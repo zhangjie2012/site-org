@@ -1,0 +1,7 @@
+#+SETUPFILE: ~/site/tpl/wiki-tpl.org
+#+TITLE: wiki
+
+** 编程
+*** 工具
+
+- [[file:progamming/code-env/emacs.org][emacs]]

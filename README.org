@@ -1,0 +1,7 @@
+* site
+
+** 本地运行
+
+#+BEGIN_SRC shell
+docker run -p 0.0.0.0:8080:80 -v /Users/admin/site-html:/usr/share/nginx/html:ro --rm nginx
+#+END_SRC
