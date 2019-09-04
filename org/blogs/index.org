@@ -1,0 +1,5 @@
+#+SETUPFILE: ~/site/tpl/site-tpl.org
+#+TITLE: Blogs
+#+OPTIONS: toc:nil
+
+- 2019-09-04：[[file:build-site-with-org-mode.org][拥抱 org-mode]]

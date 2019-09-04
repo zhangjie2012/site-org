@@ -1,0 +1,5 @@
+#+SETUPFILE: ~/site/tpl/site-tpl.org
+#+TITLE: 拥抱 org-mode
+#+OPTIONS: toc:nil
+
+这是第一篇使用 org-mode 发布的文章。
