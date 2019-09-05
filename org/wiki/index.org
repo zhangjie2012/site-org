@@ -1,7 +1,14 @@
-#+SETUPFILE: ~/site/tpl/wiki-tpl.org
+#+SETUPFILE: ~/site/tpl/site-tpl.org
+#+OPTIONS: html-postamble:nil
 #+TITLE: wiki
 
-** 编程
-*** 工具
+** 操作系统
 
-- [[file:progamming/code-env/emacs.org][emacs]]
+- [[file:os/epoll.org][I/O 多路复用]]
+- [[file:os/other.org][其他]]
+
+** 编程
+
+*** 编码环境
+
+- [[file:progamming/code-env/emacs.org][Emacs]]：神之编辑器

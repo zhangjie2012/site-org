@@ -1,5 +1,6 @@
 #+SETUPFILE: ~/site/tpl/site-tpl.org
 #+TITLE: JerryZhang
+#+OPTIONS: html-postamble:nil
 #+OPTIONS: toc:nil
 
 Hello, org-mode site.
