@@ -9,6 +9,7 @@
 
 ** 编程
 
-*** 编码环境
+*** 编码工具
 
-- [[file:progamming/code-env/emacs.org][Emacs]]：神之编辑器
+- 版本管理：[[file:programming/code-env/git.org][git]]、[[file:programming/code-env/svn.org][svn]]
+- [[file:programming/code-env/emacs.org][Emacs]]：神之编辑器
