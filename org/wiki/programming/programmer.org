@@ -1,0 +1,106 @@
+#+SETUPFILE: ~/site/tpl/site-tpl.org
+#+OPTIONS: html-postamble:nil
+#+TITLE: 技术人
+#+DATE: 2019-06-02 17:28:49
+
+** 办公硬件
+
++ 耳机
+  - [[https://gradolabs.com/][Grado]] SR325e：纯手工制作耳机，长相帅的一B，就是包装丑了一点，当初是为了听摇滚买的。
+  - 你也可以买森海塞尔，比较中庸（听什么都 OK），我后来买了 [[https://item.jd.com/2184483.html][森海塞尔（Sennheiser）MOMENTUM In-Ear I Black Chrome]]，只能说电子产品一分钱一分货，相比 Grado 还是有一定差距的
++ 机械键盘
+  - FILCO 87 圣手二代 茶轴，千元左右
+  - Cherry MX2.0 G80-3800 性价比超级高，不喜欢机械键盘的朋友也可以尝试这款的低键位
++ 显示器
+  - DELL U2718Q 27 英寸 4K
+  - 非 MacOS，2K 屏幕也可
++ 鼠标
+  - [[https://item.jd.com/1201624.html][Logitech M558 无线鼠标]]：小巧好用的蓝牙无线鼠标，支持简单的快捷键定制
++ 笔记本
+  - [[https://item.jd.com/4250271.html][NVV N-W1]]：非常好用的笔记本支架，折叠完了之后跟扇子差不多大小
+
+说明：
+
+- 对于耳机，入耳式和头戴式看个人喜好，两个切换着用效果更佳；蓝牙耳机，会有一定的音质损伤，看怎么权衡了
+- 对于机械键盘，我买过 2 个 Cherry 的，2 个 Filco 的，还有一个 [[https://item.jd.com/3491224.html][IKBC]] 的。轴用过青轴和茶轴，还有朋友的红轴。结论供参考：
+  1) 原厂轴太重要了，IKBC 算是国内做的比较好的了，用的时间长了，轴跟 Filco 的还是有一定差距的（按着手指头累）
+  2) Cherry 键盘普遍比 Filco 丑，真的丑
+  3) 键盘不建议买奶白色，漂亮是绝对漂亮，就是太不禁脏了，别听信洗键帽之说，我有两个键盘洗过键帽，装回去之后总感觉怪怪的
+  4) 推荐茶轴，青轴不适合写代码，一来太吵，而来确实累；红轴太轻了，几乎没有任何机械键盘的快感，还是算了
+
+** 编码环境
+
++ 代码编辑器
+  + [[https://www.gnu.org/software/emacs/][Emacs]]，主力编辑器，[[file:code-env/emacs.org][我的 Wiki]]
+  + [[https://www.vim.org/][Vim]]，没办法，服务器只有 Vi/Vim
++ 编码字体
+  - [[https://github.com/tonsky/FiraCode][Fira Code]]
+  - [[https://github.com/adobe-fonts/source-code-pro][Source Code Pro]] 用了五年多，现在依旧认为是最美的的编程字体，最近才切换到 Fira code，Fira code 也很好看，而且棱角分明一些。
++ shell
+  - [[https://github.com/robbyrussell/oh-my-zsh][oh-my-zsh]]
+
+** 工具软件
+
+*** 云原生
+
++ 容器化
+  + [[https://www.docker.com/][Docker]]
++ 版本管理
+  - [[https://about.gitlab.com/][Gitlab]]
+
+*** 记录
+
++ 云笔记
+  - [[https://note.youdao.com/][有道云笔记]]，支持 Windows 和 Mac 平台，Mac 体验优于印象笔记，不支持 Ubuntu，手机上广告很多
++ TODO
+  - [[https://www.wunderlist.com/zh/][+Wunderlist]]：支持 Windows 和 Mac 平台，[[https://github.com/edipox/wunderlistux][Ubuntu]]+，部分功能已经用 org-mode 代替了。_gtd 是一个很艰难的事，与工具无关。_
+
+*** 设计
+
++ 思维导图
+    - [XMind](https://www.xmind.cn/)
++ UML
+    - Mac 平台下的 WPS 支持画图，很好用
+    - Windows 下当然是 Visio 啦
+
+UML 绘图始终觉得 Visio 做的最好，各种在线（比如 ProcessOn）的我也尝试过，效率太低了。
+
+*** 邮箱客户端
+
+- [[https://mail.163.com/dashi/][网易邮箱大师]]：支持 Mac 和 Windows，不支持 Linux
+说明：
+
+- 用了 Foxmail 几年时间，最后弃了，主要原因是现在已经没人维护了，MacOS 下邮件接收太猛的时候（告警邮件），邮件会掉线，再登录一直提示密码错误，这个问题很严重
+- [[https://getmailspring.com/][Mailspring]]：长相不错，跨全平台（Windows/MacOS/Linux），轻量级，就是 Bug 有点多
+
+*** 写作
+
++ markup 语言
+  - markdown
+  - org-mode
++ 资源：
+  - [[https://unsplash.com/][upsplash]]：免费的图片素材
+
+*** 其它
+
++ 科学上网
+  + PC [[https://github.com/shadowsocks/ShadowsocksX-NG][ShadowsocksX-NG]]
+  + iOS Potatso Lite
++ 包管理工具
+  - [[https://brew.sh/][Homebrew]]：The missing package manager for macOS
++ SSH 连接工具 & 终端模拟器
+  - [[https://www.iterm2.com/][iterm2]]
+  - [[https://www.netsarang.com/products/xsh_overview.html][XShell]]：可惜只支持 Windows 环境
+  - [[https://gnometerminator.blogspot.com/p/introduction.html][terminator]]：Ubuntu 下优于默认的 terminal
++ Chrome 插件
+  - [[https://www.getpostman.com/][Postman]]：也可独立于 Chrome 运行
+  - FireShot：网页截图
+  - [[https://github.com/FelisCatus/SwitchyOmega][SwitchyOmega]]
++ 代码生成图片
+  - [[https://dawnlabs.io/carbon][carbon]]
++ 文本比较
+  - [[https://www.scootersoftware.com/][Beyond Compare]]，跨平台，[[https://blog-1252349778.cos.ap-beijing.myqcloud.com/2018/keygen.exe][注册机]]
++ 刻录
+  - [[https://unetbootin.github.io/][UNetbootin]]：Windows、MacOS、Linux
++ 录屏
+  - [[https://www.cockos.com/licecap/][LICEcap]]：Windows、MacOS

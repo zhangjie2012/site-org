@@ -1,0 +1,26 @@
+#+SETUPFILE: ~/site/tpl/site-tpl.org
+#+TITLE: Makefile
+#+DATE: 2017-12-04 11:37:43
+
+
+内容系为陈皓当前写的一个系列: 跟我一起写 Makefile。顺便附上他的博客:
+
+- 陈皓的个人博客: [[http://coolshell.cn/][酷壳-CoolShell.cn——享受编程和技术所带来的快乐 – http://coolshell.cn]]
+- CSDN博客(旧的，已经不再更新): [[http://blog.csdn.net/haoel/article/details/2899][陈皓专栏【空谷幽兰，心如皓月】]]
+
+目录:
+
++ [[http://blog.csdn.net/haoel/article/details/2886][跟我一起写 Makefile（一）]]: 概述, 关于程序的编译和链接, Makefile 规则。
++ [[http://blog.csdn.net/haoel/article/details/2887][跟我一起写 Makefile（二）]]: make 是如何工作的, Makefile 中使用变量，让 make 自动推导，清空目标文件的规则。
++ [[http://blog.csdn.net/haoel/article/details/2888][跟我一起写 Makefile（三）]]: Makefile 里有什么？Makefile 的文件名，引用其他的 Makefile，环境变量 MAKEFILES，make 的工作方式。
++ [[http://blog.csdn.net/haoel/article/details/2889][跟我一起写 Makefile（四）]]: 规则举例，规则的语法，在规则中使用通配符，文件搜索，伪目标。
++ [[http://blog.csdn.net/haoel/article/details/2890][跟我一起写 Makefile（五）]]: 多目标，静态模式，自动生成依赖性。
++ [[http://blog.csdn.net/haoel/article/details/2891][跟我一起写 Makefile（六）]]: 显示命令，命令执行，命令出错，嵌套执行make，定义命令包。
++ [[http://blog.csdn.net/haoel/article/details/2892][跟我一起写 Makefile（七）]]: 变量的基础，变量中的变量，变量高级用法，追加变量值，override 指示符。
++ [[http://blog.csdn.net/haoel/article/details/2893][跟我一起写 Makefile（八）]]: 多行变量，环境变量，目标变量，模式变量，使用条件判断。
++ [[http://blog.csdn.net/haoel/article/details/2894][跟我一起写 Makefile（九）]]: 使用函数，函数的语法，字符串处理函数，文件名操作函数。
++ [[http://blog.csdn.net/haoel/article/details/2895][跟我一起写 Makefile（十）]]: foreach 函数，if 函数，call 函数，origin 函数，shell 函数，控制 make 的函数。
++ [[http://blog.csdn.net/haoel/article/details/2896][跟我一起写 Makefile（十一）]]: make 的运行，make 的退出码，指定 Makefile，指定目标，检查规则，make的参数。
++ [[http://blog.csdn.net/haoel/article/details/2897][跟我一起写 Makefile（十二）]]: 隐含规则，使用隐含规则，隐含规则一览，隐含规则使用的变量，隐含规则链。
++ [[http://blog.csdn.net/haoel/article/details/2898][跟我一起写 Makefile（十三）]]: 定义模式规则，模式规则介绍，模式规则示例，自动化变量，模式的匹配，重载内建隐含规则
++ [[http://blog.csdn.net/haoel/article/details/2899][跟我一起写 Makefile（十四）]]: 使用make更新函数库文件，后序

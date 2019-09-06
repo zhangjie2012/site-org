@@ -1,0 +1,31 @@
+#+SETUPFILE: ~/site/tpl/site-tpl.org
+#+OPTIONS: html-postamble:nil
+#+TITLE: pip
+#+OPTIONS: toc:nil
+#+DATE: 2017-12-04 11:34:03
+
+** MacOS 安装
+
+#+BEGIN_SRC shell
+sudo easy_install pip
+#+END_SRC
+
+** 全局指定源
+
+#+BEGIN_SRC
+touch ~/.pip/pip.conf
+
+# pip.conf
+[global]
+timeout = 60
+index-url = http://pypi.douban.com/simple
+trusted-host = pypi.douban.com
+#+END_SRC
+
+单次安装可以在命令行指定: ~pip install tornado -i https://pypi.douban.com/simple~
+
+** 指定用户
+
+#+BEGIN_SRC shell
+pip install --user mysql-python
+#+END_SRC

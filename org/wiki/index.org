@@ -1,15 +1,30 @@
 #+SETUPFILE: ~/site/tpl/site-tpl.org
 #+OPTIONS: html-postamble:nil
 #+TITLE: wiki
+#+OPTIONS: toc:nil
 
-** 操作系统
+* 操作系统
 
 - [[file:os/epoll.org][I/O 多路复用]]
 - [[file:os/other.org][其他]]
 
-** 编程
+* 编程
 
-*** 编码工具
+** 工程师素养
 
-- 版本管理：[[file:programming/code-env/git.org][git]]、[[file:programming/code-env/svn.org][svn]]
+- [[file:programming/programmer.org][技术人]]：一些常用的办公设备和软件记录
+
+** C++
+
+- [[file:programming/cpp/autotools.org][AutoTools]]：编译工具
+- [[file:programming/cpp/gcc.org][gcc]]：编译器
+- [[file:programming/cpp/makefile.org][Makefile]]
+- [[file:programming/cpp/perf.org][Perf]]：性能剖析工具，其实只要记得 ~perf top -p~ 一个指令就行了
+- [[file:programming/cpp/valgrind.org][Valgrind]]：Linux 下动态（指令框架）分析工具，主要用来做内存泄露检测。其他的工具还有 VLC，Nvwa 等
+
+
+** 编码工具
+
 - [[file:programming/code-env/emacs.org][Emacs]]：神之编辑器
+- [[file:programming/code-env/git.org][git]] | [[file:programming/code-env/svn.org][svn]]：版本管理器
+- [[file:programming/code-env/pip.org][pip]]：Python 的包管理器

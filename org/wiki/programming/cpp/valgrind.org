@@ -1,0 +1,170 @@
+#+SETUPFILE: ~/site/tpl/site-tpl.org
+#+TITLE: Valgrind
+#+DATE: 2017-12-04 11:43:59
+
+[TOC]
+
+本文档大部分内容均为摘抄，仅供技术学习, 误传播。
+
+本文主要介绍 Linux 下内存泄露检测工具: 内容基本来自 [[http://valgrind.org/docs/manual/manual.html][Valgrind 手册]]。
+
+* 1. 什么是 Valgrind ?
+
+[Valgrind](http://valgrind.org/) is an *instrumentation framework* for building dynamic analysis tools.
+
+通俗来讲，Valgrind 是调试、性能优化等分析工具的集合，主要包括下面这些有用的工具：
+
+- Memcheck: 内存错误探测器 :: 让你的C/C++代码运行的更正确。
+- Cachegrind: 缓存和分支预测分析器 :: 让你的程序跑的更快。
+- Callgrind: 函数调用缓存分析器 :: 相比 Callgrind，它能收集到更多的信息。
+- Helgrind: 线程错误探测器 :: 让你的多线程程序更加正确。
+- DRD: 也是一个线程错误探测器 :: 和 Helgrind 类似，不同点在于使用不同的分析技术可能找到不同的问题。
+- Massif: 堆分析器 :: 优化你的程序对内存的使用。
+- DHAT: 不同类型的对分析器。 ::  It helps you understand issues of block lifetimes, block utilisation, and layout inefficiencies.
+- SGcheck: 实验工具。 :: 可以用来修改栈和全局数组的内容。
+- BBV: is an experimental SimPoint basic block vector generator.  :: It is useful to people doing computer architecture research and development.
+
+* 2. Valgrind 的使用(参数)
+
+生成可执行文件的编译选项建议:
+
+1. 打开 debug 选项 ~-g~;
+2. 如果是 C++ 程序，~-fno-inline~ 可以帮助 Valgrind
+更好的找到函数调用关系链(function-call chain);
+3. 如果打算做 Memcheck 分析，建议关掉编译器优化选项;
+4. 打开 ~-Wall~;
+
+** 2.1 Valgrind 命令格式
+
+#+BEGIN_SRC shell
+valgrind [valgrind-options] your-prog [your-prog-options]
+#+END_SRC
+
+一般来说 ~[valgrind-options]~ 是 ~--tool=xxx~ ，在 Valgrind 不加参数时，直接使用 valgrind 等价于 ~valgrind --tool=memcheck~ ，也就是默认情况下， Valgrind 是做内存错误检测的。
+
+** 2.2 控制输出
+
+默认情况，Valgrind 工具之输出一些基本的信息，可以在运行的时候加上 ~-v~ 选项来使得输出更丰富的信息。
+
+下面三种不同的方法可以使分析结果输出到不同的位置:
+
+1. 默认情况: 将分析结果输出到指定的文件描述符(file descriptor)中，默认情况是 2 (也就是 stderr 啦，在 Linux 中 stdin 为 0，stdout 为 1)。你可以使用 ~--log-fd=xx~ 去修改;
+2. 输出到文件中: ~--log-file=filename~
+3. 输出到网络 socket: socket 由 IP 地址和端口号来指定，比如: ~--log-socket=192.168.0.1:12345~ 。你也可以不指定端口号，这种情况下默认的端口号是 1500。具体请看手册，这里不再赘述。
+
+** 2.3 参数选项(Core Command-line Options)
+
+*选项的解释基本上只点一下功能，详细的使用方法看 man 手册。*
+
+*** 2.3.1 Tool-selection Option
+
++ ~--tool=<toolname> [default: memcheck]~ : 使用 ~toolname~ 工具，比如 MemCheck, Cachegrind.
+
+*** 2.3.2 Basic Options
+
++ ~-h, --help~
++ ~--help-debug~
++ ~--version~
++ ~-q, --quit~ : 静默运行，只输出错误信息。在回归测试或者其他自动化测试机器上使用会非常有用
++ ~-v, --verbose~ : 输出一些额外的信息
++ ~--trace-children=<yes|no>[default: no]~ : 打开以后，Valgrind 可以跟踪到子进程(通过 ~exec~ 系统调用)，在多进程程序中是很有用的
++ ~--trace-children-skip=patt1, patt2, ...~ : 这个参数只有在设置了 ~--trace-children=yes~ 时才有意义。它允许跳过某些子进程
++ ~--trace-children-skip-by-arg=patt1, patt2, ...~: 和 ~--trace-children-skip~ 类似，with one difference: the decision as to whether to trace into a child process is made by examining the arguments to the child process, rather than the name of its executable
++ ~--vgdb=<no|yes|full>[default: yes]~: 当设置为 ~yes~ 或者 ~full~ 的时候，Valgrind 提供 "gdbserver" 功能。这样可以调试在 Valgrind 下运行的程序
++ ~--vgdb-error=<number> [defalult: 999999999]~
++ ~--trace-fds=<yes|no> [default: no]~
++ ~--time-stamp=<yes|no> [default: no]~: 打印时间戳
++ ~--log-fd=<number> [default: 2, stderr]~: 上面讲过了
++ ~--log-file=<filename>~: 上面讲过了
++ ~--log-socket=<ip-address:port-number>~: 上面讲过了
+
+*** 2.3.3 Error-related Options
+
+选项用于工具错误上报，比如 MemCheck, 但不是 Cachegrind.
+
++ ~--xml=<yes|no> [default: no]~: 打开以后输出成 XML 格式，而不是纯文本
++ ~--xml-fd=<number> [default: -1, disabled]~: 含义同同 ~--log-fd~
++ ~--xml-file=<filename>~: 含义同 ~--log-file~
++ ~--xml-socket=<ip-address:port-number>~: 含义同 ~--log-socket~
++ ~--xml-user-comment=<string>~: 在输出的XML报告开头加上用户信息，当 ~--xml=yes~ 时有效。
++ ~--demangle=<yes|no>[default:yes]~:
++ ~--num-callers=<number> [default: 12]~: 堆栈层数
++ ~--unw-stack-scan-thresh=<number> [default: 0], --unw-stack-scan-frames=<number> [default: 5]~
++ ~--error-limit=<yes|no> [default: yes]~: 输出的错误数量限制
++ ~--error-exitcode=<number> [defalut: 0]~
++ ~--sigill-diagnostics=<yes|no> [defalut:yes]~: 输出不合法的指令诊断，当设置~--quiet~ 时，也会关闭此选项
++ ~--show-below-main=<yes|no>[default: no]~
++ ~--fullpath-after=<string> [default: don't show source paths]~: 指定源代码路径
++ ~--extra-debuginfo-path=<path> [default: undefined and unused]~
++ ~--debuginfo-server=ipaddr:port [default: undefined and unused]~: 3.9.0 以上版本才有此功能
++ ~--db-attach=<yes|no> [default: no]~: 遇到错误时调试
++ ~--db-command=<command> f [default: gdb -nw p]~: 设置 gdb 参数，和 ~--db-attach~ 搭配使用
++ ~--input-fd=<number>[default: 0, stdin]~
++ ~--max-stackframe=<number> [default: 2000000]~
++ ~-stacksize=<number> [default: use current 'ulimit' value]~
+
+*** 2.3.4 malloc-related Option
+
+使用 Valgrind 时其实用的是自己的实现的 ~malloc~(比如, Memcheck, Massif, Helgrind, DRD)，可以使用下面的参数：
+
++ ~--alignment=<number> [default: 8 or 16, depending on the platform]~: 设置对齐字节
++ ~--redzone-size=<number> [default: depends on the tool]~: 填充大小
+
+*** 2.3.5 Uncommon Options
+
+不常用的选项。
+
+*** 2.3.6 Debugging Options
+
+通过 ~--help-debug~ 来查看。
+
+*** 2.3.7 设置默认的配置选项
+
+Vagrind 是从下面3个地方读取的配置：
+
+1. 文件 ~~/.valgrindrc~
+2. 环境变量 ~$VALGRIND_OPTS~
+3. 文件 ~./.valgrindrc~
+
+* 3. 功能简介
+
+** 3.1 Memcheck: 内存使用检测 **
+
+格式: ~valgrind --leak-check=yes myprog arg1 arg2~
+
+泄露的两种级别:
+
+1. "definitely lost" : 必须要修复的内存泄露.
+2. "probably lost" : your program is leaking memory, unless you're doing funny things with pointers (such as moving them to point to the middle of a heap block).
+
+~--num-callers~: 用来限制显示的堆栈层数
+
+使用 Memcheck 可发现常见的内存问题:
+
++ 使用未初始化的内存
++ 内存读写越界
++ 内存覆盖
++ 动态内存管理错误: ~new/delete/malloc/free~
++ 内存泄露
+
+* 4. 扩展知识
+
+以前在 Windows 下开发用过两款内存泄露检测工具，都是开源的，这里简单介绍一下，感兴趣可以自己研究研究。
+
+** 4.1 Visual Leak Detector
+
+- 主页: [[https://vld.codeplex.com/][https://vld.codeplex.com/]]
+- 原理: Windows Hook 技术(挂到 Windows 下申请/释放内存 API 上)
+- 评价: 因为用到了 Windows API，所以它不是跨平台的。泄露时可打印堆栈，泄露字节，有泄露报告，而且报告可定制，这方面做的很好。以前写过一篇文章简单介绍 vld 的使用: [[https://www.zhangjiee.com/blog/visual-leak-detector][C/C++ 内存泄漏检测工具 Visual Leak Detector]]
+
+** 4.2 Nvwa
+
++ 下载: [[http://sourceforge.net/projects/nvwa/][http://sourceforge.net/projects/nvwa/]]
++ 原理:
+  - 重载 new/delete 运算符
+  - 全局变量最后析构
++ 评价:
+  - 代码精简、易懂，觉得不爽的地方自己改一下就好了;
+  - 跨平台;
+  - 要在产品代码中添加头文件，这一点非常蛋疼;
+  - 没有调用堆栈，不好定位泄露。
