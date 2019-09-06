@@ -53,9 +53,7 @@
 + 云笔记
   - [[https://note.youdao.com/][有道云笔记]]，支持 Windows 和 Mac 平台，Mac 体验优于印象笔记，不支持 Ubuntu，手机上广告很多
 + TODO
-  - +[[https://www.wunderlist.com/zh/][Wunderlist]]：支持 Windows 和 Mac 平台，[[https://github.com/edipox/wunderlistux][Ubuntu]] +，部分功能已经用 org-mode 代替了。 _gtd 是一个很艰难的事，与工具无关。_
-
-+hello+
+  - +[[https://www.wunderlist.com/zh/][Wunderlist]]：支持 Windows 和 Mac 平台，[[https://github.com/edipox/wunderlistux][Ubuntu]]+ ，部分功能已经用 org-mode 代替了。 _gtd 是一个很艰难的事，与工具无关。_
 
 *** 设计
 
