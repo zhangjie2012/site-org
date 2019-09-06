@@ -4,9 +4,7 @@
 
 [TOC]
 
-本文档大部分内容均为摘抄，仅供技术学习, 误传播。
-
-本文主要介绍 Linux 下内存泄露检测工具: 内容基本来自 [[http://valgrind.org/docs/manual/manual.html][Valgrind 手册]]。
+本文档大部分内容均为摘抄，仅供技术学习, 误传播。主要介绍 Linux 下内存泄露检测工具: 内容基本来自 [[http://valgrind.org/docs/manual/manual.html][Valgrind 手册]]。
 
 * 1. 什么是 Valgrind ?
 
@@ -128,7 +126,7 @@ Vagrind 是从下面3个地方读取的配置：
 
 * 3. 功能简介
 
-** 3.1 Memcheck: 内存使用检测 **
+** 3.1 Memcheck: 内存使用检测
 
 格式: ~valgrind --leak-check=yes myprog arg1 arg2~
 
