@@ -1,4 +1,4 @@
-#+SETUPFILE: ~/site/tpl/site-tpl.org
+#+SETUPFILE: ~/site/tpl/wiki-tpl.org
 #+OPTIONS: html-postamble:nil
 #+TITLE: pip
 #+OPTIONS: toc:nil

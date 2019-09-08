@@ -1,4 +1,4 @@
-#+SETUPFILE: ~/site/tpl/site-tpl.org
+#+SETUPFILE: ~/site/tpl/wiki-tpl.org
 #+TITLE: Go 包管理工具
 #+DATE: 2019-01-18 11:07
 

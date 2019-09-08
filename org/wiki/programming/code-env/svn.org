@@ -1,4 +1,4 @@
-#+SETUPFILE: ~/site/tpl/site-tpl.org
+#+SETUPFILE: ~/site/tpl/wiki-tpl.org
 #+TITLE: SVN
 
 本文由 [[http://svndoc.iusesvn.com/svnbook/1.4][svn book 1.4]] 整理而来。

@@ -1,4 +1,4 @@
-#+SETUPFILE: ~/site/tpl/site-tpl.org
+#+SETUPFILE: ~/site/tpl/wiki-tpl.org
 #+TITLE: Go 工程项目结构
 #+DATE: 2019-06-09 17:08:00
 

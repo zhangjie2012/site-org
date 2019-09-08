@@ -1,4 +1,4 @@
-#+SETUPFILE: ~/site/tpl/site-tpl.org
+#+SETUPFILE: ~/site/tpl/wiki-tpl.org
 #+TITLE: Git
 
 * 一、Git 基础

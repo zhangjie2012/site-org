@@ -1,4 +1,4 @@
-#+SETUPFILE: ~/site/tpl/site-tpl.org
+#+SETUPFILE: ~/site/tpl/wiki-tpl.org
 #+TITLE: I/O 多路复用
 
 整理自 [[https://www.zhihu.com/question/20122137][知乎@蓝形参]] 的回复：

@@ -1,0 +1,10 @@
+#+SETUPFILE: ~/site/tpl/youth-tpl.org
+#+TITLE: 绝版青春
+
+
+* 在西农
+
+/2008~2012 在西农的经历，2015 年写的这一个系列，所以日期是 2015。/
+
+- 2015-12-13: [[file:ultimate-youth-start.org][绝版青春-序]]
+- 2015-12-14: [[file:in-xinong-s1.org][第一个选择]]
