@@ -1,0 +1,87 @@
+#+SETUPFILE: ~/site/tpl/site-tpl.org
+#+TITLE: Go 时间格式化与解析
+#+DATE: 2019-01-18 11:07
+
+跟其他语言的设计不同（Python 等），Go 时间的格式化与解析都是通过 ~layout~ 参数来实现的。类似： ~Mon Jan 2 15:04:05 MST 2006~ 。
+
+用 ~01/02 03:04:05PM '06 -0700~ 可以帮助记忆，某个字段使用某个值，是一种 _约定_ 。两个函数：
+
++ Parse 将字符串解析成日期 ~func Parse(layout, value string) (Time, error)~
++ Format 将日期格式化成字符串 ~func (t Time) Format(layout string) string~
+
+* 所有的时间和日期选项
+
+（用来书写 ~layout~ ）
+
+#+BEGIN_SRC
+Type	 => Option
+--------------------------------------------------------------------
+Year     => 06   2006
+Month    => 01   1   Jan   January
+Day	     => 02   2   _2   (width two, right justified)
+Weekday	 => Mon   Monday
+Hours    => 03   3   15
+Minutes  => 04   4
+Seconds  => 05   5
+ms μs ns => .000   .000000   .000000000
+ms μs ns => .999   .999999   .999999999   (trailing zeros removed)
+am/pm    => PM   pm
+Timezone => MST
+Offset   => -0700   -07   -07:00   Z0700   Z07:00
+#+END_SRC
+
+* 常用的时间和日期格式
+
+#+BEGIN_SRC
+Layout	                   => Note
+------------------------------------------------------
+January 2 2006	           => Date
+01/02/06
+Jan-02-06
+------------------------------------------------------
+15:04:05	               => Time
+3:04:05 PM
+------------------------------------------------------
+Jan _2 15:04:05	           => Timestamp
+Jan _2 15:04:05.000000	      with microseconds
+------------------------------------------------------
+2006-01-02T15:04:05-0700   => ISO 8601
+2006-01-02
+15:04:05
+------------------------------------------------------
+02 Jan 06 15:04 MST	       => RFC 822
+02 Jan 06 15:04 -0700	      with numeric zone
+------------------------------------------------------
+Mon, 02 Jan 2006 15:04:05 MST	=> RFC 1123
+Mon, 02 Jan 2006 15:04:05 -0700	   with numeric zone
+------------------------------------------------------
+#+END_SRC
+
+（这里可以理解成为大家的约定）
+
+* 预定义的日期和时间戳 layouts
+
+预定义的格式常量，可以直接拿来用（ ~time~ 库中）。
+
+#+BEGIN_SRC
+ANSIC       = "Mon Jan _2 15:04:05 2006"
+UnixDate    = "Mon Jan _2 15:04:05 MST 2006"
+RubyDate    = "Mon Jan 02 15:04:05 -0700 2006"
+RFC822      = "02 Jan 06 15:04 MST"
+RFC822Z     = "02 Jan 06 15:04 -0700"
+RFC850      = "Monday, 02-Jan-06 15:04:05 MST"
+RFC1123     = "Mon, 02 Jan 2006 15:04:05 MST"
+RFC1123Z    = "Mon, 02 Jan 2006 15:04:05 -0700"
+RFC3339     = "2006-01-02T15:04:05Z07:00"
+RFC3339Nano = "2006-01-02T15:04:05.999999999Z07:00"
+Kitchen     = "3:04PM"
+// Handy time stamps.
+Stamp      = "Jan _2 15:04:05"
+StampMilli = "Jan _2 15:04:05.000"
+StampMicro = "Jan _2 15:04:05.000000"
+StampNano  = "Jan _2 15:04:05.000000000"
+#+END_SRC
+
+--------------------
+
+总体来看，Go 的这种做法，反倒比 Python，JavaScript 等统一一些。

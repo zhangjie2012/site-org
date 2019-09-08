@@ -1,0 +1,25 @@
+#+SETUPFILE: ~/site/tpl/site-tpl.org
+#+TITLE: Go 包管理工具
+#+DATE: 2019-01-18 11:07
+
+* govender
+
+govendor: <https://github.com/kardianos/govendor>，安装： ~go get -u github.com/kardianos/govendor~ 。
+
+** 创建项目
+
++ 项目初始化：~govendor init~
++ 查看文件状态：~govendor list~
++ 添加 package 到 vendor：~govendor add +external~
++ 在 ~.gitignore~ 中添加 package 过滤：
+
+#+BEGIN_SRC shell
+vendor/*
+!vendor/vendor.json
+#+END_SRC
+
+** 常规使用
+
++ git pull 下来项目后，本地同步安装 package： ~govendor sync -v~
++ 查看 package 被哪里引用： ~govendor list -v package~
++ govendor 其实并不那么好用（不然 go 的 package 管理也不会这么混乱了），升级和删除 package 等，暴力解法是：删掉 vendor 目录，重新走一遍初始化
