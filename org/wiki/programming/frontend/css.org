@@ -1,0 +1,125 @@
+#+SETUPFILE: ~/site/tpl/wiki-tpl.org
+#+TITLE: CSS
+#+DATE: 2018-05-29 18:29:03
+
+* 基础
+
+** CSS 选择器
+
+- 简单选择器（Simple selectors）：通过元素类型、class 或 id 匹配一个或多个元素；
+- 属性选择器（Attribute selectors）：通过 属性/属性值 匹配一个或多个元素；
+- 伪类（Pseudo-classes）：匹配处于确定状态的一个或多个元素，比如被鼠标指针悬停的元素，或当前被选中或未选中的复选框，或元素是 DOM 树中一父节点的第一个子节点；
+- 伪元素（Pseudo-elements）：匹配处于相关的确定位置的一个或多个元素，例如每个段落的第一个字，或者某个元素之前生成的内容；
+- 组合器（Combinators）：这里不仅仅是选择器本身，还有以有效的方式组合两个或更多的选择器用于非常特定的选择的方法。例如，你可以只选择divs的直系子节点的段落，或者直接跟在headings后面的段落；
+- 多重选择器（Multiple selectors）：这些也不是单独的选择器；这个思路是将以逗号分隔开的多个选择器放在一个CSS规则下面， 以将一组声明应用于由这些选择器选择的所有元素；
+
+*** 简单选择器
+
+简单选择器分为：元素选择器、类选择器和 ID 选择器。
+
+- 元素选择器 :: 针对 HTML 元素名字的选择器，比如 ~p~、~div~、~span~ 等。
+- 类选择器 :: HTML 的 class 文档元素属性，文档中可以有多个相同的类型，多个类名以空格分开。
+- ID 选择器 :: HTML 的 id 元素属性，文档中只能有一个，用来选择单个元素。
+- 通用选择器 :: ~*~ 可以表示页面中的所有元素，一般无意义，慎用。
+
+*** 属性选择器
+
+属性选择器根据元素的属性和属性值来匹配元素。通用语法由 ~[]~ 组成，其中包含属性名称，后跟可选条件以匹配属性的值。
+
+**** 存在和值（Presence and value）属性选择器
+
+精确匹配属性值：
+
++ ~[attr]~ : 该选择器选择包含 attr 属性的所有元素，不论 attr 的值为何。 -> _全部_
++ ~[attr=val]~ : 该选择器仅选择 attr 属性被赋值为 val 的所有元素。 -> _精确匹配_
++ ~[attr~=val]~ ：该选择器仅选择 attr 属性的值（以空格间隔出多个值）中有包含 val 值的所有元素，比如位于被空格分隔的多个类（class）中的一个类。 -> _包含关系_
+
+比如：
+
+#+BEGIN_SRC html
+// HTML
+<i lang="fr-FR">Poulet basquaise</i>
+<ul>
+  <li data-quantity="1kg" data-vegetable>Tomatoes</li>
+  <li data-quantity="3" data-vegetable>Onions</li>
+  <li data-quantity="3" data-vegetable>Garlic</li>
+  <li data-quantity="700g" data-vegetable="not spicy like chili">Red pepper</li>
+  <li data-quantity="2kg" data-meat>Chicken</li>
+  <li data-quantity="optional 150g" data-meat>Bacon bits</li>
+  <li data-quantity="optional 10ml" data-vegetable="liquid">Olive oil</li>
+  <li data-quantity="25cl" data-vegetable="liquid">White wine</li>
+</ul>
+
+// CSS
+/*
+    具有"data-vegetable"属性的所有元素,
+    将被给予绿色的文本颜色
+*/
+[data-vegetable] {
+  color: green
+}
+
+/*
+    具有"data-vegetable"属性且属性值刚好是"liquid"的所有元素，
+    将被给予金色背景颜色
+*/
+[data-vegetable="liquid"] {
+  background-color: goldenrod;
+}
+
+/*
+    具有"data-vegetable"属性且属性值包含"spicy"的所有元素，
+    即使某元素的该属性还包含其他属性值，
+    都会被给予红色的文本颜色
+*/
+[data-vegetable~="spicy"] {
+  color: red;
+}
+#+END_SRC
+
+**** 子串值（Substring value）属性选择器
+
+也被称为「伪正则选择器」：
+
+- ~[attr|=val]~ : 选择 attr 属性的值是 val 或值以 ~val-~ 开头的元素（-用来处理语言编码）。
+- ~[attr^=val]~ : 选择 attr 属性的值以 val 开头（包括 val）的元素。
+- ~[attr$=val]~ : 选择 attr 属性的值以 val 结尾（包括 val）的元素。
+- ~[attr*=val]~ : 选择 attr 属性的值中包含字符串 val 的元素。 -> 字符串包含
+
+*** 伪选择器
+
+该选择器不是选择元素，而是元素的某些部分，或者仅在特定上下文中存在的元素。
+
+**** 伪类（Pseudo-class）
+
+伪类是一个以冒号（~:~）为前缀的关键字，当你希望在特定状态下才呈现到指定的元素时，可以在元素的选择器上加上对应的伪类（pseudo-class）。同一个元素可能有很多种状态，比如鼠标选中，划过等。
+
+常见伪类有: ~:active~, ~:checked~, ~:first~, ~:first-child~, ~:first-of-type~, ~:fullscreen~, ~:focus~, ~:hover~, ~:nth-child()~, ~:visited~ 等，需要的时候临时查就可以了。
+
+**** 伪元素（Pseudo-element）
+
+伪元素和伪类很像，伪元素是两个冒号（~::~），区别在于伪元素一般会创建文档之外的元素。
+
+*** 组合器和选择器组
+
+|--------+-----------------------------------------------------------------------------------------------------------------|
+| 组合器 | 效果                                                                                                            |
+|--------+-----------------------------------------------------------------------------------------------------------------|
+| A, B   | 匹配满足 A、B 或者 A 和 B 的任意元素                                                                            |
+| A  B   | 匹配任意元素，满足条件：B 是 A 的后代结点（B是A的子节点，或者 A 的子节点的子节点）                              |
+| A > B  | 匹配任意元素，满足条件：B 是 A 的直接子节点                                                                     |
+| A + B  | 匹配任意元素，满足条件：B 是 A 的下一个兄弟节点（AB 有相同的父结点，并且 B 紧跟在 A 的后面）                    |
+| A ~ B  | 匹配任意元素，满足条件：B 是 A 之后的兄弟节点中的任意一个（AB 有相同的父节点，B 在 A 之后，但不一定是紧挨着 A） |
+|--------+-----------------------------------------------------------------------------------------------------------------|
+
+* 布局
+
+** flex
+
+[[https://medium.com/@js_tut/the-complete-css-flex-box-tutorial-d17971950bdc][The Complete CSS Flex Box Tutorial]]
+
+* 最佳实践
+
+*** 如何设置 span 的宽度
+
+~span~ 是默认是 ~display: inline~ 是无法设置宽度的，而 ~display: block~ 才可以设置宽度，但是修改为 ~block~ 之后， ~span~ 布局会变成块。CSS 为了解决此类问题，提供了 ~inline-block~ 。

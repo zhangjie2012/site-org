@@ -1,0 +1,341 @@
+#+SETUPFILE: ~/site/tpl/wiki-tpl.org
+#+TITLE: LESS
+#+DATE: 2018-05-29 11:56:12
+
+[[http://lesscss.org/][Less]] 是 CSS 向后兼容的扩展语言，Less 语法可以通过 Less 提供的工具转换成 CSS。
+
+* 安装
+
+#+BEGIN_SRC shell
+npm install less -g   # 全局安装 lessc 工具
+npm i less --save-dev # 本工程
+#+END_SRC
+
+* 语言教程
+
+** 变量
+
+使用 ~@~ 定义变量，比如：
+
+#+BEGIN_SRC css
+@nice-blue: #5B83AD;
+@light-blue: @nice-blue + #111;
+
+#header {
+    color: @light-blue;
+}
+#+END_SRC
+
+** 混合（Mixins）
+
+混合（Mixins）提供了一个属性集合包含另外一个属性集合的方法。类似下面的类：
+
+#+BEGIN_SRC
+.bordered {
+    border-top: dotted 1px black;
+    border-bottom: solid 2px black;
+}
+#+END_SRC
+
+我们想要在其他地方使用，只需要直接引用即可：
+
+#+BEGIN_SRC css
+#menu a {
+  color: #111;
+  .bordered;
+}
+
+.post a {
+  color: red;
+  .bordered;
+}
+#+END_SRC
+
+** 嵌套
+
+Less 提供了嵌套语法，比如说：
+
+#+BEGIN_SRC css
+#header {
+  color: black;
+}
+#header .navigation {
+  font-size: 12px;
+}
+#header .logo {
+  width: 300px;
+}
+#+END_SRC
+
+可以精简为：
+
+#+BEGIN_SRC css
+#header {
+  color: black;
+  .navigation {
+    font-size: 12px;
+  }
+  .logo {
+    width: 300px;
+  }
+}
+#+END_SRC
+
+嵌套中你也可以使用伪选择器（ ~pseudo-selectors~ ）, ~&~ 代表当前父选择器：
+
+#+BEGIN_SRC css
+.clearfix {
+  display: block;
+  zoom: 1;
+
+  &:after {
+    content: " ";
+    display: block;
+    font-size: 0;
+    height: 0;
+    clear: both;
+    visibility: hidden;
+  }
+}
+#+END_SRC
+
+*** 父选择器
+
+在嵌套规则中，使用 ~&~ 表示父选择器，大部分时候被用来对一个已有的选择器修改类或者伪类。比如：
+
+#+BEGIN_SRC css
+a {
+  color: blue;
+  &:hover {
+    color: green;
+  }
+}
+#+END_SRC
+
+结果为：
+
+#+BEGIN_SRC
+a {
+  color: blue;
+}
+
+a:hover {
+  color: green;
+}
+#+END_SRC
+
+父选择器有多种用法，一种基本的用法是在嵌套的时候替代父选择器，展开的时候直接连接起来。比如：
+
+#+BEGIN_SRC css
+.button {
+  &-ok {
+    background-image: url("ok.png");
+  }
+  &-cancel {
+    background-image: url("cancel.png");
+  }
+
+  &-custom {
+    background-image: url("custom.png");
+  }
+}
+#+END_SRC
+
+结果为：
+
+#+BEGIN_SRC css
+.button-ok {
+  background-image: url("ok.png");
+}
+.button-cancel {
+  background-image: url("cancel.png");
+}
+.button-custom {
+  background-image: url("custom.png");
+}
+#+END_SRC
+
+*** 在规则中嵌套和冒泡
+
+像 ~@media~ 或者 ~@supports~ 这种规则也可以以相同的方式嵌套在选择器中。不过这些规则将放在元素的顶部，称之为冒泡。比如：
+
+#+BEGIN_SRC css
+    .component {
+      width: 300px;
+      @media (min-width: 768px) {
+        width: 600px;
+        @media  (min-resolution: 192dpi) {
+          background-image: url(/img/retina2x.png);
+        }
+      }
+      @media (min-width: 1280px) {
+        width: 800px;
+      }
+    }
+#+END_SRC
+
+
+结果为：
+
+#+BEGIN_SRC css
+    .component {
+      width: 300px;
+    }
+    @media (min-width: 768px) {
+      .component {
+        width: 600px;
+      }
+    }
+    @media (min-width: 768px) and (min-resolution: 192dpi) {
+      .component {
+        background-image: url(/img/retina2x.png);
+      }
+    }
+    @media (min-width: 1280px) {
+      .component {
+        width: 800px;
+      }
+    }
+#+END_SRC
+
+** 运算符
+
+数学运算符（加减乘除）可以在任何数字、颜色或者变量中使用。在数学运算时将先把值转换为相同的单位，结果单位为最左边的单位类型。如果不可能转换或者没有意义，单位会被忽略。比如将 ~px~ 转换为 ~cm~ 或者 ~rad~ 转为为 ~%~ 。
+
+#+BEGIN_SRC css
+    // numbers are converted into the same units
+    @conversion-1: 5cm + 10mm; // result is 6cm
+    @conversion-2: 2 - 3cm - 5mm; // result is -1.5cm
+
+    // conversion is impossible
+    @incompatible-units: 2 + 5px - 3cm; // result is 4px
+
+    // example with variables
+    @base: 5%;
+    @filler: @base * 2; // result is 10%
+    @other: @base + @filler; // result is 15%
+#+END_SRC
+
+乘法或者除法不会转换数字类型，因为大多数时候是无意义的。
+
+** 转义（Escaping）
+
+转义允许你使用任意字符串作为属性或者变量值。除了变量差值之外， ~~"anything"~ 或者 ~~"anything"~ 将会作为自己的原生值不会被改变。
+
+#+BEGIN_SRC css
+    @min768: ~"(min-width: 768px)";
+    .element {
+      @media @min768 {
+        font-size: 1.2rem;
+      }
+    }
+#+END_SRC
+
+
+结果为：
+
+#+BEGIN_SRC css
+    @media (min-width: 768px) {
+      .element {
+        font-size: 1.2rem;
+      }
+    }
+#+END_SRC
+
+** 函数
+
+Less 提供了各式各样的函数用来转换颜色，处理字符串或者数学计算。比如：
+
+#+BEGIN_SRC css
+    @base: #f04615;
+    @width: 0.5;
+
+    .class {
+      width: percentage(@width); // returns ~50%~
+      color: saturate(@base, 5%);
+      background-color: spin(lighten(@base, 25%), 8);
+    }
+#+END_SRC
+
+[[http://lesscss.org/functions/][这里]]有全部的参考文档。
+
+** 命名空间和访问器
+
+有的时候，你为了更好的组织代码，更好的抽象，把想要把 minxins 分组，你可以在 Less 中很直观的做到这一点。比如：
+
+#+BEGIN_SRC css
+    #bundle() {
+      .button {
+        display: block;
+        border: 1px solid black;
+        background-color: grey;
+        &:hover {
+          background-color: white
+        }
+      }
+      .tab { ... }
+      .citation { ... }
+    }
+#+END_SRC
+
+然后你希望 ~.button~ 类和我们的 ~#header a~ 混合，我们可以这么做：
+
+#+BEGIN_SRC css
+    #header a {
+      color: orange;
+      #bundle > .button;  // can also be written as #bundle.button
+    }
+#+END_SRC
+
+** 作用域
+
+Less 中的作用域和其他编程语言很类似，变量、混合会优先使用当前作用域，如果找不到的话，编译器再会查看父作用域，等等。
+
+#+BEGIN_SRC css
+    @var: red;
+
+    #page {
+      @var: white;
+      #header {
+        color: @var; // white
+      }
+    }
+#+END_SRC
+
+
+混合或者变量定义不一定要放在他们使用之前，所以下面的代码和上面等价：
+
+#+BEGIN_SRC css
+    @var: red;
+
+    #page {
+      #header {
+        color: @var; // white
+      }
+      @var: white;
+    }
+#+END_SRC
+
+原因查看 [[http://lesscss.org/features/#variables-feature-lazy-loading][惰性求值]]
+
+** 注释
+
+Less 支持块风格和内联注释。
+
+#+BEGIN_SRC css
+/* One heck of a block
+* style comment! */
+@var: red;
+
+// Get in line!
+@var: white;
+#+END_SRC
+
+** 导入（Importing）
+
+你可以导入 ~.less~ 文件，文件中的变量将会被全部导入，如果不指定后缀名，会被认为是 ~.less~ 文件。
+
+#+BEGIN_SRC css
+@import "library"; // library.less
+@import "typo.css";
+#+END_SRC
