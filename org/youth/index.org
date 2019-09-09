@@ -8,3 +8,5 @@
 
 - 2015-12-13: [[file:ultimate-youth-start.org][绝版青春-序]]
 - 2015-12-14: [[file:in-xinong-s1.org][第一个选择]]
+- 2015-12-15: [[file:in-xinong-s2.org][宿舍]]
+- 2015-12-16: [[file:in-xinong-s3.org][迷茫的大一]]
