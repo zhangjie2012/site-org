@@ -6,3 +6,4 @@
 - [[file:blogs/index.org][Blogs]] :: 网络日志
 - [[file:wiki/index.org][Wiki]] :: 知识点整理
 - [[file:youth/index.org][Youth]] :: 永远年轻，永远热泪盈眶；从大学开始的人生经历和感悟。
+- [[file:weekly/index.org][Weekly]] :: 碎碎念

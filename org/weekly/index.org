@@ -1,0 +1,9 @@
+#+SETUPFILE: ~/site/tpl/weekly-tpl.org
+#+TITLE: Weekly
+#+OPTIONS: html-postamble:nil
+#+OPTIONS: toc:nil
+
+* 2019
+
+- [[file:2019/09.org][九月]]
+- [[file:2019/08.org][八月]]

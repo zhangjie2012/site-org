@@ -1,0 +1,82 @@
+#+SETUPFILE: ~/site/tpl/weekly-tpl.org
+#+TITLE: 2019-08
+
+** 2019-08-30 09:38
+
+Emacs 用上了 lsp，速度确实不快，但是相比以前已经进步很多了。
+
+要论补全的话，lsp 框架确实是最好的。
+
+** 2019-08-27 14:10
+
+我一定要改掉经常带着耳机的坏习惯。
+
+** 2019-08-20 12:49
+
+王垠是真的硬核，https://www.yinwang.org/blog-cn/2019/08/17/trust
+
+牛逼。
+
+** 2019-08-18 10:00
+
+看到 C++ 代码，还是好亲切。
+
+** 2019-08-16 10:59
+
+~:first-of-type~ 所选的元素必须要有一个共同的父元素，不然不会生效。
+
+** 2019-08-13 22:34
+
+caicloud 的 K8s 教程：https://github.com/caicloud/kube-ladder
+
+** 2019-08-13 22:02
+
+原来 Emacs 的 =S= 和 =s= 不是一个键位，因为几乎用不到，所以就没搞明白。
+
+- =S= 对应的是 =Super= 键
+- =s= 对应的是 =shift= 键
+
+** 2019-08-13 21:52
+
+永远做对当前最优的选择。
+
+** 2019-08-13 15:27
+
+团队里做事情，一定要允许有不同的声音，但是同时也要统一有一个人来做决断。
+
+** 2019-08-12 18:37
+
+git 删除分支报错: ~error: unable to delete 'v1.0': remote ref does not exist~
+
+原因是: ~v1.0~ 既是一个分支名称，又是一个 tag 名。删除分支和 tag 用的都是 ~git push origin :v1.0~ ，这种情况下，就没有办法区分到底要删谁。解决的办法是明确的告诉 git，你要删什么：
+
+- ~heads/v1.0~ 指的是分支
+- ~tags/v1.0~ 值的是 tag
+
+删除分支: ~git push origin :heads/v1.0~ 。
+
+** 2019-08-12 17:32
+
+#+begin_quote
+计算机科学领域的任何问题都可以通过增加一个间接的中间层来解决。
+#+end_quote
+
+这几年影响最大的一句话。
+
+** 2019-08-05 15:00
+
+ag([[https://github.com/ggreer/the_silver_searcher][the_sliver_searcher]] 过滤目录：
+
+他会自动过滤版本管理器中过滤的文件内容，比如 .gitignore 和 .hgignore。但是很多时候执行 ~ag~ 并不是包含忽略文件的目录，比如 emacs 中执行 ~counsel-ag~ 的 ignore 判定是当前项目的根目录，但是有些项目的 ignore 并不是在根目录下，而是 src 目录下。
+
+ag 有个全局的 ~.agignore~ 文件，添加过滤文件即可解决问题。
+
+** 2019-08-04 20:35
+
+[[http://pygments.org/][pygments]] 是一个通用的代码语法高亮工具，支持很多语言。专门用于博客、论坛、wiki 等代码美化显示。
+
+后端使用 pygments 之后，前端需要 css 对应。使用 pygments 可自动生成集中内置的主题。在线查看：
+
+https://help.farbox.com/pygments.html
+
+qwerty 也使用了。
