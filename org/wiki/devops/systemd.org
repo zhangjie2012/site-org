@@ -1,0 +1,248 @@
+#+SETUPFILE: ~/site/tpl/wiki-tpl.org
+#+TITLE: systemd
+#+DATE: 2018-06-01 15:50:40
+
+官方 Wiki：https://www.freedesktop.org/wiki/Software/systemd/
+
+#+begin_quote
+systemd 是 Linux 电脑操作系统之下的一套中央化系统及设置管理程序（init），包括有守护进程、程序库跟应用软件，由 Lennart Poettering 带头开发。
+其开发目标是提供更优秀的框架以表示系统服务间的依赖关系，并依此实现系统初始化时服务的并行启动，同时达到降低Shell的系统开销的效果，最终代替现在常用的 System V 与 BSD 风格 init 程序。
+
+-- https://zh.wikipedia.org/wiki/Systemd
+#+end_quote
+
+值得注意的是 systemd 被众多的 Linux发行版 所支持，但并不是所有，比如 Ubuntu 15.04 之后的版本才支持。
+
+关于 Linux 系统初始化的发展可以看这三篇文章，可以更好的理解 systemd：
+
++ [[https://www.ibm.com/developerworks/cn/linux/1407_liuming_init1/index.html][浅析 Linux 初始化 init 系统，第 1 部分 sysvinit]]：串行启动，慢
++ [[https://www.ibm.com/developerworks/cn/linux/1407_liuming_init2/index.html][浅析 Linux 初始化 init 系统，第 2 部分 UpStart]]：采用事件驱动模型，启动更快，动态硬件插拔
++ [[https://www.ibm.com/developerworks/cn/linux/1407_liuming_init3/index.html][浅析 Linux 初始化 init 系统，第 3 部分 Systemd]]：采用 socket/D-Bus activation 等技术启动服务，并行启动更快
+
+下面的文档基本翻译自：Fedora 官方文档 [[https://docs.fedoraproject.org/quick-docs/en-US/understanding-and-administering-systemd.html][Understanding and administering systemd]]。
+
+** 理解 systemd
+
+systemd 是一个系统和 Linux 服务管理器，兼容 SysV 和 LSB 初始化脚本，systemd 提供了：
+
++ 更好的并行处理功能（Aggressive parallelization capabilities）；
++ 启动服务使用 socket 和 D-Bus 激活（Uses socket and D-Bus activation for starting services）；
++ 按需提供守护进程，使用 Linux cgroups 做进程追踪（Offers on-demand starting of daemons, keeps track of processes using Linux cgroups）；
++ 提供快照和恢复系统功能（Supports snapshotting and restoring of the system state）；
++ 维护挂载和自动挂载点（Maintains mount and automount points）；
++ 实现基于事务依赖性的服务控制逻辑（Implements an elaborate transactional dependency-based service control logic）；
+
+`systemctl` 命令是管理 systemd 的主要工具，它结合了 SysVinit 的 `service` 和 `chkconfig` 命令，用来开启和关闭服务。
+
+systemd 使用 _units_ 作为资源和服务的表达方式，下面显示了 systemd 可以管理的 unit 类型：
+
++ `service`：系统上运行的服务，包含服务的启动、重启、停止指令；
++ `socket`：与服务关联的网络套接字（network socket）；
++ `device`：专门用 systemd 管理的设备；
++ `mount`：使用 systemd 管理的挂载点；
++ `automount`：在引导程序上自动挂载的挂载点（A mountpoint automatically mounted on boot）；
++ `swap`：系统上的交换空间（Swap space）；
++ `target`：其它 units 的同步点。通常用于在系统启动时启动的服务，（对配置单元进行逻辑分组，更好的管理配置单元）；
++ `path`：A path for path-based activation. For example, you can start services based on the state of a certain path, such as whether it exists or not了；
++ `timer`：计划任务（A timer to schedule activation of another unit）；
++ `snapshot`：当前 systemd 状态的 snapshot。通常用于 systemd 临时更改之后回滚；
++ `slice`：通过使用 Linux Control Group nodes（cgroups）限制资源；
++ `scope`：systemd 总线接口信息。通常用于管理外部系统进程；
+
+** 启动、暂停和查询 systemd 服务
+
+你可以使用 `systemctl` 执行各种管理任务来控制 systemd 服务。下面举几个例子：
+
+假定你有一个 `foo` 服务：
+
++ 激活服务：`systemctl start foo`
++ 停止服务：`systemctl stop foo`
++ 重启服务：`systemctl restart foo`
++ 查看服务状态：`systemctl status foo`
++ 服务开机自启动：`systemctl enable foo`
++ 关闭服务开机自启动：`systemctl disable foo`
++ 除非 unmasked，否则阻止服务手动启动甚至是手动启动：`systemctl mask foo`
++ 检查服务是否已经设置开机自启动：`systemctl is-enabled foot`
++ 重新加载已修改的配置文件：`systemctl daemon-reload`，修改文件之后只有 `daemon-reload`，再 reload 服务才能生效
++ 重置 systemd 状态：`systemctl reset-failed`，某个单元出了问题之后，systemd 会一直记录他的退出代码让管理员来检查，直到服务重启或者执行这个命令才会消除（但有些时候该服务已经被管理员删掉了）
+
+** 修改已经存在的系统服务
+
+服务修改文件存放在 `/etc/systemd/system` 目录下，该目录以服务命名。例如，下面的程序修改 `httpd` 服务。
+
+1. 以 `[SERVICE NAME].service.d` 的格式创建目录，比如 `httpd.service.d`：
+
+        mkdir /etc/systemd/system/httpd.service.d/
+
+2. 在该目录下创建配置文件：
+
+        vi /etc/systemd/system/httpd.service.d/custom.conf
+
+3. 添加 custom 配置，比如：
+
+        [Service]
+        Restart=always
+        RestartSec=30
+
+4. 保存文件
+5. 重启 `httpd` 服务：
+
+        systemctl restart httpd
+
+** 创建新的 systemd 服务
+
+自定义的 unit 文件在 `/etc/systemd/system/` 目录下，以 `.service` 作为后缀。比如说 `foo` 服务使用 `/etc/systemd/system/foo.service` unit 文件。
+
+1. 创建并且编辑一个新的配置文件：`vi /etc/systemd/system/foo.service`
+2. 接下来在文件中添加每个 section 参数：
+    1. `[Unit]` section 指定最基本的服务信息。`foo` 服务使用下面两个参数：
+        + `Description`：unit 描述字符串，systemd 在用户界面 unit 名称旁边显示这个字符串；
+        + `Requires`：定义该服务的依赖 unit 。当你激活 unit 的时候，systemd 会先激活 `Requires` 中的 units 列表；
+
+                [Unit]
+                Description=My custom service
+                Requires=network.target
+
+    2. `[Service]` section 提供控制服务所需的指令，`foo` 服务使用下面两个参数：
+        + `Type`：定义 systemd 服务的类型，`foo` 服务是一个 `simple` 服务（在不需要任何特殊条件下启动）
+        + `ExecStart`：服务启动命令。包含命令的全路径和运行参数；
+
+                [Service]
+                Type=simple
+                ExecStart=/usr/bin/sleep infinity
+
+    3. `[Install]` 提供 systemd 如何安装服务的指令。`foo` 服务使用如下参数：
+        + `WantedBy` 如果使用 `systemctl enable` 开启服务，由哪个服务来触发。大多数情况下用来在系统启动时启动服务，`foo.service` 使用 `multi-user.target`，当系统启动时加载 `multi-user.target` 时跟随启动；
+
+3. 完整的 `foo.service` 文件如下：
+
+        [Unit]
+        Description=My custom service
+        Requires=network.target
+
+        [Service]
+        Type=simple
+        ExecStart=/usr/bin/sleep infinity
+
+        [Install]
+        WantedBy=multi-user.target
+
+4. 启动服务：`systemctl start foo`；
+5. 检查服务的运行状态：`systemctl status foo`；
+
+        $ systemctl status foo
+        ● foo.service - My custom service
+           Loaded: loaded (/etc/systemd/system/foo.service; static; vendor preset: disabled)
+           Active: active (running) since Thu 2017-12-14 14:09:12 AEST; 6s ago
+         Main PID: 31837 (sleep)
+            Tasks: 1 (limit: 4915)
+           CGroup: /system.slice/foo.service
+                   └─31837 /usr/bin/sleep infinity
+
+        Dec 14 14:09:12 dansmachine systemd[1]: Started My custom service.
+
+** 转换 SysVinit 服务
+
+旧的 Fedora 使用 SysVinit 脚本管理服务，这一节提供怎样把 SysVinit 脚本转换成等价的 systemd 服务的方法。略。
+
+** 常用的服务参数
+
+这里只列出常用的参数，完整的参数可以通过 `man systemd.unit` 查看。
+
+*** Unit 参数
+
+服务中的 `[Unit]` 块参数。
+
++ `Description`：服务描述字符串；
++ `Documentation`：空格分隔的 URIs 引用文档，只接受如下形式的 URIs：`http://`，`https://`，`file:`，`info:`，`man`；
++ `Requires`：依赖服务配置，该服务激活时，依赖的服务也会被激活。如果依赖的服务被激活失败，systemd 不会启动该服务。可以指定多个依赖服务，服务之间用空格分开；
++ `Wants`：跟 Require 类似，除了依赖启动失败时不会影响当前服务；
++ `BindTo`：跟 Require 类似，除了停止依赖 units 也停止服务；
++ `PartOf`：跟 Require 类似，除了停止和重启依赖 units 也停止和重启服务；
++ `Conflicts`：空格分离的 unit 名称列表，如果他们运行，服务会被终止；
++ `Before`，`After`：空格分隔的单元名称，用来配置服务之间的依赖顺序（属于更精确地依赖）；
++ `OnFailure`：当服务进入失败状态时，启动的 unit 名称列表；
+
+*** Install 参数
+
+服务中的 `[Install]` 参数。
+
++ `Alias`：A space-separated list of additional names this service shall be installed under. The names listed here must have the same suffix (i.e. type) as the service filename.
++ `RequiredBy`，`WantedBy`：将服务定义为依赖于其他服务，一般用来作为触发服务的 target。类似于 `[Units]` 块中的 `Requires` 和 `Wants`；
++ `Also`：安装或者卸载此服务时同时安装和卸载的 unit；
+
+*** Service 参数
+
+服务中的 `[Service]` 参数。
+
++ `Type`：配置此服务所服务的进程启动类型：
+    - `simple`：以简单的主进程方式启动，这是默认的方式；
+    - `forking`：fork 一个进程，然后以作为主守护进程的一部分运行；
+    - `oneshot`：跟 `simple` 类似，except the process must exits before systemd starts follow-up services；
+    - `dbus`：跟 `simple` 类似，except the daemon acquires a name of the D-Bus bus；
+    - `notify`：跟 `simple` 类似, except the daemon sends a motification message using sd_notify or an equivalent call after starting up；
+    - `idle`：跟 `simple` 类似，except the execution of the service is delayed until all active jobs are dispatched.；
++ `RemainAfterExit`：一个 boolean 值指定当它的进程退出时是否认为活跃，默认为 no；
++ `GuessMainPID`：一个 boolean 值用来指定如果无法准确的确定 PID 时，否猜测服务的主 PID。只有当 `Type=forking` 时才有意义，默认值为 yes。
++ `PIDFile`：指向守护进程 PID 文件的绝对文件路径。当使用 `Type=forking` 时推荐使用这个选项。当启动服务的时候 systemd 读取守护进程的主进程的 PID。systemd 不会写入这里配置的文件，虽然它会在服务关闭时移除文件。
++ `BusName`：到达该服务的 D-Bus 的 bus 名称。当服务设置 `Type=dbus` 时需要强制设置；
++ `ExecStart`：服务启动命令和参数；
++ `ExecStartPre`，`ExecStartPost`：在 `ExecStart` 命令之前或者之后执行的额外命令；
++ `ExecReload`：当服务重启时执行的命令；
++ `ExecStop`：当服务停止时执行的命令；
++ `ExecStopPost`：在服务停止时执行的额外命令；
++ `RestartSec`：在重启服务的时候 sleep 的秒数；
++ `TimeoutStartSec`：服务启动时等待的秒数；
++ `TimeoutStopSec`：服务停止时等待的秒数；
++ `TimeoutSec`：同时配置 `TimeoutStartSec` 和 `TimeoutStopSec` 的简单办法；
++ `RuntimeMaxSec`：服务运行的最长时间，传递 infinity（默认值）表示没有运行时长限制；
++ `Restart`：配置服务重启的时机（当服务进程退出、被杀掉、或者超时）：
+    - `no` - 服务不会被重启。默认选项；
+    - `no-success` - 只有服务正常退出时（exit code 0）重启；
+    - `no-failure` - 只有服务没有正常退出时（no-zero exit code）重启；
+    - `on-abnormal` - 如果进程在被信号终止或者发生超时时终止；
+    - `on-abort` - 进程正常退出时没有捕获信号
+    - `always` - 总是重启；
+
+**  runlevels 和 targets 的映射关系
+
+systemd targets 跟 SysVinit runlevels 有相同的目标，但是行为有一点点不同。每个 target 都有一个名字而不是数字而且有特定的目的。systemd 通过继承另一个 target 并向其添加额外的服务来实现一些 targets。一些 systemd targets 模仿常见的 sysvinit runlevels，也就意味着你可以用 `telinit RUNLEVEL` 相似的命令来切换 targets。runlevels 在 vanilla Fedora 安装时被分配了一个特定的目的（0，1，3，5 和 5）跟特定的 systemd target 有 1:1 的映射关系。
+
+然而，在用户定义的 runlevels 2 和 4 不是这种情况，要使用这些运行级别，创建一个新的命名的 systemd targets 比如 `/etc/systemd/system/$YOURTARGET` 使用一个已经存在的 runlevels 做为基础，创建一个目录 `/etc/systemd/system/$YOURTARGET.wants`，然后符号链接其他服务以启用该目录。
+
+下面是 SysVinit runlevels 和 systemd targets 的映射关系：
+
+|-------------------+-------------------------------------------------------+----------------------------------------------------------------------------------------------|
+| Sysvinit Runlevel | systemd Target                                        | Notes                                                                                        |
+|-------------------+-------------------------------------------------------+----------------------------------------------------------------------------------------------|
+|                 0 | runlevel0.target, poweroff.target                     | Halt the system.                                                                             |
+|      1, s, single | runlevel1.target, rescue.target                       | Single user mode.                                                                            |
+|              2, 4 | runlevel2.target, runlevel4.target, multi-user.target | User-defined/Site-specific runlevels. By default, identical to 3.                            |
+|                 3 | runlevel3.target, multi-user.target                   | Multi-user, non-graphical. Users can usually login via multiple consoles or via the network. |
+|                 5 | runlevel5.target, graphical.target                    | Multi-user, graphical. Usually has all the services of runlevel 3 plus a graphical login.    |
+|                 6 | runlevel6.target, reboot.target                       | Reboot                                                                                       |
+|         emergency | emergency.target                                      | Emergency shell                                                                              |
+|-------------------+-------------------------------------------------------+----------------------------------------------------------------------------------------------|
+
+** 服务映射命令
+
+下表演示了 systemd 和 SysVinit 的等价命令。
+
+|-----------------------------+-----------------------------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------------|
+| Sysvinit Command            | systemd Command                                                                                                       | Notes                                                                                                   |
+|-----------------------------+-----------------------------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------------|
+| service frobozz start       | systemctl start frobozz                                                                                               | Used to start a service (not reboot persistent)                                                         |
+| service frobozz stop        | systemctl stop frobozz                                                                                                | Used to stop a service (not reboot persistent)                                                          |
+| service frobozz restart     | systemctl restart frobozz                                                                                             | Used to stop and then start a service                                                                   |
+| service frobozz reload      | systemctl reload frobozz                                                                                              | When supported, reloads the config file without interrupting pending operations.                        |
+| service frobozz condrestart | systemctl condrestart frobozz                                                                                         | Restarts if the service is already running.                                                             |
+| service frobozz status      | systemctl status frobozz                                                                                              | Tells whether a service is currently running.                                                           |
+| ls /etc/rc.d/init.d/        | systemctl or systemctl list-unit-files --type=service or ls /lib/systemd/system/.service /etc/systemd/system/.service | Used to list the services that can be started or stopped, Used to list all the services and other units |
+| chkconfig frobozz on        | systemctl enable frobozz                                                                                              | Turn the service on, for start at next boot, or other trigger.                                          |
+| chkconfig frobozz off       | systemctl disable frobozz                                                                                             | Turn the service off for the next reboot, or any other trigger.                                         |
+| chkconfig frobozz           | systemctl is-enabled frobozz                                                                                          | Used to check whether a service is configured to start or not in the current environment.               |
+| chkconfig --list            | systemctl list-unit-files --type=service or ls /etc/systemd/system/*.wants/                                           | Print a table of services that lists which runlevels each is configured on or off                       |
+| chkconfig --list            | grep 5:on                                                                                                             | systemctl list-dependencies graphical.target                                                            |
+| chkconfig frobozz --list    | ls /etc/systemd/system/*.wants/frobozz.service                                                                        | Used to list what levels this service is configured on or off                                           |
+| chkconfig frobozz --add     | systemctl daemon-reload                                                                                               | Used when you create a new service file or modify any configuration                                     |
+|-----------------------------+-----------------------------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------------|
