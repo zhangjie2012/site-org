@@ -1,0 +1,13 @@
+#+SETUPFILE: ~/site/tpl/wiki-tpl.org
+#+TITLE: hash
+#+DATE: 2018-10-23 17:55:15
+
+* 一致性散列算法
+
+最早提及的论文：[[https://www.akamai.com/us/en/multimedia/documents/technical-publication/consistent-hashing-and-random-trees-distributed-caching-protocols-for-relieving-hot-spots-on-the-world-wide-web-technical-publication.pdf][Consistent Hashing and Random Trees: Distributed Caching Protocols for Relieving Hot Spots on the World Wide Web]]
+
+* 文章
+
++ [[https://www.toptal.com/big-data/consistent-hashing][A Guide to Consistent Hashing]]
++ [[https://medium.com/@sent0hil/consistent-hashing-a-guide-go-implementation-fe3421ac3e8f][Consistent hashing, a guide & Go library]]
++ [[http://www.cnblogs.com/haippy/archive/2011/12/10/2282943.html][一致性hash算法释义]]
