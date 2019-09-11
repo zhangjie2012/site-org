@@ -1,6 +1,14 @@
 #+SETUPFILE: ~/site/tpl/weekly-tpl.org
 #+TITLE: 2019-09
 
+** 2019-09-10 17:38:40
+
+#+begin_quote
+Bad programmers worry about the code. Good programmers worry about data structures and their relationships.
+#+end_quote
+
+/via Linus Torvalds/
+
 ** 2019-09-10 12:31:23                                              :twitter:
 
 东野圭吾《恶意》里面说：有些人的恨是没有原因的，他们平庸、没有天分、碌碌无为，于是你的优秀、你的天赋、你的善良和幸福都是原罪。有种恶意不需要理由，而且可以深刻到赔上自己以致对方于死地。
