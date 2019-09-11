@@ -1,6 +1,7 @@
 #+SETUPFILE: ~/site/tpl/wiki-tpl.org
 #+TITLE: systemd
 #+DATE: 2018-06-01 15:50:40
+#+OPTIONS: num:n
 
 官方 Wiki：https://www.freedesktop.org/wiki/Software/systemd/
 

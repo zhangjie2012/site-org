@@ -1,0 +1,34 @@
+#+SETUPFILE: ~/site/tpl/wiki-tpl.org
+#+TITLE: rsync
+#+DATE: 2017-12-04 11:11:41
+
+~rsync~ 是 Linux 下两台主机数据同步工具。
+
+语法:
+
+#+BEGIN_SRC shell
+rsync [OPTION]... SRC DEST
+rsync [OPTION]... SRC [USER@]host:DEST
+rsync [OPTION]... [USER@]HOST:SRC DEST
+rsync [OPTION]... [USER@]HOST::SRC DEST
+rsync [OPTION]... SRC [USER@]HOST::DEST
+rsync [OPTION]... rsync://[USER@]HOST[:PORT]/SRC [DEST]
+#+END_SRC
+
+参数:
+
++ ~-t~: 同步源文件的 "modify time"，但是可能会导致相同时间的不同文件内容被忽略
++ ~-I~: 挨个文件做同步，可以保证数据一致性，代价是是速度上会变慢(可以避免~-t~带来的问题)
++ ~-v~: 输出更新信息，增加的 ~v~ 越多，就可以获得更多的日志信息
++ ~-z~: 这是个压缩选项，只要使用了这个选项，rsync就会把发向对端的数据先进行压缩再传输。对于网络环境较差的情况下建议使用。
++ ~-r~: 递归同步
++ ~-p~: 保持权限
++ ~-a~: 等价于 ~rlptgoD~ 这一系列选项
++ ~-C~: ~auto-ignore files in the same way CVS does~
++ ~-H~: 保留硬链接
+
+常用: ~rsync -avHC SRC DEST~
+
+参考:
+
++ <http://roclinux.cn/?p=2643>
