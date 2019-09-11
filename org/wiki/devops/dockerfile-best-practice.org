@@ -1,0 +1,23 @@
+#+SETUPFILE: ~/site/tpl/wiki-tpl.org
+#+TITLE: Dockerfile 最佳实践
+#+DATE: 2018-08-20 17:45:11
+
+
+来自：Docker 官方 [[https://docs.docker.com/develop/develop-images/dockerfile_best-practices/][Best practices for writing Dockerfiles]]。
+
++ 使用 ~.dockerfile~ 文件避免不必要的文件发送到 Docker daemon，提升镜像构建效率。千万不要把 root 作为构建向上下文
++ 一个容器应该只包含一个服务（一容器一进程），更符合 Docker 的理念。但并不是强制这么做的，类似 nginx + uwsgi 这种例外情况，可以使用 supervisor 来实现
++ 最小化镜像层数
+  + 在 Docker 1.10 或者更高的版本下，只有 ~RUN~、~COPY~、~ADD~ 指令会创建层数，其它的指令创建临时的中间镜像，不会直接增大构建的大小
+  + 在 Docker 17.05 或者更高的版本，你可以用多阶段构建，只需要把最终的内容复制到镜像中
++ 多行参数按照字母顺序排序，避免安装包重复，可读性强，使用 ~\~ 换行
++ 使用构建缓存，Docker 按照 Dockerfile 指令顺序执行，构建时会检测是否有可复用的镜像，而不是直接创建镜像
+  - Docker 从缓存的父镜像开始，将每一条指令和基础基础派生的所有子镜像对比（看是否使用了完全相同的构建指令），以确定缓存是否可用
+  - 大多数情况下，只需要对比子镜像指令。 ~COPY~ 和 ~ADD~ 这种结果依赖于内容的需要判断内容是否相同（忽略修改时间和访问时间）
+  - 除了 ~ADD~ 和 ~COPY~ 命令之外，缓存检查不会查看容器中的文件（以保证匹配效率）。所以, ~RUN apt-get -y update~ 这类指令不会检查容器中实际的缓存是否匹配，只会使用字符串命令表面来做匹配
++ 指令最佳实践
+  - ~FROM~ 尽可能使用官方的镜像作为基础镜像（安全因素、干净）
+  - ~RUN~ 通过 ~\~ 分隔较长的或者复杂的命令
+  - 不建议 ~ENTRYPOINT~ 和 ~CMD~ 一起使用，会增加复杂性。通常只需要使用 ~CMD~ ，只有当你需要把容器作为一个进程来使用时才使用 ~ENTRYPOINT~
+  - ~EXPOSE~ 表明容器要监听的端口，建议使用标准端口
+  - 优先使用 ~COPY~ 而不是 ~ADD~，~COPY~ 更透明一些，只提供文件的拷贝，当需要解压操作的时候再使用 ~ADD~ ，远程文件拷贝也使用 ~RUN~ 结合 ~wget~ 和 ~curl~ 命令替代
