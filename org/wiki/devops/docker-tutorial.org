@@ -1,5 +1,5 @@
 #+SETUPFILE: ~/site/tpl/wiki-tpl.org
-#+TITLE: Docker 笔记
+#+TITLE: Docker 学习笔记
 #+DATE: 2018-08-20 17:45:11
 
 * Docker 简介
@@ -324,16 +324,18 @@ Docker 允许挂载一个主机目录作为数据卷。区别仅在于 ~source~ 
 
 ** ENTRYPOINT 和 CMD 的区别
 
-1. 镜像运行时，ENTRYPOINT 命令会最先执行； ~docker run~ 后执行的命令会追加到 ENTRYPOINT 之后。ENTRYPOINT 会可以指定脚本：
+1. Docker 默认的 ENTRYPOINT 是 ~/bin/sh -c~ ，但是没有默认的 CMD。 _CMD 是 ENTRYPOINT 的参数_ ，一个 Dockerfile 只能有一个 CMD 命令，多个命令只会执行最后一个
+2. 镜像运行时，ENTRYPOINT 命令会最先执行； ~docker run~ 后执行的命令会追加到 ENTRYPOINT 之后。ENTRYPOINT 会可以指定脚本：
    #+BEGIN_SRC
    COPY ./docker-entrypoint.sh /
    ENTRYPOINT ["/docker-entrypoint.sh"]
    CMD ["postgres"]
    #+END_SRC
-2. CMD 会在 ENTRYPOINT 之后执行，一个 Dockerfile 只能有一个 CMD 命令，多个命令只会执行最后一个
 3. 在运行 docker 时，添加命令会覆盖 CMD， ~docker run rails_app rails console~ 会覆盖默认的命令
 
 *使用上的最佳实践*
+
+不建议 ~ENTRYPOINT~ 和 ~CMD~ 一起使用，会增加复杂性。通过只需要 ~CMD~ ，只有当你需要吧容器当成一个进程来使用才使用 ~ENTRYPOINT~ 。
 
 ~ENTRYPOINT~ 设置镜像的主要命令， ~CMD~ 做为默认 flag，比如：
 
@@ -343,18 +345,18 @@ Docker 允许挂载一个主机目录作为数据卷。区别仅在于 ~source~ 
     CMD ["-c"]
 #+END_SRC
 
-**语法最佳实践**
+*语法最佳实践*
 
 ~CMD~ 应该使用这种格式: ~CMD ["executable", "param1", "param2", ...]~
 
-**总结**
+*总结*
 
 ENTRYPOINT 和 CMD 都是用来定义容器启动时所要执行的命令，下面说明两者之间的关系：
 
 1. Dockerfile 应该至少指定一个 CMD 或者 ENTRYPOINT 命令
 2. 当容器做为可执行文件时，应该定义 ENTRYPOINT
 3. CMD 应该做为 ENTRYPOINT 的默认参数，或在容器中执行 ad-hoc 命令
-4. 运行容器设置 alternative arguments 会覆盖 CMD
+4. 运行容器设置交互参数（alternative arguments）会覆盖 CMD
 
 via: [[https://medium.freecodecamp.org/docker-entrypoint-cmd-dockerfile-best-practices-abc591c30e21][Docker ENTRYPOINT & CMD: Dockerfile best practices]]：ENTRYPOINT & CMD
 
@@ -367,7 +369,7 @@ via: [[https://medium.freecodecamp.org/docker-entrypoint-cmd-dockerfile-best-pra
 还因为在构建镜像的时候，你无法决定运行期主机端口如何映射到容器内部，因为你不知道运行容器的机器有哪些端口是可用的。
 + ~-p~ 或者 ~--publish~ 是实际建立网络映射的方法，创建宿主机和容器的端口映射规则，比如 ~-p 127.0.0.1:6379:6379~ 会将容器中的 6379 映射到宿主机的 ~127.0.0.1:6379~ 上
 
-再简单来讲，~EXPOSE~ 只是规范（documenting）， ~-p~ 才是实际和网络映射有关的。
+再简单来讲， ~EXPOSE~ 只是规范（documenting）， ~-p~ 才是实际和网络映射有关的。
 
 ** Docker 如何跟随系统启动？
 
@@ -381,9 +383,23 @@ via: [[https://medium.freecodecamp.org/docker-entrypoint-cmd-dockerfile-best-pra
 
 来自：[[https://stackoverflow.com/questions/19335444/how-do-i-assign-a-port-mapping-to-an-existing-docker-container][How do I assign a port mapping to an existing Docker container?]]
 
-* FAQ
+** ADD 和 COPY 的区别
 
-A: docker 作为 crontab 命令时报错, ~Error The input device is not a TTY~
+都是从上下文环境拷贝数据到镜像中，区别就是 ~ADD~ 比 ~COPY~ 做的事情更多一些。
+
++ ~ADD~ 允许 ~<src>~ 是个 URL
++ 如果 ~<src>~ 是个压缩格式的文件，~ADD~ 也会自动解压。
+
+根据 [[https://docs.docker.com/develop/develop-images/dockerfile_best-practices/#add-or-copy][Dockerfile]] 最佳实践 中说明，建议使用 ~COPY~ 而不是 ~ADD~ ，除非你必须要使用 ~ADD~ 的特性才能完成工作。
+
+* FAQ
+** 如何获取机器容器 IP
+
+#+BEGIN_SRC
+docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' container_name_or_id
+#+END_SRC
+
+** docker 作为 crontab 命令时报错, ~Error The input device is not a TTY~
 
 解决办法时去掉 docker 命令中的 ~-t~ 选项，参考：
 
