@@ -239,3 +239,39 @@ https://blog-1252349778.cos.ap-beijing.myqcloud.com/2018/docker-pull-2013-2017.p
 -------------
 
 在本文中，我们介绍了 Docker 的不同里程碑和延边，并发现了一些工具，比如 libcontainer，libnetwork，RunC，Swarm，Containerd 和 Linuxkit。
+
+------------
+
+** 笔者：一些补充
+
+*** LXC vs Docker
+
+https://blog-1252349778.cos.ap-beijing.myqcloud.com/2018/docker_vs_lxc.png
+
+*** containerd
+
+[[https://containerd.io/][containerd]] 是一个行业标准的运行时，强调简单行、健壮性、可移植性。
+
+下面是来自官网的架构图：
+
+https://blog-1252349778.cos.ap-beijing.myqcloud.com/2018/containerd-architecture.png
+
+_containerd_ 是 Linux 和 Windows 上的守护进程。它管理主机系统上完整的生命周期，从图像传输和存储到容器执行和监控，再到低级存储，再到网络附件。
+
+从架构图上可以看到底层的 runtime 管理器用的是交互用的是 runc 或者操作系统特定的库来处理的。
+
+*** RunC
+
+[[https://github.com/opencontainers/runc][runc]] 的前身是 [[https://github.com/docker/libcontainer][libcontainer]]， ~runc = libcontainer + client~ ，所以官方说的是符合 OCI 规范的管理容器的 CLI 工具。容器这里对应的是 libcontainer。
+
+注意，基于 OCI 标准实现的运行时，不止有 runc，还有虚拟机运行 [[https://github.com/hyperhq/runv][runv: Hypervisor-based Runtime for OCI]] 以及 [[https://github.com/huawei-openlab/oct][huawei-openlabl: oct]] 等。这就是指定标准的好处。
+
+再注意，runc 是独立于 Docker 的，它是比 Docker 更轻量级的，而且是符合 OCI 标准化的，Docker 不具备这些。
+
+*** OCI
+
+[[https://www.opencontainers.org/][OCI]] open container initiative，开放容器协议，是一个轻量级的，开放的治理结构（项目），在 Linux 基金会的支持下成立，旨在围绕容器格式和运行时创建的开放行业标准。OCI 于 2015 年 6 月 22 日由 Docker，CoreOS 和其他容器行业领导者推出。
+
+OCI 目前包含两个规范：运行时规范（[[https://github.com/opencontainers/runtime-spec][runtime-spec]]）和镜像规范（[[https://github.com/opencontainers/image-spec][image-spec]]）。
+
+简单讲就是，OCI 的存在是为了避免容器生态系统混乱无序，从而定义规范，什么是「容器」，以方便大家有一致的共识。
