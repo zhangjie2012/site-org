@@ -16,3 +16,4 @@
 #+LANGUAGE: zh
 #+EMAIL: me@zhangjiee.com
 #+AUTHER: JerryZhang
+#+OPTIONS: timestamp:nil date:t

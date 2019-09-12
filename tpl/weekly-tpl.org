@@ -18,3 +18,4 @@
 #+AUTHER: JerryZhang
 #+OPTIONS: html-postamble:nil
 #+OPTIONS: toc:nil
+#+OPTIONS: timestamp:nil date:t
