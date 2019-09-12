@@ -23,8 +23,9 @@
 ** 容器化
 *** Docker
 
-- [[file:devops/docker-tutorial.org][笔记]]
+- [[file:devops/docker-tutorial.org][学习笔记]]
 - [[file:devops/dockerfile-best-practice.org][Dockerfile 最佳实践]]
+- [[file:devops/different-from-docker-and-vm.org][Docker 和 VM 的区别]]：翻译的 Stackoverflow 的帖子，推荐
 
 *** TODO K8s
 
