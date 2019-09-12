@@ -1,0 +1,241 @@
+#+SETUPFILE: ~/site/tpl/site-tpl.org
+#+TITLE: [译] Docker 生态系统一览 - Containers, Moby, Swarm, Linuxkit, containerd, Kubernetes ..
+#+DATE: 2018-12-17 17:11
+
+原文链接：[[https://medium.com/devopslinks/an-overall-view-on-docker-ecosystem-containers-moby-swarm-linuxkit-containerd-kubernetes-5e4972a6a1e8][An Overall View On Docker Ecosystem — Containers, Moby, Swarm, Linuxkit, containerd, Kubernetes ..]]
+
+本文的目标是分享容器技术的整体视图。不涉及技术细节，而是对容器和 Docker 进行全局视图。
+
+从 Docker 第一个版本诞生以来发生了很多的变化，这让试图学习这项技术的工程师和开发人员感到困惑。
+
+本文将说明容器生态系统中的不同概念，它们之间的关系，Docker 介绍以及 2018 年以来最重要的里程碑。
+
+所有的图片均来自 docker.com 网站。
+
+---
+
+** Docker
+
+Docker 是使用容器更轻松的创建，部署，和运行应用程序的工具。
+
+容器并不是一个新兴的技术，Docker 的普及给人了一种它是唯一使用容器的错觉，但事实上不是这样的。
+
+下面这些也使用了容器技术：
+
++ Chroot Jail
++ FreeBSD Jails
++ Linux-VServer
++ Solaris Containers
++ OpenVZ
++ Process LMCTFY
++ Docker
++ RKT
++ Chroot Jail
+
+*Chroot Jail:*
+
+(Change root)
+
+在 1979 年就发明了，也被认为是最早的容器化技术，它允许你将子进程和操作系统的其余部分隔离开。
+
+*The FreeBSD Jail:*
+
+FreeBSD Jail 是一个操作系统级虚拟化的实现。它也是操作系统级首批虚拟化技术之一。
+
+*Linux VServer*
+
+使用已添加到 Linux 内核的操作系统级虚拟化功能的虚拟专用服务器。
+
+*Oracle Solaris Containers*
+
+专为 X86 和 SPARC 系统设计的操作系统级虚拟化技术。solaris 容器是系统资源控制和「区域」提供的边界分离的组合。
+
+*OpenVZ*
+
+操作系统级别的虚拟化，它允许你创建多个安全隔离的 Linux 容器，称之为 VPS。
+
+*Process Containers*
+
+Process Containers 是由谷歌工程师开发的，更多的被称为 cgroups 或者控制组。
+
+*LXC*
+
+(Linux containers, or LXC)
+
+它是一种操作系统级虚拟化技术，允许使用单个 Linux 内核在控制主机上运行多个隔离系统。
+
+*Warden*
+
+最初使用 LXC 作为容器运行时，后来被 CloudFoundy 的实现取代。
+
+*LMCTFY*
+
+(Let me contain that for you)
+
+谷歌容器栈的开源版本。
+
+谷歌工程师在 licontainer 基础上和 Docker 团队合作，将其核心概念和抽象移植到该项目中。
+
+该项目没有积极的开发，未来可能被 libcontainer 取代。
+
+*Docker*
+
+Docker 是一个将应用程序和依赖项目打包到一起，然后几乎可以在任何服务器容器上运行的工具。
+
+*RKT*
+
+(Rocket)
+
+它是一个专注于安全性和开放标准的应用程序容器引擎。
+
+-------------------
+
+由上面可以看到，Docker 不是最早的一个容器化技术，但的确是最出名的一个。
+
+该技术于 2013 年推出，在过去的几年不断变化和发展。
+
+https://blog-1252349778.cos.ap-beijing.myqcloud.com/2018/docker-infrastructure.png
+
+这些是 Docker 平台主要的组件。
+
+在架构上，Docker 位于应用程序和基础设施之间。它封装了行业标准的容器运行时 containerd，一个名为 docker Swarm 的本地编排工具，社区版（Docker 的开源版本）和提供商业管理服务的企业版。
+
+** 让我们深入的了解一些概念和工具，比如 containerd 和 LXC
+
+*** Docker & LXC
+
+Docker 的第一个执行环境时 LXC，从 0.9 版本开始被 libcontainer 取代。
+
+*** Docker & libcontainer
+
+libcontainer 是 Linux 基础设施的 Docker 接口比如 Cgroups，namespaces，netlink 和 netfilter。
+
+https://blog-1252349778.cos.ap-beijing.myqcloud.com/2018/docker-libcontainer.jpeg
+
+*** 2015 - Docker & runC
+
+2015 年，Docker 宣布使用轻量级的、可移植的运行时 runC，它基本上是一个直接使用 libcontainer 的命令行工具，而无需通过 Docker 引擎。
+
+runC 的目标是使标准容器随处可用，该项目转赠给了 OCI。
+
+*** Docker & The Open Containers Initiative
+
+OCI 是一个轻量级的，开放的治理结构（项目），由 Docker，CoreOS 和其他容器行业的领导者在 2015 年推出。
+
+它维护了像 runC，运行时和镜像规范。它的目的是围绕容器行业制定标准，因此如果你使用 Docker 创建容器，也可以在任何其他引擎上运行。
+
+*** 2016 - Docker & containerd
+
+2016 年，Docker 拆分出 containerd ，并把它捐赠给新的社区项目。containerd 从核心的 Docker 引擎中移出，并变成一个单独的守护进程。
+
+*** Docker 组件
+
+https://blog-1252349778.cos.ap-beijing.myqcloud.com/2018/docker-component.png
+
+因此，Docker 从一个单一的软件转变成了一组独立的组件和项目。
+
+1、Docker 是怎样创建一个容器的？
+
+- Docker 引擎创建镜像
+- 传递给 containerd
+- containerd 创建 containerd-shim
+- containerd-shim 使用 runC 运行一个容器
+- containerd-shim 允许运行时（这种情况下是 runC）在启动后推出
+
+2、这个模型的两个主要好处是：
+
+- 运行守护进程减少容器
+- 重启或者升级引擎不影响正在运行的容器
+
+*** 2017 - 容器成为了主流
+
+2017 是容器成为主流的一年，这也是 Docker 在 Linux 之外构建多个 Docker 版本的原因（Docker for Mac，Docker for Windows，Docker for AWS，GCP，等等）。
+
+随着容器大规模采用，Docker 公司意识到需要的新的生产模型，这就是它启动 Moby 项目的原因。
+
+** Moby 项目
+
+Moby 开始实现新的协作和生产级别，这是一个开源项目，旨在推进软件容器化运动。
+
+#+begin_quote
+它提供了一组包含许多组件的 lego，将他们组装成基于容器的自定义系统的框架。
+#+end_quote
+
+
+_Docker 生产模型的开始就像任何其他常见的开源单片项目一样_
+
+https://blog-1252349778.cos.ap-beijing.myqcloud.com/2018/moby-01.png
+
+_它开始将单个项目拆分为不同的开放组件_
+
+https://blog-1252349778.cos.ap-beijing.myqcloud.com/2018/moby-02.png
+
+_然后允许共享这些组件和组件的模型_
+
+https://blog-1252349778.cos.ap-beijing.myqcloud.com/2018/moby-03.png
+
+_最后，在一个组件和公共组件上提供更多的协作模型_
+
+https://blog-1252349778.cos.ap-beijing.myqcloud.com/2018/moby-04.png
+
+*** 现在，我们来一起看看 Moby 项目的组件
+
+**** Containerd_
+
+Containerd 是行业的核心运行时。它可用作 Linux 和 Windows 的守护程序，它管理整个容器生命周期，如图像传输和存储，容器执行和监视，低级存储和网络附件。
+
+**** Linuxkit
+
+Linuxkit 是另一个 Moby 项目的组件，它是为容器构建安全，可移植和精益操作系统的工具。
+
+它目前被下面这些（组织）支持：
+
++ 本地的虚拟机管理程序，比如 hyper-v 和 vmware
++ 一些基于云的平台，像 AWS，GCP，Azure
++ packet.net 上的 baremetal
+
+**** Infrakit
+
+Infrakit 也是 Moby 项目的一部分。
+
+它是用于创建和管理声明的、不可变更和自我修复基础结构的工具包。
+
+Infrakit 旨在自动化基础架构的设置和管理，以支持分布式系统和更高级别的容器编排系统。
+
+它的使用场景是编排引导，类似 Docker Swarm 和 Kubernetes 或者在某些公有云（如AWS）及其自动缩放组中创建自动缩放集群。
+
+**** Libnetwork
+
+Libnetwork 是用于连接容器的 native Go 实现。
+
+它支持网络驱动程序和插件的开发，旨在满足容器的中网络的「可组合」需求。
+
+**** Docker & Docker Swarm
+
+Swarm 是 Docker 引擎构建的编排工具。起初是一个独立的工具，在 1.12 版本之后包含在 Docker 中。它使用 Docker CLI 创建 swarm 集群、部署和管理应用程序和服务。
+
+https://blog-1252349778.cos.ap-beijing.myqcloud.com/2018/docker-infrastructure.png
+
+**** Docker & Kubernetes
+
+在 2017 年 10 月份宣布，将 Kubernetes 本地集成到 Docker 中，这是很重要的一次变更。
+
+通过这种集成，Docker 用户和开发人员可以选择使用 Kubernetes 和 Swarm 协调容器工作负载。
+
+(https://blog-1252349778.cos.ap-beijing.myqcloud.com/2018/moby-kubernetes.png
+
+即将推出的支持 Kubernetes 的 Docker 版本将允许用户将他们的 Docker Compose 应用程序部署为本地的 Kubernetes Pod 和服务。
+
+#+begin_quote
+Kubernetes 被认为是和 Swarm 一样的本地编排工具
+#+end_quote
+
+https://blog-1252349778.cos.ap-beijing.myqcloud.com/2018/docker-now.png
+
+**** 从 2013 年到 2017 年 Docker Pulls 情况
+
+https://blog-1252349778.cos.ap-beijing.myqcloud.com/2018/docker-pull-2013-2017.png
+
+-------------
+
+在本文中，我们介绍了 Docker 的不同里程碑和延边，并发现了一些工具，比如 libcontainer，libnetwork，RunC，Swarm，Containerd 和 Linuxkit。
