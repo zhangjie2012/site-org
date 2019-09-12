@@ -1,0 +1,41 @@
+#+SETUPFILE: ~/site/tpl/site-tpl.org
+#+TITLE: 使用 Docker 部署 Django Web server 最佳实践
+#+DATE: 2019-03-03 15:13
+
+2018 年 9 月 8 日，我写了 [[file:../2018/docker-run-django-project.org][Docker 运行 Django 项目]]，随着自己对 Docker 的更深一步了解，以及在 [qwerty](https://github.com/zhangjie2012/qwerty) 项目中的实践，感觉之前写的略有不足。这篇文章进行一定的补充说明。
+
+** 使用 Supervisor
+
+在虚拟机上部署 Django 项目，一般使用的是 uwsgi，但是在容器中运行的服务必须有一个前台进程，所以在之前的文章中去掉了 uwsgi 的 ~daemonize2~ 选项，uwsgi 日志相关的配置也都删除了（因为要跑到前台），所以 uwsgi 的日志相当于是打在了标准输出上。
+虽然这符合 Docker 的规范，但是在项目上线运行调试的过程中，uwsgi 的日志最好能够保留下来，打印到标准输出，Docker 重启时就不存在了。
+
+[[http://supervisord.org/][Supervisor]] 是 Python 写的一个进程控制系统，可以很方便的启动、重启、关闭进程。我们可以使用 Supervisor 来管理 uwsgi 进程，然后使得 Supervisor 跑在前台即可。
+_如果有多个进程需要运行在容器中，也可以使用 Supervisor，比如常见的 nginx+uwsgi_ 。配置比较简单：
+
+#+BEGIN_SRC
+[program:app-uwsgi]
+command = /usr/local/bin/uwsgi --ini /code/uwsgi.ini
+#+END_SRC
+
+然后在 Docker 启动命令设为 ~supervisord -n~ （ ~-n~ for run in the foreground）。拓展阅读：[[https://docs.docker.com/config/containers/multi-service_container/][Run multiple services in a container]]
+
+** 服务参数传递
+
+Web 服务会有一些参数要设置，比如 DB，缓存的地址、账号、密码等，以及日志的输出路径等等，Docker 部署时建议可变参数已环境变量（ ~--env~ ）的方式注入，但是实际操作中发现服务配置项往往与预期的要多，使用环境的方式启动命令会很长，很容易搞错，不容易维护。
+所以，将所以的服务配置项，使用 yml 文件维护，启动时挂载配置文件到容器指定目录下即可。
+
+** 设置 bind mounts
+
+一些需要落地宿主机的文件，最常见的为服务日志，使用 bind mounts（ ~--mounts~ ）日志目录映射到宿主机（按照固定的目录规则，也方面后期日志收集），上面所有的服务配置文件也可以 mount 到容器中；
+
+** 将 migrate 在启动脚本中执行
+
+使用 Django 经常会需要 ~migrate~ ，在容器启动后，手动进入容器中执行 ~migrate~ 非常麻烦。好在 Dockerfile 中的 ~ENTRYPOINT~，~CMD~ 运行直接指定一个启动脚本，以应对复杂的服务启动。
+实际操作也比较简单，写一个 ~startup.sh~ 脚本，内部执行 ~migrate~ 然后启动服务即可。
+
+** 对上篇文章的纠正
+
+1. 使用 ~--network~ 而不是 ~--link~ ， ~--link~ 将被 Docker 废弃，network 的方式功能更强大，也比 ~--link~ 好用，具体见：[[https://docs.docker.com/network/links/][Legacy container links]]；
+1. 实际项目直接选择 ~python:3~ ，虽然使用 ~python:3-alpine~ 看似镜像很小，但安装了众多依赖后（python-dev），大小也差不了多少。而且我尝试基于 ~python:3-alpine~ 安装 mysqlclient 库时没成功；
+
+[[https://github.com/zhangjie2012/qwerty-server/][qwerty]] 项目覆盖了上面所有的实践，不太清楚的地方，直接看代码即可。

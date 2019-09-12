@@ -7,6 +7,7 @@
 * 2019
 
 - 09-04: [[file:2019/build-site-with-org-mode.org][拥抱 org-mode]]
+- 03-03: [[file:2019/best-practices-for-docker-deploy-django.org][使用 Docker 部署 Django Web server 最佳实践]]
 
 * 2018
 
@@ -14,3 +15,4 @@
 - 12-15: [[file:2018/different-from-docker-and-vm.org][{译} Docker 和 VM 的区别]]
 - 10-25: [[file:2018/redis-cluster-hash.org][Redis cluster 中的 hashing]]
 - 10-24: [[file:2018/consistent-hashing.org][{译} 一致性 hash 指南]]
+- 09-08: [[file:2018/docker-run-django-project.org][使用 Docker 运行 Django 项目]]
