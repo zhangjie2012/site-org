@@ -10,5 +10,6 @@
 
 * 2018
 
+- 12-15: [[file:2018/different-from-docker-and-vm.org][{译} Docker 和 VM 的区别]]
 - 10-25: [[file:2018/redis-cluster-hash.org][Redis cluster 中的 hashing]]
 - 10-24: [[file:2018/consistent-hashing.org][{译} 一致性 hash 指南]]
