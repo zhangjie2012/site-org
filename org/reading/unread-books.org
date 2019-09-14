@@ -37,11 +37,9 @@
 - [[https://book.douban.com/subject/27072230/][深入理解 ES6]]
 
 ** DevOps
-   :PROPERTIES:
-   :CUSTOM_ID: devops
-   :END:
 
 - [[https://book.douban.com/subject/26902196/][The DevOps Handbook]]
+- [[https://clouddamcdnprodep.azureedge.net/gdc/gdckTlBtc/original][Kubernetes Up & Running: Dive into the Future of Infrastructure]]
 
 ** Project Management
    :PROPERTIES:

@@ -272,6 +272,15 @@ elisp 比较熟的有自己的办法优化，当然我不熟。我的解决办�
 ** 行逆序排序
 1. ~M-x sort-lines~
 2. ~M-x reverse-region~
+** 如何将 markdown 转成 org-mode
+
+~.org~ 文件可以很轻松的通过 ~org-md-export-to-markdown~ 生成 =.md= 文件。 =.md= 文件可以借助 Pandoc 生成 =.org=  [fn:md-to-org]。
+
+#+BEGIN_SRC shell
+pandoc -f markdown -t org -o test.org test.md
+#+END_SRC
+
+
 * Resource
 
 ** Blog/Site/Tutorial
@@ -296,3 +305,6 @@ elisp 比较熟的有自己的办法优化，当然我不熟。我的解决办�
 - [[https://github.com/purcell/emacs.d][purcell/emacs.d]]：久负盛名
 - [[https://github.com/redguardtoo/emacs.d][redguardtoo/emacs.d]]
 - [[https://github.com/hlissner/doom-emacs][hlissner/doom-emacs]]
+
+
+[fn:md-to-org] https://emacs.stackexchange.com/questions/5465/how-to-migrate-markdown-files-to-emacs-org-mode-format
