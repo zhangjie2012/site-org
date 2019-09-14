@@ -1,0 +1,10 @@
+#+SETUPFILE: ~/site/tpl/wiki-tpl.org
+#+TITLE: K8s 中的术语
+#+DATE: 2018-08-28 14:56:5
+
++ Node：节点，对应一台运行 K8s 的主机，虚拟机或者物理机
++ Pod：若干容器组成的容器组，同一个组内的容器共享一个存储卷（Volume）
++ RC（Replication Controllers）
++ Service：服务
++ Volumes：卷，对应一个目录，容器对其有访问权限
++ labels：标签

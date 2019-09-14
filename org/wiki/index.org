@@ -28,7 +28,10 @@
 - 博客:
   + [[file:../blog/2018/different-from-docker-and-vm.org][{译} Docker 和 VM 的区别]]
 
-*** TODO K8s
+*** K8s
+
+- [[file:devops/k8s-concept.org][术语]]
+- [[file:devops/k8s-ingress.org][Ingress]]
 
 * 程序设计
 
