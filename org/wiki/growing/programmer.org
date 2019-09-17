@@ -104,3 +104,8 @@ UML 绘图始终觉得 Visio 做的最好，各种在线（比如 ProcessOn）�
   - [[https://unetbootin.github.io/][UNetbootin]]：Windows、MacOS、Linux
 + 录屏
   - [[https://www.cockos.com/licecap/][LICEcap]]：Windows、MacOS
+
+** 版本号约定
+
++ [[https://semver.org/lang/zh-CN/][semver]]: =<MAJORL>.<MINOR>.<PATCH>= ，大部分软件发布都是用的这种规则
++ [[https://calver.org/][calver]]: =YY.mm.<patch>= ，基于日历的版本发布，适用于对时间敏感的项目，目前使用这种规则的有 Docker、Ubuntu 等

@@ -68,3 +68,4 @@
 
 - [[file:growing/programmer.org][技术人]]：一些常用的办公设备和软件记录
 - [[file:growing/mgr.org][个人管理]]：一些摘抄和感悟
+- [[file:growing/think-back.org][反思]]

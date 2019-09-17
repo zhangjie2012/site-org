@@ -63,8 +63,6 @@
 - [[https://about.gitlab.com/][Gitlab]]
 
 ** 其他资源
-
-
 *** 行业咨询类
 
 - [[https://www.infoq.cn/][InfoQ]]
@@ -118,18 +116,21 @@
 
 *** 工程师素养
 
-- [[https://roadmap.sh/][Roadmaps for Developers]]：包括前端、后端和 DevOps
-- [[https://github.com/xingshaocheng/architect-awesome][后端架构师技术图谱]]
-- [[https://db-engines.com/en/][DB-Engines]]: DBMS 收集和排名
-- [[https://github.com/vitalets/github-trending-repos][github-trending-repos]]
-- [[http://www.brendangregg.com/linuxperf.html][Linux Performance]]
-- [[https://github.com/dbohdan/structured-text-tools][structured-text-tools]]
-- [[https://w3techs.com/][W3Techs]]: Web 相关技术统计分析
-- [[https://coolshell.cn/articles/17583.html][技术人员的发展之路]]
-- [[https://www.cs.usfca.edu/~galles/visualization/Algorithms.html][数据结构动图网站]]
 - [[http://blog.knownsec.com/Knownsec_RD_Checklist/][知道创宇研发技能表v3.1]]
 - [[http://daily.zhihu.com/story/4226507][程序员の健康和效率装备列表，普通人也能参考]]
+- [[http://www.brendangregg.com/linuxperf.html][Linux Performance]]
+- [[https://coolshell.cn/articles/17583.html][技术人员的发展之路]]
 - [[https://coolshell.cn/articles/4990.html][程序员技术练级攻略]]
+- [[https://db-engines.com/en/][DB-Engines]]: DBMS 收集和排名
+- [[https://github.com/CyC2018/CS-Notes][CS-Notes]]
+- [[https://github.com/InterviewMap/CS-Interview-Knowledge-Map][CS-Interview-Knowledge-Map]]：面试图谱
+- [[https://github.com/dbohdan/structured-text-tools][structured-text-tools]]
+- [[https://github.com/donnemartin/system-design-primer/blob/master/README-zh-Hans.md][system-design-primer]]：系统设计入门
+- [[https://github.com/vitalets/github-trending-repos][github-trending-repos]]
+- [[https://github.com/xingshaocheng/architect-awesome][后端架构师技术图谱]]
+- [[https://roadmap.sh/][Roadmaps for Developers]]：包括前端、后端和 DevOps
+- [[https://w3techs.com/][W3Techs]]: Web 相关技术统计分析
+- [[https://www.cs.usfca.edu/~galles/visualization/Algorithms.html][数据结构动图网站]]
 
 ** 周刊
 
