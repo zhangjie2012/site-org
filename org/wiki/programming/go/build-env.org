@@ -1,6 +1,6 @@
 #+SETUPFILE: ~/site/tpl/wiki-tpl.org
 #+TITLE: 构建环境
-#+DATE:2017-12-07 09:41:24
+#+DATE: 2017-12-07 09:41:24
 
 * 安装
 
@@ -96,3 +96,7 @@ export PATH=$PATH:$GOROOT/bin
 比如在 MacOS 上编译 CentOS7 下的二进制包： ~GOOS=linux GOARCH=amd64 go build main~ 。
 
 相关的 Stackoverflow 帖子：[[https://stackoverflow.com/questions/20728767/all-possible-goos-value][All possible GOOS value?]] 中说明在 Go 1.7 之后，可以使用 ~go tool dist list -json~ 来显示可选的值（不加 =-json= 参数将显示为文本）。
+
+** 开发环境
+
+[[file:gocode.org][gocode]]

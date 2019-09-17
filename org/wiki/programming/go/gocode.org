@@ -1,0 +1,21 @@
+#+SETUPFILE: ~/site/tpl/wiki-tpl.org
+#+TITLE: gocode
+#+DATE: 2019-03-14 15:10
+
+gocode 是 Go 自动补全的守护进程。不过这个项目实在太曲折了。
+
+最初是这个项目 [[https://github.com/nsf/gocode][nsf/gocode]]，只支持到 1.10 版本之前，目前已经不维护了。
+
+然后迁移到了这个项目 [[https://github.com/mdempsky/gocode][mdempsky/gocode]]，支持 1.8 以上版本，但是不支持 Modules，也就是 1.12 版本。
+
+于是，就又有了[[https://github.com/stamblerre/gocode][stamblerre/gocode]]，依然是基于前一个项目开发的，支持新特性 Modules。
+
+=nsf/gocode= 和 =mdempsky/gocode= 有个问题就是补全不及时，新写的代码（包、结构体、函数等），往往不能补全。
+为此，我提了一个 [[https://github.com/mdempsky/gocode/issues/95][issue]]，答案是目前不支持，欢迎 PR。
+
+然而 =stamblerre/gocode= 虽然补全杠杠的，但是有个更严重的问题是慢，非常的慢，乃至于编辑代码都卡。
+也有一个 [[https://github.com/stamblerre/gocode/issues/28][issue]] 说这个问题，答案是就是慢，要想用更快的工具，推荐使用 [[https://github.com/golang/go/wiki/gopls][gopls]]。
+
+gopls 是跟 [[https://github.com/emacs-lsp/lsp-mode][emacs-lsp]] 结合的，lsp 是另外一个框架，支持多种语言的前端（需要对应的后端服务支持），测试下来 lsp 还很不稳定，bug 较多，倒是可以观望一下。
+
+总结下来，还是使用 =mdempsky/gocode= ，虽然有补全不实时的问题，但至少很稳定。
