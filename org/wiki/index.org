@@ -34,11 +34,6 @@
 - [[file:devops/k8s-ingress.org][Ingress]]
 
 * 程序设计
-
-** 工程师素养
-
-- [[file:programming/programmer.org][技术人]]：一些常用的办公设备和软件记录
-
 ** 前端
 
 - [[file:programming/frontend/css.org][CSS]]
@@ -67,3 +62,8 @@
 - [[file:programming/code-env/emacs.org][Emacs]]：神之编辑器
 - [[file:programming/code-env/git.org][git]] | [[file:programming/code-env/svn.org][svn]]：版本管理器
 - [[file:programming/code-env/pip.org][pip]]：Python 的包管理器
+
+* 成长
+
+- [[file:growing/programmer.org][技术人]]：一些常用的办公设备和软件记录
+- [[file:growing/mgr.org][个人管理]]：一些摘抄和感悟

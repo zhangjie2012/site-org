@@ -4,7 +4,7 @@
 
 本文档大部分内容均为摘抄，仅供技术学习, 勿传播。
 
-** 1. 什么是 Perf
+** 什么是 Perf
 
 Perf is a profiler tool for Linux 2.6+ based systems that abstracts away CPU
 hardware differences in Linux performance measurements and presents a simple
@@ -44,13 +44,13 @@ The most commonly used perf commands are:
 See 'perf help COMMAND' for more information on a specific command.
 #+END_SRC
 
-** 2. Perf 的功能
+** Perf 的功能
 
 - 评估程序对硬件资源的使用情况: 各级 Cache 访问次数、各级 Cache 丢失次数、流水线停顿周期、前端总线访问次数 ...
 - 评估程序对操作系统资源的使用情况: 系统调用次数、Page Fault 次数、上下文切换次数、任务迁移次数...
 - 评估内核性能: Benchmarks、调度器性能分析、系统行为记录与重演动态添加探测点...
 
-*** 2.1 Perf list
+*** Perf list
 
 功能: 查看当前软硬件环境、支持的性能事件。
 
@@ -76,7 +76,7 @@ These include:
 2) 软件性能事件
 3) tracepoint event
 
-*** 2.2 Perf stat
+*** Perf stat
 
 功能: 分析程序的整体性能.
 
@@ -88,7 +88,7 @@ These include:
 - ~perf stat -r 5 ./a.out~          :: 分析 5 次就停止
 - ~perf stat -d ./a.out~            :: 全面分析
 
-*** 2.3 Perf top
+*** Perf top
 
 功能: 实时显示系统/进程的性能统计信息。
 
@@ -130,7 +130,7 @@ top 界面解释:
 	perf report -g fractal,5% #
 
 
-*** 2.5 Perf timechart
+*** Perf timechart
 
 功能: 将系统的运行状态以 SVG 图的形式输出。
 
@@ -141,7 +141,7 @@ top 界面解释:
 
     perf timechart record -p 31655
 
-*** 2.6 Perf script
+*** Perf script
 
 功能: 查看 perf 数据文件 (perf.data)
 
@@ -151,15 +151,15 @@ top 界面解释:
 + ~perf script syscall-count~ # 查看系统调用被调度次数
 + ~perf script sctop~ # 实时查看各个系统调用被调用的次数
 
-*** 2.7 Perf kmem
+*** Perf kmem
 
 功能: 针对内存子系统的分析工具。也可以用 ~perf record -e kmem:* -p 630~ 来统计内存分配、释放。
 
-*** 2.8 内核 tracepoint
+*** 内核 tracepoint
 
 暂无.
 
-** 3. 一些术语
+** 一些术语
 
 - PMU ::  Performance Monitoring Unit，性能检测单元。
 - Tracepoints :: Tracepoint 是散落在内核源代码中的一些 hook，一旦使用，它们便可以在特定的代码被运行到时被触发，这一特性可以被各种 trace/debug 工具所使用。
@@ -169,7 +169,7 @@ top 界面解释:
 - instructions :: 程序执行期间产生的处理器指令数。
 - branches :: 程序在执行期间遇到的分支指令数。绝大多数现在处理器都具有分支预测与OOO(Out-of-Order)执行机制，以充分利用 CPU 内部的资源，减少流水线停顿周期。当处理器遇到分支指令时，正常来说，需要等待分支条件计算完毕才能知道后续指令该往何处跳转。这就导致了在等待分支条件计算期间，流水线上出现若干周期的停顿(流水线Hazard)。
 
-** 4. 参考(扩展)资料
+** 参考(扩展)资料
 
 + [[http://kernel.taobao.org/images/5/52/Perf%E5%9C%A8Linux%E6%80%A7%E8%83%BD%E8%AF%84%E4%BC%B0%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8_v3.pdf][Perf 在 Linux 程序性能评估中的应用(by淘宝承刚)]]
 + [[http://kernel.taobao.org/images/3/31/Linux%E7%9A%84%E7%B3%BB%E7%BB%9F%E7%BA%A7%E6%80%A7%E8%83%BD%E5%89%96%E6%9E%90%E5%B7%A5%E5%85%B7-perf-2.pdf][Linux 的系统级性能剖析工具‐perf(二)]]

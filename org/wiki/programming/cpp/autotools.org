@@ -4,9 +4,9 @@
 
 本文档整理自: [[https://www.lrde.epita.fr/~adl/dl/autotools.pdf][Autotools Tutorial: Part II]]
 
-** 一、Hello World
+** Hello World
 
-*** 1.1 创建文件
+*** 创建文件
 
 *src/main.c*
 
@@ -56,7 +56,7 @@ src:
 Makefile.am  main.c
 #+END_SRC
 
-*** 1.2 autoreconf --install
+*** autoreconf --install
 
 #+BEGIN_SRC shell
 $: autoreconf --install
@@ -84,7 +84,7 @@ Makefile.am  Makefile.in  main.c
 - depcomp* install-sh* missing* : auxiliary tools used during the build.
 - autom4te.cache/ autom4te.cache/* : Autotools cache files
 
-*** 1.3 ~./configure~
+*** ~./configure~
 
 #+BEGIN_SRC shell
 checking for a BSD-compatible install... /usr/bin/install -c
@@ -101,7 +101,7 @@ config.status: creating config.h
 config.status: executing depfiles commands
 #+END_SRC
 
-*** 1.4 ~make~
+*** ~make~
 
 #+BEGIN_SRC
 /usr/bin/make  all-recursive
@@ -117,7 +117,7 @@ make[2]: Leaving directory `/home/zhangjie/TempFile/src'
 make[1]: Leaving directory `/home/zhangjie/TempFile/src'
 #+END_SRC
 
-*** 1.5 编译、链接成功，运行程序: ~src/hello~
+*** 编译、链接成功，运行程序: ~src/hello~
 
 #+BEGIN_SRC shell
 $: src/hello
@@ -125,7 +125,7 @@ Hello World!
 This is amhello 1.0.
 #+END_SRC
 
-*** 1.6 源码打包: ~make distcheck~
+*** 源码打包: ~make distcheck~
 
 #+BEGIN_SRC shell
 $: make distcheck
@@ -136,7 +136,7 @@ amhello-1.0.tar.gz
 ============================================
 #+END_SRC
 
-*** 1.7 解包，查看文件内容
+*** 解包，查看文件内容
 
 #+BEGIN_SRC shell
 $ tar ztf amhello-1.0.tar.gz
@@ -156,9 +156,9 @@ amhello-1.0/depcomp
 amhello-1.0/install-sh
 #+END_SRC
 
-** 二、Autotools 核心介绍
+** Autotools 核心介绍
 
-*** 2.1 GNU AutoConf
+*** GNU AutoConf
 
 - ~autoconf~ : Create *configure* from *configure.ac* .
 - ~autoheader~ : Create *config.h.in* from *configure.ac* .
@@ -170,13 +170,13 @@ amhello-1.0/install-sh
 features used by most of the above tools. Useful for
 creating more than just *configure* files.
 
-*** 2.2 GNU AutoMake
+*** GNU AutoMake
 
 + ~automake~ : Create *Makefile.in*s from *Makefile.am*s and *configure.ac* .
 + ~aclocal~ : Scan ~configure.ac~ for uses of third-party macros, and
 gather denitions in ~aclocal.m4~.
 
-*** 2.3 autoreconf
+*** autoreconf
 
 ![autoreconf](/attach/compile/autoreconf.jpg)
 
@@ -187,9 +187,9 @@ gather denitions in ~aclocal.m4~.
 + 修改输出(配置)文件的时候，重建规则；
 + 你需对解每个工具产生的错误都有一个粗糙的理解（至少要知道是谁产生的错误）。
 
-** 三、Hello World 讲解
+** Hello World 讲解
 
-*** 3.1 configure.ac
+*** configure.ac
 
 #+BEGIN_SRC shell
 AC_INIT([amhello], [1.0], [bug-report@address])
@@ -207,7 +207,7 @@ AC_OUTPUT
 + ~AC_CONFIG_FILES~: Declare *Makefile* and *src/Makefile* as output files.
 + ~AC_OUTPUT~: Actually output all declared files.
 
-*** 3.2 Makefile.am
+*** Makefile.am
 
 #+BEGIN_SRC shell
 SUBDIRS = src
@@ -216,7 +216,7 @@ SUBDIRS = src
 + Build recursively in ~*src/*~.
 + Nothing else is declared for the current directory.(The top-level *Makefile.am* is usually short.)
 
-*** 3.2 src/Makefile.am
+*** src/Makefile.am
 
 #+BEGIN_SRC shell
 bin_PROGRAMS = hello
@@ -232,9 +232,9 @@ hello_SOURCES = main.c
 
 ![](/attach/compile/sys_hierarchy.jpg)
 
-** 四、使用 Autoconf
+** 使用 Autoconf
 
-*** 4.1 从 configure.ac 到 configure 和 config.h.in
+*** 从 configure.ac 到 configure 和 config.h.in
 
 + "autoconf is a macro processor.
 + It converts *configure.ac*, which is a shell script using macro instructions, into *congfiure*, a full-fledged shell script.
@@ -243,7 +243,7 @@ hello_SOURCES = main.c
 + While processing *configure.ac* it is also possible to trace the occurrences of macros. This is how "autoheader" creates *config.h.in* . It just looks for the macros that #define symbols.
 + The real macro processor actually is GNU M4. Autoconf offers some infrastructure on top of that, plus the pool of macros.
 
-*** 4.2 探索 M4
+*** 探索 M4
 
 *exmple.m4:*
 
@@ -268,7 +268,7 @@ M4 是一个宏处理器，将输出拷贝到输出。可以内嵌，也可以�
 
 这里不详细展开表述 M4，但是要记住 M4 是 Autoconf 的核心，Autoconf 只是封装了一些指令而已。
 
-*** 4.3 M4 基础上的 Autoconf
+*** M4 基础上的 Autoconf
 
 + 在许多机器上， Auto = M4，和一些预定义的宏。
 + 引用是 ~[~ 和 ~]~ (而不是 ~'~ 和 ~'~)。
@@ -284,7 +284,7 @@ AC_DEFUN([MET], [$1 met $2])
 MET([NAME1], [NAME2])
 #+END_SRC
 
-*** 4.3 一个 configure.ac 的结构
+*** 一个 configure.ac 的结构
 
 #+BEGIN_SRC shell
 # Prelude
@@ -316,9 +316,9 @@ AC_CONFIG_FILES([Makefile src/Makefile ...])
 AC_OUTPUT
 #+END_SRC
 
-** 五、使用 Automake
+** 使用 Automake
 
-*** 5.1 Automake 规则
+*** Automake 规则
 
 + Automake helps creating **portable** and **GNU-standard compliant* *Makefile*s.
     + You may be used to other kinds of build systems.(eg. no VPATH builds, but all objects go into *obj/*).
@@ -329,7 +329,7 @@ AC_OUTPUT
     + "automake"" creates build rules from these definitions.
     + It's OK to add extra *Makefile* rules in *Makefile.am*: "automake" will preserve them in the output.
 
-*** 5.2 在 *configure.ac* 中声明 Automake
+*** 在 *configure.ac* 中声明 Automake
 
 语法: ~AM_INIT_AUTOMAKE([OPTIONS...])])~ . eg: ~AM_INIT_AUTOMAKE([foreign -Wall -Werror])~ .
 
@@ -346,7 +346,7 @@ AC_OUTPUT
 
 eg: ~AC_CONFIG_FILES([Makefile sub/Makefile])~ 会生成 *Makefile.am* 和 *sub/Makefile.am*.
 
-*** 5.3 声明源文件
+*** 声明源文件
 
 #+BEGIN_SRC shell
 bin_PROGRAMS = foo run-me
@@ -362,7 +362,7 @@ run_me_SOURCES = run.c run.h print.c
 + It's OK to use the same source for two programs.
 + Compiler and linker are inferred from the extensions.
 
-*** 5.4 (静态)库
+*** (静态)库
 
 #+BEGIN_SRC shell
 lib_LIBRARIES = libfoo.a libbar.a
@@ -376,7 +376,7 @@ include_HEADERS = foo.h bar.h
 + Public headers will be installed in $(includedir).
 + Private headers are not installed, like ordinary source files.
 
-*** 5.5 目录结构
+*** 目录结构
 
 + 在每个目录下都要有一个 *Makefile* (也就是 *Makefile.am*)。
 + 所有的 *Makefile* 都要在 *configure.ac* 中声明.
@@ -392,7 +392,7 @@ SUBDIRS = lib src
 + The current directory is implicitly built after subdirectories.
 + You can put: .' where you want to override this.
 
-*** 5.6 $(srcdir) and VPATH Builds
+*** $(srcdir) and VPATH Builds
 
 + Remember VPATH builds: a source file is not necessary in the current directory.
 + There are two twin trees: the **build tree**, and the **source tree**.
@@ -403,7 +403,7 @@ SUBDIRS = lib src
 + When referring to sources files or targets in Automake variables, you do not have to worry about *source* vs. *build*, because 'make' will check both directories.
 + You may need ~$(srcdir)~ when specifying flags for tools, or writing custom commands. E.g., to tell the compiler to include headers from *dir/* , you should write ~-I$(srcdir)/dir~, not ~-Idir~. (~-Idir~ would fetch headers from the build tree.)
 
-*** 5.7 Convenience Libraries
+*** Convenience Libraries
 
 *lib/Makefile.am*:
 
@@ -427,7 +427,7 @@ run_me_CPPFLAGS = -I$(srcdir)/../lib
 + *AM_CPPFLAGS* contains additional preprocessor flags.
 + You can use per-target variables: they apply to a single program
 
-*** 5.8 Per-Target Flags
+*** Per-Target Flags
 
 Assuming foo is a program or library:
 
@@ -451,7 +451,7 @@ run_me_CPPFLAGS = -I$(srcdir)/../lib
 run_me_LDADD = ../lib/libcompat.a $(EFENCELIB)
 #+END_SRC
 
-*** 5.9 What Gets Distributed
+*** What Gets Distributed
 
 ~make dist~ and ~make distcheck~ create a tarball containing:
 
@@ -464,6 +464,6 @@ run_me_LDADD = ../lib/libcompat.a $(EFENCELIB)
 + See ~automake --help~ for a list of those files.
 + Extra les or directories listed into *EXTRA_DIST*.
 
-*** 5.10 扩展的 Automake 规则
+*** 扩展的 Automake 规则
 
 略。

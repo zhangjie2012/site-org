@@ -2,11 +2,9 @@
 #+TITLE: Valgrind
 #+DATE: 2017-12-04 11:43:59
 
-[TOC]
-
 本文档大部分内容均为摘抄，仅供技术学习, 误传播。主要介绍 Linux 下内存泄露检测工具: 内容基本来自 [[http://valgrind.org/docs/manual/manual.html][Valgrind 手册]]。
 
-* 1. 什么是 Valgrind ?
+* 什么是 Valgrind ?
 
 [Valgrind](http://valgrind.org/) is an *instrumentation framework* for building dynamic analysis tools.
 
@@ -22,7 +20,7 @@
 - SGcheck: 实验工具。 :: 可以用来修改栈和全局数组的内容。
 - BBV: is an experimental SimPoint basic block vector generator.  :: It is useful to people doing computer architecture research and development.
 
-* 2. Valgrind 的使用(参数)
+* Valgrind 的使用(参数)
 
 生成可执行文件的编译选项建议:
 
@@ -32,7 +30,7 @@
 3. 如果打算做 Memcheck 分析，建议关掉编译器优化选项;
 4. 打开 ~-Wall~;
 
-** 2.1 Valgrind 命令格式
+** Valgrind 命令格式
 
 #+BEGIN_SRC shell
 valgrind [valgrind-options] your-prog [your-prog-options]
@@ -40,7 +38,7 @@ valgrind [valgrind-options] your-prog [your-prog-options]
 
 一般来说 ~[valgrind-options]~ 是 ~--tool=xxx~ ，在 Valgrind 不加参数时，直接使用 valgrind 等价于 ~valgrind --tool=memcheck~ ，也就是默认情况下， Valgrind 是做内存错误检测的。
 
-** 2.2 控制输出
+** 控制输出
 
 默认情况，Valgrind 工具之输出一些基本的信息，可以在运行的时候加上 ~-v~ 选项来使得输出更丰富的信息。
 
@@ -50,7 +48,7 @@ valgrind [valgrind-options] your-prog [your-prog-options]
 2. 输出到文件中: ~--log-file=filename~
 3. 输出到网络 socket: socket 由 IP 地址和端口号来指定，比如: ~--log-socket=192.168.0.1:12345~ 。你也可以不指定端口号，这种情况下默认的端口号是 1500。具体请看手册，这里不再赘述。
 
-** 2.3 参数选项(Core Command-line Options)
+** 参数选项(Core Command-line Options)
 
 *选项的解释基本上只点一下功能，详细的使用方法看 man 手册。*
 
@@ -124,9 +122,9 @@ Vagrind 是从下面3个地方读取的配置：
 2. 环境变量 ~$VALGRIND_OPTS~
 3. 文件 ~./.valgrindrc~
 
-* 3. 功能简介
+* 功能简介
 
-** 3.1 Memcheck: 内存使用检测
+** Memcheck: 内存使用检测
 
 格式: ~valgrind --leak-check=yes myprog arg1 arg2~
 
@@ -145,17 +143,17 @@ Vagrind 是从下面3个地方读取的配置：
 + 动态内存管理错误: ~new/delete/malloc/free~
 + 内存泄露
 
-* 4. 扩展知识
+* 扩展知识
 
 以前在 Windows 下开发用过两款内存泄露检测工具，都是开源的，这里简单介绍一下，感兴趣可以自己研究研究。
 
-** 4.1 Visual Leak Detector
+** Visual Leak Detector
 
 - 主页: [[https://vld.codeplex.com/][https://vld.codeplex.com/]]
 - 原理: Windows Hook 技术(挂到 Windows 下申请/释放内存 API 上)
 - 评价: 因为用到了 Windows API，所以它不是跨平台的。泄露时可打印堆栈，泄露字节，有泄露报告，而且报告可定制，这方面做的很好。以前写过一篇文章简单介绍 vld 的使用: [[https://www.zhangjiee.com/blog/visual-leak-detector][C/C++ 内存泄漏检测工具 Visual Leak Detector]]
 
-** 4.2 Nvwa
+** Nvwa
 
 + 下载: [[http://sourceforge.net/projects/nvwa/][http://sourceforge.net/projects/nvwa/]]
 + 原理:
