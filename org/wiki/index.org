@@ -53,7 +53,7 @@
 ** Go
 
 - [[file:programming/go/build-env.org][构建环境]]：安装、环境配置、工具链等说明
-- [[file:programming/go/log-packages.org][日志包]]：常见的几种日志包对比
+- [[file:programming/go/packages.org][packages]]：各种库的对比和选型
 - [[file:programming/go/package-manager.org][包管理工具]]
 - [[file:programming/go/project-layout.org][项目结构]]：摘自 [[https://github.com/golang-standards/project-layout][project-layout]]，go 工程的项目结构
 - [[file:programming/go/date-format.org][时间格式化与解析]]
