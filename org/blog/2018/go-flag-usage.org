@@ -1,0 +1,13 @@
+#+SETUPFILE: ~/site/tpl/site-tpl.org
+#+TITLE: Go flag 中的 usage 一个细节
+#+DATE: 2018-12-06 19:26
+
+今天使用 flag 时，发现 usage 中包含反引号会自动将反引号中的字符串替换类型。后来看源代码才知道设计就是这样的：
+
+[[https://golang.org/src/flag/flag.go]]
+
+https://blog-1252349778.cos.ap-beijing.myqcloud.com/2018/flag-unquoteusage.png
+
+优先找 usage 中的反引号，如果找不到，则会根据值的类型自动推导类型。
+
+但是我好奇的是，一般使用 flag 时会选择类型对应的方法，类似 =flag.StringVar= 这种情况下，不就知道类型是什么了吗？

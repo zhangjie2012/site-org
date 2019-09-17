@@ -13,6 +13,8 @@
 
 - 12-17: [[file:2018/an-overall-view-on-docker-ecosystem-containers-moby-swarm-linuxkit-containerd-kubernete.org][{译} Docker 生态系统一览 - Containers, Moby, Swarm, Linuxkit, containerd, Kubernetes ..]]
 - 12-15: [[file:2018/different-from-docker-and-vm.org][{译} Docker 和 VM 的区别]]
+- 12-06: [[file:2018/go-http-get-close-body.org][Go http.Get 是必须要 close response body]]
+- 12-06: [[file:2018/go-flag-usage.org][flag 中的 usage 一个细节]]
 - 10-25: [[file:2018/redis-cluster-hash.org][Redis cluster 中的 hashing]]
 - 10-24: [[file:2018/consistent-hashing.org][{译} 一致性 hash 指南]]
 - 09-08: [[file:2018/docker-run-django-project.org][使用 Docker 运行 Django 项目]]
