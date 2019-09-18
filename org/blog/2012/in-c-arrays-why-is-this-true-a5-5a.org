@@ -1,0 +1,53 @@
+#+SETUPFILE: ~/site/tpl/site-tpl.org
+#+TITLE: [译] C 数组中为什么 a[5] == 5[a] 是对的?
+#+DATE: 2012-07-06 09:36:49
+
+声明：
+
+- 翻译仅以技术学习和交流为目的，如需转载请务必标明原帖链接。
+- [[http://stackoverflow.com/questions/381542/in-c-arrays-why-is-this-true-a5-5a]]
+
+水平有限，如有翻译不当，欢迎探讨、批评与指正。
+
+帖子内容：
+
+Dinah:
+
+Joel 在 [[http://blog.stackoverflow.com/2008/12/podcast-34/][Stack
+Overflow podcast
+#34]]中指出，在[[http://www.amazon.com/dp/0131103628/?tag=stackoverfl08-20][C程序设计语言]](aka:
+K&R)中，都提到了在 C 数组的一个性质：a[5] = 5[a]。
+
+Joel 解释说那是指针运算，但是我仍旧不理解，为什么 a[5] == 5[a] ？
+
+--------------
+
+- Mehrdad Afshari: 因为 a[5] 相当于 =*(a+5)=，5[a]
+  相当于=*(5+a)=。用小学数学我们就可以判断它们是相等的。这是一种数组作为指针的直接表现方式(This
+  is the direct artifact of arrays behaving as
+  pointers)。"a"是一个内存地址。"a[5]"是距离 a 5
+  个长度元素的值。元素的地址是 "a+5"。这和从内存地址开始 5
+  个元素的位置开始偏移 a 个地址是一样的，地址空间是(5+a)。
+- John MacIntyre: 我想知道是不是和 /(5/sizeof(a)) +
+  a)一样，要是这样的话，就很好解释了。
+- Mehrdad Afshar: 是的，我没有提到 sizeof
+  的原因是那样可以很简单把问题解释清楚，加上时候会变得复杂。(I was going
+  to mention the size. but thought I would complicate just things to get
+  the core idea.)
+- Johannes Schaub - litb : John，不需要使用
+  sizeof，系统在偏移的时候，自动按照 sizeof 的大小的进行递增的。
+- Mehrdad Afshari: @Dinah，站在C编译器的角度上说，你是对的。不需要考虑
+  sizeof，我提到的这些表达式也是类似的（不用考虑sizeof）。然而编译器在生成机器码的时候，会考虑
+  sizeof 的。如果 a 是一个 int 数组，a[5] 编译器将会使用 mov eax,
+  [ebx+20] 这样的汇编代码来实现，而不是 [ebx+5]。
+- David Thornley：因为数组的存取方式被定义成指针（的存取方式），a[i]
+  实现为 *(a+i)，它们是可互换的。
+
+--------------
+
+笔者：
+
+- [[http://www.cppleyuan.com][C++奋斗乐园]]曾经有一个类似的帖子，关心这个问题的朋友可以去看看，很不错。
+  [[http://www.cppleyuan.com/viewthread.php?tid=8082&extra=page%3D6][关于二维数组中的元素a[i][j]的访问问题]]。
+- 我没有完全把整个帖子翻译完，有一些评分较低的，我就没有翻译。
+- 翻译完之后，我觉得这个帖子选择的不太好，内容不够充实。引发我一些思考，我考虑下次翻译要不要找一些文章来翻译。

@@ -1,0 +1,201 @@
+#+SETUPFILE: ~/site/tpl/site-tpl.org
+#+TITLE: 随机数小研究
+#+DATE: 2013-03-05 13:23:28
+
+不知道大家听歌是按照什么样的循环方式，我一般是随机，顺序循环很容易猜到下一首歌是什么，没意思。我会发现一个奇怪的问题，一部分歌的重复率要明显高于另外一部分，自然而言，导致的结果就是一些歌一直听，而另外一些歌很少能听到。不知道是不是心里因素，好听的歌一直听不到，不想听的歌却一直重复。
+
+我想这些音乐播放器的"随机"应该也是用随机数来做的，于是用C++进行了模拟测试。
+
+测试代码如下：
+
+#+BEGIN_EXAMPLE
+  // Win 7 + Code::Blocks 10.05
+  #include <iostream>
+  #include <utility>
+  #include <cstdlib>
+  #include <algorithm>
+  #include <ctime>
+
+  bool statCompare(const std::pair<int, int> & lth,
+                   const std::pair<int, int> & rth)
+  {
+      if (lth.second > rth.second) {
+          return true;
+      }
+      else {
+          return false;
+      }
+  }
+
+  int main()
+  {
+      const int musicCount = 10;
+      const int playTimes = 10000000;
+
+      {
+          std::pair<int, int> stat[musicCount];
+          for (int i=0; i<musicCount; ++i) {
+              stat[i].first = i + 1;
+              stat[i].second = 0;
+          }
+
+          for (int i=0; i<playTimes; ++i) {
+              stat[rand() % musicCount].second++;
+          }
+
+          sort(stat, stat+musicCount-1, statCompare);
+          std::cout << "bigger differ: " << stat[0].second - stat[musicCount-1].second << std::endl;
+          for (int i=0; i<musicCount; ++i) {
+              std::cout << stat[i].first << ": " << stat[i].second << std::endl;
+          }
+      }
+
+      {
+          std::pair<int, int> stat[musicCount];
+          for (int i=0; i<musicCount; ++i) {
+              stat[i].first = i + 1;
+              stat[i].second = 0;
+          }
+
+          unsigned int seeds = time(NULL);
+          for (int i=0; i<playTimes; ++i) {
+              srand(seeds++);
+              stat[rand() % musicCount].second++;
+          }
+
+          sort(stat, stat+musicCount-1, statCompare);
+          std::cout << "bigger differ: " << stat[0].second - stat[musicCount-1].second << std::endl;
+          for (int i=0; i<musicCount; ++i) {
+              std::cout << stat[i].first << ": " << stat[i].second << std::endl;
+          }
+      }
+      return 0;
+  }
+#+END_EXAMPLE
+
+代码很好理解，一看就应该明白的。两种测试，一种是使用默认的随机种子，另外一种是每次随机之前先修改随机种子。运行结果：
+
+#+BEGIN_EXAMPLE
+  bigger differ: 1978
+  8: 1001158
+  1: 1000853
+  3: 1000766
+  4: 1000584
+  2: 1000075
+  5: 999659
+  7: 999623
+  6: 999156
+  9: 998946
+  10: 999180
+  bigger differ: 313
+  1: 1000065
+  8: 1000065
+  5: 1000064
+  2: 1000062
+  4: 1000061
+  7: 1000061
+  3: 1000059
+  6: 1000058
+  9: 999753
+  10: 999752
+#+END_EXAMPLE
+
+理论的上随机效果应该是测试的数据量越大，数据越平均。实际上的结果显示数据量越大，不均衡的程度越强烈，每次随机之前设置随机种子会好很多。
+
+看一下维基百科中的随机数解释：
+
+“随机数是专门的随机试验的结果。
+在统计学的不同技术中需要使用随机数，比如在从统计总体中抽取有代表性的样本的时候，或者在将实验动物分配到不同的试验组的过程中，或者在进行蒙特卡罗模拟法计算的时候等等。
+
+产生随机数有多种不同的方法。这些方法被称为随机数发生器。随机数最重要的特性是它在产生时后面的那个数与前面的那个数毫无关系。
+
+真正的随机数是使用物理现象产生的：比如掷钱币、骰子、转轮、使用电子元件的噪音、核裂变等等。这样的随机数发生器叫做物理性随机数发生器，它们的缺点是技术要求比较高。
+
+在实际应用中往往使用伪随机数就足够了。这些数列是"似乎"随机的数，实际上它们是通过一个固定的、可以重复的计算方法产生的。它们不真正地随机，因为它们实际上是可以计算出来的，但是它们具有类似于随机数的统计特征。这样的发生器叫做伪随机数发生器。
+
+在真正关键性的应用中，比如在密码学中，人们一般使用真正的随机数。”
+
+学过算法的同学都应该知道，计算机中的随机数使用随机算法产生的，一个随机种子产生一个序列，这个序列中的数据是随机的。CB看不到C语言rand的源代码（只能看到声明，看不到定义），所以我网上搜了一些模拟定义（或者是源码？我不知道），大家可以参考一下：
+
+[[http://stackoverflow.com/questions/4768180/rand-implementation]]
+
+#+BEGIN_EXAMPLE
+  void __cdecl srand (unsigned int seed)
+  {
+      #ifdef _MT
+          _getptd()->_holdrand = (unsigned long)seed;
+      #else /* _MT */
+          holdrand = (long)seed;
+      #endif /* _MT */
+  }
+
+  int __cdecl rand (void)
+  {
+     #ifdef _MT
+      _ptiddata ptd = _getptd();
+      return( ((ptd->_holdrand = ptd->_holdrand * 214013L + 2531011L) >> 16) &
+      0x7fff );
+     #else /* _MT */
+      return(((holdrand = holdrand * 214013L + 2531011L) >> 16) & 0x7fff);
+     #endif /* _MT */
+  }
+#+END_EXAMPLE
+
+[[http://stackoverflow.com/questions/1026327/what-common-algorithms-are-used-for-cs-rand]]
+
+#+BEGIN_EXAMPLE
+  /*
+   * This file is part of the libpayload project.
+   *
+   * It was originally taken from the OpenBSD project.
+   *
+   * Copyright (c) 1990 The Regents of the University of California.
+   * All rights reserved.
+   *
+   * Redistribution and use in source and binary forms, with or without
+   * modification, are permitted provided that the following conditions
+   * are met:
+   * 1. Redistributions of source code must retain the above copyright
+   *    notice, this list of conditions and the following disclaimer.
+   * 2. Redistributions in binary form must reproduce the above copyright
+   *    notice, this list of conditions and the following disclaimer in the
+   *    documentation and/or other materials provided with the distribution.
+   * 3. Neither the name of the University nor the names of its contributors
+   *    may be used to endorse or promote products derived from this software
+   *    without specific prior written permission.
+   *
+   * THIS SOFTWARE IS PROVIDED BY THE REGENTS AND CONTRIBUTORS ``AS IS'' AND
+   * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+   * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+   * ARE DISCLAIMED.  IN NO EVENT SHALL THE REGENTS OR CONTRIBUTORS BE LIABLE
+   * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+   * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+   * OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+   * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+   * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+   * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+   * SUCH DAMAGE.
+   */
+
+  #include <libpayload.h>
+
+  static unsigned int next = 1;
+
+  int rand_r(unsigned int *seed)
+  {
+      *seed = *seed * 1103515245 + 12345;
+      return (*seed % ((unsigned int)RAND_MAX + 1));
+  }
+
+  int rand(void)
+  {
+      return (rand_r(&next));
+  }
+
+  void srand(unsigned int seed)
+  {
+      next = seed;
+  }
+#+END_EXAMPLE
+
+看代码学东西是最快的，自己研究吧。

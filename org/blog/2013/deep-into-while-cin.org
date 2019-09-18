@@ -1,0 +1,245 @@
+#+SETUPFILE: ~/site/tpl/site-tpl.org
+#+TITLE: C++ 深入探究 while(cin)
+#+DATE: 2013-01-18 15:21:35
+
+今天看到这个帖子："[[http://www.cppleyuan.com/viewthread.php?tid=10415][C++中字符串的结束字符是什么？]]"，代码是：
+
+#+BEGIN_EXAMPLE
+  while(cin >> str)
+      ivec.push_back(str);
+#+END_EXAMPLE
+
+我从来没有写过这样的代码，原因是不好理解，我喜欢把 while
+条件写的很简单。对他的这个问题，我的理解是这样的：要跳出这个 while
+循环的唯一情况就是：while(0)，那么问题就转移到 cin
+的返回值是什么，什么情况才会出现 0 ？
+
+我简单的查了一下资料，于是给了他这样的回复：
+
+"std::cin 是一个变量，变量类型是std::istream, >> 的返回值是一个istream
+&，也就是 cin 变量本身，因此 while 是一个死循环。这和 C++
+n的结束字符是什么没有关系，你问题的切入点错了。"我当时认为 cin
+返回值是一个引用，那就在任何情况下都不可能是 0，也就是说这是一个死循环。
+
+看他回复另外一个朋友的源码是：
+
+#+BEGIN_EXAMPLE
+  #include <iostream>
+  #include <vector>
+  #include <string>
+  using namespace std;
+
+  int main ()
+  {
+      vector<string> ivec;
+      string str;
+      while(cin >> str)
+          ivec.push_back(str);
+
+      for(vector<string> ::size_type ix=0; ix!=ivec.size();ix++)
+          cout << ivec[ix] << endl;
+
+      return 0;
+  }
+#+END_EXAMPLE
+
+我运行（Win 7 + Codeblocks 10.05，以下分析环境这个）之后，发现 ctrl+z
+是可以结束的。到这里他的问题也就结束了，ctrl+z是可以结束的，不知道他是什么环境下
+ctrl+z
+不能结束。随即我就想到他不会是把"ctrl+z"当成字符串输入了吧？我想我应该是没猜错的，因为我也曾经那么干过。
+
+--------------
+
+好吧，我们抛开这个帖子来看待这个问题，"cin
+>>"的返回值到底是什么？什么情况下返回0？
+
+cin 是一个全局变量，变量类型是 istream。我开始想着把 cin >>
+的返回值保存下来，进行分析，后来发现 istream
+的拷贝构造函数是私有的。我查了一些资料，网上有些说法："当流遇到文件结束符(EOF)，被标记错误......"，有一些理解了，但是很不爽，因为不是很透彻。
+
+每当遇到这种情况，我通常使用的法宝是："分析源码------源码面前一览无遗。"（注意：istream
+是模板，所以代码中众多的 template
+声明我都直接删了，我们当成伪代码看就行了）
+
+找=istream >>=的声明：
+
+#+BEGIN_EXAMPLE
+  basic_istream<_CharT, _Traits>& operator>>(short& __n)
+  {
+      // _GLIBCXX_RESOLVE_LIB_DEFECTS
+      // 118. basic_istream uses nonexistent num_get member functions.
+      long __l;
+      _M_extract(__l);
+      if (!this->fail())
+      {
+          if (__gnu_cxx::__numeric_traits<short>::__min <= __l && __l <= __gnu_cxx::__numeric_traits<short>::__max)
+              __n = short(__l);
+          else
+              this->setstate(ios_base::failbit);
+      }
+      return *this;
+  }
+#+END_EXAMPLE
+
+想必有很多重载，拿一个就够分析了。假如有如下代码:
+
+#+BEGIN_EXAMPLE
+  short s;
+
+  cin >> s;
+#+END_EXAMPLE
+
+就会调用这个函数， n 也就是 s。
+
+找 =_M_extract= 实现：
+
+#+BEGIN_EXAMPLE
+  basic_istream<_CharT, _Traits>& _M_extract(_ValueT & __v)
+  {
+      sentry __cerb(*this, false);
+      if (__cerb)
+      {
+          ios_base::iostate __err = ios_base::iostate(ios_base::goodbit);
+          __try
+          {
+              const __num_get_type& __ng = __check_facet(this->_M_num_get);
+              __ng.get(*this, 0, *this, __err, __v);
+          }
+          __catch(__cxxabiv1::__forced_unwind&)
+          {
+              this->_M_setstate(ios_base::badbit);
+              __throw_exception_again;
+          }
+          __catch(...)
+          {
+              this->_M_setstate(ios_base::badbit);
+          }
+          if (__err)
+              this->setstate(__err);
+      }
+      return *this;
+  }
+#+END_EXAMPLE
+
+这个函数涉及到了 =sentry=
+，我看了一下这个类，代码比较长，就不贴代码了，我觉得不必要关心它了。=_M_extract=
+可以看出，它做的操作就是："读入数据，捕捉异常，设置state"。
+
+回到 =operator>>= 继续往下分析。if
+内部很好分析，就是简单的判断和赋值。那么问题点一定是在
+=!this->fail()=，即fail返回false 时进入if。找到它的源码：
+
+#+BEGIN_EXAMPLE
+  bool fail() const
+  {
+      return (this->rdstate() & (badbit | failbit)) != 0;
+  }
+#+END_EXAMPLE
+
+继续找 rdstate 的源码：
+
+#+BEGIN_EXAMPLE
+  iostate rdstate() const
+  {
+      return _M_streambuf_state;
+  }
+#+END_EXAMPLE
+
+badbit，failbit，=_M_streambuf_state=
+是什么含义对我们来说，完全不重要。需要找到的是能影响 operator >>
+返回值(return /this;)的操作，也就是在什么情况下会改 /this
+的值。我回头看了一下几个函数（_M_setstate、setstate），都是一些简单的赋值操作并没有影响
+*this 的值。也就是我们分析了半天都白费了？
+
+就在我迷茫之时看到了这么一行代码：
+
+#+BEGIN_EXAMPLE
+  /**
+   *  @brief  The quick-and-easy status check.
+   *
+   *  This allows you to write constructs such as
+   *  "if (!a_stream) ..." and "while (a_stream) ..."
+   */
+  operator void*() const
+  { return this->fail() ? 0 : const_cast<basic_ios*>(this); }
+#+END_EXAMPLE
+
+也就是说如果 =this->fail()= 返回 true,这个函数则返回
+0。原来问题点的核心在这里，当时提供这个方案就是为了
+while(cin>>str)这种判断。现在的问题在于，什么情况下会调用这个函数？在执行
+=while (cin >> str)=
+时进行了=(void*)=这个转换吗，要验证很简单，看下面这个例子：
+
+#+BEGIN_EXAMPLE
+  #include <iostream>
+
+  class my_istream
+  {
+  public:
+      operator void * () const
+      {
+          return 0;
+      }
+  };
+
+  int main ()
+  {
+      my_istream mi;
+      my_istream &mi_ref = mi;
+
+      do
+      {
+          std::cout << "I am right!" << std::endl;
+      } while (mi_ref);
+
+      return 0;
+  }
+#+END_EXAMPLE
+
+假如将 =operator void * () const= 去掉编译器会提示如下错误：
+
+#+BEGIN_EXAMPLE
+  E:\TEMP_FILE\test_volatile\main.cpp||In function 'int main()':|
+
+  E:\TEMP_FILE\test_volatile\main.cpp|18|error: could not convert 'mi_ref' to 'bool'|
+
+  ||=== Build finished: 1 errors, 0 warnings ===|
+#+END_EXAMPLE
+
+Ok，总结：
+
+#+BEGIN_EXAMPLE
+  while(cin >> str)
+      ivec.push_back(str);
+#+END_EXAMPLE
+
+while 判断时，会调用了 =operator void*()= 这个函数，是否返回 0 取决于
+fail
+这个函数。当在缓冲区读入数据的时候，如果出现异常，这些异常通过一些变量记录下来，而这些变量会左右
+fail 的返回值。
+
+_CTRL+Z -> 引发异常 -> 记录异常 -> fail() 返回true-> operator void*()
+返回 0 -> while结束_
+
+在 cplusplus.com 中对这个函数的解释这样的：
+
+#+BEGIN_QUOTE
+  operator void * () const;
+
+  Convert to pointer A stream object derived from ios can be casted to a
+  pointer. This pointer is a null pointer if either one of the error
+  flags (failbit or badbit) is set, otherwise it is a non-zero pointer.
+
+  The pointer returned is not intended to be referenced, it just
+  indicates success when none of the error flags are
+  set.（可以看出和我的理解是一致的）
+#+END_QUOTE
+
+说一些题外话：
+
+1. 源码分析方式是一种最透彻的方法，但是分析的时候一定要抓住问题的核心，当然耐心是必须的。
+2. 通过这次分析的经历，也感觉自己水平在不断的下降，看到结论让我想起一个贴子：http://www.cppleyuan.com/viewthread.php?tid=2617，我当时的回复是："windows下是
+   ctrl +z吧
+   为什么这么用，我有一种猜测仅供参考：cin重载了bool类型转换，可以根据
+   cin
+   的状态来判断是否结束，如果结束返回false，未结束返回true。"那是两年前，我瞬间就可以推测到这么多。可惜现在第一感觉都想不到。

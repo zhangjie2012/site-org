@@ -1,0 +1,56 @@
+#+SETUPFILE: ~/site/tpl/site-tpl.org
+#+TITLE: ubuntu 12.04 gedit 乱码解决方法
+#+DATE: 2012-10-19 02:36:02
+
+ubuntu 12.04 gedit 打开 Windows
+下文本文件(txt)的时候会出现汉字乱码的问题，究其原因是编码不同。Windows
+下编码格式为GBK，而ubuntu
+gedit默认没有对GBK的支持。所以打开的时候会显示乱码，解决方法是修改编码格式。
+
+** 方法一
+   :PROPERTIES:
+   :CUSTOM_ID: 方法一
+   :END:
+
+(感谢[[http://www.jijiwaiwai.info/][陈东坡]]的推荐)：
+
+使用 enconv
+转码，这种方法的好处在于转码之后，所有的编辑器打开都不会有乱码，坏处是会修改原文件的编码格式。这个方法其实很不错，简单有效，推荐大家使用。
+
+** 方法二
+   :PROPERTIES:
+   :CUSTOM_ID: 方法二
+   :END:
+
+在打开文件的时候，指定编码，假如你要打开的文件名为：file.txt
+
+#+BEGIN_EXAMPLE
+  gedit --encoding=gbk file.txt
+#+END_EXAMPLE
+
+对于一个文件只需要设置一次即可。
+
+** 方法三
+   :PROPERTIES:
+   :CUSTOM_ID: 方法三
+   :END:
+
+#+BEGIN_EXAMPLE
+  sudo apt-get install dconf-tools // 安装dconf-editor
+  dconf-editor // 打开Configuration Editor[/code]
+  [code]org->gedit->preferences->encoding[/code]
+  audo-detected 中将'GB18030'添加到'UTF-8'后面
+  shown-in-menu 中将'GB18030'添加到开头
+#+END_EXAMPLE
+
+--------------
+
+尝试失败的方法:
+
+用gconf-editor改编码：
+
+#+BEGIN_EXAMPLE
+  apps->gedit-2->preference->encodings
+#+END_EXAMPLE
+
+在我的ubuntu下(12.04)找不到这个选项，原因未知。

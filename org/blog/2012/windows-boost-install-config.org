@@ -1,0 +1,106 @@
+#+SETUPFILE: ~/site/tpl/site-tpl.org
+#+TITLE: Windows 下 C++ Boost 安装与配置
+#+DATE: 2012-03-11 00:00:00
+
+本文介绍了 =C++ boost 1.51.0= 库的下载、安装和配置过程。配置主要基于
+CodeBlocks 10.05 和 Microsoft Visual Studio 2010 两个 IDE。
+
+** 1.下载
+   :PROPERTIES:
+   :CUSTOM_ID: 下载
+   :END:
+
+去"[[http://www.boost.org/][boost]]"下载最新版 boost
+库，我当前下载的是：[[http://sourceforge.net/projects/boost/files/boost/1.51.0/boost_1_51_0.zip/download][Version
+1.51.0]]
+
+** 2.安装
+   :PROPERTIES:
+   :CUSTOM_ID: 安装
+   :END:
+
+解压之后运行 booststrap.bat 文件，运行完毕后会出现 bjam.exe 和 b2.exe
+两个文件，继续运行 bjam.exe
+（这个操作会很费时间，耐心等待，没错，我去打了一把 dota 回来发现正好）。
+
+把 boost_1_51 移动到 "C:\Program Files"
+下，这是我的个人习惯，你可以放到你想要放置的位置上。
+
+** 3.配置
+   :PROPERTIES:
+   :CUSTOM_ID: 配置
+   :END:
+
+*** 3.1 配置 CodeBlocks 10.05
+    :PROPERTIES:
+    :CUSTOM_ID: 配置-codeblocks-10.05
+    :END:
+
+*设置全局变量*
+
+- Setting->Global variables
+- new->Current Set:boost
+- new->Current Variable:boost
+- base:boost安装目录
+- include:boost安装目录（应该是 boost
+  头文件所在目录，在C:\Program Files\boost_1_51_0下，但是很多人喜欢这么用头文件
+  #include 所以应该包含的是 boost 的父级目录。）
+- lib:libs 所在目录（"C:\Program Files\boost_1_51_0\libs"）
+
+*使用全局变量*
+
+在你使用 boost 工程的工程 build options 中设置：
+
+=右键工程->build options-> Search directories->Add->"$(#boost)"->OK=
+
+Debug 和 Release 两个模式分别进行设置。
+
+当然可以不使用全局变量，直接在工程编译选项中把 boost include 和 libs
+库包含进来也是可以的，但是我推荐使用全局变量，这是一个很好的习惯。
+
+*** 3.2 配置 Microsoft Visual Studio 2010
+    :PROPERTIES:
+    :CUSTOM_ID: 配置-microsoft-visual-studio-2010
+    :END:
+
+=右键工程->Properties->Configuration选择All Configurations->Configuration properties->VC++ Directories=
+
+- 将 boost 目录加入到 Include Directories 中
+- 将 boost libs目录加入到 Library Directories 中
+
+** 4.测试代码
+   :PROPERTIES:
+   :CUSTOM_ID: 测试代码
+   :END:
+
+#+BEGIN_EXAMPLE
+  #include <boost/scoped_ptr.hpp>
+  #include <string>
+  #include <iostream>
+
+  int main()
+  {
+      {
+      boost::scoped_ptr<std::string> p(new std::string("Use scoped_ptr often."));
+      // 打印字符串的值
+      if (p) {
+          std::cout << *p << std::endl;
+      }
+      // 获取字符串的大小
+      size_t i = p->size();
+      std::cout << i << std::endl;
+      // 给字符串赋新值
+      *p = "Acts just like a pointer";
+      } // 这里 p 被销毁，并删除 std::string
+  }
+#+END_EXAMPLE
+
+以上代码来自 Beyond the C++ STL，本文不能保证所有的 boost
+工程这么设置的正确性，以后遇到问题我再另行补充。
+
+** 参考资料
+   :PROPERTIES:
+   :CUSTOM_ID: 参考资料
+   :END:
+
+- [[http://blog.csdn.net/clever101/article/details/7163654][在CodeBlocks环境下使用boost库]]

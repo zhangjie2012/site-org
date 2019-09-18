@@ -1,0 +1,87 @@
+#+SETUPFILE: ~/site/tpl/site-tpl.org
+#+TITLE: C++ the scope of exception parameter
+#+DATE: 2014-01-14 00:00:00
+
+Look at code:
+
+#+BEGIN_EXAMPLE
+  #include <iostream>
+  #include <string>
+
+  using namespace std;
+
+  void some_function()
+  {
+      string str("Hello,World!");
+      throw(str);
+  }
+
+  int main()
+  {
+      try
+      {
+          some_function();
+      }
+      catch (string& e)
+      {
+          cout << e << endl;
+          e = "Hello, the world!";
+          cout << e << endl;
+      }
+
+      return 0;
+  }
+#+END_EXAMPLE
+
+Debug it in VS2010, I get that information:
+
+1. in some_function the str addr: =0x003CF820=
+2. int main the e addr: =0x003CF738=
+
+So, I have three question:
+
+1. catch parameter is =string&=, why we get diff addr in =main()= ?
+2. is =str= not a temp value ? why we can use a temp value reference ?
+3. where is =e= store in memory ?
+
+One Answer make me understand:
+
+#+BEGIN_QUOTE
+  When a throw expression is evaluated, an exception object is
+  initialized from the value of the expression. The exception object
+  which is thrown gets its type from the static type of the throw
+  expression ignoring any const and volatile qualifiers. For class types
+  this means that copy-initialization is performed.
+
+  The exception object's scope is outside of the scope of the block
+  where the throw occurs. Think of it as living in a special exception
+  area off to one side of the normal call stack where local objects
+  live.
+
+  Inside a catch block, the name initialized with the caught exception
+  object is initialized with this exception object and not the argument
+  to throw, even if this was an lvalue.
+
+  If you catch via non-const reference, then you can mutate the
+  exception object, but not what it was initialized from. You can alter
+  the behaviour of the program if you re-throw the exception in ways
+  that you couldn't if you caught by value or const reference
+  (const_casts aside).
+
+  The exception object is destroyed when the last catch block that does
+  not exit via a re-throw (i.e. a parameterless throw expression
+  evaluation) completes.
+#+END_QUOTE
+
+thanks for
+[[http://stackoverflow.com/users/19563/charles-bailey][Charles Bailey]].
+
+** Reference
+   :PROPERTIES:
+   :CUSTOM_ID: reference
+   :END:
+
+- [[http://stackoverflow.com/questions/1654150/scope-of-exception-object-in-c/1654187#1654187][Scope
+  of exception object in C++]]
+- [[http://stackoverflow.com/questions/20966681/where-c-exception-parameter-store-in-memory][where
+  C++ exception parameter store in memory?]]

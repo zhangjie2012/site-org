@@ -1,0 +1,22 @@
+#+SETUPFILE: ~/site/tpl/site-tpl.org
+#+TITLE: WordPress主题制作全过程
+#+DATE: 2012-11-06 03:04:09
+
+最近在折腾 wordpress 主题，看到 [[http://www.ludou.org/][Ludou]]
+博客中写了一系列关于制作 wordpress
+主题的博文，一口气看完了，觉得讲的很不错。正如他博文中说到，适合对 CSS,
+HTML
+了解一些（如果你是高手的话，可以不看的），算是初级人群吧，而我恰好属于这一类人。感谢
+Ludou 的博文，下面是目录链接：
+
+- [[http://www.ludou.org/create-wordpress-themes-prepare.html][WordPress主题制作全过程（一）：基础准备]]
+- [[http://www.ludou.org/create-wordpress-themes-template-hierarchy.html][WordPress主题制作全过程（二）：主题文件构成]]
+- [[http://www.ludou.org/create-wordpress-themes-html-template.html][WordPress主题制作全过程（三）：HTML静态模板制作]]
+- [[http://www.ludou.org/create-wordpress-themes-first-step.html][WordPress主题制作全过程（四）：小试牛刀]]
+- [[http://www.ludou.org/create-wordpress-themes-header.html][WordPress主题制作全过程（五）：制作header.php]]
+- [[http://www.ludou.org/create-wordpress-themes-footer.html][WordPress主题制作全过程（六）：制作footer.php]]
+- [[http://www.ludou.org/create-wordpress-themes-sidebar.html][WordPress主题制作全过程（七）：制作sidebar.php]]
+- [[http://www.ludou.org/create-wordpress-themes-index.html][WordPress主题制作全过程（八）：制作index.php备]]
+- [[http://www.ludou.org/create-wordpress-themes-single.html][WordPress主题制作全过程（九）：制作single.php]]
+- [[http://www.ludou.org/create-wordpress-themes-comments.html][WordPress主题制作全过程（十）：制作comments.php]]
+- [[http://www.ludou.org/create-wordpress-themes-page.html][WordPress主题制作全过程（十一）：制作page.php]]

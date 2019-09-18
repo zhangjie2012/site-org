@@ -1,0 +1,271 @@
+#+SETUPFILE: ~/site/tpl/site-tpl.org
+#+TITLE: stackoverflow | C++ | std::wstring vs std::string
+#+DATE: 2012-08-26 00:00:00
+
+来源：[[http://stackoverflow.com/questions/402283/stdwstring-vs-stdstring]]
+
+声明：
+
+1. 翻译仅以技术学习和交流为目的，如需转载请务必标明原帖链接。
+2. 水平有限，如有翻译不当，欢迎探讨、批评与指正。
+
+* 问题表述
+  :PROPERTIES:
+  :CUSTOM_ID: 问题表述
+  :END:
+
+我不理解 std::string 和 std::wstring 之间的差别。我知道 wstring
+支持宽字符（例如 Unicode 字符）。我有下面几个问题：
+
+1. 什么时候我应该用 std::wstring 替代 std::string 呢？
+2. std::string 可以存储整个 ASCII 字符集，包含特殊字符吗？
+3. 所有 C++ 的主流编译器都支持 std::wstring 吗？
+4. 宽字符的精确定义是什么？
+
+* 解释一
+  :PROPERTIES:
+  :CUSTOM_ID: 解释一
+  :END:
+
+1. 存在一些历史原因，人们希望宽字符可以支持 Unicode。现在常用作 APIs
+   接口（UTF-16 字符串）。我仅仅在调用这种 API
+   的时候，才会使用到（宽字符）。
+2. 这和 std::string
+   没有多大关系，它可以存放任意编码的字符。唯一的问题就是你怎么对待他们。我推荐使用
+   UTF-8 ，因为它能准确的存储 unicode 字符。在 Linux
+   中经常这么使用，但是我认为 Windows 程序中也应该这么做。
+3. 不是的。
+4. 宽字符是一个迷惑人的名字。早期的
+   Unicode，相信字符可以用两个字节编码。由此而来。现在，它代表"任何字符的部分都是两字节长"（any
+   part of the character that is two bytes long）。UTF-16
+   使用字节对的序列，在 UTF-16 中字符使用一个或者两个字节。
+
+从 [[http://www.utf8everywhere.org]]中，你可以获得更多的信息。
+
+译者注：我估计这个回帖者的母语也不是英语，用词有些牵强、生硬，有些句子我不是很理解。建议大家去看看原帖吧。
+
+* 解释二
+  :PROPERTIES:
+  :CUSTOM_ID: 解释二
+  :END:
+
+** string? wstring?
+   :PROPERTIES:
+   :CUSTOM_ID: string-wstring
+   :END:
+
+std::string 是模板类 basic_string 模板用 char 的特化，std::wstring
+对应的是 wchar_t。
+
+** char vs. wchar_t
+   :PROPERTIES:
+   :CUSTOM_ID: char-vs.-wchar_t
+   :END:
+
+char 用来存储一个字符，通常来说占一个字节。wchar_t
+用来存储宽字符，于是，事情就有些复杂了：在 Linux 上，一个 wchar_t 占 4
+个字节；但是在 Windows 上，占 2 个字节。
+
+** 那么关于 Unicode 呢？
+   :PROPERTIES:
+   :CUSTOM_ID: 那么关于-unicode-呢
+   :END:
+
+问题在于 char 和 wchar_t 都没有和 unicode 有直接的关系。
+
+** 在 Linux 上？
+   :PROPERTIES:
+   :CUSTOM_ID: 在-linux-上
+   :END:
+
+我们选一个 Linux 操作系统吧：我的 Ubuntu 系统对 Unicode
+很敏感。当我使用一个 char 字符串的时候，它自然的使用 UTF-8
+进行编码（也就是Unicode char 字符串）。下面是代码：
+
+#+BEGIN_EXAMPLE
+  #include <cstring>
+  #include <iostream>
+
+  int main(int argc, char* argv[])
+  {
+     const char text[] = "olé" ;
+     const wchar_t wtext[] = L"olé" ;
+
+     std::cout << "sizeof(char)    : " << sizeof(char) << std::endl ;
+     std::cout << "text            : " << text << std::endl ;
+     std::cout << "sizeof(text)    : " << sizeof(text) << std::endl ;
+     std::cout << "strlen(text)    : " << strlen(text) << std::endl ;
+
+     std::cout << "text(binary)    :" ;
+
+     for(size_t i = 0, iMax = strlen(text); i < iMax; ++i)
+     {
+        std::cout << " " << static_cast<unsigned int>(static_cast<unsigned char>(text[i])) ;
+     }
+
+     std::cout << std::endl << std::endl ;
+
+     std::cout << "sizeof(wchar_t) : " << sizeof(wchar_t) << std::endl ;
+     //std::cout << "wtext           : " << wtext << std::endl ; <- error
+     std::cout << "wtext           : UNABLE TO CONVERT NATIVELY." << std::endl ;
+     std::wcout << L"wtext          : " << wtext << std::endl;
+
+     std::cout << "sizeof(wtext)   : " << sizeof(wtext) << std::endl ;
+     std::cout << "wcslen(wtext)   : " << wcslen(wtext) << std::endl ;
+
+     std::cout << "wtext(binary)   :" ;
+
+     for(size_t i = 0, iMax = wcslen(wtext); i < iMax; ++i)
+     {
+        std::cout << " " << static_cast<unsigned int>(static_cast<unsigned short>(wtext[i])) ;
+     }
+
+     std::cout << std::endl << std::endl ;
+
+
+     return 0;
+  }
+#+END_EXAMPLE
+
+输出结果如下：
+
+#+BEGIN_EXAMPLE
+  sizeof(char)    : 1
+  text            : olé
+  sizeof(text)    : 5
+  strlen(text)    : 4
+  text(binary)    : 111 108 195 169
+
+  sizeof(wchar_t) : 4
+  wtext           : UNABLE TO CONVERT NATIVELY.
+  sizeof(wtext)   : 16
+  wcslen(wtext)   : 3
+  wtext(binary)   : 111 108 233
+#+END_EXAMPLE
+
+你可以看到 char 类型字符串的 "olé" 事实上是由四个字符：110, 108, 195 和
+169 （不包括字符串结尾符0）, (wchar_t 你自己尝试分析一下吧)。
+
+因此，当我们在 Linux 上使用 char 时，最终应该还是使用 Unicode
+的（即便你并不知道）。std::string 使用内部采用的是 char
+，由此看来，std::string 也是 unicode-ready。
+
+要注意：std::string 和 C 式的字符串 API 一样，会认为 "olé" 有 4
+个字符，而不是三个。因此，当你对 unicodes
+字符进行截断或者扩增的时候，你要分外小心了，因为在 UTF-8
+中许多字符的组合是被禁止的（不可用）。
+
+在 Windows 下会有些不同，Unicode 出现之前，Win32 不得不大量的支持使用
+char 工作的应用程序，并且产生了全世界不同的
+[[http://en.wikipedia.org/wiki/Character_encoding][字符集]]/[[file:en.wikipedia.org/wiki/Code_page][代码页]]
+。
+
+因此他们的解决方案是很有趣的：如果一个应用程序使用 char 工作，那么 char
+字符串编码/打印/显示在 GUI
+标签的时候，将会使用本机的字符集/代码页。例如，在french-localized
+Windows 上 "olé" 显示为"olé"，但是在 cyrillic-localized Windows
+就有些不同了（如果你用
+[[http://en.wikipedia.org/wiki/Windows-1251][Windows-1251]]
+的话，应该显示"olй"）。因此，"早的应用程序"仍旧按照以前的方式运行。
+
+对于基于 Unicode 的应用程序，Windows 使用 wchar_t ,也就是两字节宽，使用
+[[http://en.wikipedia.org/wiki/UTF-16][UTF-16]]
+编码（每个字符占两个字节）（或者至少和 UCS-2是兼容的，和 IIRC
+大致相同）。
+
+应用程序使用的 char 被称作
+"多字节"（"multibyte"）（因为每一个符号有很多的 chars
+组成）。应用程序使用的 wchar_t 被称作
+"宽字节"（widechar）（因为每个符号由一个或者两个 wchar_t
+组成）。通过查看 Win32 提供的多字节和宽字节相互转换的 API
+可以获得更多的信息（
+[[file:msdn.microsoft.com/en-us/library/ms776413.aspx][MultiByteToWideChar]]
+和
+[[http://msdn.microsoft.com/en-us/library/ms776420.aspx][WideCharToMultiByte]]
+）。
+
+因此，如果在 Windows 下工作的话，你应该尽可能使用 wchar_t
+（除非你使用了一个框架，把它（wchar_t）给隐藏了，比如：[[http://en.wikipedia.org/wiki/GTK%2B][GTK+]]或者[[file:en.wikipedia.org/wiki/Qt_%28toolkit%29][QT]]...）.\\
+Windows 下使用 wchar_t 字符串，因此，之前的应用程序将会把他们的 char
+字符串转换成 wchar_t （当使用类似于 SetWindowText 这种 API 的时候）。
+
+** 内存问题（Memory issues）
+   :PROPERTIES:
+   :CUSTOM_ID: 内存问题memory-issues
+   :END:
+
+UTF-32 每个字符占 4 个字节，因此没什么要添加的。只要 UTF-8 和 UTF-16
+文本使用小于和 UTF-32 文本所占内存相等（通常是小于）。
+
+如果有内存问题的话，你应该去了解更多的西方语言，同一个字符，UTF-8 要比
+UTF-16 少占用内存。
+
+仍然，对于其他的语言（中文，日文等等），内存占用相等或者比 UTF-8
+大，更大可能比 UTF-16 还要大。
+
+总之，UTF-16总是每个字符占用两个字节（除非你处理难懂的语言符号（克林贡语？精灵语）），UTF-8
+占用 1~4 个字节。
+
+从
+[[http://en.wikipedia.org/wiki/UTF-8#Compared_to_UTF-16]]获取更多的信息。
+
+** 总结
+   :PROPERTIES:
+   :CUSTOM_ID: 总结
+   :END:
+
+1、什么时候我应该使用 std::wstring 替代 std::string 呢？
+
+- 在 Linux 平台？几乎从来不用；
+- 在 Windows 平台？几乎总需要；
+- 跨平台代码？依赖于你的工具包（toolkit）...
+
+除非你使用工具包/框架强制你使用某一种方式。
+
+2、std::string 可以存储整个 ASCII 字符集，但是能存储特殊字符吗？
+
+注意：std::string 适合存储二进制 buffer，std::wstring 不可以。
+
+- 在 Linux 平台？可以。
+- 在 Windows 平台？特殊的字符只对于 Windows 当前用户是有效的。
+
+3、所有 C++ 的主流编译器都支持 std::wstring 吗？
+
+大部分都支持，除了移植到 Windows 下的基于GCC的编译器。我使用 g++
+4.3.2（Linux下），在 Win32 下（Visual C++ 6）我使用 Unicode API ，
+
+4、宽字符的精确定义是什么？
+
+就 C/C++ 来说，wchar_t 是一个比 char 大的字符类型。它用来存储比
+255（或者是127，依赖于实现...） 大的字符。
+
+** 解释三
+   :PROPERTIES:
+   :CUSTOM_ID: 解释三
+   :END:
+
+1、当你想要在你的字符串中存储宽字符的时候。这个"宽"依赖于实现。如果我没有记错的话。Visual
+C++ 默认是 16bit ,GCC 的默认值依赖于目标（target）。这里是 32
+位长。请注意 wchar_t（宽字符类型）和 unicode
+无关。它只不过保证它可以存储最大字符集（本地实现所支持的）的所有成员，最少和
+char 一样。你可以存储 unicode 字符串到 std::string 中，使用 utf-8
+编码。但是我不了解 unicode 的代码点的含义。因此 str.size()
+不能告诉你你字符串中逻辑字符的个数，只是 char 或者 wchar_t 元素存储在
+string/wstring 中的个数。因此 gtk/glib C++ 包装器的人（wrapper
+folks）已经开发了 Glib::ustring 类可以处理 utf-8. 如果你的 wchar_t 是
+32位 长，你可以使用 utf-32 作为 unicode 编码，你可以存储和处理 unicode
+字符串使用 确定性编码（utf-32就是一种确定性编码）。也就意味着你的
+wstring 的 s.size() 函数将会返回正确的 wchar_t 元素个数和逻辑个数。
+
+2、是的，char 总是至少 8位 长，也就意味着可以存储所有的 ASCII 值。
+
+3、是的，所有的主流编译器都支持它。
+
+--------------
+
+译者注：
+
+1. 我选取这篇帖子的主要原因是很多人都会曲解
+   UNICODE，因为我一开始就有曲解，我希望以这个帖子作引，让看到这篇文章的读者，自己去好好研究一下字符编码。
+2. 尽管花费我一天的时间来翻译和排版，但是我始终觉得有一部分翻译的不合理。其原因可能是我这方面了解的不多，希望大家可以谅解，同时也希望懂这方面的朋友给予指正，我不胜感激。
+3. 同样，我没有翻译完所有回复，因为很零碎。但是希望读者有时间去看一看他们讨论的部分，相信你可以学到很多。

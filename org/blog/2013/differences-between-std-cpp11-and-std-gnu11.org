@@ -1,0 +1,34 @@
+#+SETUPFILE: ~/site/tpl/site-tpl.org
+#+TITLE: differences between -std=c++11 and -std=gnu++11
+#+DATE: 2013-11-04 00:00:00
+
+帖子链接:
+http://stackoverflow.com/questions/10613126/what-are-the-differences-between-std-c11-and-std-gnu11
+，一个小的技术点，怕以后忘了，顺便 mark 了一下。
+
+--------------
+
+Question:
+
+What are the differences between -std=c++11 and -std=gnu++11 as
+compilation parameter for gcc and clang? Same question with c99 and
+gnu99? I know about c++ and c standards, it's the differences in the
+parameters that interest me.
+
+I've read somewhere that it have to do with some extensions but it is
+not clear to me which ones and how to choose between one or the other
+for a new project?
+
+Answer:
+
+As you have found out yourself the difference between the two options
+are whether the gnu extentions violating the standard are enabled or
+not. The extension are described
+[[http://gcc.gnu.org/onlinedocs/gcc/C_002b_002b-Extensions.html][here]].
+Note that some extension can still be in effect while using -std=c++11
+as long as they do not contradict the standard.
+
+For in use with the mingw compiler I need the extensions for a working
+boost lexical cast. If you do not use any of the extensions you are
+better off using the std without extensions for maximum portability.
+This might come in handy if you find yourself forced to change compiler.

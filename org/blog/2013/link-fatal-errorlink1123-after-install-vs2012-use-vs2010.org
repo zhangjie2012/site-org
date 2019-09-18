@@ -1,0 +1,29 @@
+#+SETUPFILE: ~/site/tpl/site-tpl.org
+#+TITLE: 安装VS2012后使用VS2010:fatal error LNK 1123
+#+DATE: 2013-06-29 00:00:00
+
+安装了VS2012之后，编译VS2010工程(VS2010和VS2012共存，不是把VS2010工程用VS2012打开)，编译失败。错误提示：
+
+=_LINK : fatal error LNK1123: faiure during conversion to COFF: file invalid or corrupt_=
+
+解决方法：把VS2010安装目录(C:\Program Files(x86)\Microsoft Visual Studio
+10.0\VC\BIN)下的cvtres.exe重命名为cvtresold.exe。
+
+原因：
+
+#+BEGIN_QUOTE
+  By debugging with the /VERBOSE linker option I found the linker was
+  writing that error message when it tried to invoke cvtres and it
+  failed. It turned out that I had two versions of this untility in my
+  path. One at
+  =C:\Program Files(x86)\Microsoft Visual Studio 10.0\VC\BIN\cvtres.exe=
+  and one at =C:\Windows\Microsoft.NET\Framework\v4.0.30319\cvtres.exe=.
+  After VS2012 install, the VS2012 version of cvtres.exe will no longer
+  work. If that's the first one in your path, and the linker decides it
+  needs to convert a .res file to COFF object format, the link will fail
+  with LNK1123.
+#+END_QUOTE
+
+来源：
+
+[[http://stackoverflow.com/questions/10888391/link-fatal-error-lnk1123-failure-during-conversion-to-coff-file-invalid-or-c]]

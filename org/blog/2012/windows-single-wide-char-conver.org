@@ -1,0 +1,114 @@
+#+SETUPFILE: ~/site/tpl/site-tpl.org
+#+TITLE: windows | C/C++ | 宽字符与多字符之间的转换
+#+DATE: 2012-04-11 09:13:36
+
+如果你经常在 Windows 平台下使用 C/C++
+写程序的话，我相信你一定会遇到宽字符与多字符之间的转换。最多的应该是单字符和宽字符之间的转换。我花了点时间把转换方法封装了两个函数，有需要的可以直接调用。
+这里我只讲述宽字符和单字符，多字符也是一样的。聪明的你，一定可以明白的。
+
+** 1.单字符->宽字符
+   :PROPERTIES:
+   :CUSTOM_ID: 单字符-宽字符
+   :END:
+
+#+BEGIN_EXAMPLE
+  int MultiByteToWideChar(
+    __in   UINT CodePage,   // 标识了与多字节关联的一个代码页值
+    __in   DWORD dwFlags,   // 允许我们进行额外的控制，它会影响带变音符号（比如重音）的字符。但是一般情况下不适用，赋为 0 即可。
+    __in   LPCSTR lpMultiByteStr, // 参数指定要转换的字符串
+    __in   int cbMultiByte,       // 指定要转换串长度的长度（字节数），如果参数值是-1，函数便可自动判断源字符串的长度
+    __out  LPWSTR lpWideCharStr,  // 指定转换后Unicode版本的字符串内存地址
+    __in   int cchWideChar        // 指定 lpWideCharStr 缓冲区的最大长度。
+                                  // 如果传入0，函数不会进行转换，而是返回一个宽字符数（包括终止字符'\0'），
+                            // 只有当缓冲区能够容纳该数量的宽字符时，转换才会成功。
+  );
+#+END_EXAMPLE
+
+转换步骤：
+
+1. 调用 MultiByteToWideChar，为 pWideCharStr 参数传入
+   NULL，为cchWideChar 参数传入 0，为 cbMultiByte 参数传入 -1 。
+2. 分配一块足以容纳转换后的 Unicode 字符串的内容。它的大小是上一个
+   MultiByteToWideChar 调用的返回值乘以 sizeof(wchar_t) 。
+3. 再次调用MultiByteToWideChar，这一次将缓冲区地址作为 pWideCharStr
+   参数的值传入，将第一次 MultiByteToWideChar 调用的返回值乘以
+   sizeof(wchar_t) 后得到大小作为 cchWideChar 参数的值传入。
+4. 使用转换后的字符串
+5. 释放 Unicode 字符串占用的内存块。
+
+** 2.宽字符->单字符
+   :PROPERTIES:
+   :CUSTOM_ID: 宽字符-单字符
+   :END:
+
+#+BEGIN_EXAMPLE
+  int WideCharToMultiByte(
+    __in   UINT CodePage,           // 标志了要与新转换的字符串关联的代码页
+    __in   DWORD dwFlags,           // 制定额外的转换控制，一般不需要进行这种程度的控制，而为 dwFlag 传入 0
+    __in   LPCWSTR lpWideCharStr,   // 指定要转换的字符串的内存地址
+    __in   int cchWideChar,         // 指出该字符串的长度，如果传入 -1 ，则由函数来判断字符串的长度
+    __out  LPSTR lpMultiByteStr,    // 转换后的缓冲区
+    __in   int cbMultiByte,         // 指定 lpMultiByteStr 缓冲区的最大大小（字节数），如果传入 0 ，函数返回该目标缓冲区需要的大小
+    __in   LPCSTR lpDefaultChar,
+    __out  LPBOOL lpUsedDefaultChar // 宽字符字符串中，如果至少有一个字符不能转换为对应的多字节形式，函数就会把这个变量设为 TRUE 。如果所有字符都能成功转换，就会把这个变量设为 FALSE。 通常将此函数传入 NULL 值。
+  );
+#+END_EXAMPLE
+
+只有一个字符在 uCodePage
+制定的代码页中没有对应的表示时，WideCharToMultiByte
+才会使用后两个参数。在遇到一个不能转换的字符时，函数便使用 pDefaultChar
+参数指向的字符。如果这个参数指向为 NULL
+，函数就会使用一个默认的字符。这个默认的值通常是一个问号。这对文件操作是非常危险的，因为问号是一个通配符。
+
+函数代码：
+
+#+BEGIN_EXAMPLE
+  /* 作者：<a href="http://www.perfect-is-shit.com">独酌逸醉</a>
+   * 时间: 2012.04.11
+   *
+   * 功能: 将宽字符串转换成单字符串
+   * 返回值：单字符串指针
+   * 参数: pwstring: 宽字符串指针
+   * 备注:
+   *     (1) 测试环境: windows 7 , visual studio 2010
+   *     (2) 使用需添加头文件 windows.h
+   *     (3) 使用返回指针后注意释放内存(使用 free, 而不是 delete)
+   */
+  char* widestring_to_single(const wchar_t * pwstring)
+  {
+      int char_count = WideCharToMultiByte(CP_ACP, 0, pwstring, -1,
+          NULL, 0, NULL, NULL);
+      char * pastring = (char*)malloc(char_count);
+      WideCharToMultiByte(CP_ACP, 0, pwstring, -1,
+          pastring, char_count, NULL, NULL);
+      return pastring;
+  }
+
+  /* 作者：<a href="http://www.perfect-is-shit.com">独酌逸醉</a>
+   * 时间: 2012.04.11
+   *
+   * 功能: 将单字符串转换成宽字符串
+   * 返回值：宽字符串指针
+   * 参数: pastring: 单字符串指针
+   * 备注:
+   *     (1) 测试环境: windows 7 , visual studio 2010
+   *     (2) 使用需添加头文件 windows.h
+   *     (3) 使用返回指针后注意释放内存(使用 free, 而不是 delete)
+   */
+  wchar_t * singlestring_to_wide(const char * pastring)
+  {
+      int wchar_count = MultiByteToWideChar(CP_ACP, 0, pastring, -1,
+          NULL, 0);
+      wchar_t * pwstring = (wchar_t*)malloc(wchar_count * sizeof(wchar_t));
+      MultiByteToWideChar(CP_ACP, 0, pastring, -1,
+          pwstring, wchar_count * sizeof(wchar_t));
+      return pwstring;
+  }
+#+END_EXAMPLE
+
+** 参考书籍
+   :PROPERTIES:
+   :CUSTOM_ID: 参考书籍
+   :END:
+
+- 《windows 核心编程(第5版)》

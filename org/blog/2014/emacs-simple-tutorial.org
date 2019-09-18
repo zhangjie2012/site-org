@@ -1,0 +1,690 @@
+#+SETUPFILE: ~/site/tpl/site-tpl.org
+#+TITLE: Emacs 简易教程
+#+DATE: 2014-12-01 00:00:00
+
+更新记录:
+
+2018/06/22：本文以不再维护，请移步到我的
+[[http://wiki.zhangjiee.com/tools/emacs.html][Emacs Wiki]]。
+
+2015/01/20： 一开始我总是想让 Emacs
+干所有的事情，后来我发现我装的插件严重拖累了 Emacs
+的使用速度，但是我却没有用过它。这也可能是很多新手经常会犯的错误，盲目的追求功能，而忽略了最原始的需求。这次更新文档会砍掉很多不常用的插件，适配最新的的配置文件。
+
+另外: 笔者是服务器开发，常用 Emacs 开发(C/C++, Python, shell
+...)和写文章(markdown not
+org-mode)。我的配置文件：[[https://github.com/zhangjie2012/_emacs.d]]。
+
+--------------
+
+最早开始文本编辑器的时候是 Vi(m) ，实在不习惯频繁的 Esc
+和编辑模式切换，就选择了 Emacs。
+
+现在看来编辑器无谓好坏，只是个人习惯而已。Emacs 没有 Vi(m)
+的编辑快感和编辑速度，但是它可以随意定制，用更少的键做更多的事情。
+
+世界上有三种程序员，一种是用 Vim 的，一种是用 Emacs
+的，另外一种是用其它编辑器的。本文介绍 Emacs 的基本使用。
+
+** Emacs24 的安装
+   :PROPERTIES:
+   :CUSTOM_ID: emacs24-的安装
+   :END:
+
+安装过程:
+
+#+BEGIN_EXAMPLE
+  wget https://github.com/mirrors/emacs/archive/emacs-24.3.92.zip
+  unzip emacs-24.3.92.zip
+  cd emacs-24.3.93
+  ./autogen.sh
+  ./configure --without-makeinfo
+  make -j2
+  sudo make install
+#+END_EXAMPLE
+
+添加 =alias em='env TERM=xterm-256color emacs -nw= 到 =~/.bashrc=
+中，这样就可以直接用 =em= 打开 Emacs 了。
+
+Emacs24 集成了很多插件，比之前的版本好用很多，而且很多新的插件都是基于
+24 的，所以建议用 Emacs24, 而非 Emacs23-，本文也仅仅针对 24 做适配。
+
+** 基本快捷键
+   :PROPERTIES:
+   :CUSTOM_ID: 基本快捷键
+   :END:
+
+这里列出在没有打开任何 mode 的情况下，原生 Emacs 所支持的快捷键。
+
+- =C-=: Ctrl 键
+- =M-=: Alt/ESC 键,
+- =S-=: Shift 键
+- =C-g= : 撤销命令(没事多摁几下，我都是没事摁着玩的)
+- =C-z= : 挂起 Emacs
+- =C-x C-c=: 关闭 Emacs
+
+*** 光标移动
+    :PROPERTIES:
+    :CUSTOM_ID: 光标移动
+    :END:
+
+- =C-n= : 下一行
+- =C-p= : 上一行
+- =C-f= : 前进一个字符
+- =C-b= : 后退一个字符
+- =M-f= : 前进一个单词
+- =M-b= : 后退一个单词
+- =C-v= : 向下翻页
+- =M-v= : 向上翻页
+- =C-l= : 光标所在行移动到屏幕中央
+- =C-a= : 行首
+- =C-e= : 行尾
+- =M-a= : 句首
+- =M-e= : 句尾
+- =M-{= : 段首
+- =M-}= : 段尾
+- =M-<= : 文件首
+- =M->= : 文件尾
+
+*** 文档编辑
+    :PROPERTIES:
+    :CUSTOM_ID: 文档编辑
+    :END:
+
+- =<Backspace>= : 向前删除一个字符
+- =C-d= =<DEL>= : 向后删除一个字符，我一般用 =C-d=
+- =M-d= =M-<DEL>= : 向后删除一个单词
+- =C-k= : 删除光标到行尾，删除一行用 =C-a, C-k= (Vim 中的 dd)。
+- =M-k= : 删除光标到句尾
+- =C-@= : 标记(Mark set), 标记之后配合光标移动快捷键，可以选中一个区域
+- =M-w= : 复制
+- =C-w= : 剪切
+- =C-y= : 粘贴
+- =C-/= : 撤销(UNDO)
+
+大小写转换:
+
+- =M-l=: Convert following word to lower case (downcase-word).
+- =M-u=: Convert following word to upper case (upcase-word).
+- =M-c=: Capitalize the following word (capital-word).
+- =C-x C-l=: Convert region to lower case (downcase-region).
+- =C-x C-u=: Convert region to upper case (upcase-region).
+
+块操作:
+
+- =C-x r k=: Kill the text of the region-rectangle, saving its contents
+  as the "last killed rectangle" (kill-rectangle).
+- =C-x r M-w=: Save the text of the region-rectangle as the "last killed
+  rectangle" (copy-rectangle-as-kill).
+- =C-x r d=: Delete the text of the region-rectangle (delete-rectangle).
+- =C-x r y=: Yank the last killed rectangle with its upper left corner
+  at point (yank-rectangle).
+- =C-x r o=: Insert blank space to fill the space of the
+  region-rectangle (open-rectangle). This pushes the previous contents
+  of the region-rectangle to the right.
+- =C-x r N=: Insert line numbers along the left edge of the
+  region-rectangle (rectangle-number-lines). This pushes the previous
+  contents of the region-rectangle to the right.
+- =C-x r c=: Clear the region-rectangle by replacing all of its contents
+  with spaces (clear-rectangle).
+- =M-x delete-whitespace-rectangle=: Delete whitespace in each of the
+  lines on the specified rectangle, starting from the left edge column
+  of the rectangle.
+- =C-x r t string <RET>=: Replace rectangle contents with string on each
+  line (string-rectangle).
+- =M-x string-insert-rectangle <RET> string <RET>=: Insert string on
+  each line of the rectangle.
+
+删除空白字符(Deleting whitespace):
+
+- =M-\\= : 删除光标周围的空格和 tab。
+- =M-<SPC>= : 删除光标周围的空格和 tab，但是保留一个。
+- =C-x C-o= : 删除周围行附近的空行。
+- =M-^= : Join two lines by deleting the intervening newline, along with
+  any indentation following it. With a prefix (C-u M-^) it joins the
+  current with the next line.
+
+选中:
+
+- =M-h= : Move point to the beginning of the current paragraph, and set
+  mark at the end.
+- =C-M-h= : Move point to the beginning of the current defun, and set
+  mark at the end.
+- =C-x h= : Move point to the beginning of the buffer, and set mark at
+  the end.
+- =C-x SPC= : Makes a rectangular region (new in Emacs 24.4).
+
+*** 搜索
+    :PROPERTIES:
+    :CUSTOM_ID: 搜索
+    :END:
+
+- =C-s= : 向前搜索
+- =C-r= : 向后操作
+- =C-g= : 回到搜索开始前的位置
+- =M-%= : 询问并替换
+- =M-s .= : 当前单词搜索。
+
+*** 文件操作(缓冲区)
+    :PROPERTIES:
+    :CUSTOM_ID: 文件操作缓冲区
+    :END:
+
+Emacs 可以打开很多文件，一个文件可以理解成一个
+buffer，你可以在多个文件中来回切换。
+
+- =C-x f= : 打开一个文件 -> =find-file=
+- =C-x s= : 保存
+- =C-x C-w= : 另存为
+- =C-x C-v= : 关闭当前缓冲区，并打开新文件
+- =C-x C-b= : 打开缓冲区列表
+- =C-x b= : 切回最近的 buffer -> =switch-to-buffer=
+- =C-x k= : 关闭当前缓冲区
+- =C-x C-b=, =d=, =x=: 关闭用 d 标记 buffer
+- =M-x find-file-at-point= , =M-x ffap=
+- =C-x 5 0= : =delete-frame=
+
+*** 窗口(WINDOWS)操作
+    :PROPERTIES:
+    :CUSTOM_ID: 窗口windows操作
+    :END:
+
+- =C-x 1= : 只保留当前窗口
+- =C-x 2= : 水平切分
+- =C-x 3= : 垂直切分
+- =C-x o= : 切换到另外一个窗口
+- =C-x 0= : 关闭当前窗口(并不是删除buffer)
+- =C-x 4 C-f= : 在另外一个窗口打开文件 -> =find-file-other-window=
+
+*** 查阅命令
+    :PROPERTIES:
+    :CUSTOM_ID: 查阅命令
+    :END:
+
+- =M-x man= :
+- =M-x info= : 所有的 Emacs 手册
+
+*** 代码编辑
+    :PROPERTIES:
+    :CUSTOM_ID: 代码编辑
+    :END:
+
+- =M-;= : 块注释
+- =C-M-h= : 选中一个函数
+
+*** 目录操作
+    :PROPERTIES:
+    :CUSTOM_ID: 目录操作
+    :END:
+
+- =M-x dired= : 打开一个目录
+
+*** 书签
+    :PROPERTIES:
+    :CUSTOM_ID: 书签
+    :END:
+
+- =C-x r m= : 设置一个书签 -> =bookmark-set=
+- =C-x r b= : 跳转到一个书签 -> =bookmark-jump=
+- =C-x r l= : 显示所有书签列表, 管理书签的方式和 =Direcd= 模式一样
+
+  - =RET= : 打开一个书签
+  - =p=: 前一个书签
+  - =n=: 后一个书签
+  - =s= : 保存当前书签到一个文件中
+  - =o= : 在另外一个窗口中打开文件
+  - =r= : 重命名书签
+  - =d= : 标记要删除的书签
+  - =x= : 执行删除动作
+  - =u= : 撤销标记
+
+*** Occur
+    :PROPERTIES:
+    :CUSTOM_ID: occur
+    :END:
+
+把所有的搜索结果都列到一个名为 =*Occur*= buffer 中。使用 =M-s o= 调用
+=occur= 函数，搜索当前文档。
+
+- =M-g n= : 下一个匹配项
+- =M-g p= : 上一个匹配项
+- =e= : 进入 =occur-edit-mode=，可以编辑搜索结果
+- =C-c C-c= : 退出编辑模式
+- =g= : 刷新搜索结果
+
+*** Dired
+    :PROPERTIES:
+    :CUSTOM_ID: dired
+    :END:
+
+- =C-x d= : 选个一个目录，在当前窗口打开
+- =C-x 4 d= : 选一个目录，在另外一个目录打开
+- =i= : 打开子目录
+
+*** 版本控制(Version Control)
+    :PROPERTIES:
+    :CUSTOM_ID: 版本控制version-control
+    :END:
+
+- =c-x v += , =M-x vc-update= : 更新文件
+- =C-x v v= , =M-x vc-next-action= : 提交当前文件
+- =C-x v == , =M-x vc-diff=
+- =C-x v ~= , =M-x vc-revision-other-window=: 显示指定版本
+- =C-x v l= , =M-x vc-print-log= : 查看日志
+- =C-x v u= , =M-x vc-revert=
+- =C-x v C-h= : 查看所有可用的 vc 命令
+
+** 基本设置(独立于插件)
+   :PROPERTIES:
+   :CUSTOM_ID: 基本设置独立于插件
+   :END:
+
+Emacs 默认找的配置文件为 =~/.emacs= 或者
+=~/.emacs.d/init.el=。我用的是后者，这样就可以把所有的配置放到一个目录下面，方便管理。默认的
+Emacs 的快捷键有些不好用，比如 =c-x c-f=
+时，没有任何提示。再如窗口切换使用 =c-x o=，当 buffer
+多时，非常不方便，这一节介绍 emacs 通用的定制(不针对某种开发/编辑环境)。
+
+零散的设置:
+
+1. 用 =y/n= 代替 =yes/no=: =(fset 'yes-or-no-p 'y-or-n-p)=
+2. 关闭自动保存: =(setq auto-save-default nil)=
+3. 关闭自动备份: =(setq make-backup-files nil)=
+4. 多个 Emacs 打开同一份文件时，会自动产生一个 .#xxx
+   的文件，很烦人，去掉: =(setq create-lockfiles nil)=
+5. 屏蔽挂起键(经常按错): =global-unset-key (kbd "C-z"))=
+
+设置编码为 UTF-8:
+
+#+BEGIN_EXAMPLE
+  (setq locale-coding-system 'utf-8)
+  (set-terminal-coding-system 'utf-8)
+  (set-keyboard-coding-system 'utf-8)
+  (set-selection-coding-system 'utf-8)
+  (prefer-coding-system 'utf-8)
+#+END_EXAMPLE
+
+打开 Eshell 绑定快捷键: =C-c e= 打开, =C-c l= 清空:
+
+#+BEGIN_EXAMPLE
+  (defun clear-eshell-buffer ()
+    (interactive)
+    (let ((inhibit-read-only t))
+      (delete-region (point-min) (point-max))))
+  (global-set-key (kbd "C-c l") 'clear-eshell-buffer)
+  (global-set-key (kbd "C-c e") 'eshell)
+#+END_EXAMPLE
+
+Tab 设置(空格替代，4字符):
+
+#+BEGIN_EXAMPLE
+  (setq-default indent-tabs-mode nil)
+  (setq-default tab-width 4)
+#+END_EXAMPLE
+
+括号匹配、对齐、补全：
+
+#+BEGIN_EXAMPLE
+  (show-paren-mode t)
+  (require 'electric)
+  (electric-indent-mode t)
+  ;;(electric-pair-mode t)
+  (electric-layout-mode t)
+#+END_EXAMPLE
+
+我不喜欢括号自动补全，所有就注释掉了。
+
+*Tip*: =M-x eval-buffer= 可以使配置文件立即生效，调试非常方便。
+
+** 高级定制
+   :PROPERTIES:
+   :CUSTOM_ID: 高级定制
+   :END:
+
+这一节针对不同的应用，介绍一些插件。
+
+*** 外观
+    :PROPERTIES:
+    :CUSTOM_ID: 外观
+    :END:
+
+自动换行: =(global-visual-line-mode 1)=
+
+行号宽度定制:
+
+#+BEGIN_EXAMPLE
+  (setq linum-format "%3d|")
+  ;;(global-linum-mode 1)
+#+END_EXAMPLE
+
+默认情况下，不显示行号，需要的时候，=M-x linum-mode=。
+
+代码参考线:
+[[https://github.com/alpaker/Fill-Column-Indicator][fill-column-indicator]]
+
+#+BEGIN_EXAMPLE
+  (require 'fill-column-indicator)
+  (setq fci-rule-color "#D15FEE")
+  (setq fci-rule-column 80)
+  (define-globalized-minor-mode
+    global-fci-mode fci-mode (lambda () (fci-mode 1)))
+  ;;(global-fci-mode 1)
+  (global-set-key (kbd "M-|") 'global-fci-mode)
+#+END_EXAMPLE
+
+默认不显示，快捷键绑定到 =M-|=，随时切换。
+
+主题: [[https://github.com/jordonbiondo/ample-theme][ample-theme]]。
+
+*** 缓冲区使用优化
+    :PROPERTIES:
+    :CUSTOM_ID: 缓冲区使用优化
+    :END:
+
+使用 [[https://github.com/emacs-helm/helm][helm]], 最牛逼的 Emacs
+插件之一:
+
+#+BEGIN_EXAMPLE
+  (require 'helm)
+  (require 'helm-config)
+  (require 'helm-eshell)
+
+  (add-hook 'eshell-mode-hook
+            #'(lambda ()
+                (define-key eshell-mode-map (kbd "C-c C-l")  'helm-eshell-history)))
+
+  (global-set-key (kbd "C-c h") 'helm-command-prefix)
+  (define-key helm-map (kbd "<tab>") 'helm-execute-persistent-action)
+  (define-key helm-map (kbd "C-i") 'helm-execute-persistent-action)
+  (define-key helm-map (kbd "C-z") 'helm-select-action)
+
+  (when (executable-find "curl")
+    (setq helm-google-suggest-use-curl-p t))
+
+  (setq helm-split-window-in-side-p           t
+        helm-move-to-line-cycle-in-source     t
+        helm-ff-search-library-in-sexp        t
+        helm-scroll-amount                    8
+        helm-ff-file-name-history-use-recentf t
+        )
+
+  (global-set-key (kbd "M-x") 'helm-M-x)
+  (global-set-key (kbd "M-y") 'helm-show-kill-ring)
+  (global-set-key (kbd "C-x b") 'helm-mini)
+  (global-set-key (kbd "M-y") 'helm-show-kill-ring)
+  (global-set-key (kbd "C-c h o") 'helm-occur)
+  (setq helm-M-x-fuzzy-match t)
+  ;;(helm-autoresize-mode 1)
+  (helm-mode 1)
+#+END_EXAMPLE
+
+比较详细的一篇文档，[[http://tuhdo.github.io/helm-intro.html][A Package
+in a league of its own:
+Helm]]，这里不再赘述了，简单演示一下几个常用的功能(其实 helm
+的功能都很常用):
+
+#+CAPTION: helm
+[[/img/wiki/helm.gif]]
+
+Buffer
+切换([[https://github.com/nschum/window-numbering.el][windows-numbering.el]]):
+
+#+BEGIN_EXAMPLE
+  ;; 使用 M-(1,2,3...9)窗口切换
+  (require 'window-numbering)
+  (setq window-numbering-assign-func
+        (lambda () (when (equal (buffer-name) "*Calculator*") 9)))
+  (window-numbering-mode 1)
+#+END_EXAMPLE
+
+*** 编辑优化
+    :PROPERTIES:
+    :CUSTOM_ID: 编辑优化
+    :END:
+
+相同符号高亮([[https://github.com/nschum/highlight-symbol.el][highlight-symbol.el]]):
+
+#+BEGIN_EXAMPLE
+  (require 'highlight-symbol)
+  (global-set-key (kbd "M--") 'highlight-symbol-at-point)
+  (global-set-key (kbd "M-n") 'highlight-symbol-next)
+  (global-set-key (kbd "M-p") 'highlight-symbol-prev)
+#+END_EXAMPLE
+
+自动补全([[https://github.com/auto-complete/auto-complete][auto-complete]]
+& [[https://github.com/capitaomorte/yasnippet][yasnippet]]):
+
+#+BEGIN_EXAMPLE
+  (require 'popup)
+
+  (require 'auto-complete)
+  (require 'auto-complete-config)
+  (add-to-list 'ac-dictionary-directories
+               "~/.emacs.d/auto-complete/dict")
+  (ac-config-default)
+  (setq ac-use-quick-help nil)
+  (setq ac-use-menu-map t)
+  (define-key ac-menu-map "\C-n" 'ac-next)
+  (define-key ac-menu-map "\C-p" 'ac-previous)
+  (global-set-key "\M-/" 'auto-complete)
+  (add-to-list 'ac-modes 'protobuf-mode)
+
+  (require 'yasnippet)
+  ;;(yas-global-mode 1)
+#+END_EXAMPLE
+
+C/C++
+头文件自动补全([[https://github.com/mooz/auto-complete-c-headers][auto-complate-c-headers]]):
+
+#+BEGIN_EXAMPLE
+  (defun my:ac-c-headers-init ()
+    (require 'auto-complete-c-headers)
+    (add-to-list 'ac-sources 'ac-source-c-headers)
+    (add-to-list 'achead:include-directories '"/usr/lib/gcc/x86_64-redhat-linux/4.4.7/../../../../include/c++/4.4.7")
+    (add-to-list 'achead:include-directories '"/usr/lib/gcc/x86_64-redhat-linux/4.4.7/../../../../include/c++/4.4.7/x86_64-redhat-linux")
+    (add-to-list 'achead:include-directories '"/usr/lib/gcc/x86_64-redhat-linux/4.4.7/../../../../include/c++/4.4.7/backward")
+    (add-to-list 'achead:include-directories '"/usr/local/include")
+    (add-to-list 'achead:include-directories '"/usr/lib/gcc/x86_64-redhat-linux/4.4.7/include")
+    (add-to-list 'achead:include-directories '"/usr/include"))
+
+  (add-hook 'c++-mode-hook 'my:ac-c-headers-init)
+  (add-hook 'c-mode-hook 'my:ac-c-headers-init)
+#+END_EXAMPLE
+
+区域标记([[https://github.com/magnars/expand-region.el][expand-region]])，Emacs
+这下牛逼了，我给绑定了一些快捷键:
+
+#+BEGIN_EXAMPLE
+  (require 'expand-region)
+  (global-set-key (kbd "M-m") 'er/expand-region)
+  (global-set-key (kbd "M-s s") 'er/mark-symbol)
+  (global-set-key (kbd "M-s p") 'er/mark-outside-pairs)
+  (global-set-key (kbd "M-s P") 'er/mark-inside-pairs)
+  (global-set-key (kbd "M-s q") 'er/mark-outside-quotes)
+  (global-set-key (kbd "M-s Q") 'er/mark-inside-quotes)
+  (global-set-key (kbd "M-s m") 'er/mark-comment)
+  (global-set-key (kbd "M-s f") 'er/mark-defun)
+#+END_EXAMPLE
+
+*** 常用语言 Mode
+    :PROPERTIES:
+    :CUSTOM_ID: 常用语言-mode
+    :END:
+
+Markdown: [[http://jblevins.org/projects/markdown-mode/][markdown-mode]]
+
+#+BEGIN_EXAMPLE
+  (autoload 'markdown-mode "~/.emacs.d/lisp/markdown-mode/markdown-mode.el"
+    "Major mode for editing Markdown files" t)
+  (setq auto-mode-alist
+        (cons '("\\.md" . markdown-mode) auto-mode-alist))
+  (setq auto-mode-alist
+        (cons '("\\.markdown" . markdown-mode) auto-mode-alist))
+#+END_EXAMPLE
+
+Python: [[http://sourceforge.net/projects/python-mode/][python-mode]]
+
+#+BEGIN_EXAMPLE
+  (require 'python-mode)
+#+END_EXAMPLE
+
+Google Protobuf Buffer:
+[[http://code.google.com/p/protobuf/source/browse/trunk/editors/protobuf-mode.el?r=227][protobuf-mode]]
+
+#+BEGIN_EXAMPLE
+  (require 'protobuf-mode)
+  (add-to-list 'auto-mode-alist '("\\.proto$" . protobuf-mode))
+#+END_EXAMPLE
+
+lua: [[https://github.com/immerrr/lua-mode/][lua-mode]]
+
+#+BEGIN_EXAMPLE
+  (autoload 'lua-mode "lua-mode" "lua editing mode. " t)
+  (add-to-list 'auto-mode-alist '("\\.lua$" . lua-mode))
+  (add-to-list 'interpreter-mode-alist '("lua" . lua-mode))
+#+END_EXAMPLE
+
+[[http://web-mode.org/][web-mode]]:
+
+#+BEGIN_EXAMPLE
+  (require 'web-mode)
+  (add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
+#+END_EXAMPLE
+
+*** C++开发定制: xcscope + etags + c++-mode
+    :PROPERTIES:
+    :CUSTOM_ID: c开发定制-xcscope-etags-c-mode
+    :END:
+
+#+BEGIN_EXAMPLE
+  ;; 编译与调试
+  (global-set-key [(f5)] 'compile)
+
+  (require 'xcscope)
+  (cscope-setup)
+
+  (global-set-key [(f9)] 'ff-find-other-file)
+
+  (setq tab-stop-list ())
+  (loop for x downfrom 40 to 1 do
+        (setq tab-stop-list (cons (* x 4) tab-stop-list)))
+
+  (defconst my-c-style
+    '(
+      (c-tab-always-indent        . t)
+      (c-hanging-braces-alist     . ((substatement-open after)
+                                     (brace-list-open)))
+      (c-hanging-colons-alist     . ((member-init-intro before)
+                                     (inher-intro)'
+                                     (label after)
+                                     (acecss-label after)))
+      (c-cleanup-list             . (scope-operator
+                                     empty-defun-braces
+                                     defun-close-semi))
+      (c-offsets-alist            . ((arglist-close . c-lineup-arglist)
+                                     (case-label . 4)
+                                     (substatement-open . 0)
+                                     (block-open        . 0)
+                                     (knr-argdecl-intro . -)
+                                     (innamespace . -)
+                                     (inline-open . 0)
+                                     (inher-cont . c-lineup-multi-inher)
+                                     (arglist-cont-nonempty . +)
+                                     (template-args-cont . + )))
+      (c-echo-syntactic-information-p . t)
+      )
+    "My C Programming Style")
+
+  ;; offset customizations not in my-c-style
+  (setq c-offsets-alist '((member-init-intro . ++)))
+
+  ;; Customizations for all modes in CC Mode.
+  (defun my-c-mode-common-hook ()
+    ;; add my personal style and set it for the current buffer
+    (c-add-style "PERSONAL" my-c-style t)
+    ;; other customizations
+    (setq tab-width 4
+          indent-tabs-mode nil)
+    ;; we like auto-newline and hungry-delete
+    ;; (c-toggle-auto-hungry-state 1)
+    ;; key bindings for all supported languages.  We can put these in
+    ;; c-mode-base-map because c-mode-map, c++-mode-map, objc-mode-map,
+    ;; java-mode-map, idl-mode-map, and pike-mode-map inherit from it.
+    )
+  (add-hook 'c-mode-common-hook 'my-c-mode-common-hook)
+  (add-hook 'c-mode-hook 'hs-minor-mode)
+
+  (add-to-list 'auto-mode-alist '("\\.h\\'" . c++-mode))
+
+  ;; http://stackoverflow.com/questions/14668744/emacs-indent-for-c-class-method
+  (defun vlad-cc-style()
+    (c-set-offset 'inline-open '0)
+    )
+  (add-hook 'c++-mode-hook 'vlad-cc-style)
+#+END_EXAMPLE
+
+[[https://github.com/dkogan/xcscope.el][xcscope.el]] 使用:
+
+- =cscope-indexer -r= : 在根目录下递归生成数据库
+- =C-c s a= : Set initial directory;
+- =C-c s A= : Unset initial directory;
+- =C-c s I= : create list of files to index;
+- =C-c s s= : Find symbol;
+- =C-c s d= : Find global definition;
+- =C-c s c= : Find functions calling a function;
+- =C-c s C= : Find called functions (list functions called from a
+  function);
+- =C-c s t= : Find text string;
+- =C-c s e= : Find egrep pattern;
+- =C-c s f= : Find a file;
+- =C-c s i= : Find files #including a file;
+- =C-c s b= : Display cscope buffer;
+
+etags 使用:
+
+搭配 =find= 来生成 tags:
+
+#+BEGIN_EXAMPLE
+  find . -name '*.c' -o -name '*.cpp' -o -name '*.h' -print | etags -
+#+END_EXAMPLE
+
+- =M-x visit-tags-table <RET> FILE <RET>= : 选择tags文件
+- =M-. [TAG] <RET>= : 访问标签
+- =M-*= : 返回
+- =C-u M-.= : 寻找标签的下一个定义
+
+=F5= 编译:
+
+- C-x : 下一个编译错误。
+- =M-g p= : 上一个编译错误。
+- =g= : 重新编译
+
+其它：
+
+- =F9= : 在头文件和对应源文件之间跳转:
+  =(global-set-key [(f9)] 'ff-find-other-file)=
+
+** 学习资源
+   :PROPERTIES:
+   :CUSTOM_ID: 学习资源
+   :END:
+
+一些学习资源推荐，也是本文档的参考资料。
+
+- [[http://tuhdo.github.io/index.html][Emacs Mini Mannual]] : Emacs Mini
+  手册
+- [[http://emacsthemes.caisah.info/][Emacs Themes]] : 主题集合
+- [[http://melpa.milkbox.net/][MELPA]] : 插件集合，同时也可以感受一下
+  Emacs 的强大
+- [[http://www.gnu.org/software/emacs/manual/][GNU Emacs Manuals
+  Online]] : Emacs 官方手册
+- [[http://emacsredux.com/][Emacs Redux]]
+- [[http://jblevins.org/projects/markdown-mode/][Emacs Markdown Mode]]
+- [[https://github.com/redguardtoo/mastering-emacs-in-one-year-guide/blob/master/guide-zh.org][一年成为Emacs高手(像神一样使用编辑器)]]
+- [[http://www.jesshamrick.com/2012/09/18/emacs-as-a-python-ide/][Emacs
+  as a Python IDE]]
+- [[http://jianlee.ylinux.org/Computer/Emacs/emacsBFE99F8FE883.html][Emacs快速参考]]
+- [[http://www.gnu.org/software/emacs/manual/html_node/emacs/Case.html][Case
+  Conversion Commands]]
+- [[http://www.caole.net/diary/emacs_write_cpp.html][曹乐:
+  在Emacs下用C/C++编程]]

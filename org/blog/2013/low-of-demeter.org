@@ -1,0 +1,33 @@
+#+SETUPFILE: ~/site/tpl/site-tpl.org
+#+TITLE: 得墨忒耳定律
+#+DATE: 2013-06-12 00:00:00
+
+最近看两本书，[[http://book.douban.com/subject/5387402/][程序员修炼之道------从小工到专家]]
+和
+[[http://book.douban.com/subject/5442024/][代码整洁之道]]，里面都讲到了
+得墨忒耳定律，英文原称为 /The Low of Demeter/
+，觉得挺有道理，但是又无法一时理解到位，可以正确的使用。所以摘录了下来，供以后回忆。
+
+下面是我直接从[[http://zh.wikipedia.org/wiki/%E5%BE%97%E5%A2%A8%E5%BF%92%E8%80%B3%E5%AE%9A%E5%BE%8B][维基百科]]摘录过来的：
+
+--------------
+
+得墨忒耳定律（Law of Demeter，缩写LoD）亦称为"最少知识原则(Principle of
+Least
+Knowledge)"，是一种软件开发的设计指导原则，特别是面向对象的程序设计。得墨忒耳定律是松耦合的一种具体案例。该原则是美国东北大学在1987年末在发明的，可以简单地以下面任一种方式总结:
+
+- 每个单元对于其他的单元只能拥有有限的知识：只是与当前单元紧密联系的单元(Each
+  unit should have only limited knowledge about other units: only units
+  "closely" related to the current unit.)；
+- 每个单元只能和它的朋友交谈：不能和陌生单元交谈(Each unit should only
+  talk to its friends; don't talk to strangers)；
+- 只和自己直接的朋友交谈(Only talk to your immediate friends)。
+
+这个原理的名称来源于希腊神话中的农业女神，孤独的得墨忒耳。
+
+很多面向对象程序设计语言用"."表示对象的域的解析算符，因此得墨忒耳定律可以简单地陈述为"只使用一个.算符"。因此，a.b.Method()违反了此定律，而a.Method()不违反此定律。一个简单例子是，人可以命令一条狗行走(walk)，但是不应该直接指挥狗的腿行走，应该由狗去指挥控制它的腿如何行走。
+
+--------------
+
+感兴趣的可以去看看 [[http://en.wikipedia.org/wiki/Law_of_Demeter][Law of
+Demeter]]。

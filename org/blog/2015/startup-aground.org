@@ -1,0 +1,103 @@
+#+SETUPFILE: ~/site/tpl/site-tpl.org
+#+TITLE: Startup News 搁浅了...
+#+DATE: 2015-09-06 00:00:00
+
+今天晚上打算优化一下之前的抓取脚本，加上列表随机和sleep，更"真实"一些。没想到搜狗把策略又改了，研究之后发现在
+=http://weixin.sogou.com/weixin?query=xxx= 搜索到的"最新文章" 的 URL
+变成了类似:
+
+#+BEGIN_QUOTE
+  http://weixin.sogou.com/websearch/art.jsp?sg=CBf80b2xkgZXWLd5LFt4M_wqQ2pb3Td1pI1DqNAnxtnlAszluk3riyL8C5RGWKQH45EG7ulYZsbbhM2jJWZuLc4kdzzAIXL3rBPx8ElSh3ODdduK0e0_CY8gWqKpVjdPn18Aa5JV41c-N7jK0Zk2HdcbfKaFsacL&url=p0OVDH8R4SHyUySb8E88hkJm8GF_McJfBfynRTbN8wj3aP025tegkDOKr0mojK8XIKUX_KcUigenAQqJStDx6WQ3JxMQ3374NGhlV8aEc9GtupU-kYV6jWCl4_Im3jrNaC13kELEkPdYy-5x5In7jJFmExjqCxhpkyjFvwP6PuGcQ64lGQ2ZDMuqxplQrsbk
+#+END_QUOTE
+
+这样的结构，其中
+
+#+BEGIN_QUOTE
+  sg=CBf80b2xkgZXWLd5LFt4M_wqQ2pb3Td1pI1DqNAnxtnlAszluk3riyL8C5RGWKQH45EG7ulYZsbbhM2jJWZuLc4kdzzAIXL3rBPx8ElSh3ODdduK0e0_CY8gWqKpVjdPn18Aa5JV41c-N7jK0Zk2HdcbfKaFsacL
+#+END_QUOTE
+
+这个 sg 序列是每请求一次似乎都会变一次，再次请求会提示
+"当前请求已过期，请点击重新加载"，后面的 =url=...= 部分应该是不变的。
+
+想了一会也没有想到好的解决办法，也不打算想了，烦躁(最近诸事不顺，去合肥票都买好了，结果去错车站了；第二天手机屏碎了；今天银行卡又丢了...)。
+
+这几天的调研，做类似网站基本上三种思路，大体说一下，感兴趣的朋友可以自行研究:
+
+1. 和腾讯合作，拿到公众号的API，这种无疑是最为精确的
+2. 抓 =weixin.sogou.com= 的搜索结果，也有人说用 RSS 生成器
+3. 在手机上每个公众号都有一个"查看历史消息"，通过手机抓包获取
+   查看历史消息 的 URL，访问 URL
+   即可得到每个公众号的文章列表。不过据说，这个 URL 也是会每天更换的
+
+我是不打算再折腾了，就让他搁浅吧，也折腾好几天了，而且这几天的搜狗策略也是一直在更换，加了几个公众号，质量都不错，推荐下:
+
+- AppSolution
+- InfoQ
+- MacTalk
+- OurDearAmy
+- Tiny4Voice
+- at
+- caoz的梦呓
+- gitcafe
+- 一个程序员的思考
+- 中文互联网数据研究资讯中心
+- 价值线
+- 余晟以为
+- 健康头条
+- 大象公会
+- 小道消息
+- 左岸读书
+- 开发者头条
+- 张杰de闲言碎语
+- 最美应用
+- 枯木杂谈
+- 特赞tezign
+- 王豖
+- 知乎每日精选
+- 美文日赏
+- 肉饼铺子
+- 连岳
+- 道哥的黑板报
+- 鬼脚七
+- 大家
+
+[[http://www.perfect-is-shit.com/startup-news.html][上篇文章]]
+说有机会分享感受，没想到机会来的这么快。
+
+忘了以前看得哪篇文章了，把程序分为两大类：产品型程序和技术型程序。产品型的程序不在乎使用的技术手段是否高明，只看重最终的产品形态，而技术型程序，对技术有着极高的追求，但是不太看重产品，可能会有一定的沟通障碍。这样分虽然有些偏激，但是不是全没有道理。不知道从什么时候开始，我逐渐成产品型程序，而且似乎一直都顺风顺水，想做的东西，花点时间也就搞出来了。直到最近做的两件事情，让我开始反思自己。一个是文章没有提及的"磁力链接"(你懂得)，另外一个就是
+StartupNews 了。
+
+自己私下常用的技术: Python, urllib, Django, 正则表达式，以及公司常用的
+Django, MySQL，svn, git
+等等，遇到问题的时候随便搜一搜也就解决了，不会去深入地思考根本原因，导致相同的问题可能搜过很多很多次了。比如:
+=from collections import defaultdict= 这一行，我搜过不下 20 次了，宁愿把
+[[http://stackoverflow.com/questions/960733/python-creating-a-dictionary-of-lists][Python
+creating a dictionary of lists]]
+这个链接记到印象笔记都不愿意花点事情记下来。
+
+为什么会变的这么"懒"?
+
+1. 想想以前 C++
+   基础多好啊，直到最近整理基础库的时候，才发现自己把最基本的
+   "纯虚函数", "纯虚类"，"虚基类"
+   概念都搞不清楚了，静态对象初始化，模板等很基础的问题都犹豫不决；
+2. 我用 Git 有将近 3 年了吧，基本上每天都在用，一开始
+   Git官方文档也不知道看过多少遍了。然而，经常在切换分支的时候
+   =checkout= 和 =branch= 都搞不清楚区别，还是要查 Wiki；
+3. 一些基本的原理性东西，比如编译、链接过程，堆栈、寻址、虚拟存储器，以前多熟啊，现在每次遇到这种问题的时候，都不敢开口，心里确实没底。
+4. 基本的排序算法及其算法复杂度，都忘光了。
+5. ....
+
+类似的例子还有很多很多，久而久之，就不愿意再去深入的了解技术背后的原理性东西，因为了解也终究会忘，如果会忘，我是否要花大精力去研究呢？这个想法很容易反驳，我也可以反驳我自己。不过这本身就是一个对立面，都是事实。
+
+对立的事实是：
+
+1. 多扎实的技术功底，都是会忘的，只要一段时间没看，再去看的时候和新的东西差不了多少；以前我相信技术只有每天在用就不会忘，可事实是每天用的只不过的很小很小的一部分。
+2. 如果不深入研究每一项技术背后的原理，那个相同的问题一遍一遍的去查，还是会浪费很多的时间，自己也会很疲惫；
+
+我并不想抛出什么样的结论，没什么对错。
+
+最近和奶妈(我们项目组主策)聊过一次天，觉得有一句话说的非常好，大体是说:
+"我们没有必要过分的追究以前所存在的问题，因为以前的项目组的每个决策对当时来讲都可能是最好的决策，所以不需要过分的纠结以前，而是要面向项目组的以后"。
+
+多反思吧，感觉跑偏了，就向自己觉得正的方向跑跑。

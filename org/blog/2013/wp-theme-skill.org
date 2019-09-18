@@ -1,0 +1,211 @@
+#+SETUPFILE: ~/site/tpl/site-tpl.org
+#+TITLE: WordPress主题开发总结（下）：技巧
+#+DATE: 2013-01-17 15:46:33
+
+本文主要包括在 WordPress
+开发中会遇到的一些问题（随机文章，记录文章浏览量，热评文章，SITEINFO，PageNav）及解决方案。
+
+注意：看这些技巧之前，首先一定要了解基本的 WordPress 主题结构。
+
+** 获取发布文章
+   :PROPERTIES:
+   :CUSTOM_ID: 获取发布文章
+   :END:
+
+#+BEGIN_EXAMPLE
+  <?php
+      $args = array( 'numberposts' => 12, 'orderby' => 'pubdate' );
+      $rand_posts = get_posts( $args );
+      foreach( $rand_posts as $post ) : ?>
+      <div class="post">
+          <p class="title"><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></p>
+          <p class="postmetadata">
+              分类:<?php the_category(', ') ?>   <?php the_tags('Tags: ', ', ' , ''); ?> <?php edit_post_link('编辑', ' &#124; ', ''); ?>
+          </p>
+      </div>
+  <?php endforeach; ?>
+#+END_EXAMPLE
+
+numberposts 指的是文章数量
+
+orderby 值为 pubdate 表示最近发布，当值为 rand
+时，表示随机，也就是随机获取文章。
+
+** 显示热"点"文章列表
+   :PROPERTIES:
+   :CUSTOM_ID: 显示热点文章列表
+   :END:
+
+首先要实现文章浏览量，就这个功能而言，把下面的两个函数添加到
+functions.php 中。
+
+#+BEGIN_EXAMPLE
+  function getPostViews($postID) {
+      $count_key = 'post_views_count';
+      $count = get_post_meta ( $postID, $count_key, true );
+      if ($count == '') {
+          delete_post_meta ( $postID, $count_key );
+          add_post_meta ( $postID, $count_key, '0' );
+          return "0 View";
+      }
+      return $count . ' Views';
+  }
+
+  function setPostViews($postID) {
+      $count_key = 'post_views_count';
+      $count = get_post_meta ( $postID, $count_key, true );
+      if ($count == '') {
+          $count = 0;
+          delete_post_meta ( $postID, $count_key );
+          add_post_meta ( $postID, $count_key, '0' );
+      } else {
+          $count ++;
+          update_post_meta ( $postID, $count_key, $count );
+      }
+  }
+#+END_EXAMPLE
+
+在主循环中添加如下代码，应该都能看懂，第一个是在浏览的时候记录，第二是显示浏览次数。
+
+#+BEGIN_EXAMPLE
+  <?php setPostViews(get_the_ID()); ?>
+  <?php echo getPostViews(get_the_ID()); ?>[/php]
+#+END_EXAMPLE
+
+但是，如果要把热门点击文章按列表显示，上面这个方法就不行了，我用的是插件（WP-PostViews）。在需要显示该文章浏览次数处，调用
+the_views 方法：
+
+#+BEGIN_EXAMPLE
+  <?php if(function_exists('the_views')) { the_views(); } ?>
+#+END_EXAMPLE
+
+在想要显示列表的调用 =get_most_viewed= 方法：
+
+#+BEGIN_EXAMPLE
+  <?php if (function_exists('get_most_viewed')): ?>
+     <ul>
+     <?php get_most_viewed('both', 12);?>
+     </ul>
+  <?php endif; ?>[/php]
+#+END_EXAMPLE
+
+至于显示的效果需要你的 css 和 WP-PostViews 后台设置相配合。
+
+** 显示热"评"文章列表
+   :PROPERTIES:
+   :CUSTOM_ID: 显示热评文章列表
+   :END:
+
+在 functions.php 中添加如下
+simple_get_most_review，这个函数我是从网上拷贝的，foreach
+中添加了显示文章评论个数的代码，否则显示出来的只是热评文章的标题。你在使用的时候，建议手动修改一下。
+
+#+BEGIN_EXAMPLE
+  /*
+  $termId:分类目录 ID,为 0 时是检索所有分类目录
+  $posts_num:显示热评文章的数量
+  $days:检索多少天内的热评文章
+  */
+  function simple_get_most_review($termId=0,$posts_num=12, $days=30)
+  {
+      global $wpdb;
+      if($termId==0){
+          $sql = "SELECT `ID` , `post_title` , `comment_count` FROM $wpdb->posts
+          WHERE `post_type` = 'post'
+          AND TO_DAYS( now( ) ) - TO_DAYS( `post_date` ) < $days
+          AND (`wp_posts`.`post_status` = 'publish' OR `wp_posts`.`post_status` = 'inherit')
+          ORDER BY `comment_count` DESC LIMIT 0 , $posts_num ";
+      }
+      else {
+          $sql="SELECT `ID` , `post_title` , `comment_count`  FROM `wp_posts`
+          INNER JOIN `wp_term_relationships` ON (`wp_posts`.`ID` = `wp_term_relationships`.`object_id`)
+          INNER JOIN `wp_term_taxonomy` ON (`wp_term_relationships`.`term_taxonomy_id` =  `wp_term_taxonomy`.`term_taxonomy_id`)
+          WHERE   1=1
+          AND `wp_term_taxonomy`.`taxonomy` = 'category'
+          AND `wp_term_taxonomy`.`term_id` = $termId
+          AND `wp_posts`.`post_type` = 'post'
+          AND (`wp_posts`.`post_status` = 'publish' OR `wp_posts`.`post_status` = 'inherit')
+          GROUP BY `wp_posts`.`ID`
+          ORDER BY `comment_count` DESC LIMIT 0 , 10  ";
+      }
+      $posts = $wpdb->get_results($sql);
+      $output = "";
+      foreach ($posts as $post){
+          $overPost=$post->post_title;
+          $comment = get_post($post->ID)->comment_count;
+          $output .= "\n<li> <div class=\"key\">
+              <a href= \"".get_permalink($post->ID)."\" rel=\"bookmark\" title=\"".$post->post_title."\" >".$overPost."</a>
+              </div>
+              <div class=\"value\">
+                  $comment
+              </div></li>";
+      }
+      echo $output;
+  }
+#+END_EXAMPLE
+
+在需要显示热评列表的地方，调用
+=simple_get_most_review=（参数含义请看函数声明）。
+
+#+BEGIN_EXAMPLE
+  <ul>
+  <?php if (function_exists('simple_get_most_review')) {simple_get_most_review(0,12,36500); }  ?>
+  </ul>
+#+END_EXAMPLE
+
+** 显示 SITEINFO
+   :PROPERTIES:
+   :CUSTOM_ID: 显示-siteinfo
+   :END:
+
+#+BEGIN_EXAMPLE
+  文章数量：<?php $count_posts = wp_count_posts();echo $published_posts = $count_posts->publish;?>
+  分类数量：<?php echo $count_categories =wp_count_terms('category'); ?>
+  标签数量：<?php echo $count_tags =wp_count_terms('post_tag'); ?>
+  评论数量：<?php $count_comments =get_comment_count();echo $count_comments['approved'];?>
+  页面总数：<?php $count_pages = wp_count_posts('page'); echo $page_posts = $count_pages->publish; ?>
+  链接总数：<?php $link = $wpdb->get_var("SELECT COUNT(*) FROM $wpdb->links WHERE link_visible = 'Y'"); echo $link; ?>
+  网站已运行：<?php echo floor((time()-strtotime("2010-7-10"))/86400); ?>
+  最后更新：<?php $last = $wpdb->get_results("SELECT MAX(post_modified) AS MAX_m FROM $wpdb->posts WHERE (post_type = 'post' OR post_type = 'page') AND (post_status = 'publish' OR post_status = 'private’)");$last = date('Y-n-j', strtotime($last[0]->MAX_m));echo $last; ?>
+#+END_EXAMPLE
+
+** 无插件实现 PageNav
+   :PROPERTIES:
+   :CUSTOM_ID: 无插件实现-pagenav
+   :END:
+
+[[http://blog.wpjam.com/m/native-pagenavi/][WordPress 技巧：不用插件实现
+Pagenavi 功能]]
+
+** 杂项
+   :PROPERTIES:
+   :CUSTOM_ID: 杂项
+   :END:
+
+- =<?php bloginfo('stylesheet_url'); ?>= 获取 style.css 文件所在路径
+- =<?php bloginfo('name'); ?>= 获取博客标题
+- =<?php bloginfo('url'); ?>= 获取博客链接
+- =<?php bloginfo('description'); ?>= 获取博客描述
+- =<?php bloginfo('template_url'); ?>= 用户主目录
+- =TEMPLATEPATH= 主题文件夹的位置
+- =the_title()= 日志标题
+- =the_permalink()= 日志标题链接
+- =the_category(',')= 日志所在分类（用','分隔开）
+- =the_author()= 当前日志作者名
+- =comments_popup_link('No Comments &#187;', '1 Comment &#187;', '% Comments &#187;');=
+  当弹出留言的功能激活的话，=comment_popup_link()=
+  调用一个弹出的留言窗口，如果没有激活，=comment_popup_link()=
+  则只是简单的显示留言列表。=No Comments &#187=
+  是在没有留言的时候显示的。 =1 Comment &#187;= 是用于当刚好只有 1
+  条留言的时候。=% Comments &187;= 显示多余 1 条留言的时候。
+- =edit_post_link('Edit', '|', '')=
+  显示一个可以用来编辑当前日志的编辑链接。第一个参数用来确定显示的文字，第二个参数是显示在文字前面的字符，第三个参数是显示在文字后面的字符。
+
+** 参考文章
+   :PROPERTIES:
+   :CUSTOM_ID: 参考文章
+   :END:
+
+- http://www.32133.com/labrary/450.html
+- http://tzqmiracle.diandian.com/post/2012-02-24/17853923
+- http://blog.wpjam.com/m/native-pagenavi/

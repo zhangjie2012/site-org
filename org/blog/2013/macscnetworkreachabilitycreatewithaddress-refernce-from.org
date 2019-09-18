@@ -1,0 +1,29 @@
+#+SETUPFILE: ~/site/tpl/site-tpl.org
+#+TITLE: "SCNetworkReachabilityCreateWithAddress" reference from
+#+DATE: 2013-05-20 00:00:00
+
+今天在 MAC OS 下写 makefile，运行时出现一下问题：
+
+#+BEGIN_EXAMPLE
+  Undefined symbols for architecture x86_64:
+  "_SCNetworkReachabilityCreateWithAddress", referenced from:
+  classname::function()     in  library.a(object.o)
+  "_SCNetworkReachabilityGetFlags", referenced from:
+  classname::function()      in library.a(object.o)
+  "_kCFAllocatorDefault", referenced from:
+  classname::function()      in library.a(object.o)
+  ld: symbol(s) not found for architecture x86_64
+  collect2: ld returned 1 exit status
+  make: *** [gtest_main] Error 1
+#+END_EXAMPLE
+
+网上搜了一下，是因为缺少 framework，很多人是在 MAC 下 使用 XCode
+出现这个问题，并不是在写 makefile 的时候。我写 makefile
+属于赶鸭子上架型，当然用 MAC
+开发更是。当然我不是在抱怨，这是我的工作，遇到问题还是需要积极应对的。已经知道缺少
+framework 以后，我直接搜索 MAC 下怎么在 makefile 中添加
+framework。很有成效，搜到下面[[http://macprogramming.googlecode.com/svn/trunk/LogOnOffMonitor/nbproject/Makefile-Debug.mk][链接]]，感觉只是一个样例，不过对我已经足够了。
+
+这个问题是的解决方法是，在链接时加入："-framework SystemConfiguration
+-framework CoreFoundation"。个人对 makefile 和 MAC
+了解不多，我遇到了这个问题，是这样解决的，具体原理性的东西，大家自己研究吧。

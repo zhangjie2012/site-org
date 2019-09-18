@@ -1,0 +1,121 @@
+#+SETUPFILE: ~/site/tpl/site-tpl.org
+#+TITLE: 使用 jekyll 为你的 Github 建立主页
+#+DATE: 2013-10-27 00:00:00
+
+Github 支持建立个人主页和每个项目建立一个主页，可以在
+=Settings->Github Pages->Automatic Page Generator=
+生成一个简单的页面。你可以在这个基础上丰富一些内容，不过，个人感觉不太方便。
+
+另外一种方法是使用Jekyll，Github原生就支持Jekyll，简单来讲，你可以用
+=jekyll new new-site= 生成一个新站，然后把生成的相关文件提交到你的
+github 中，一个网站就生成了。
+
+阅读这篇文章我有几个假设：
+
+- 你有一个 github 帐号；
+- 熟悉基本的 git 操作；
+- 知道 jekyll 是什么，熟悉基本的 jekyll 命令，以及如何在本地进行测试。
+
+下面，我将从建立个人主页和建立项目主页，分别简单的说明一下，希望可以对你们有所帮助：
+
+** 一、建立个人主页
+   :PROPERTIES:
+   :CUSTOM_ID: 一建立个人主页
+   :END:
+
+建立个人主页是很简单的，有一个硬性条件，你需要建立一个
+=YourUserName.github.io= 的 repo，然后用 jekyll
+命令生成一个新站，把生成的网站内容提交上去。过 10 分钟左右，访问
+=YourUserName.github.io=。
+
+如此简单，你就拥有的自己的个人主页。
+
+** 二、建立项目主页
+   :PROPERTIES:
+   :CUSTOM_ID: 二建立项目主页
+   :END:
+
+相比建议个人主页要相对复杂一些，但是比你想象的要简单许多。
+
+github 约定项目主页的网站相关文件需要放到该项目的 gh-pages
+分支下，所以也就意味着我们需要创建一个新的分支。
+
+#+BEGIN_EXAMPLE
+  git clone https://github.com/user/repository.git # 把你的 repo clone 到本地
+  cd repository
+  git checkout --orphan gh-pages # 创建我们需要的分支 gh-pages，并切换到新的分支。
+  git rm -rf . # 删除旧工作分支的所有文件
+  echo "My Github Page" > index.html
+  git add index.html
+  git commit -m "first pages commit"
+  git push origin gh-pages
+#+END_EXAMPLE
+
+btw，如果提示需要你的 =git pull= 的时候，记得要
+=git pull origin gh-pages=。
+
+等待 10 分钟左右，访问 =github.com/YourUserName/YourRepo= 看到
+=My Github Page=，说明我们成功了。
+
+第二步，就和建立个人主页差不多了。用 jekyll 生成一个新站，上传到
+gh-pages 分支(把我们刚才提交的index.html删了吧)。继续访问
+=github.com/YourUserName/YourRepo=，可以看到内容，但是，整个网站就好像没有
+css 一样，没错，我们的 css 路径是错的。别担心，稍微修改一下就好了：
+
+1. 在=_config.yml=中把=baseurl=改为=/project-name=，不要忘了
+   =project-name= 前面的斜线。
+2. 修改 =default.html= 中的 CSS 路径为
+   =\{\{ site.baseurl\}\}/path/to/css.css=。
+3. 修改模板中的链接为
+   =\{\{ site.baseurl \}\}\{\{ post.url \}\}=，等你发现你的文章链接打开不对时，你就知道改哪里了！
+
+再次刷新主页，你就发现一切都正常了。
+
+另外，同步 master 到 pg-pages 的方法(直接摘抄自参考资料2)：
+
+#+BEGIN_EXAMPLE
+  git checkout master
+  git status
+  git commit -am "Committing changes to master"
+  git push origin master
+  git checkout gh-pages
+  git rebase master # or merge, whatever your preference
+  git push origin gh-pages
+  git checkout master
+#+END_EXAMPLE
+
+** 三、更换域名
+   :PROPERTIES:
+   :CUSTOM_ID: 三更换域名
+   :END:
+
+相信很多人是希望有自己的独立域名的，毕竟=UserName.github.io=不够个性。更换也很简单，创建一个新的名为
+CNAME 的文件，写入你的域名。比如: "www.perfect-is-shit.com" or
+"perfect-is-shit.com" ，然后提交即可。
+
+- 对于个人主页，=ping=一下=UserName.github.io=，将域名解析到相同的地址即可；
+- 对于项目主页，域名解析到=204.232.175.78=。注意，项目主页添加域名之后，就不需要前面说的那么麻烦的修改相对路径了。=baseurl=直接指向根目录=/=即可，css
+  以及 文章链接也不用做重置了，非常方便。
+
+jekyll主题及其他注意事项与本文内容无关，就不赘述了。如果你在建站过程中遇到了问题，可以给我发邮件(chinajiezhang@gmail.com)，我们一起解决掉它。
+
+** 参考资料
+   :PROPERTIES:
+   :CUSTOM_ID: 参考资料
+   :END:
+
+- 
+
+  1. [[https://help.github.com/articles/creating-project-pages-manually][Creating
+     Project Pages manually]]
+
+- 
+
+  2. [[http://brettterpstra.com/2012/09/26/github-tip-easily-sync-your-master-to-github-pages/][GitHub
+     tip: easily sync your master to GitHub Pages]]
+
+- 
+
+  3. [[http://jekyllrb.com/docs/github-pages/]]
+
+

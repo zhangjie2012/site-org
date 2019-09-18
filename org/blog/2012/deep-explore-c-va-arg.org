@@ -1,0 +1,221 @@
+#+SETUPFILE: ~/site/tpl/site-tpl.org
+#+TITLE: 深度探索C语言函数可变长参数
+#+DATE: 2012-08-18 06:56:40
+
+** 一、基础部分
+   :PROPERTIES:
+   :CUSTOM_ID: 一基础部分
+   :END:
+
+*** 1.1 什么是可变长参数
+    :PROPERTIES:
+    :CUSTOM_ID: 什么是可变长参数
+    :END:
+
+可变长参数：顾名思义，就是函数的参数长度（数量）是可变的。比如 C 语言的
+printf 系列的（格式化输入输出等）函数，都是参数可变的。下面是 printf
+函数的声明：
+
+#+BEGIN_EXAMPLE
+  int printf ( const char * format, ... );
+#+END_EXAMPLE
+
+可变参数函数声明方式都是类似的。
+
+** 1.2 如何实现
+   :PROPERTIES:
+   :CUSTOM_ID: 如何实现
+   :END:
+
+C语言可变参数通过三个宏（=va_start、va_end、va_arg=）和一个类型（=va_list=）实现的，
+
+#+BEGIN_EXAMPLE
+  void va_start ( va_list ap, paramN );
+#+END_EXAMPLE
+
+参数：
+
+- ap: 可变参数列表地址
+- paramN: 确定的参数
+
+功能：初始化可变参数列表（把函数在 paramN 之后的参数地址放到 ap 中）。
+
+#+BEGIN_EXAMPLE
+  void va_end ( va_list ap );
+#+END_EXAMPLE
+
+功能：关闭初始化列表（将 ap 置空）。
+
+#+BEGIN_EXAMPLE
+  type va_arg ( va_list ap, type );
+#+END_EXAMPLE
+
+功能：返回下一个参数的值。
+
+- va_list ：存储参数的类型信息。
+
+好了，综合上面3个宏和一个类型可以猜出如何实现C语言可变长参数函数：用
+va_start 获取参数列表（的地址）存储到 ap 中，用 va_arg
+逐个获取值，最后用 va_arg 将 ap 置空。
+
+*** 1.3 举例
+    :PROPERTIES:
+    :CUSTOM_ID: 举例
+    :END:
+
+#+BEGIN_EXAMPLE
+  /* 作者：独酌逸醉
+   * 时间：2012.08.18
+   * 功能：用C语言实现变长参数小例：求和
+   * IDE:  Microsoft Visual Studio 2010
+   */
+
+  #include <stdio.h>
+  #include <stdarg.h>
+
+  #define END -1
+
+  int va_sum (int first_num, ...)
+  {
+      // (1) 定义参数列表
+      va_list ap;
+      // (2) 初始化参数列表
+      va_start(ap, first_num);
+
+      int result = first_num;
+      int temp = 0;
+      // 获取参数值
+      while ((temp = va_arg(ap, int)) != END)
+      {
+          result += temp;
+      }
+
+      // 关闭参数列表
+      va_end(ap);
+
+      return result;
+  }
+
+  int main ()
+  {
+      int sum_val = va_sum(1, 2, 3, 4, 5, END);
+      printf ("%d", sum_val);
+      return 0;
+  }
+#+END_EXAMPLE
+
+*** 1.4 使用注意事项
+    :PROPERTIES:
+    :CUSTOM_ID: 使用注意事项
+    :END:
+
+- 宏定义在 stdarg.h 中，所以使用时，不要忘了添加头文件。
+- 设定一个参数结束标志（cplusplus 上说，va_arg
+  并不能确定哪个参数是最后一个参数）。
+- 类型的匹配
+- 期待您的补充......
+
+** 二、深入原理
+   :PROPERTIES:
+   :CUSTOM_ID: 二深入原理
+   :END:
+
+"源码面前，一览无遗"！
+
+以下源码，来自=“..\Microsoft Visual Studio 10.0\VC\include”=
+
+#+BEGIN_EXAMPLE
+  // stdarg.h
+  #define va_start _crt_va_start
+  #define va_arg _crt_va_arg
+  #define va_end _crt_va_end
+  // vadefs.h
+  typedef char *  va_list;
+  #define _crt_va_start(ap,v)  ( ap = (va_list)_ADDRESSOF(v) + _INTSIZEOF(v) )
+  #define _crt_va_arg(ap,t)    ( *(t *)((ap += _INTSIZEOF(t)) - _INTSIZEOF(t)) )
+  #define _crt_va_end(ap)      ( ap = (va_list)0 )
+  #define _ADDRESSOF(v)   ( &(v) )
+  #define _INTSIZEOF(n)   ( (sizeof(n) + sizeof(int) - 1) & ~(sizeof(int) - 1) )
+#+END_EXAMPLE
+
+除了 =_INTSIZEOF= 之外，其他都很好理解，举个例子吧：
+
+#+BEGIN_EXAMPLE
+  /* 作者：独酌逸醉
+   * 时间：2012.08.18
+   * 功能：测试 _INTSIZEOF 宏
+   * IDE:  CodeBlocks 10.05
+   */
+
+  #include <stdio.h>
+  #include <stdarg.h>
+
+  int main ()
+  {
+      int i = 1;
+      float f = 0.0;
+      printf("_INTSIZEOF(i) = %d\n", (int)(_INTSIZEOF(i)));
+      printf("_INTSIZEOF(f) = %d\n", (int)(_INTSIZEOF(f)));
+      printf("_INTSIZEOF(\"Hello,world\") = %d\n", (int)(_INTSIZEOF("Hello,world")));
+      printf("sizeof(\"Hello,world\") = %d\n", sizeof("Hello,world") );
+      return 0;
+  }
+#+END_EXAMPLE
+
+输出结果：
+
+#+BEGIN_EXAMPLE
+  _INTSIZEOF(i) = 4
+  _INTSIZEOF(f) = 4
+  _INTSIZEOF("Hello,world") = 12
+  sizeof("Hello,world") = 12
+#+END_EXAMPLE
+
+既然 =sizeof= 和 =_INTSIZEOF= 值一样，为什么不直接用 sizeof
+呢？干嘛要写的那么复杂？答案是为了字节对齐（无论32位还是64位机器，sizeof(int)永远代表机器的位数，明白了吧！^_^）
+
+现在再去看变长参数的实现：其实就是把参数在栈中的地址记录到 ap
+中（通过一个确定参数 paramN 确定地址），然后逐个读取值。
+
+此时是否有一种豁然开朗的感觉？至少明白了许多，也清楚了很多。
+
+** 三、知识扩展
+   :PROPERTIES:
+   :CUSTOM_ID: 三知识扩展
+   :END:
+
+可能大家也猜到了，我扩展要扩展什么了？！^_^
+
+*** 简单介绍两种函数调用约定
+    :PROPERTIES:
+    :CUSTOM_ID: 简单介绍两种函数调用约定
+    :END:
+
+**__stdcall （C++默认）**
+
+- 参数从右向左压入堆栈
+- 函数被调用者修改堆栈
+- 函数名(在编译器这个层次)自动加前导的下划线，后面紧跟一个@符号，其后紧跟着参数的尺寸
+
+**__cdecl （C语言默认）**
+
+- 参数从右向左压入堆栈
+- 参数由调用者清楚，手动清栈，被调用函数不会要求调用者传递多少参数，调用者传递过多或者过少的参数，甚至完全不同的参数都不会产生编译阶段的错误。
+
+那么，变参函数的调用方式为（也只能是）：__cdecl 。
+
+本来打算多写一点扩展的，又担心会文不符题，所以感兴趣的朋友可以去看参考资料中的文章，有一些介绍的很详细。
+
+** 参考资料
+   :PROPERTIES:
+   :CUSTOM_ID: 参考资料
+   :END:
+
+- [[http://www.cplusplus.com/reference/clibrary/cstdarg/va_start/]]
+- [[http://www.cplusplus.com/reference/clibrary/cstdarg/va_end/]]
+- [[http://www.cplusplus.com/reference/clibrary/cstdarg/va_list/]]
+- [[http://www.cplusplus.com/reference/clibrary/cstdarg/va_arg/]]
+- [[http://51hired.com/questions/13278?sort=oldest]]
+- [[http://www.cnblogs.com/diyunpeng/archive/2010/01/09/1643160.html]]
+- [[http://blog.csdn.net/huanjieshuijing/article/details/5822942]]
+- [[http://baike.baidu.com/view/1280676.htm]]

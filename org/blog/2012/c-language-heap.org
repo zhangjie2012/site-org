@@ -1,0 +1,158 @@
+#+SETUPFILE: ~/site/tpl/site-tpl.org
+#+TITLE: C语言的堆
+#+DATE: 2012-11-30 02:41:58
+
+今天整理资料，偶然发现以前 down
+的一些文章，都是我曾经非常关注的核心问题，现在看了仍旧有些收获。如果你是初入C/C++编程，并且勤于思考的话，相信这几个问题也会困扰着你。
+这篇文章不是我原创，原创是谁我也不知道（当时没有记录），我只是重新整理和验证。时间过去好几年了，这应该是我大一下学期找的资料（上英语听力课的时候）。向原创作者致谢和致歉！
+
+--------------
+
+堆是一种动态存储结构，实际上就是数据段中的自由存储区，它是 C
+语言中使用的一种名称，常常用于动态数据的存储分配。堆中存入一数据，总是以
+2
+字节（WORD）的整数倍进行分配，地址向增加方向变动。堆可以不断进行分配直到没有堆空间为止，也可以随时进行释放、再分配，不存在次序问题。
+
+所谓动态数组是指在程序运行期间确定其大小的，如常用到的动态数组，它们是在程序执行过程中动态进行变化的，即在程序开始部分没有说明大小，只有在程序运行期间用堆的分配函数为其分配存储空间，分配的大小可根据需要而定，这些数据使用过后，可释放它们占用的堆空间，并可进行再分配。
+堆和栈在使用时相向生长，栈向上生长，即向小地址方向生长，而堆向下增长，即向大地址方向，其间剩余部分是自由空间。使用过程中要防止增长过度而导致覆盖。
+
+一般的程序我们都是使用小内存模式，它的内存分配如下：
+
+#+BEGIN_EXAMPLE
+                 ________________
+                |     代码段     |
+                |---------------|
+                |     数据段     |
+                |---------------|
+                |     BSS段     |
+                |---------------|
+                |       堆      |
+                |---------------| 自由空间
+                |---------------|
+                |       栈      |
+                |---------------|
+                |      远堆     |
+                |---------------|
+                |_______________| 自由空间
+#+END_EXAMPLE
+
+在堆和栈之间、以及远堆地址的后面都是自由空间，总共是 64K。
+
+函数：
+
+1.得到堆和栈之间的自由空间大小的函数
+
+#+BEGIN_EXAMPLE
+  小数据内存模式：unsigned coreleft(void);
+
+  大数据内存模式：unsigned long coreleft(void);
+
+  对于远堆，可以用farcoreleft()函数。
+#+END_EXAMPLE
+
+2.分配一个堆空间函数
+
+#+BEGIN_EXAMPLE
+  void * malloc (unsigned size);
+#+END_EXAMPLE
+
+该函数将分配一个大小为size字节的堆空间，并返回一个指向这个空间的指针。由于这个指针是
+void
+型的，因此当将它赋给其他类型的指针时，必须对该指针进行强制类型转换。例如info是一个结构类型指针，即：
+
+#+BEGIN_EXAMPLE
+  struct addr *info;
+#+END_EXAMPLE
+
+将由malloc()函数返回的指针赋给info时，必须进行类型转换：
+
+#+BEGIN_EXAMPLE
+  info=(struct addr *)malloc (sizeof(record));
+#+END_EXAMPLE
+
+malloc()函数所分配的堆空间将不进行初始化。在调用malloc()函数时，若当时没有可用的内存空间，该函数便返回一个NULL指针。
+
+3.分配一个堆空间，其大小为能容纳几个元素，没有元素长度为size的函数
+
+#+BEGIN_EXAMPLE
+  void *calloc(unsigned n,unsigned size);
+#+END_EXAMPLE
+
+该函数将分配一个容量为n*size大小的堆空间，并用0初始化分配的空间。该函数将返回一个指向分配空间的指针，没有空间可用时，则返回一个NULL指针。
+
+4.重新分配堆空间函数
+
+#+BEGIN_EXAMPLE
+  void *realloc(void *ptr, unsigned newsize);
+#+END_EXAMPLE
+
+该函数将对由ptr指向的堆空间重新分配，大小变为 newsize。
+
+5.释放堆空间函数
+
+#+BEGIN_EXAMPLE
+  void free(void *ptr);
+#+END_EXAMPLE
+
+下面举一个关于堆和栈的综合例子：
+
+#+BEGIN_EXAMPLE
+  #include <stdio.h>
+  #include <stdlib.h>
+  void push(int);
+  int pop();
+
+  int *pi = NULL;
+  int *tos = NULL;
+
+  int main()
+  {
+      int v;
+      pi = (int *)malloc(50*sizeof(int));
+      if(!pi)
+      {
+          printf("allocation failure\n");
+          exit(0);
+      }
+      tos = pi;
+      do
+      {
+          printf("please input value, push it;enter 0 then pop;(enter -1 then stop)\n");
+          scanf("%d", &v);
+          if(v!=0)
+              push(v);
+          else
+              printf("pop this is it %d\n", pop());
+      } while(v!=-1);
+
+      free(tos);
+  }
+
+  void push(int i)
+  {
+      pi++;
+      if(pi==(tos+50))
+      {
+          printf("stack overflow\n");
+          exit(0);
+      }
+      *pi = i;
+  }
+
+  int pop()
+  {
+      if(pi==tos)
+      {
+          printf("stack underflow\n");
+          exit(0);
+      }
+      pi--;
+      return *(pi+1);
+  }
+#+END_EXAMPLE
+
+程序分配 100 字节的堆空间，转换成 int 型赋给 pi，当 pi
+为NULL时，表示没有可用的空间了，则显示allocation
+failure。输入一个整数，压入栈中，当超过 50 时，则显示stack
+overflow.当输入 0
+时，则把栈中的数据弹出。这个程序也演示了栈的后进先出的特点。
