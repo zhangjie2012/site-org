@@ -1,0 +1,322 @@
+#+SETUPFILE: ~/site/tpl/site-tpl.org
+#+TITLE: Emacs 心路历程（下）
+#+DATE: 2019-06-19 21:20:00
+
+在使用 Emacs
+过程中，从不缺折腾，每次折腾都让人想放弃使用它，但是折腾过后又会觉得很爽。隔一段时间我都会折腾一次，但是比较大范围的折腾，只有两次。
+
+--------------
+
+第一次大范围的折腾以及后面的几年使用使得自己对 Emacs
+得心应手。第二次大范围的折腾是在最近这一个月，其实最近这一个多月干了两件事情：一是家里的
+MacOS 环境换到了 Ubuntu，二个是 Emacs
+插件大换血。第一点不在本文的讨论范围就暂且不提。
+
+这次折腾 Emacs
+是纯属有时间想玩一玩，没想到还玩出了一些心得。经过这次折腾，感觉自己对于
+Emacs 使用上又上了一个台阶。
+
+** From Helm to Ivy
+   :PROPERTIES:
+   :CUSTOM_ID: from-helm-to-ivy
+   :END:
+
+[[https://blog-1252349778.cos.ap-beijing.myqcloud.com/2019/ivy.gif]]
+
+如上文所说，我从 2014 年开始使用
+[[https://github.com/emacs-helm/helm][helm]]，到现在快五年了，helm
+已经成了 Emacs 一个重要的组成部分。
+
+Ivy 一般指的是 Ivy + Counsel + Swiper 的统称，至于为啥叫
+ivy，我没有去深究。ivy 比 helm 要迟几年。Helm 的前身是
+[[https://www.emacswiki.org/emacs/everything.el][anything.el]]，而我理解的
+ivy 也是对 helm 有很多的借鉴，很多地方都很像，不同的在于 ivy
+使用的完全不同的架构思路。
+
+helm
+是一个大一统的思路，据业内评论非常臃肿，而我个人使用下来也是这种感觉。helm
+功能很丰富，但是 90% 以上的东西平时根本用不到，我梳理了一下常用 helm
+的快捷键不超过五个。Ivy 就比较简单了，职责也比较清晰：
+
+- Ivy, a generic completion mechanism for Emacs.
+- Counsel, a collection of Ivy-enhanced versions of common Emacs
+  commands.
+- Swiper, an Ivy-enhanced alternative to isearch.
+
+helm 中我常用的功能 ivy 都已经覆盖到了，对于 helm 和 ivy
+的对比，我做不出很理性的分析（毕竟看不懂
+LISP，架构啥的也就是人家说一说，我听一听），社区对此的争论比较多，比如
+[[https://sam217pa.github.io/2016/09/13/from-helm-to-ivy/][From helm, to
+ivy]] 说的：
+
+#+BEGIN_QUOTE
+  You can do anything with Helm. But you don't need to. Just because you
+  can does not mean you should. After a year of using it, I can tell you
+  that I have only used a third or less of Helm's abilities. Some
+  functions I thought were great, I re-discovered by reading this post
+  yesterday. Most of the time, I used simple commands to switch buffers,
+  or list files.
+#+END_QUOTE
+
+这篇文章写的挺好的，还有 reddit
+上的讨论：[[https://www.reddit.com/r/emacs/comments/7vcrwo/helm_vs_ivy_what_are_the_differences_what_are_the/][Helm
+vs Ivy: What are the differences, what are the advantages?]] 。
+
+对我来说，切换到 ivy 的理由很简单：因为大家都说 ivy
+好，哈哈。但是过程是有点痛苦的，毕竟所有的快捷键全部都不一样了。尝试了有两周之后，有如下体会：
+
+- =helm-mini= VS =ivy-switch-buffer=，=helm-find-files= VS
+  =counsel-find-files=，helm 比 ivy
+  要好用，说不出来的感觉（但并不是已经适应了 helm 的原因）
+
+- 在 buffer 切换上 helm 更剩一筹，helm 只会切换本次 Emacs 打开之后的
+  buffer，而 ivy 会将最近的 buffer 全部显示
+
+  这一点上应该是设计理念上的不同，可能是习惯了 helm，ivy 总感觉 buffer
+  很乱
+
+- 本文件搜索，helm 用的是 =helm-swoop=，我绑定了 =C-h o= 快捷键，而 ivy
+  用的是 Swiper，Swiper 只干一件事情就是搜索，可以绑定到 =C-s=
+  上，这两个对比半斤八两
+
+- 显示最近的拷贝记录，helm 用的是 =helm-show-kill-ring=，ivy 用的是
+  =counsel-yank-pop=，之前我以为 ivy 没有，就提了
+  [[https://github.com/abo-abo/swiper/issues/2090][issue]]，结果已经有了。UI
+  上 helm 更好看一些
+
+- ivy 比较爽的有两个函数（后来才知道 helm
+  也有类似的功能，可能是藏的太深了，我一直没有发现）
+
+  - =counsel-git=：在本 git 工程中查找文件
+    =C-c g=，有了这个以后基本上就不需要前面的 buffer
+    切换了，极大的提高了效率
+  - =counsel-git-grep=：在本 git 工程中搜索 =C-c j=，等价于 =counsel-ag=
+    只不过一个用的是 grep ，一个是 ag，这个也很好用
+
+ivy 提供的功能大多都是常用的，不常用的也没做，尽管 UI 整体比 helm
+差一些，但是我更喜欢 ivy 一些，而且确实比 helm
+要轻量级很多，从启动速度上就可以感觉出来。
+
+整体对比 helm 和 ivy
+并没有那么大的差距，速度之说，差个零点几秒也无伤大雅，要说快的话
+ido+smex 才是最快的，就看个人喜好和怎么权衡了。对于 Emacser：ido +
+smex、helm、ivy，三个框架，选一个用就是了。
+
+** 使用 projectile 管理多个工程
+   :PROPERTIES:
+   :CUSTOM_ID: 使用-projectile-管理多个工程
+   :END:
+
+[[https://blog-1252349778.cos.ap-beijing.myqcloud.com/2019/projectile.gif]]
+
+不管是使用 Emacs
+还是其他的编码工具，用的时间长了，都会有固定的工作流。我之前的工作流是这样的：
+
+- 使用终端的 Emacs
+- 一个页签，一个 project
+
+因为这几年一直都是同时写前后端：Javascript(React) + Python(Django) 或者
+JavaScript(React) + Go
+这样的组合，还有段时间做多集群测试，同时打开三四个 Emacs。
+
+这样带来的问题是，终端下项目切换很麻烦（主要是项目运行本身也有
+=npm run start= 这样的页签需要占用），Mac 下用 =Command + 1/2/3=
+这样的方式切换，有的时候都搞到 =Command + 7/8= 了。
+
+还有一个问题是，我经常会打开 Emacs
+一个项目不会关闭，好几周不关闭一次也是常事，前几年经常会遇到 Emacs
+运行时间过长 crash 的 bug，再加上 helm 在 Emacs 关闭之后，buffer
+就都不存在了。在项目比较大的情况下，重新打开项目再找到最近编辑的
+buffer，还有点费时间。
+
+对于第一个问题的解决方案是使用
+[[https://github.com/bbatsov/projectile][projectile]]，projectile
+支持在多个项目之间切换，项目的标识是：
+
+- 在版本管理系统下的项目，自动识别
+- 添加了 =.projectile= 的目录
+
+因为 projectile 默认搭配的是 ido，所以又有人开发了 ivy 的 projectile
+UI，即
+[[https://github.com/ericdanan/counsel-projectile][counsel-projectile]]。
+
+projectile 提供了在本项目下的常用操作，比如：
+
+- 切换项目：=C-c p p=
+- 本项目中打开文件：=C-c p f=
+- 本项目中切换 buffer：=C-c p b=
+- 本项目中搜索：=C-c p s g= 或者 =C-c p s s=
+
+这些都非常实用，因为在同时管理多个项目的前提下，打开的 buffer
+可能会很多，很容易「串」，所以所有的操作都限定在当前项目中就很重要了。
+
+使用 projectile 的时候，就不需要同时打开多个 Emacs，一个 Emacs
+就足够了。
+
+对于之前说的第二个问题是使用 Emacs daemon 和 client 的方式，client
+挂了没关系，只要 daemon 在就行了。所以不用担心 Emacs UI
+挂掉。这种方式我还没有尝试过，准备试试。不过 Emacs 打开时间长了 crash 在
+24 版本经常出现，但是在 26 就很少了。
+
+** 终端 vs GUI
+   :PROPERTIES:
+   :CUSTOM_ID: 终端-vs-gui
+   :END:
+
+对于使用终端版本的 Emacs 还是 GUI 版本的 Emacs，争议也很大。我从开始用
+Emacs 就是使用终端的，后来结合自己的工作流（同时打开多个 Emacs
+的需求，以及要与终端命令完美配合），这段时间坚持使用了两周的 GUI
+版本。体会如下：
+
+- GUI 版本可以完美使用 Emacs
+  所有的快捷键，而终端不行，终端要考虑终端模拟器自身的快捷键是否冲突
+
+- GUI 版本可以与系统的剪切板完美融合，比如在 Mac 环境下，在浏览器
+  =Ctrl + c= 复制，在 Emacs 下使用 =C-y= 粘贴，反之亦然。
+
+  终端的 Emacs 与外接的复制和粘贴，与 Emacs
+  都无关，全部依赖终端。之前经常遇到的问题是，无法将终端下的 Emacs
+  某个文件内容全部拷贝出来（通过 Emacs 的方式）
+
+- GUI 支持鼠标操作
+
+- GUI 版本的 UI 要比终端要舒适的多，色彩支持也好，而且支持打开图片
+
+- GUI 有个致命的问题，找一个等宽等高的美观的中文字体很难
+
+  终端的 Emacs 编码和字体的宽高是由终端控制的，跟 Emacs 自身没关系
+
+对于字体问题，下面会单独讨论，这里只对比终端与
+GUI。网上也有一些对比和讨论：
+
+- [[https://www.reddit.com/r/emacs/comments/4nwvex/gui_vs_terminal_version_of_emacs_recommendations/][GUI
+  vs. terminal version of emacs - recommendations?]]
+
+- [[https://irreal.org/blog/?p=5835][Terminal vs. GUI Emacs]]
+
+- [[https://blog.aaronbieber.com/2016/12/29/don-t-use-terminal-emacs.html][Don't
+  Use Terminal Emacs]]
+
+  评论的第一条就是哥用了终端 Emacs 25 年了~
+
+- [[http://ergoemacs.org/emacs/emacs_gui_vs_terminal.html][Emacs: GUI
+  Emacs vs Terminal Emacs]]
+
+整体来看支持 GUI
+的要远大于终端，我个人体会下来也是这样，但是没有合适的中文字体，所以暂时不能用
+GUI。
+
+** 字体选择
+   :PROPERTIES:
+   :CUSTOM_ID: 字体选择
+   :END:
+
+编码等宽字体是一个老生常谈的问题，对于字体和主题，前几年我做过无数的尝试，浪费了不少时间。
+
+我自己从入行到现在坚持使用一段时间的等宽字体：
+
+- [[https://zh.wikipedia.org/wiki/Fixedsys][Fixedsys]]：
+  12号，这款经典的字体是 VC++6.0 的标配，也是最初开始写代码的时候的字体
+- [[https://zh.wikipedia.org/wiki/Consolas][Consolas]]： 切换到 VS 系列
+  IDE 的时候，一直用的 Consolas，用了有 3 年左右
+- [[https://github.com/adobe-fonts/source-code-pro][Source Code Pro]]：
+  从 2014 年开始，一直用到现在（支持各种平台：Windows、MacOS、Linux）
+
+对于网上推荐的那些等宽字体，比如早期的 Windows 下的 Courier new，MacOS
+下默认的 Monaco、XCode 默认的 Menlo，以及 Ubuntu 下经典的 Ubuntu
+Mono、Droid Sans Mono、DejaVu Sans Mono 我都做过尝试。
+
+各有优劣，比如在推崇的 =L l I i=
+两个字符的区分上，敢拿出去比较的都是比较好的，但是 Source Code Pro
+在长相上绝对是最美的，不过最近发现
+[[https://github.com/tonsky/FiraCode][Fira Code]] 也很不错，足够跟
+Source Code Pro 相媲美，Github 上 35,796 个 Star
+啊（2019-06-20），值得一推。
+
+接下来说，GUI 下的 Emacs 字体选择，在 GUI
+下大部分等宽字体中英文都不是等宽的，比如 Monaco 和 Fira Code：
+
+[[https://blog-1252349778.cos.ap-beijing.myqcloud.com/2019/emacs-font-gui.gif]]
+
+我尝试下来只有 Ubuntu Mono 和
+[[https://www.fontsquirrel.com/fonts/m-1m][M+1M]]
+是等宽的，可惜不是等高的，中英文输入的时候，行会抖动。下面是 M+1M
+字体演示：
+
+[[https://blog-1252349778.cos.ap-beijing.myqcloud.com/2019/emacs-font-gui-2.gif]]
+
+唯一一款等宽并且等高的字体是：[[http://wenq.org/wqy2/index.cgi][文泉驿正黑]]，这个字体看
+chenbin 的 [[https://github.com/redguardtoo/emacs.d/issues/299][issue]]
+里提到的。
+
+文泉驿在 Ubuntu 下不算丑，但是在 MacOS
+下实在是有点丑，但它的确是既等宽又等高的，MacOS 下如下图：
+
+[[https://blog-1252349778.cos.ap-beijing.myqcloud.com/2019/emacs-font-gui-3.gif]]
+
+如你所见，很丑。
+
+下面是在 Ubuntu 下的文泉驿正黑：
+
+[[https://microblog-1252349778.cos.ap-shanghai.myqcloud.com/2019/emacs-wqy.png]]
+
+看着还不错吧，我目前主要的工作环境是 MacOS，GUI
+下的等宽等高是刚需，文泉驿太丑，所以还是继续使用终端吧。
+
+** 拥抱 abo-abo 全家桶
+   :PROPERTIES:
+   :CUSTOM_ID: 拥抱-abo-abo-全家桶
+   :END:
+
+ivy 是 [[https://github.com/abo-abo][abo-abo]]
+写的，后来发现这哥们写了很多的 Emacs 插件（他的
+[[https://oremacs.com/][blog]] 在 Emacs 圈里也挺有名的）。
+
+- [[https://github.com/abo-abo/avy][avy]]，快速定位鼠标位置，我之前用的是
+  [[https://github.com/winterTTr/ace-jump-mode][ace-jump-mode]]，avy 比
+  ace 功能要强大一些，支持行跳转 =avy-goto-line=。不过凭良心讲，ace 和
+  avy 基本上没啥区别，但是因为对 abo-abo 的热爱，所以就···
+
+- [[https://github.com/abo-abo/ace-window][ace-window]]：多窗口切换，以前我用的是
+  [[https://github.com/deb0ch/emacs-winum][emacs-winum]]
+
+  winnum 用的是 =Meta + 1/2/3= 切换，而 ace-window 用的是
+  =M-o 1/2/3=，因为 =Meta + 1/2/3=
+  的方式经常会跟终端模拟器快捷键冲突，困扰了我很多年，但是又没有办法，终于释放了
+
+还有个比较出名的插件是
+[[https://github.com/abo-abo/hydra][hydra]]，就是我一直没搞明白到底有啥用，所以就先不用了。
+
+** 其它
+   :PROPERTIES:
+   :CUSTOM_ID: 其它
+   :END:
+
+这次也添加了 git 插件
+[[https://magit.vc/][magit]]，以前觉得太臃肿复杂了，所以就没用。这次装上之后，强制自己使用它，感觉还是很方便的。快捷键只需要记住
+=C-x g= ，然后按 =?= 就行了，不用死记硬背。
+
+[[https://github.com/Malabarba/beacon][beacon]]
+是一个高亮鼠标周围的插件，这是在看视频的时候发现有人用，挺好玩的，也挺有用的。多个窗口切换的时候，切换过去，鼠标的位置通常不明显。
+
+** 总结
+   :PROPERTIES:
+   :CUSTOM_ID: 总结
+   :END:
+
+这次折腾 Emacs 收获挺大的，除了 Emacs 自身之外，还有：
+
+- 心态很重要，不能固守残缺，要拥抱新的东西
+- 还是那句话，被很多人追捧的东西，一定有其独到的地方，要先尝试，再下定论
+
+不得不佩服国外这些做技术的，他们对技术的热爱和坚持让我觉得汗颜，就比如
+abo-abo，如果你觉得没啥的话，还可以看另外一个网站：[[https://planet.emacslife.com/][Planet
+Emacslife]]，据说有八九千篇文章；还有
+[[http://ergoemacs.org/][ErgoEmacs]]。
+
+向他们学习，也希望自己有一天可以不为了生活而做技术。
+
+--------------
+
+Emacs 使用可以看的我写的
+[[http://wiki.zhangjiee.com/programming/code-env-emacs.html][Wiki]]。

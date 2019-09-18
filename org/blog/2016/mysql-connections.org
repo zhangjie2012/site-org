@@ -1,0 +1,17 @@
+#+SETUPFILE: ~/site/tpl/site-tpl.org
+#+TITLE: MySQL 中的连接数
+#+DATE: 2016-07-10 10:48:12
+
+实时查看当前连接数的方法:
+
+- =mysqladmin -uxxx -pxxx status=
+- =mysqladmin -uxxx -pxxx processlist=
+- 连接成功之后: =show full processlist=
+
+查看最大连接数(=max_connections=):
+=show variables like '%max_connections%';=
+
+修改最大连接数的方法:
+
+1. 热修改，无需重启: =set global max_connections=1024;=
+2. 修改配置文件，需要重启: =max_connections=1024=

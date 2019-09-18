@@ -1,0 +1,78 @@
+#+SETUPFILE: ~/site/tpl/site-tpl.org
+#+TITLE: 眼界发布 v1.1 版本
+#+DATE: 2018-06-29 00:00:00
+
+
+#+CAPTION: 
+[[https://blog-1252349778.cos.ap-beijing.myqcloud.com/yanjie001.png]]
+
+半年前我做了 [[https://www.iyanjie.cn/blogs][眼界]]，并写了一篇
+[[/yanjie.html][文章]]
+试图说明这款产品的初衷。这半年里我一直是它忠实的用户，看到好的资源就从后台添加到了网站中，同样在使用过程中也有了一些新的想法，然而初衷从未变更：为
+IT 从业人员提供优质的资源集合。
+
+2014 年的时候，我写过一篇文章
+[[/tech-person-accu-and-intergrate.html][技术人的积累和整合]]，那个时候我意识到积累和整合的重要性，期间也做过一些尝试，比如：[[/startup-aground.html][微信公众号文章爬虫]]、[[/stop-update-blog.html][博客停更，转做公众号]]、[[http://wiki.zhangjiee.com/][写
+Wiki]]
+等等，然而终究执着于技术/工具实现的快感，没有坚持下去。从业时间越长，浮于表面的东西越发提不起兴致，想深入了解一个面（一个领域），就不得不把优秀的资源不断的汇集起来，反复思考，加以沉淀，建立知识体系。这也是做眼界的一点私念，这个过程中自己的收益无疑是最大的。
+
+既然针对的从业人员，大多数应该都是软件工程师。我想索性就更开发一点，比如将前端代码放到
+[[https://github.com/zhangjie2012/yanjie-client][Github]]
+上（后端代码放到 coding 的私有 Repo 中，就暂时不公开了）、将
+[[/yanjie-tech-stack.html][眼界技术栈]]
+同样公开、将一些做的过程中思考的东西输出到博客中。
+
+** 博客
+   :PROPERTIES:
+   :CUSTOM_ID: 博客
+   :END:
+
+一些人看博客习惯于用 RSS，所以在原有「博客」内容上选择性的添加了 RSS
+链接。加了 RSS
+链接之后，再深入一步便可做到博客更新提示，但我并不打算做，正如
+[[/yanjie.html][最初文章]] 中所说的：不做爬虫，不做社区。
+
+本想博客中只放一些业内出名的人博客，但限于实际情况，很多技术牛逼的人在转型做管理之后，就很少写博客了，最多也就是写公众号（比如
+Fenng，TimYang 等），向 云风
+这样的毕竟少之又少。所以放宽了博客收录的标准，只要是持续输出三四年的原创博客都考虑收录进去。
+
+** Weekly
+   :PROPERTIES:
+   :CUSTOM_ID: weekly
+   :END:
+
+很早就接触 RSS
+了，但一直不感冒，每次尝试一下就放弃了。然而，这些年我一直受利于订阅的
+Weekly，比如 [[http://pycoders.com/][Pycoders Weekly]]：Python
+最佳实践、Python 有新的好玩的库了、Django 发布新版本了、国外 Python
+程序招聘都在关注哪些方面等等。对于 Weekly
+这种形式的资源，你无需时时刻刻关注行业大事，它会整理好每周发给你，简直不要太好。
+
+所以，这次版本更新新加了「周刊」（叫周刊也许不合适，考虑到菜单栏的整齐，所以......），用来放各种技术领域的
+Weekly。
+
+** 为什么眼界不是 awesome ？
+   :PROPERTIES:
+   :CUSTOM_ID: 为什么眼界不是-awesome
+   :END:
+
+Github 上有很多 awesome
+Repo，比如：[[https://github.com/avelino/awesome-go][Awesome
+Go]]，也是做的整合，几乎设计到 Go 的方方面面。
+
+但我以为 awesome
+做为扩展视野还可以，但真正选择某一项的时候，太多的选择并不是什么好事情。比如我想为我的服务器选择一个
+Logging，结果发现提供了几十个 Logging
+库......，但我的需求是你帮我找一个业务权威的我直接用就是了。
+
+这就是眼界和 awesome
+的不同，眼界只提供权威的，优质的资源，覆盖方方面面不是它的职责。
+
+** 前后端分离
+   :PROPERTIES:
+   :CUSTOM_ID: 前后端分离
+   :END:
+
+这次除了功能更新之外，最大的更新其实是前后端分离，以前是前后端一体的（Django
+template + Bootstrap4）。目前的缺陷在于没做手机端适配，Pad 是 OK
+的。具体请看 [[/yanjie-tech-stack.html][眼界技术栈]]。

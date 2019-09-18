@@ -1,0 +1,294 @@
+#+SETUPFILE: ~/site/tpl/site-tpl.org
+#+TITLE: Django 实现分库
+#+DATE: 2016-12-25 00:00:00
+
+网站后端的数据库随着业务的不断扩大，用户的累积，数据库的压力会逐渐增大。一种办法是优化使用方法，也就是的优化
+SQL
+语句啦，添加缓存以达到减少存取的目的；另外一种办法是修改使用架构，在数据库层面上「分库分表」。
+
+以前做手游服务器的时候，数据库用的是 NxM 的结构，即 N 个数据库，M
+个表。通过用户 ID
+哈希把不同的用户分布到不同的表中，以达到「均衡」的目的。分库分表是很常见的解决数据库压力的方法，适用于很多业务场景，比如社交类app，用户表、用户评论这种只会不断累加但不会删除。
+
+我遇到一个刚需的例子是：日志统计平台，当然少不了日志存储。日志的特性是相互之间没有任何关联(业务简单)，一直会增量上报(量大)，单表存储，很快就会有查询性能问题。这是可能最合适的分库分表的业务场景了。
+
+ORM 几乎是数据库切分的「天敌」(本质上他们有这不同的设计策略)。而我用的是
+Django，Django 的 ORM
+基本上就可以「分表」说再见了，一个模型对应一个表，如果要 10 个表，就要写
+10 个模型，使用上麻烦，而且不容易扩展和维护。Django
+提供了同时使用多数据库的方法，通过配置路由规则来选择使用的数据库，看起来是的「垂直分库」变的可行，这篇文章将介绍在日志统计平台中如何实现日志存储的分库。
+
+#+BEGIN_QUOTE
+  BTW，在此之前我的日志系统是我自己脱离 Django 直接封装了一层 MySQL
+  的使用接口，实现 10*10
+  的日志存储库表结构，用了一段时间也没出现问题。缺陷就是增加新功能的时候太过繁琐，为不同业务的查询封装了多个接口，最蛋疼的时候没有
+  django =migrate= 这样的工具，增加、删除字段会变的很复杂。
+#+END_QUOTE
+
+日志统计平台有自身的业务，以及其它要存储的数据用 =default=
+来存储，日志自身的存储将被分成 10 个库，然后按照服务器 ID 哈希到这 10
+个库中。库的别名为 =sharding0=, =sharding1=, ..., =sharding9=。
+
+** 新建项目
+   :PROPERTIES:
+   :CUSTOM_ID: 新建项目
+   :END:
+
+首先创建一个 =logstat= 的项目，然后一个创建 =report= 的 app。
+
+#+BEGIN_EXAMPLE
+  >>> django-admin startproject logstat
+  >>> cd logstat
+  >>> django-startapp report
+#+END_EXAMPLE
+
+** 数据库配置
+   :PROPERTIES:
+   :CUSTOM_ID: 数据库配置
+   :END:
+
+配置 =setting= 中配置 =default= DATABASES：
+
+#+BEGIN_EXAMPLE
+  DATABASES = {
+      'default': {
+          'ENGINE': 'django.db.backends.mysql',
+          'NAME': 'logstat',
+          'USER': 'logstat_user',
+          'PASSWORD': 'logstat_password',
+          'HOST': 'localhost',
+          'PORT': '3306',
+          'CHARSET': 'utf8',
+      },
+  }
+#+END_EXAMPLE
+
+接下来配置分库日志的数据库，为了 demo 写起来方便，改成 2 个库：
+
+#+BEGIN_EXAMPLE
+  DATABASES = {
+      'default': {
+          'ENGINE': 'django.db.backends.mysql',
+          'NAME': 'logstat',
+          'USER': 'logstat_user',
+          'PASSWORD': 'logstat_password',
+          'HOST': 'localhost',
+          'PORT': '3306',
+          'CHARSET': 'utf8',
+      },
+      'logsharding0': {
+          'ENGINE': 'django.db.backends.mysql',
+          'NAME': 'logsharding0',
+          'USER': 'logstat_user',
+          'PASSWORD': 'logstat_password',
+          'HOST': 'localhost',
+          'PORT': '3306',
+          'CHARSET': 'utf8',
+      },
+      'logsharding1': {
+          'ENGINE': 'django.db.backends.mysql',
+          'NAME': 'logsharding1',
+          'USER': 'logstat_user',
+          'PASSWORD': 'logstat_password',
+          'HOST': 'localhost',
+          'PORT': '3306',
+          'CHARSET': 'utf8',
+      },
+  }
+#+END_EXAMPLE
+
+** 创建数据库
+   :PROPERTIES:
+   :CUSTOM_ID: 创建数据库
+   :END:
+
+#+BEGIN_EXAMPLE
+  create database logstat charset='utf8';
+  grant all on logstat.* to 'logstat_user'@localhost identified by 'logstat_password';
+  create database logsharding0 charset='utf8';
+  grant all on logsharding0.* to 'logstat_user'@localhost identified by 'logstat_password';
+  create database logsharding1 charset='utf8';
+  grant all on logsharding1.* to 'logstat_user'@localhost identified by 'logstat_password';
+#+END_EXAMPLE
+
+** 添加模型类
+   :PROPERTIES:
+   :CUSTOM_ID: 添加模型类
+   :END:
+
+在 =logstat/report/models.py= 中添加我们要存储的日志格式：
+
+#+BEGIN_EXAMPLE
+  class Log(models.Model):
+      serverid = models.IntegerField('服务器ID')
+      logid = models.IntegerField('日志类型')
+      desc = models.TextField('日志内容', blank=True)
+      report_dt = models.DateTimeField('上报时间')
+#+END_EXAMPLE
+
+然后将 app 添加到 =INSTALLED_APPS= 中。=./manage.py makemigrations= 产生
+migrations 文件。
+
+同步数据库：
+
+#+BEGIN_EXAMPLE
+  ./manage.py migrate
+  ./manage.py migrate --database=logsharding0
+  ./manage.py migrate --database=logsharding1
+#+END_EXAMPLE
+
+这时候我们发现，所有的 migrations 都在 =default=, =logsharding0=,
+=logsharding1= 分别创建了表。这显然不是我们想要的。我们想要的效果是
+=report= app 中的模型不在 =default= 中创建，只在 =logshardingx=
+中创建，而 =default= 中的模型，也不希望在 =logshardingx= 中创建。
+
+此时我们需要添加数据库路由器。
+
+** 数据库路由器
+   :PROPERTIES:
+   :CUSTOM_ID: 数据库路由器
+   :END:
+
+在 =logstat/report= 中创建 =log_router.py= 文件，添加路由规则：
+
+#+BEGIN_EXAMPLE
+  class LogRouter(object):
+      def allow_migrate(self, db, app_label, model_name=None, **hints):
+          if app_label == 'report':
+              return db == 'logsharding0' or db == 'logsharding1'
+          return None
+#+END_EXAMPLE
+
+意思是，在 =migrate= 时，如果是 =report= App，并且 =database= 是
+=logshardingx= 是可以创建的，否则不创建。
+
+在 =setting.py= 中添加数据库路由器，使之生效：
+
+#+BEGIN_EXAMPLE
+  DATABASE_ROUTERS = ['report.log_router.LogRouter',]
+#+END_EXAMPLE
+
+同步数据库：
+
+#+BEGIN_EXAMPLE
+  ./manage.py migrate
+  ./manage.py migrate --database=logsharding0
+  ./manage.py migrate --database=logsharding1
+#+END_EXAMPLE
+
+这时，我们发现 =report_log= 表已经不再 =log_stat= 库中，而只出现在
+=logshardingx= 中。但是在 =logshardingx= 还是会有
+=auth_group=，=auth_group_permissions= ... 这些 Django
+组件的表。到现在，我们已经实现了分库的效果，这些额外的表我们不用关心，但是总觉得不优雅，还是去比较好。
+
+这些额外的 App 分别是 =admin=, =auth=，=contenttypes=, =sessions=,
+=messages=, =staticfiles=，同样我们需要为他们设置路由规则，在 =logstat=
+下创建 =default_router.py= 添加路由规则，使得其余的 App 自动只选择
+=default=：
+
+#+BEGIN_EXAMPLE
+  class DefaultRouter(object):
+      def allow_migrate(self, db, app_label, model_name=None, **hints):
+          if app_label == 'admin' \
+             or app_label == 'auth' \
+             or app_label == 'staticfiles' \
+             or app_label == 'sessions' \
+             or app_label == 'messages' \
+             or app_label == 'contenttypes':
+              return db == 'default'
+          return None
+#+END_EXAMPLE
+
+同样添加到 =DATABASE_ROUTERS= 中，
+
+#+BEGIN_EXAMPLE
+  DATABASE_ROUTERS = [
+      'logstat.default_router.DefaultRouter',
+      'report.log_router.LogRouter',
+  ]
+#+END_EXAMPLE
+
+再执行 =migrate --database=xxx= 时，只创建了两个表，=django_migrations=
+和 =report_log= ，这就是我们想要的效果。
+
+备注: =django_migrations= 这个表是必须存在的，它是数据库 =migrate=
+记录，以保证再次 =migrate= 时，=migrations= 文件不被重复执行。
+
+** 分库使用
+   :PROPERTIES:
+   :CUSTOM_ID: 分库使用
+   :END:
+
+Django
+在[[/model/advanced-multiple-databases.html][多数据库文档]]中提供了指定数据库的用法，但是我个人倾向于一个简单的规则：「同时只操作一个库」。从那个库中查询的数据，无论是修改、保存还是删除，都只操作同一个库。像：
+
+#+BEGIN_EXAMPLE
+  >>> user_obj.save(using='new_users')
+  >>> user_obj.delete(using='legacy_users')
+#+END_EXAMPLE
+
+这种用户从一个表迁移到另外一个表，应该写的更明确一些，应在业务上迁移而不是利用
+=using= 关键字和 Django
+的设计取巧。尽管这非常方便，但是对于维护代码的人简直就是灾难！所谓业务上的迁移是，首先创建一个新的用户(=User.objects.using('new_users').create()=)，待新用户创建以后，再删除旧用户(=User.objects.using('legacy_users').filter().delete()=)，逻辑清晰。
+
+*** 自动选择一个库
+    :PROPERTIES:
+    :CUSTOM_ID: 自动选择一个库
+    :END:
+
+日志存储的需求是：基于 =serverid= 的 hash
+值选择一个存储库中的模型，封装一个函数即可:
+
+#+BEGIN_EXAMPLE
+  def db_slice(serverid):
+      slice_list = (
+          'logsharding0',
+          'logsharding0'
+      )
+      return slice_list[serverid % 2]
+#+END_EXAMPLE
+
+使用实例：
+
+#+BEGIN_EXAMPLE
+  # 创建对象
+  Log.objects.using(db_slice(1)).create(
+      serverid=1,
+      logid=1001,
+      desc='lalala',
+      report_dt=datetime.now()
+  )
+
+  # 查询对象
+  Log.objects.using(db_slice(1)).all()
+#+END_EXAMPLE
+
+** 结尾
+   :PROPERTIES:
+   :CUSTOM_ID: 结尾
+   :END:
+
+自此，一个分库的例子就讲完了，也比较简单。聊几句个人想法，选择框架和选择技术，因为业务场景不同，很难有一个完美的解决方案，总是要做一些取舍。
+
+比如说，自己写一个直接独立于 Django 的分库分表策略并不难，但是脱离了
+Django 这一套东西，常用的 API 用不了(=create=, =filter=, =delete=
+etc)，为每一个操作封装一个 SQL
+操作，测试起来比较麻烦，灵活性太强，扩展性差，重要的是还要防止 SQL
+注入。
+
+如果用 Django 的多 DB 实现策略，也有问题。首先是路由，新的 app
+如果忘了设置路由规则，很容易把表生成到不想生成的地方，而且 Django
+官方文档也说了，并不会检查非 =default=
+迁移的一致性(1.10之后版本可能支持)。其次是外键，使用了分库之后外键约束自然就没有了，这也不算一个问题。还有在使用上，每次访问数据库都必须要用
+=using=
+显式的选择一个数据库。忘了如果路由规则设置没问题会直接报错这倒还好，如果选择错了，就蛋疼了，因为他们每个库的结构都是一样的，很难查出问题。这将为写代码增加复杂性。
+
+我的建议是，既然没有一个完美的方案，就应该尽量的保证逻辑简单、清晰，不要过分的依赖框架，少使用
+hack 技巧。像上面那种
+
+#+BEGIN_EXAMPLE
+  >>> user_obj.save(using='new_users')
+  >>> user_obj.delete(using='legacy_users')
+#+END_EXAMPLE
+
+尽管可行，但个人认为这是非常不可取的。

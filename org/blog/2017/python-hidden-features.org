@@ -1,0 +1,376 @@
+#+SETUPFILE: ~/site/tpl/site-tpl.org
+#+TITLE: Python隐藏（使用）技巧
+#+DATE: 2017-09-30 00:00:00
+
+摘自：[[https://stackoverflow.com/questions/101268/hidden-features-of-python#113198][Hidden
+features of Python]]
+
+** Function argument unpacking
+   :PROPERTIES:
+   :CUSTOM_ID: function-argument-unpacking
+   :END:
+
+你可以通过 =*= 和 =**= 将列表或者字典解包作为函数参数，比如：
+
+#+BEGIN_EXAMPLE
+  def draw_point(x, y):
+      print(x, y)
+
+  point_foo = (3, 4)
+  point_bar = {'y': 3, 'x': 2}
+
+  draw_point(*point_foo)
+  draw_point(**point_bar)
+#+END_EXAMPLE
+
+** 串联比较运算（Chaining comparison operators）
+   :PROPERTIES:
+   :CUSTOM_ID: 串联比较运算chaining-comparison-operators
+   :END:
+
+#+BEGIN_EXAMPLE
+  >>> x = 5
+  >>> 1 < x < 10
+  True
+  >>> 10 < x < 20
+  False
+  >>> x < 10 < x*10 < 100
+  True
+  >>> 10 > x <= 9
+  True
+  >>> 5 == x > 4
+  True
+#+END_EXAMPLE
+
+** 装饰器（Decorators）
+   :PROPERTIES:
+   :CUSTOM_ID: 装饰器decorators
+   :END:
+
+装饰器是在 Python
+函数或方法的基础上包装了一层，你可以添加功能，修改参数或者返回值等等。已我们统计函数执行时间的装饰器为例：
+
+#+BEGIN_EXAMPLE
+  def fprofiler(output=True):
+      """函数执行时间监视器
+      output: 是否输出信息，线上业务中如果全部打开会产生很多日志，所以需要一个开关
+      """
+
+      class SimpleObj:
+          def __init__(self, func_module, func_name):
+              self.func_module = func_module
+              self.func_name = func_name
+              self.s = time.time()
+
+          def __del__(self):
+              logger.debug('fprofiler|%s.%s|%s',
+                           self.func_module,
+                           self.func_name,
+                           round(time.time()-self.s, 3))
+
+      def _fprofiler(func):
+          def _wrapper(*args, **kwargs):
+              if output:
+                  _ = SimpleObj(func.__module__, func.__name__)
+                  return func(*args, **kwargs)
+              else:
+                  return func(*args, **kwargs)
+          return _wrapper
+
+      return _fprofiler
+#+END_EXAMPLE
+
+使用：
+
+#+BEGIN_EXAMPLE
+  # config.py
+  PROFILER = True
+  # views
+  @fprofiler(PROFILER)
+  def do_something(request):
+      # do something
+#+END_EXAMPLE
+
+** 小心使用可变参数作为默认参数
+   :PROPERTIES:
+   :CUSTOM_ID: 小心使用可变参数作为默认参数
+   :END:
+
+#+BEGIN_EXAMPLE
+  def foo(x=[]):
+      x.append(1)
+      print(x)
+
+  foo()
+  foo()
+  foo()
+
+  # output
+  [1]
+  [1, 1]
+  [1, 1, 1]
+#+END_EXAMPLE
+
+正确的做法应该是：
+
+#+BEGIN_EXAMPLE
+  def foo(x=None):
+      x = x or []
+      x.append(1)
+      print(x)
+
+  foo()
+  foo()
+  foo()
+
+  # output
+  1
+  1
+  1
+#+END_EXAMPLE
+
+比较合理的一种解释：
+
+#+BEGIN_QUOTE
+  Actually, this is not a design flaw, and it is not because of
+  internals, or performance. It comes simply from the fact that
+  functions in Python are first-class objects, and not only a piece of
+  code. As soon as you get to think into this way, then it completely
+  makes sense: a function is an object being evaluated on its
+  definition; default parameters are kind of "member data" and therefore
+  their state may change from one call to the other - exactly as in any
+  other object. In any case, Effbot has a very nice explanation of the
+  reasons for this behavior in Default Parameter Values in Python. I
+  found it very clear, and I really suggest reading it for a better
+  knowledge of how function objects work.
+#+END_QUOTE
+
+翻译过来就是：把函数当成一个对象，参数可以理解为他们的成员数据，只被定义一次。所以不管函数调用多少次参数都是同一个引用。
+
+** 字典的 =get()= 函数
+   :PROPERTIES:
+   :CUSTOM_ID: 字典的-get-函数
+   :END:
+
+当 =key= 不存在时，你可以设置一个默认值：=s.get(key, 0)=。
+
+** Doctest：文档和单元测试同时进行
+   :PROPERTIES:
+   :CUSTOM_ID: doctest文档和单元测试同时进行
+   :END:
+
+#+BEGIN_EXAMPLE
+  def factorial(n):
+      """Return the factorial of n, an exact integer >= 0.
+
+      If the result is small enough to fit in an int, return an int.
+      Else return a long.
+
+      >>> [factorial(n) for n in range(6)]
+      [1, 1, 2, 6, 24, 120]
+      >>> factorial(-1)
+      Traceback (most recent call last):
+          ...
+      ValueError: n must be >= 0
+
+      Factorials of floats are OK, but the float must be an exact integer:
+      """
+
+      import math
+      if not n >= 0:
+          raise ValueError("n must be >= 0")
+      if math.floor(n) != n:
+          raise ValueError("n must be exact integer")
+      if n+1 == n:  # catch a value like 1e300
+          raise OverflowError("n too large")
+      result = 1
+      factor = 2
+      while factor <= n:
+          result *= factor
+          factor += 1
+          return result
+
+
+  def _test():
+      import doctest
+      doctest.testmod()
+
+  if __name__ == "__main__":
+      _test()
+
+
+  # output
+  **********************************************************************
+
+  File "test.py", line 7, in __main__.factorial
+  Failed example:
+      [factorial(n) for n in range(6)]
+  Expected:
+      [1, 1, 2, 6, 24, 120]
+  Got:
+      [None, None, 2, 2, 2, 2]
+  **********************************************************************
+  1 items had failures:
+     1 of   2 in __main__.factorial
+  ***Test Failed*** 1 failures.
+#+END_EXAMPLE
+
+能理解，但是我不会这么玩...
+
+** 省略号语法
+   :PROPERTIES:
+   :CUSTOM_ID: 省略号语法
+   :END:
+
+#+BEGIN_EXAMPLE
+  def print_sth(item):
+      if item is Ellipsis:
+          print('all data')
+      else:
+          print(item)
+
+
+  print_sth(...)
+  print_sth(1)
+
+  # output
+  all data
+  1
+#+END_EXAMPLE
+
+** enumerate
+   :PROPERTIES:
+   :CUSTOM_ID: enumerate
+   :END:
+
+#+BEGIN_EXAMPLE
+  a = [5, 4, 3, 2, 1]
+  for index, item in enumerate(a):
+      print(index, item)
+#+END_EXAMPLE
+
+很实用的功能。
+
+** for...else 语法
+   :PROPERTIES:
+   :CUSTOM_ID: forelse-语法
+   :END:
+
+#+BEGIN_EXAMPLE
+  foo = (1, 2, 3)
+  for i in foo:
+      if i == 0:
+          break
+  else:
+      print('i was never 0')
+#+END_EXAMPLE
+
+=else= 会在 =for= 循环结束之后再执行。上面的代码相当于：
+
+#+BEGIN_EXAMPLE
+  found = False
+  foo = (1, 2, 3)
+  for i in foo:
+      if i == 0:
+          found = True
+          break
+  if not found:
+      print('i was never 0')
+#+END_EXAMPLE
+
+** =import this=
+   :PROPERTIES:
+   :CUSTOM_ID: import-this
+   :END:
+
+你懂的。
+
+** 位置交换赋值（in-place value swapping）
+   :PROPERTIES:
+   :CUSTOM_ID: 位置交换赋值in-place-value-swapping
+   :END:
+
+#+BEGIN_EXAMPLE
+  a, b = b, a
+#+END_EXAMPLE
+
+** 按照步长获取切片列表
+   :PROPERTIES:
+   :CUSTOM_ID: 按照步长获取切片列表
+   :END:
+
+#+BEGIN_EXAMPLE
+  >>> a = [1, 2, 3, 4, 5]
+  >>> a[::2]
+  [1, 3, 5]
+  >>> a[::-1]
+  [5, 4, 3, 2, 1]
+  >>>
+#+END_EXAMPLE
+
+** 命名格式化
+   :PROPERTIES:
+   :CUSTOM_ID: 命名格式化
+   :END:
+
+=%= 传入字典。
+
+#+BEGIN_EXAMPLE
+  >>> print "The %(foo)s is %(bar)i." % {'foo': 'answer', 'bar':42}
+  The answer is 42.
+#+END_EXAMPLE
+
+新的格式化风格：
+
+#+BEGIN_EXAMPLE
+  >>> print("The {foo} is {bar}".format(foo='answer', bar=42))
+  The answer is 42
+#+END_EXAMPLE
+
+那也就可以这么用：
+
+#+BEGIN_EXAMPLE
+  a = {
+      'foo': 'answer',
+      'bar': 42
+  }
+
+  print('{foo} - {bar}'.format(**a))
+#+END_EXAMPLE
+
+** 单行嵌套 for 循环，生成列表
+   :PROPERTIES:
+   :CUSTOM_ID: 单行嵌套-for-循环生成列表
+   :END:
+
+#+BEGIN_EXAMPLE
+  [(i,j) for i in range(3) for j in range(i) ]
+  ((i,j) for i in range(4) for j in range(i) )
+#+END_EXAMPLE
+
+** try.except.else.finally 语法
+   :PROPERTIES:
+   :CUSTOM_ID: try.except.else.finally-语法
+   :END:
+
+- =except=：异常捕捉
+- =else=：在没有任何异常的时候执行的
+- =finally=：无论是否有异常都执行
+
+** 上下文管理器和 =with= 语法
+   :PROPERTIES:
+   :CUSTOM_ID: 上下文管理器和-with-语法
+   :END:
+
+上下文管理器（context
+manager）是一个扮演者管理一系列语句运行时上下文的对象，一般用于在异常情况下正确的释放资源，比如自愿加锁解锁、文件打开关闭，数据库事务。而
+=with= 是上下文管理器的广泛案例。
+
+#+BEGIN_EXAMPLE
+  with open('foo.txt', 'w') as f:
+      f.write('hello!')
+#+END_EXAMPLE
+
+=with= 会在 =f= 文件对象上自动调用 =__enter__= 和 =__exit__= 方法。在
+=with body= 中的任何异常触发之后也会调用 =__exit__=
+方法，这样保证了即便有异常情况文件也会正常的被关闭。

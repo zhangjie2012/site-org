@@ -1,0 +1,68 @@
+#+SETUPFILE: ~/site/tpl/site-tpl.org
+#+TITLE: [译] 提高团队效能的 12 个最佳实践
+#+DATE: 2018-08-21 17:45:00
+
+原文为
+[[https://engineering.videoblocks.com/the-12-factor-engineering-team-e7abc10fe478][The
+12 Factor Engineering Team]]，同时推荐 videoblocks 的
+[[https://engineering.videoblocks.com/][官方博客]]，很多文章都不错。
+
+意译非旨意，理解思想就好。
+
+--------------
+
+构建一支优秀的团建很难，真的很难。
+
+当我在 4.5 年前加入 Storyblocks
+时，我没有任何团队构建和管理经验。从事这份工作以后，我看了很多管理相关的书籍和博客，以便获取一些管理建议，它帮助我从
+1 个工程师扩展到今天的 30 个工程师。（一些建议）比如：
+
+- 雇佣优秀的人才至关重要（几乎我阅读到的所有资料都这么说）
+- 自主、专精和目的驱动对人的成长至关重要（来自丹尼尔·平克的[[https://book.douban.com/subject/10484712/][驱动力]]，Simon
+  Sinek 的 [[https://book.douban.com/subject/4594514/][Start with
+  Why]]）
+- 信任是高效能团队的基础（来自帕特里克·兰西奥尼的[[https://book.douban.com/subject/4235591/][团队协作的五大障碍]]）
+- 精益制造原则可以应用于软件工程（来自 Gene Kim 的
+  [[https://book.douban.com/subject/26902196/][DevOps 手册]] 和我在
+  McKinsey 的工作经历）
+
+虽然尽我所能把这些理解付诸实践，但我从来没能找到一个整体上管理团队的框架（我确定应该有这样一个框架，可能是我不够努力吧），为了填补空白，我从我的经历中总结了名为「提高团队效能的
+12 个最佳实践」的框架：
+
+** 人才（People）
+   :PROPERTIES:
+   :CUSTOM_ID: 人才people
+   :END:
+
+- 雇佣牛逼的人才
+- 培养人才
+- 把人才放在正确的位置上
+
+** 进度（Process）
+   :PROPERTIES:
+   :CUSTOM_ID: 进度process
+   :END:
+
+- 制定短期和长期计划
+- 进行设计（Conduct Design）和代码审查
+- 为升级预留空间（Provide Space for Level Up Time）
+
+** 技术（Technology）
+   :PROPERTIES:
+   :CUSTOM_ID: 技术technology
+   :END:
+
+- 实施持续集成（CI）
+- 为业务环境架构系统
+- 使用正确的工具
+
+** 文化（Culture）
+   :PROPERTIES:
+   :CUSTOM_ID: 文化culture
+   :END:
+
+- 提供自主（Autonomy），专精（Mastery）和目标（Purpose）
+- 培养安全心理
+- 采用精益思想并不断提高
+
+这只是一个概览，每一条准则都应该值得单独写文说明，在接下来的几个月我会扩展开讲，敬请期待。

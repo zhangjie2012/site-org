@@ -1,0 +1,392 @@
+#+SETUPFILE: ~/site/tpl/site-tpl.org
+#+TITLE: Apache Vs NGINX – 哪个是最好的 Web 服务器
+#+DATE: 2019-06-08 15:41:00
+
+来自：[[https://serverguy.com/comparison/apache-vs-nginx/]]，翻译摘要。
+
+** 简介
+   :PROPERTIES:
+   :CUSTOM_ID: 简介
+   :END:
+
+*Apache：*
+
+- 1999 年以来，[[https://www.apache.org/][Apache 软件基金组织]]
+  来管理其品牌和服务
+- 服务器是在基金组织主持下开放的开发者社区来开发和维护
+- 大部分是在 Linux 下运行，Apache 支撑了全世界一半以上的网站
+- 到目前为止，它是最受欢迎的 Web 服务器之一，是流行的
+  LAMP（Linux，Apache，MySQL，PHP）栈中的组件之一
+
+*NGINX：*
+
+它是 2014 年由 [[https://www.nginx.com/people/igor-sysoev/][Igor
+Sysoev]] 发布，到目前为止它只是一个 Web 服务器。
+
+- 起初，人们大多时候把 Nginx 作为 Apache 的补充
+- 它只要用来提供静态文件，但今天，它已经发展成一个完整的 Web
+  服务器，完整的处理各种服务任务
+- 今天，Nginx 经常用作反向代理，负载均衡，邮件代理或者 HTTP 缓存
+
+** Apache 和 NGINX 在不同方面的对比
+   :PROPERTIES:
+   :CUSTOM_ID: apache-和-nginx-在不同方面的对比
+   :END:
+
+*** 1. 基础架构
+    :PROPERTIES:
+    :CUSTOM_ID: 基础架构
+    :END:
+
+Apache 和 Nginx
+不同点的根本区别在于它们的设计架构。也就说它们在处理连接和流量以及应对不同流量的策略不同。
+
+一个是进程驱动（process-driven），一个是事件驱动（event-driven）。
+
+*Apache*
+
+- 进程驱动
+- 每个请求对应一个线程（Apache 是多线程的架构体系）
+
+多进程模块（简称
+MPM），用来选择不同的连接和不同的处理算法。此外，不同版本的 Apache 2
+采用不同的处理模块。
+
+三个主要的 MPMs 是：
+
+1. 进程（pre-fork）MPM
+2. 工作者 MPM
+3. 事件 MPM
+
+旧版的 Apache（2.2）使用 mpm_worker，mpm_prefork 和 mod_php。而新的
+Apache 2.4 使用 mpm_event，php-form。
+
+默认情况下 2.2 使用 Pre-fork
+模式（mpm_prefork）。他响应一定数量的进程，每个进程一次提供单个的请求。
+
+换句话说，Apache 每次都会创建个的新线程来处理每个连接请求。
+
+Apache
+的基础架构可能导致大量的资源消耗，从而产生服务器问题（比如，速度慢）。
+
+[[https://blog-1252349778.cos.ap-beijing.myqcloud.com/2019/apache-request-handling.png]]
+
+*Nginx*
+
+- 事件驱动
+- 一个线程处理多个请求
+
+Nginx
+使用事件驱动的架构，并且异步的处理请求。它旨在使用非阻塞事件驱动的连接处理算法。因此一个处理线程可以处理数千个请求。这种处理方法允许在资源有限的情况下也可以非常快。
+
+[[https://blog-1252349778.cos.ap-beijing.myqcloud.com/2019/nginx-event-driven.png]]
+
+#+BEGIN_QUOTE
+  获胜者：Nginx
+
+  *NGINX* - 它拥有轻量级的架构，比 Apache 更快
+#+END_QUOTE
+
+*** 2. 性能
+    :PROPERTIES:
+    :CUSTOM_ID: 性能
+    :END:
+
+**** 2.1 静态内容
+     :PROPERTIES:
+     :CUSTOM_ID: 静态内容
+     :END:
+
+*Apache*
+
+- 使用基于文件（file-based）的方法提供文件
+
+静态内容通常存放在服务器的磁盘文件上，比如 CSS 文件，JavaScripts
+文件或者图片。Apache 使用传统的基于文件的方法处理静态内容。
+
+*NGINX*
+
+- 在提供静态文件时，Nginx 是王者！
+
+由于 Nginx
+的设计架构能够更好地处理负载，因此在提供静态文件内容方面要快的多。在
+1000 个同时连接的基准测试下，它的执行速度要比 Apache 快 2.5 倍。
+
+[[https://blog-1252349778.cos.ap-beijing.myqcloud.com/2019/Static-content-comparison.png]]
+
+**** 2.2 动态内容
+     :PROPERTIES:
+     :CUSTOM_ID: 动态内容
+     :END:
+
+*Apache*
+
+- 处理服务器内的动态内容
+
+Apache 可以在服务器本身内处理动态内容，而无需依赖任何外部的组件。
+
+在讨论 Apache 和 Nginx 的性能的时候：当考虑动态内容的时候，Nginx
+不是最好的，但是它们两个相差不大。
+
+[[https://blog-1252349778.cos.ap-beijing.myqcloud.com/2019/Dynamic-content-comparison.png]]
+
+*NGINX*
+
+- 它不处理动态内容
+
+Nginx 无法像 Apache 一样在 Web
+服务器中处理动态内容。具有动态网页内容的请求都被传递到外部进程（比如
+PHP-FPM）来执行。Nginx
+等待最终内容并将其返回给客户端。参考下面这张图片：
+
+[[https://blog-1252349778.cos.ap-beijing.myqcloud.com/2019/Nginx-performance.png]]
+
+#+BEGIN_QUOTE
+  获胜者
+
+  对于静态文件而言，Nginx 比 Apache 快很多
+
+  对于动态文件而言，两者相差无几
+#+END_QUOTE
+
+*** 3. 操作系统支持
+    :PROPERTIES:
+    :CUSTOM_ID: 操作系统支持
+    :END:
+
+*Apache*
+
+- 支持所有 Unix-like 的系统，包括 Linux 和 BSD
+- 完整的支持 MS Windows
+
+*NGINX*
+
+- 几乎支持所有的 Unix-like 系统
+- 部分支持 Windows，但是性能不像其它平台那么强劲
+
+#+BEGIN_QUOTE
+  获胜者
+
+  Apache
+#+END_QUOTE
+
+*** 4. 分布式的和集中式的配置
+    :PROPERTIES:
+    :CUSTOM_ID: 分布式的和集中式的配置
+    :END:
+
+*Apache*
+
+- 允许通过 .htaccess 文件在每一个目录的基础上进行配置
+
+这种设计允许非特权的用户控制其网站的某些方面，而不需要给授予它们编辑主配置的权限。这很强大。
+
+*NGINX*
+
+- 不允许其它配置
+
+它有一个缺点，不提供其它配置。但是这么处理会提高性能；它不需要搜索
+.htaccess 文件并解释用户所做的请求。
+
+#+BEGIN_QUOTE
+  获胜者：
+
+  考虑配置能力，Apache 获胜；考虑速度，NGINX 获胜
+#+END_QUOTE
+
+*** 5. 请求解释（Request Interpretation）
+    :PROPERTIES:
+    :CUSTOM_ID: 请求解释request-interpretation
+    :END:
+
+Apache 和 Nginx 完全以不同的方式处理和解释请求。
+
+*Apache*
+
+- 传递文件系统位置
+
+提供解释请求的能力，作为文件系统位置上的物理资源，可能需要更加抽象一些。当然，Apache
+也使用 URI
+位置，但是它们通常做更抽象的资源，当创建或者配置虚拟主机（vhost）时，Apache
+使用文档的根目录作为目录块。物理位置也可以是包含 .htaccess 文件目录。
+
+[[https://blog-1252349778.cos.ap-beijing.myqcloud.com/2019/Apache-request-interpretation-e1547121951522.png]]
+
+*NGINX*
+
+- 传递 URI 给解释请求
+
+Nginx 作为 Web 服务器和反向代理服务器。根据架构要求，Nginx
+需要可视化强一些，需要的时候转换到系统中。它不提供制定 config
+的机制。对于文件系统根目录，只是传递自身的 URI。将请求作为 URI
+而不是文件系统位置使得 Nginx 运行起来更加的简单。通过对比 URL
+和请求模式来做响应。
+
+[[https://blog-1252349778.cos.ap-beijing.myqcloud.com/2019/Nginx-request-interpretation-e1547122040424.png]]
+
+这种请求解释为 URI 位置的设计，允许 Nginx 不仅可以轻松的作 Web
+服务器，还可以用作代理服务器，负载均衡和 HTTP 缓存。
+
+此外，Apache vs Nginx 对比中，Nginx
+在传输速率（数据从服务器发送到客户端的速度）上要比再次获胜。
+
+[[https://blog-1252349778.cos.ap-beijing.myqcloud.com/2019/transferrateapach3evsnginx.png]]
+
+#+BEGIN_QUOTE
+  获胜者：
+
+  看起来 Nginx 具有更快的解释和响应速率
+#+END_QUOTE
+
+*** 6. 功能模块
+    :PROPERTIES:
+    :CUSTOM_ID: 功能模块
+    :END:
+
+*Apache*
+
+- 60 个官方动态可加载的模块，可以随时打开和关闭
+
+几个功能模块可以满足需求，但是很多都不常用。
+
+*NGINX*
+
+- 支持第三方的插件（不可以动态加载）
+
+Nginx 提供了 Web 服务器的所有核心功能，同时又可以保持轻量级和高性能。
+
+#+BEGIN_QUOTE
+  获胜者：
+
+  Nginx - 它比 Apache 更轻量级，不重要的功能不会集成到一起，可插拔
+#+END_QUOTE
+
+*** 7. 灵活性
+    :PROPERTIES:
+    :CUSTOM_ID: 灵活性
+    :END:
+
+*Apache*
+
+- 支持通过动态模块自定义 Web 服务器
+
+*NGINX*
+
+- 不够灵活，不支持动态模块和加载
+
+2016 年初，NGINX
+获得动态模块和加载的支持；之前都是需要手动编译的。但是，大多数模块还都不支持动态加载，随着时间推移，可能会支持。
+
+#+BEGIN_QUOTE
+  获胜者：
+
+  毫无疑问是 Apache
+#+END_QUOTE
+
+*** 8. 安全性
+    :PROPERTIES:
+    :CUSTOM_ID: 安全性
+    :END:
+
+*Apache*
+
+- 安全性很高
+
+Apache
+确保它的服务器上运行的网站都不会受到任何伤害和黑客攻击。因此，它提供了
+DDos 攻击处理的配置技巧，以及用于响应 HTTP Dos，DDos 或者暴力攻击的
+mod_evasive 模块。
+
+*NGINX*
+
+- 代码库越小，安全性越高
+
+Nginx 的代码库比 Apache
+少了几个数量级，因此从前瞻性的安全角度看，这绝对是一个很大的优势。
+
+#+BEGIN_QUOTE
+  获胜者：
+
+  Nginx - 它被认为更安全一些
+#+END_QUOTE
+
+*** 9. 支持
+    :PROPERTIES:
+    :CUSTOM_ID: 支持
+    :END:
+
+*Apache*
+
+- 通过邮件列表，IRC 和 Stack Overflow 进行社区支持
+
+许多第三方的公司（比如 OpenLogic）都提供商业的 Apache
+支持，但是官方不提供正式的列表。Apache 旨在为所有的用户提供强大的支持。
+
+*NGINX*
+
+- 通过邮件列表，IRC，Stack Overflow 和 论坛提供社区支持
+
+NGINX 背后的公司提供了 NGINX Plus
+的商业产品，该产品支持一系列的有关负载均衡、媒体流和监控等额外功能。
+
+#+BEGIN_QUOTE
+  获胜者：
+
+  平手，两个 Web 服务器做的都很棒。
+#+END_QUOTE
+
+下面是 Apache 和 Nginx 对比的总结：
+
+[[https://blog-1252349778.cos.ap-beijing.myqcloud.com/2019/apachevsnginximage-e1547117365178.png]]
+
+** 总结语
+   :PROPERTIES:
+   :CUSTOM_ID: 总结语
+   :END:
+
+Nginx 整体领先与 Apache。
+
+*** 什么情况选择 Apache 而不是 NGINX？
+    :PROPERTIES:
+    :CUSTOM_ID: 什么情况选择-apache-而不是-nginx
+    :END:
+
+1. Apache.htaccess
+
+   Nginx 不支持类似 .htaccess 文件。你可以使用 .htaccess
+   来让非特权用户可以通知其网站的某些重要方面。
+
+   - 显然，用户不允许编辑主配置
+   - 使用 .htaccess 文件，你可以基于每个目录覆盖系统范围的设置
+   - 为了获得最佳性能，请在主配置文件中包含这些 .htaccess 指令
+   - 在共享的主机环境中，Apache 因为 .htaccess 配置而更好的工作
+
+   对于专有主机或者 VPS，Nginx 是最佳选择
+
+2. 在功能限制的情况下 - 使用 Apache
+
+   Nginx 有一些非常重要的核心模块，但是，Nginx 存在一些功能限制。
+
+   如果存在某些限制或者使用 Nginx 不支持的额外模块，您可能希望选择
+   Apache。
+
+*** 什么情况选择 NGINX 而不是 Apache？
+    :PROPERTIES:
+    :CUSTOM_ID: 什么情况选择-nginx-而不是-apache
+    :END:
+
+1. 快速的静态文件处理
+
+2. 适合大流量的网站
+
+   它的设计很轻量级，非常适合服务器资源。这也就是为什么很多 Web
+   开发人员更喜欢 Nginx 而不是 Apache。
+
+*** 或者，也可以同时使用
+    :PROPERTIES:
+    :CUSTOM_ID: 或者也可以同时使用
+    :END:
+
+你可以使用 Nginx 做 Apache 服务器的前向代理。
+
+[[https://blog-1252349778.cos.ap-beijing.myqcloud.com/2019/nginxwithapache.png]]

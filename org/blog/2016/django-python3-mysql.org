@@ -1,0 +1,39 @@
+#+SETUPFILE: ~/site/tpl/site-tpl.org
+#+TITLE: Django Python3 MySQL 客户端
+#+DATE: 2016-05-02 11:24:11
+
+[[http://mysql-python.sourceforge.net/MySQLdb.html][MySQLdb]] 不支持
+Python3 ，有两个替代的库:
+
+** [[https://github.com/PyMySQL/PyMySQL][PyMySQL]]
+   :PROPERTIES:
+   :CUSTOM_ID: pymysql
+   :END:
+
+安装: =pip3 install pymysql=
+
+使用时，要在工程的 =__init_.py= 中添加两行代码替换 MySQLdb:
+
+#+BEGIN_EXAMPLE
+  import pymysql
+  pymysql.install_as_MySQLdb()
+#+END_EXAMPLE
+
+=PyMySQL= 是用纯 Python
+写的，所以效率上自然要慢一些。有个很严重的问题是: 不支持合并写
+=excutemany()=，它的 =executemany()= 实现方法是 =for ... execute()= 。
+
+** [[https://github.com/PyMySQL/mysqlclient-python][mysqlclient-python]]
+   :PROPERTIES:
+   :CUSTOM_ID: mysqlclient-python
+   :END:
+
+安装方法(ubuntu):
+
+#+BEGIN_EXAMPLE
+  apt-get install python3-dev libmysqlclient-dev
+  pip3 install mysqlclient
+#+END_EXAMPLE
+
+=mysqlclient= 是 MySQLdb Python3 的实现方案，后续有望合并到 MySQLdb
+中，推荐使用。

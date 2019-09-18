@@ -1,0 +1,66 @@
+#+SETUPFILE: ~/site/tpl/site-tpl.org
+#+TITLE: Django 调优工具
+#+DATE: 2017-09-23 00:00:00
+
+只列几种 Django
+查找热点的方法，而不是具体的调优策略，调优还是要具体问题具体分析。
+
+** 查看 Django 单个语句执行时间
+   :PROPERTIES:
+   :CUSTOM_ID: 查看-django-单个语句执行时间
+   :END:
+
+具体可以看：[[https://docs.djangoproject.com/en/1.11/faq/models/#faq-see-raw-sql-queries][How
+can I see the raw SQL queries Django is running?]]
+
+打开 =django shell=，执行查询语句，然后查看执行的 SQL 语句和时间：
+
+#+BEGIN_EXAMPLE
+  >>> from django.db import connection
+  >>> connection.queries
+  [{'sql': 'SELECT polls_polls.id, polls_polls.question, polls_polls.pub_date FROM polls_polls',
+  'time': '0.002'}]
+#+END_EXAMPLE
+
+这种方法有两个限制：
+
+1. 只能在 django shell 中使用，业务代码中不能查看
+2. 只有打开 =DEBUG= 才能使用 =connection.queries=。
+
+*适合做简单查看查询执行时间，想查看整个 server 的热点不通用。*
+
+** Django Debug Toolbar
+   :PROPERTIES:
+   :CUSTOM_ID: django-debug-toolbar
+   :END:
+
+第一个第三方的调优组件：[[https://django-debug-toolbar.readthedocs.io/en/stable/installation.html]]，配置简具体看官网。
+
+有几个注意事项：
+
+1. =debug_toolbar.middleware.DebugToolbarMiddleware= 建议放到
+   =MIDDLEWARE= 的最后，所谓 =MIDDLEWARE= 只不过实在 views
+   的基础上（之前/之后）加了一层封装。如果放到中间，某些中间件会提前返回，就不会执行后面的中间件了。
+2. =Internal IPs= 的设置，设置的是可以访问的 IP
+   地址。=SHOW_TOOLBAR_CALLBACK= 会检查 =DEBUG= 和 请求的 IP 地址是否在
+   =INTERNAL_IPS= 中，如果自定义了 callback 函数，就不用设置
+   =INTERNAL_IPS= 了。
+3. 默认使用的 google 的 jQuery
+   cdn，需要改成国内的：=DEBUG_TOOLBAR_CONFIG = { 'JQUERY_URL': 'http://cdn.bootcss.com/jquery/3.2.1/jquery.min.js' }=
+4. 所有的设置项目都写在 =setting.py= 中
+
+*Django Debug Toolbar 使用配合 server 一起使用，线上自动关闭。*
+
+** django-querycount
+   :PROPERTIES:
+   :CUSTOM_ID: django-querycount
+   :END:
+
+Github：[[https://github.com/bradmontgomery/django-querycount]]
+
+这个工具可以算是小巧玲珑，如果你只想查看 =SQL运行时间=，那么我建议你用
+=django-querycount=，如果还想看页面的渲染时间，那么用
+=Django Debug Toolbar=。
+
+我一般需要看页面的渲染时间和 SQL 执行时间，所以使用
+=Django Debug Toolbar=，然后只打开 =TimerPanel= 和 =SQLPannel=。

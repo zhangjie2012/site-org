@@ -1,0 +1,64 @@
+#+SETUPFILE: ~/site/tpl/site-tpl.org
+#+TITLE: index no-cache nginx
+#+DATE: 2018-09-04 16:01:00
+
+以前发布 Django 项目的时候，HTML
+代码是由后端渲染出来然后返回给前端，不是静态资源，所以不存在缓存的问题。但是
+JS 和 CSS
+属于静态文件，如果名称每次都一致，就会存在前端缓存的问题，但是的解决方案是使用不同的版本号（或者
+hash 值），新版本发布的时候，升级版本号就行了。
+
+现在做项目都是前后端分离的，前端（React）只发布前端的代码，遇到的问题和之前就反过来了，JS
+和 CSS
+每打包一次自动就换了（比如：=index.ed4cc1d9.js=、=index.b79cd22a.css=）不会有问题，但是因为
+=index.html= 是静态文件，浏览器会缓存，所以尽管 JS 和 CSS
+文件名字换了，浏览器得不到实时更新，版本更新之后客户就会各种抱怨样式问题或者使用
+bug（要么强制刷新浏览器）。
+
+常用的解决办法是强制让 NGINX 不缓存 index 文件，关键配置如下：
+
+#+BEGIN_EXAMPLE
+  location / {
+    gzip_static on;
+    try_files $uri @index;
+  }
+
+  location @index {
+    add_header Cache-Control no-cache;
+    expires 0;
+    try_files /index.html =404;
+  }
+#+END_EXAMPLE
+
+还有一个暴力的办法，设置 NGINX 不缓存任何文件：
+
+#+BEGIN_EXAMPLE
+  add_header Last-Modified $date_gmt;
+  add_header Cache-Control 'no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0';
+#+END_EXAMPLE
+
+附，完整的配置内容：
+
+#+BEGIN_EXAMPLE
+  server {
+    listen       80;
+
+    root /data/code;
+    index index.html;
+
+    location / {
+      gzip_static on;
+      try_files $uri @index;
+    }
+
+    location @index {
+      add_header Cache-Control no-cache;
+      expires 0;
+      try_files /index.html =404;
+    }
+
+    location /api {
+      proxy_pass api_server;
+    }
+  }
+#+END_EXAMPLE

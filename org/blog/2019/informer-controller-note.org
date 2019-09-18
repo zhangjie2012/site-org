@@ -1,0 +1,71 @@
+#+SETUPFILE: ~/site/tpl/site-tpl.org
+#+TITLE: Kubernetes informer controller 原理笔记
+#+DATE: 2019-06-27 22:07:00
+
+整理了一张思维导图，比较乱：
+
+[[https://microblog-1252349778.cos.ap-shanghai.myqcloud.com/2019/Informer-controller.png]]
+
+我主要关注的是数据流（从 K8s client 获取数据到分发到自定义的 handler）：
+
+- controller Run 时：
+
+  - ListAndWatch
+
+    1. List 从 K8s 中强制同步，并根据获取到的数据覆盖 Queue 中的数据
+    2. Watch 监听数据的 =Add=，=Modified=，=Delete=，然后
+       =Add=，=Update=，=Delete= 对象到 Queue 中
+
+  - ProcessLoop
+
+    1. 从 Queue 中 Pop 数据
+    2. 对取出来的数据执行 process 函数，他是个 callback
+       函数，实际执行的是 =HandleDeltas=（在 sharedIndexInformer =Run=
+       中绑定）
+
+- HandlerDeltas 处理流程：
+
+  - 判断事件类型（在 controller Run
+    中不区分数据类型），Sync、Added、Updated、Deleted
+  - 封装成各种 =Notification=，将数据发送给：=listener.add(obj)=
+
+- listener 封装了用户自定义的
+  =AddEventer=、=UpdateEventer=、=DeleteEventer=
+  等回调函数，干事情的是下面两个函数：
+
+  - =pop= 干了两件事情
+
+    - 在 HandlerDeltas 中添加的数据会放到 =addCh= 管道中，阻塞的从
+      =addCh= 中取数据，然后将数据添加到 =RingGrowing= 中 =>
+      =WriteOne=，并将数据给了 =nextCh=
+    - 从 =RingGrowing= 中取一个数据删除 =ReadOne=
+
+  - =run= 就比较简单了，等待 =nextCh=
+    中的数据，然后回掉之前用户自己注册的
+    =AddEventer=、=UpdateEventer=、=DeleteEventer=
+
+这里一共有两个队列：
+
+1. 从 K8s 中获取到的数据，缓存在 Queue 中，内容不区分类型的
+2. listener 中的 =RingGrowing=，订阅前一个 Queue
+   中的数据，内容被封装成了各种 =Notification=
+
+理解了两个队列之后，就好理解 =WaitForCacheSync= 函数，他阻塞到 Cache
+同步完成，那么完成的标准是什么呢？
+
+#+BEGIN_QUOTE
+  ListAndWatcher 中 List 成功之后，会替换掉 Queue
+  中的所有数据，首次的所有数据全部分发给 listener 中的 =RingGrowing=
+  队列，分发完成则认为是同步完成。
+#+END_QUOTE
+
+--------------
+
+扩展：
+
+- [[https://github.com/kubernetes/sample-controller/blob/master/docs/controller-client-go.md][client-go
+  under the hood]]
+- [[https://engineering.bitnami.com/articles/a-deep-dive-into-kubernetes-controllers.html][A
+  deep dive into Kubernetes controllers]]
+- [[https://engineering.bitnami.com/articles/kubewatch-an-example-of-kubernetes-custom-controller.html][Kubewatch,
+  an example of Kubernetes custom controller]]

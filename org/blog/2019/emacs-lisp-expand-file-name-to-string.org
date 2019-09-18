@@ -1,0 +1,63 @@
+#+SETUPFILE: ~/site/tpl/site-tpl.org
+#+TITLE: emacs lisp expand-file-name to string
+#+DATE: 2019-07-01 10:28:00
+
+配置 Python 环境 =jedi=
+需要设置标准库和第三方库路径，不然好像无法自动找到路径，所以就成了这样：
+
+#+BEGIN_EXAMPLE
+  (setq jedi:server-args
+        '("--sys-path" "/usr/lib/python3.6"
+          "--sys-path" "/home/jerryzhang/.local/lib/python3.6/site-packages"))
+#+END_EXAMPLE
+
+考虑到不够优雅，用户的主目录想通过 lisp 获取，直接用 =~=
+来代替，不行，似乎不会解析相对路径。lisp 有个函数叫 =expand-file-name=
+可以做各种路径的处理，于是就改成了：
+
+#+BEGIN_EXAMPLE
+  (setq jedi:server-args
+            '("--sys-path" "/usr/lib/python3.6"
+              "--sys-path" (expand-file-name "~/.local/lib/python3.6/site-packages")))
+#+END_EXAMPLE
+
+用 =C-x C-e= 运行
+=(expand-file-name "~/.local/lib/python3.6/site-packages")=
+得到的结果也是
+=/home/jerryzhang/.local/lib/python3.6/site-packages=，但是放到一起就不行了，似乎
+=expand-file-name= 函数不会执行，而当成一个字符串来处理的。
+
+不太了解 lisp，所以就
+[[https://www.reddit.com/r/emacs/comments/c77h9m/how_emacs_lisp_expandfilename_to_string/][发帖]]
+问了一下，解决办法有两种：
+
+1. 使用 =list= 即：
+
+   #+BEGIN_EXAMPLE
+      (setq jedi:server-args
+                (list
+                 "--sys-path" "/usr/lib/python3.6"
+                 "--sys-path" (expand-file-name "~/.local/lib/python3.6/site-packages")
+                 ))
+   #+END_EXAMPLE
+
+2. 使用单个反引号，也可以：
+
+   #+BEGIN_EXAMPLE
+      (setq jedi:server-args
+            `(
+              "--sys-path" "/usr/lib/python3.6"
+              "--sys-path" ,(expand-file-name "~/.local/lib/python3.6/site-packages")
+              ))
+   #+END_EXAMPLE
+
+   注意 =expand-file-name= 前面的 =,=
+
+--------------
+
+via:
+
+- [[https://stackoverflow.com/questions/56818423/emacs-lisp-expand-file-name-to-string/56823703#56823703][StackOverFlow:
+  emacs lisp expand-file-name to string]]
+- [[https://www.reddit.com/r/emacs/comments/c77h9m/how_emacs_lisp_expandfilename_to_string/][Reddit:
+  emacs lisp expand-file-name to string]]

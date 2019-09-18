@@ -1,0 +1,15 @@
+#+SETUPFILE: ~/site/tpl/site-tpl.org
+#+TITLE: MySQL server has gone away
+#+DATE: 2016-07-03 13:38:49
+
+MySQL 连接如果长时间处于空闲状态的话, 会自动断开客户端。在 Python
+MySQLdb 中会报错: =(2006, 'MySQL server has gone away')=。
+
+解决的办法是在使用之前使用 =ping= 函数 判断当前连接是否有效, eg:
+
+#+BEGIN_EXAMPLE
+  try:
+      connect.ping()
+  except Exception as e:
+      reconnect()
+#+END_EXAMPLE

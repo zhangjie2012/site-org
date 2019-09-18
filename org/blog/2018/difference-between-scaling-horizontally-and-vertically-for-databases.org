@@ -1,0 +1,38 @@
+#+SETUPFILE: ~/site/tpl/site-tpl.org
+#+TITLE: 数据库的水平扩展和垂直扩展的区别
+#+DATE: 2018-07-23 21:06:29
+
+刚看
+[[https://engineering.videoblocks.com/web-architecture-101-a3224e126947][Web
+Architecture 101]] 中的 Load Balancer
+提到了水平扩展和垂直扩展的区别，还给了一个
+[[https://stackoverflow.com/questions/11707879/difference-between-scaling-horizontally-and-vertically-for-databases][StackOverFlow]]
+的链接，我看了一下，觉得解释的挺好的，就顺便记录一下。
+
+- horizontal scaling 也称 scale-out 可翻译为
+  水平缩放、横向缩放、水平扩展，我这里用了「水平扩展」；
+- vertical scaling 也称 scale-up 可翻译为
+  垂直缩放、纵向缩放、垂直扩展，我这里用了「垂直扩展」；
+
+--------------
+
+*水平扩展是指通过向资源池中添加的更多的机器，而垂直扩展指的是向已存在的机器中添加更大的功率（CPU，RAM）*。
+
+可以通过服务器机架上的机器来更简单的记住这些，我们是在水平方向的添加更多的机器，在垂直的方向上添加更多的资源。
+
+[[https://blog-1252349778.cos.ap-beijing.myqcloud.com/2018/scaling-horizontally-and-vertically.png]]
+
+在数据库的世界里，水平扩展经常是基于数据的分区的（即，每个节点只包含数据的一部分）。在垂直扩展中，数据存在单独的节点中，通过多核的方式（即，在那台机器的
+CPU 和 RAM 资源中分散负载）。
+
+水平扩展是在已有的池子中动态的添加更多机器的方式来实现的，实际操作起来通常比较简单。垂直扩展受限于单个机器的容量，在容量上扩展也通常会涉及到重启机器，而且有上限。
+
+水平扩展做的好的例子有 Cassandra、MongoDB 和
+[[https://cloud.google.com/spanner/][Google Cloud
+Spanner]]。垂直扩展比较好的例子是 MySQL - 亚马逊的 RDS（MySQL
+的云版本），它是通过小型机和大型机之间的切换来简单的实现垂直扩展，这个过程通常伴随着服务停用。
+
+内存数据网络（In-Memory Data Grids）例如
+[[https://www.gigaspaces.com/solution/in-memory-data-grid][GigaSpaces
+XAP]]、[[http://www.oracle.com/technetwork/middleware/coherence/overview/index.html][Coherence]]
+等通常会在水平和垂直两个维度都进行优化，因为它们没有把数据绑定磁盘。水平通过分区和垂直通过多核支持。

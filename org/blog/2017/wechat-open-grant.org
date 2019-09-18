@@ -1,0 +1,161 @@
+#+SETUPFILE: ~/site/tpl/site-tpl.org
+#+TITLE: 微信第三方平台开发：授权流程
+#+DATE: 2017-12-26 00:00:00
+
+我们业务需要同一个域名接入多个微信公众号，很多线下的业务客户都是以店铺为单位的（比如餐饮），店铺都有自己的微信公众号，所以这种需求很常见。但是微信限制同一个域名不可以同时接入多个微信公众号（没有看到微信明文的文档说明，但我们测试下来是几十个之后就不能再接入了），针对此类需求，微信又提供了「第三方平台开发」的功能来满足。
+
+尽管微信提供了开发者参考文档，但是实际操作下来很多概念太「官方」，不是很好理解，所以本文将以开发者的角度来说明微信第三方平台开发遇到的问题。
+
+--------------
+
+官方文档从
+[[https://open.weixin.qq.com/cgi-bin/showdocument?action=dir_list&t=resource/res_list&verify=1&id=open1419318292&token=8e3cd7c1f59abf1f919433daeaabd2883d815d70&lang=zh_CN][这里]]
+开始。
+
+开发者需要维护四者之间的关系：
+
+- 
+
+  1. 微信第三方平台：为我们提供 API，获取信息；
+
+- 
+
+  2. 微信公众号：待接入的微信公众号；
+
+- 
+
+  3. 第三方平台服务器：需要我们自己开发配接的服务器，业务无关；
+
+- 
+
+  4. 业务服务器：实际业务相关；
+
+a, b, d 都是独立的，相互之间不会有通信，关联都是通过 c
+来桥接的。我们不关心业务相关的部分，所以本文只介绍 a, b,
+c。为避免概念混乱，文章中将用 a, b, c 来代替上面的三个概念。
+
+[[https://open.weixin.qq.com/cgi-bin/showdocument?action=dir_list&t=resource/res_list&verify=1&id=open1453779503&token=8e3cd7c1f59abf1f919433daeaabd2883d815d70&lang=zh_CN][授权流程技术说明]]提供了下面这样一张图片：
+
+[[https://res.wx.qq.com/op_res/g360EANvw_kVk3WCt-rRVP5UNFVJ2pYjH6gQCmxVL58lWhow97U8wYXpB4gw-I-d]]
+
+这张图描述的是，微信公众号接入第三方平台的过程：把一个店铺的微信公众号接入到你们公司业务中，需要做的事情。
+
+图中的「公众号用户」对应的上面的 b；「组建方网站」对应的是上面的
+c；而后面的「公众平台组建授权网站」和「公众平台API」都是
+a，都是微信提供的，我们需要通过 API 的方式来实现获取 token 和授权过程。
+
+如果对接过微信公众号的开发者应该知道，微信都是通过 =access_token=
+来维护微信与开发者服务器之间的认证关系的，定期更新 =access_token=
+来保活，所有的 API 交互基础都是
+=access_token=。与微信公众号开发不同的是，第三方平台需要很多个
+token，当然原理差不多。
+
+与之前 =access_token= 对应的则是第三方平台的
+=component_access_token=，=component_access_token= 是 c 和 a
+交互认证的凭据。所以我们的第一个问题来了。
+
+** 1. =component_access_token= 获取与更新
+   :PROPERTIES:
+   :CUSTOM_ID: component_access_token-获取与更新
+   :END:
+
+在开发者第三方平台创建审核通过之后，a 会每隔 10
+分钟向第三方的消息接收地址推送一次
+=component_verify_ticket=，消息接受地址是我们自己在第三方平台配置的「授权事件接收URL」（URL
+由 c 中提供）。所以我们可以 c 可以定期的得到 =component_verify_ticket=。
+
+c 接收到的数据是加密的，解密所需的字段在 GET 参数中提供，解密内容在 body
+中，解密流程见文档：[[https://open.weixin.qq.com/cgi-bin/showdocument?action=dir_list&t=resource/res_list&verify=1&id=open1419318479&lang=zh_CN][消息加解密接入指引]]，我们的后端语言是
+Python3，提供的范例是 Python2 的，编解码上费了一段时间。
+
+解密后得到字符串是 XML 格式的：
+
+#+BEGIN_EXAMPLE
+  <xml>
+  <AppId> </AppId>
+  <CreateTime>1413192605 </CreateTime>
+  <InfoType> </InfoType>
+  <ComponentVerifyTicket> </ComponentVerifyTicket>
+  </xml>
+#+END_EXAMPLE
+
+当 =InfoType= 为 =component_verify_ticket= 即可得到
+=component_verify_ticket= 值。
+
+令牌 =component_access_token= 的值是通过 =component_verify_ticket= +
+=AppID= + =AppSecret= 三个值来获取的，并且有效期是 2
+小时，并且令牌每天的请求次数是有限制的，所以我们需要：
+
+1. 在 c 中保存 =component_access_token= 的值；
+2. 在 c 中定时请求，在快到 2 小时的时候，重新请求令牌；
+
+向 a 请求获得 =component_access_token= 比较简单，看微信文档即可。
+
+自此，a 和 c 就完成了保活流程。当 b 接入 c 时，需要向 a 获取
+=pre_auth_code=，=pre_auth_code= 用于 c 授权 b 时所需的 API 认证。
+
+** 2. =pre_auth_code= 获取
+   :PROPERTIES:
+   :CUSTOM_ID: pre_auth_code-获取
+   :END:
+
+预授权码与令牌不同，虽然它也有有效期（30分钟），但是只有在需要授权时才需要，所以我们同步获取即可，不需要定时更新。
+
+即便如此，为了避免 30 分钟之内多次请求，我们采用的策略是将预授权码缓存到
+Redis 中，当需要授权时，先从 Redis
+中获取，获取失败时，再同步向微信服务器获取。
+
+具体的获取策略比较简单，看微信文档即可。拿到 =pre_auth_code=
+之后，就可以做授权操作了。
+
+** 3. 引导用户进入授权页
+   :PROPERTIES:
+   :CUSTOM_ID: 引导用户进入授权页
+   :END:
+
+要注意，授权页本身是由微信自身（a）提供的，不是我们自己（c）提供的。c
+提供的仅仅是一个「引导」。实操的时候两步即可：
+
+1. 授权页链接（=auth_url=）为：=https://mp.weixin.qq.com/cgi-bin/componentloginpage?component_appid=xxxx&pre_auth_code=xxxxx&redirect_uri=xxxx&auth_type=xxx=，这种样式。
+2. 在我们自己的服务器 c 中提供一个页面，页面中提供一个跳转连接，跳转到
+   =auth_url=。用户点击链接之后将跳转到微信提供的授权页，然后管理员扫码授权。
+
+*这块有点绕，微信文档上没有提供实际的交互截图，所以一开始我一直以为二维码是我们用
+=auth_url= 生成的，然后给管理员扫码；万万没有授权页面是由微信提供的。*
+
+用户授权成功后会回调 =auth_url= 中 c 设置的 =redirect_uri=，c
+将得到为针对该微信公众号的授权码 =auth_code= 和过期时间 =expires_in=。
+
+** 4. 获取接口调用凭据和账号基本信息
+   :PROPERTIES:
+   :CUSTOM_ID: 获取接口调用凭据和账号基本信息
+   :END:
+
+有了 =auth_code= 之后：
+
+1. 通过 =component_appid= 和 =auth_code= 可以获得「接口调用凭据」->
+   =authorizer_appid=，=auth_access_token= 和 =auth_refresh_token=；
+2. 再通过 =component_appid= 和 =authorizer_appid=
+   可以获得「账号基本信息」 ->
+   =nick_name=，=service_type_info=，=principal_name= 等；
+
+将这些信息保存到 c 就已经完成了 b 授权到 c 的过程。
+
+有个地方要注意的是：=pre_auth_code= 有过期时间，并且一个 =pre_auth_code=
+只能对接一个 b，所以授权成功之后记得清除掉 =pre_auth_code=
+缓存，以便下次重新获取。
+
+** 5. 定时刷新授权公众号接口调用令牌
+   :PROPERTIES:
+   :CUSTOM_ID: 定时刷新授权公众号接口调用令牌
+   :END:
+
+=auth_access_token= 是有有效期的，所以和 =component_access_token=
+一样，需要定时更新。
+
+第三方平台提供了专门的 =auth_refresh_token= 来更新
+=auth_access_token=。API 调用比较简单，不再赘述。
+
+--------------
+
+完整授权实例代码：[[https://github.com/zhangjie2012/open-wechat-grant]]

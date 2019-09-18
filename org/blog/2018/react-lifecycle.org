@@ -1,0 +1,230 @@
+#+SETUPFILE: ~/site/tpl/site-tpl.org
+#+TITLE: React 组件生命周期
+#+DATE: 2018-09-14 18:00:00
+
+[[https://blog-1252349778.cos.ap-beijing.myqcloud.com/2018/react-lifecycle.png]]
+
+Github 的
+[[https://github.com/wojtekmaj/react-lifecycle-methods-diagram][react-lifecycle-methods-diagram]]
+用于绘制生命周期图。上图是 React 16.4 的 diagram。
+
+生命周期记录的是从页面创建到销毁的过程，React
+的生命周期分为：初始化、装载（Mounting）、更新（Updating）、卸载（Unmounting）。
+
+新版本中做了较大的改动，整理下来，流程是这样的：
+
+- 初始化
+
+  1. =constructor()=：常用
+
+- 挂载，=componentWillMount()= 已被废弃，改为
+  =UNSAFE_componentWillMount()=，应避免使用
+
+  1. =static getDerivedStateFromProps()=
+  2. =render()=：常用
+  3. =componentDidMount()=：常用
+
+- 更新，=componentWillUpdate()= 和 =componentWillReceiveProps()=
+  已被废弃，应避免使用
+
+  1. =static getDerivedStateFromProps()=：不常用
+  2. =shouldComponentUpdate()=：不常用
+  3. =render()=：常用
+  4. =getSnapshotBeforeUpdate()=：不常用
+  5. =componentDidUpdate()=：常用
+
+- 卸载
+
+  1. =componentWillUnmount()=：常用
+
+** 初始化
+   :PROPERTIES:
+   :CUSTOM_ID: 初始化
+   :END:
+
+使用 =constructor(props)= 构造函数初始化，如果是通过继承
+=React.Component= 子类来创建 React 组件的话，首先应该调用 =super(props)=
+初始化父类。
+
+在构造函数中，你初始化 state 和设置函数的 this bind。初始化
+state，直接赋值初始化即可，不要使用 =setState()= 函数，因为 =setState=
+会触发渲染，而此时组件还未初始化。强行使用 =setState=，React
+会报错。bind 操作类似，
+
+#+BEGIN_EXAMPLE
+  this.handleClick = this.handleClick.bind(this)
+#+END_EXAMPLE
+
+ES6 提供了箭头函数可自动绑定 this，所以一般不需要在构造函数中手动绑定。
+
+** 装载
+   :PROPERTIES:
+   :CUSTOM_ID: 装载
+   :END:
+
+*** getDerivedStateFromProps
+    :PROPERTIES:
+    :CUSTOM_ID: getderivedstatefromprops
+    :END:
+
+=static getDerivedStateFromProps(nextProps, prevState)=，static
+的函数意味着没有 =this= 可以访问。那怎么使用 =setState=
+函数来改变状态呢？事实上，你不需要 =setState=，只需要把待更新的 data
+数据返回即可，如果没有数据需要更新则返回 =null=。
+
+但有的时候你需要在更新数据之后触发 =props=
+的更新（异步调用），这种情况下，请使用 =componentDidUpdate= 来代替。
+
+也就是说，原来的 =componentWillReceiveProps= 实现的功能，可以用
+=getDerivedStateFromProps + componentDidUpdate= 替代完成。
+
+*** render
+    :PROPERTIES:
+    :CUSTOM_ID: render
+    :END:
+
+React 组件的核心方法，也是必须要实现的一个方法，用于根据状态 state
+和属性 props 渲染 React
+组件。应保证无论执行多少次，相同的输入（state、props）有相同的输出（渲染结果），所以不要在
+render 中改变组件状态（setState）。
+
+*** componentDidMount
+    :PROPERTIES:
+    :CUSTOM_ID: componentdidmount
+    :END:
+
+=componentDidMount()= 首次渲染结束后调用的方法，只会被调用一次。异步的
+API 调用应该放到这个函数中，而不是 =componentWillMount()=
+中。具体可以查看
+[[https://hackernoon.com/where-to-integrate-api-calls-in-reactjs-componentwillmount-vs-componentdidmount-710085dc05c3][Where
+to integrate API calls in ReactJs? --- componentWillMount vs
+componentDidMount]]。
+
+** 更新
+   :PROPERTIES:
+   :CUSTOM_ID: 更新
+   :END:
+
+数据（state 或者 props）发生了变化，会触发重新渲染。
+
+*** shouldComponentUpdate
+    :PROPERTIES:
+    :CUSTOM_ID: shouldcomponentupdate
+    :END:
+
+=shouldComponentUpdate(nextProps, nextState)= 用来告诉 React 组件的
+state，props 发生变更之后是否引起组件的重新渲染，=shouldComponentUpdate=
+在 props 和 state 被接受之后，渲染之前被调用。默认是
+=true=，该方法在首次渲染和使用 =forceUpdate()= 时不会被调用。当
+=shouldComponentUpdate= 返回 =false=
+时，=UNSAFE_componentWillUpdate()=、=render()=、=componentDidUpdate()=
+将不会被调用。
+
+*** getSnapshotBeforeUpdate
+    :PROPERTIES:
+    :CUSTOM_ID: getsnapshotbeforeupdate
+    :END:
+
+=getSnapshotBeforeUpdate(prevProps, prevState)=：在最近一次渲染输出被提交之前调用，它使你的组件在可能更改之前从
+DOM 中捕获一些信息（比如滚动位置）。返回值将作为 =componentDidUpdate=
+函数的第三个参数。不是很常用的一个功能。
+
+*** componentDidUpdate
+    :PROPERTIES:
+    :CUSTOM_ID: componentdidupdate
+    :END:
+
+=componentDidUpdate(prevProps, prevState, snapshot)=
+在更新发生后立刻调用，首次初始渲染之后不会触发。你可以在
+=componentDidUpdate()= 中直接调用
+=setState=，但是注意一定要做条件判断（不然就死循环了）。类似这样：
+
+#+BEGIN_EXAMPLE
+  componentDidUpdate(prevProps) {
+    // Typical usage (don't forget to compare props):
+    if (this.props.userID !== prevProps.userID) {
+      this.fetchData(this.props.userID);
+    }
+  }
+#+END_EXAMPLE
+
+注意，在 =shouldComponentUpdate= 返回 =false= 时，=componentDidUpdate=
+不会被调用。
+
+** 卸载
+   :PROPERTIES:
+   :CUSTOM_ID: 卸载
+   :END:
+
+在组件卸载和销毁时，会调用 =componentWillUnmount()=
+函数。可以在这个函数中做一些清理工作（定时器、取消网络请求等）。在
+=componentWillUnmount()= 函数中不能调用 =setState()=
+函数。一旦一个组件被销毁之后，就再也不能挂载了。
+
+更详细的使用说明请看
+[[https://reactjs.org/docs/react-component.html][React
+官方文档：React.Component]]，本文也是由此而来。
+
+--------------
+
+*2019-07-10 14:53:22 更新*
+
+对于 =componentWillReceiveProps= 被废弃之后，使用
+=getDerivedStateFromProps + componentDidUpdate= 来代替的说明：
+
+1. =getDerivedStateFromProps= 是一个 =static=
+   函数，也就意味着不属于任何一个实例，只属于类本身，那么如何在它里面使用
+   =this.setState= 呢？
+
+   答案是你不需要这么做。这个函数直接返回新的 state ，如果没有变更返回
+   null 即可。
+
+   #+BEGIN_EXAMPLE
+      static getDerivedStateFromProps(nextProps, prevState) {
+        if (prevState !== nextProps) {
+          return {
+            // new state
+          }
+        }
+        return null
+      }
+   #+END_EXAMPLE
+
+   返回 state 这种行为就相当于是
+   =setState=，没有发生变更的值，不设置即不修改。
+
+   =getDerivedStateFromProps=
+   会在首次挂载和每次重新渲染时（re-rendering）调用，所以你可以替代在构造函数中使用
+   props 初始化 state。
+
+2. 如果同时使用了 =getDerivedStateFromProps= 和
+   =componentWillReceiveProps=，只有 =getDerivedStateFromProps= 会被调用
+
+3. =getDerivedStateFromProps= 中只能更新 state
+   的值，那更新了之后要异步更新数据怎么办呢？
+
+   答案是使用
+   =componentDidUpdate(prevProps, prevState, snapshot)=，前两个参数表示在
+   =getDerivedStateFromProps= 更新之前的 props 和 state。判断新旧的
+   props 或者
+   state，然后决定是否异步请求数据（谨慎判断，不然可能会死循环）。
+
+能满足需求，但是使用起来的确麻烦了。为什么废弃 componentWillXXX
+系列的函数呢？好像是为了减少渲染次数，提高效率（搜了不少文章，能精确描述缘由的几乎没有）。
+
+参考：[[https://medium.com/@baphemot/whats-new-in-react-16-3-d2c9b7b6193b][What's
+new in React 16.3(.0-alpha)]]
+
+*2019-08-02 10:25:09 更新*
+
+如何判断属性是否从 null 到 data 的更新，在 =componentDidUpdate=
+中做更好一些，直接比较 =preProps= 和 =this.props= 值是否相同即可。
+
+以前都是在 =getDerivedStateFromProps= 中做的，但是下面这种情况会很棘手：
+
+1. =getDerivedStateFromProps= 中判断初始的 state 与 props
+   是否相同，然后给 state 赋值
+2. 调用 =setState= 写用户变更数据
+
+这种情况下，state 不会被修改，因为 =setState= 触发了渲染，进而调用
+=getDerivedStateFromProps= 又把数据恢复的跟 props 相同了···。
