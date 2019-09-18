@@ -21,3 +21,8 @@
 - 10-25: [[file:2018/redis-cluster-hash.org][Redis cluster 中的 hashing]]
 - 10-24: [[file:2018/consistent-hashing.org][{译} 一致性 hash 指南]]
 - 09-08: [[file:2018/docker-run-django-project.org][使用 Docker 运行 Django 项目]]
+
+* 2011
+
+- 12-15: [[file:2011/gcc-compile-and-makefile-resource.org][gcc编译选项和makefile资源汇总]]
+- 12-02: [[file:2011/about-blog.org][关于博客]]
