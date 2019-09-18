@@ -2,7 +2,6 @@
 #+TITLE: Go 包选择与对比
 #+DATE: 2019-03-14 17:50:00
 
-
 * 日志
 可能是 Go 尚年轻，行业对 Go 的应用领域还比较宽泛，也可能是开源的缘故，Go package 普遍造轮子的现象比较明显。
 
@@ -65,3 +64,70 @@ MongoDB 官方在 2018 年的 2 月 14 日发布了 MongoDB Go Driver Alpha 版�
 - 目前依旧建议使用 mgo.v2 企业不比社区，稳定性第一位，而且 MongoDB 版本的升级不一定会导致业务使用的 MongoDB 升级
 - 可以持续观望 mongo-go-driver，官方支持肯定靠谱，怕的是不兼容的更新，再等个一年左右多发几个正式版再说
 - 就使用体验而言 mongo-go-driver 比 mgo.v2 要好一些， =bson.D= 比 =bson.M= 好用一些，就是文档范例不够完善，不知道怎么用，以前用的时候，不得已只能翻他自己的测试用例。有个小项目用的是 Beta  版本，看到后几次版本发布，欲哭无泪（各种不兼容更新），还不知道咋搞呢···
+
+** [[https://github.com/mongodb/mongo-go-driver][mongo-go-driver]] 构建索引报错：
+
+#+BEGIN_QUOTE
+  (BadValue) Invalid field specified for createIndexes command:
+  maxTimeMS
+#+END_QUOTE
+
+代码如下：
+
+#+BEGIN_EXAMPLE
+  func yieldIndexModel(key string, unique bool, order int) mongo.IndexModel {
+      keys := bsonx.Doc{{Key: key, Value: bsonx.Int32(int32(order))}}
+      index := mongo.IndexModel{
+          Keys: keys,
+      }
+      if unique {
+          index.Options = options.Index().SetUnique(true)
+      }
+      return index
+  }
+
+  func (sc *StorageClient) BuildIndex(name string, key string, unique bool) error {
+      db, err := sc.GetDatabase()
+      if err != nil {
+          return err
+      }
+
+      collection := db.Collection(name)
+      opts := options.CreateIndexes().SetMaxTime(20 * time.Second) // set max build time
+      indexModel := yieldIndexModel(key, unique, ASCENDING)
+      indexName, err := collection.Indexes().CreateOne(context.Background(), indexModel, opts)
+
+      // ...
+  }
+#+END_EXAMPLE
+
+去掉 =SetMaxTime= 之后就正常了。
+
+有一个 [[https://github.com/mongodb/mongo-php-driver/issues/510][issue]] 说明这个问题， =maxTimeMS= 只适合只读操作，是一个遗留选项，应该是不同的版本支持不同，这也就印证了在我 macOS 本地是可以的，在 server 端却是不行的。
+
+** mgo.v2 中的连接池
+
+=mgo.Session= 的所有方法是并发安全的，支持多个协程同时访问。但是并不意味着可以并行的创建和它们。
+
+正确的使用方法是：只初始化一个 session，然后调用 =Session.Copy()= 或者 =Session.Clone()= 创建一个副本。
+
+Session 会自动的管理一个连接池，甚至可以管理多个服务器节点，如果只使用一个 Session 的话，会跳过连接池带来的便利。调用 =Session.Clone()= 会从连接池中拿出一个连接， =Session.Close()= 并没有关闭连接，而是把它放回连接池，准备为另外一个会话服务。
+
+*Copy() vs Clone()*
+
+#+BEGIN_QUOTE
+  Clone works just like Copy, but also reuses the same socket as the
+  original session, in case it had already reserved one due to its
+  consistency guarantees. This behavior ensures that writes performed in
+  the old session are necessarily observed when using the new session,
+  as long as it was a strong or monotonic session. That said, it also
+  means that long operations may cause other goroutines using the
+  original session to wait.
+#+END_QUOTE
+
+似乎 =Clone()= 更好一些？
+
+参考：
+
+- [[https://stackoverflow.com/questions/42492020/concurrency-in-gopkg-in-mgo-v2-mongo-go][Concurrency in gopkg.in/mgo.v2 (Mongo, Go)]]
+- [[https://stackoverflow.com/questions/40999637/mgo-query-performance-seems-consistently-slow-500-650ms/41000876#41000876][mgo -query performance seems consistently slow (500-650ms)]]

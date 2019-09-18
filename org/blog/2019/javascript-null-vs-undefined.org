@@ -1,0 +1,25 @@
+#+SETUPFILE: ~/site/tpl/site-tpl.org
+#+TITLE: Javascript null vs undefined
+#+DATE: 2019-01-28 15:22
+
+- =null= 用来初始化值，它代表无，类似 Python 中的 =None=
+- =undefined= 一般指的是变量未定义
+- ~null !== undefined~ 但是 ~null == undefined~
+
+#+BEGIN_QUOTE
+  *实践指南：*
+
+  判断值为 =undefined=：=typeof foo !== 'undefined'=；而判断 =null=
+  可以直接判断：=foo == null=。
+#+END_QUOTE
+
+Javascript 中的 ~==~ 与 ~===~ 区别在于：
+
+- ~===~ 会严格判断相等，同时判断 /类型/ 和 /值/，所以 ~123 ==='123'~ 是 =false=
+- ~==~ 是简单的判断值，如果类型不同的话，会转换成相同的类型然后判断值是否相同，所以 ~123 === '123'~ 是 =true= ，而且 =false == 0= 也是 =true=
+
+#+BEGIN_QUOTE
+  *实践指南：*
+
+  尽可能使用 ~===~ ，而不是 ~==~ 。
+#+END_QUOTE

@@ -2,7 +2,6 @@
 #+TITLE: awk
 #+DATE: 2017-12-04 11:37:43
 
-
 ** 工作方式
 
 awk 脚本结构: ~awk 'BEGIN{ statements } statements2 END{ statements }'~

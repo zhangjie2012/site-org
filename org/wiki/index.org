@@ -17,7 +17,8 @@
 * DevOps
 ** 系统运维
 
-- 基础命令：[[file:devops/awk.org][awk]]，[[file:devops/sed.org][sed]]，[[file:devops/tar.org][tar]]，[[file:devops/rsync.org][rsync]]
+- 基础命令：[[file:devops/awk.org][awk]]，[[file:devops/sed.org][sed]]，[[file:devops/tar.org][tar]]，[[file:devops/rsync.org][rsync]]，[[file:devops/cron.org][crontab]]，[[file:devops/find.org][find]]
+- 操作系统：[[file:devops/ubuntu.org][Ubuntu]]
 - 系统管理：[[file:devops/systemd.org][systemd]] 和 [[file:devops/journalctl.org][journalctl]]
 
 ** 容器化
