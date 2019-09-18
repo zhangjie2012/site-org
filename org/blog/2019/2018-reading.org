@@ -1,0 +1,44 @@
+#+SETUPFILE: ~/site/tpl/site-tpl.org
+#+TITLE: 2018 价值阅读
+#+DATE: 2019-03-04 17:09
+
+看过的一些不错的资源（文档、博客、书籍）：
+
+* UI/产品
+
+- {文档} [[https://ant.design/docs/spec/introduce-cn][Ant Design 设计语言]]：蚂蚁金服中后台系统抽象的设计标准，写的不错，验证了之前的很多想法
+
+* 软件系统
+
+- {博客} [[https://engineering.videoblocks.com/web-architecture-101-a3224e126947][Web Architecture 101]]：当我成为一个 Web 开发者时，我希望我能知道的基本 Web 结构概念
+
+* 前端
+
+- {文档} [[https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/A_re-introduction_to_JavaScript][重新介绍 JavaScript（JS 教程）]]：Mozilla 的文档还是牛逼啊
+
+* 软件工程师
+
+- {TED} [[https://open.163.com/movie/2016/6/3/9/MBPNHJU6K_MBR358639.html][Linux操作系统之父]]：Linus 的 TED 采访
+- {博客} [[https://engineering.gusto.com/how-my-role-as-cto-has-changed-as-weve-grown-to-100-engineers/?utm_source=wanqu.co&utm_campaign=Wanqu+Daily&utm_medium=website][How my role as CTO has changed as we've grown to 100 engineers]]：我的 CTO 成长之路
+- {博客} [[http://www.itpro.co.uk/devops/28097/what-is-devops][What is DevOps?]]：介绍 DevOps 是什么，它有哪些好处
+- {博客} [[https://engineering.videoblocks.com/the-12-factor-engineering-team-e7abc10fe478][The 12 Factor Engineering Team]]：Increase your team's productivity by implementing these 12 best practices，[[/blog/the-21-factor-engineeing-team][我的翻译]]
+- {电子书} [[https://book.douban.com/subject/26929955/][腾讯传]]
+
+* 规则/定律
+
+- {文档} [[http://callbackhell.com/][Callback Hell]]：A guide to writing asynchronous JavaScript programs
+
+* 编程语言
+
+- {博客} [[https://blog.golang.org/gos-declaration-syntax][Go's Declaration Syntax]]：和 C 语言的类型声明语言对比，解释了为什么 Go 的后置类型声明更好
+- {文档} [[https://tour.golang.org/][A Tour of Go]]：Go 语言之旅，以例子的方式让你一窥 Go 语言
+- {电子书} [[https://golang.org/doc/effective_go.html][Effective Go]]：Go 语言必读书籍，[[/blog/effective-go-notes][笔记]]
+
+* DevOps
+
+- {博客} [[https://blog.buoyant.io/2017/04/25/whats-a-service-mesh-and-why-do-i-need-one/][What's a service mesh? And why do I need one?]]：WILLIAM MORGAN：Service Mesh 是什么，以及为什么需要 Service Mesh
+- {博客} [[http://philcalcado.com/2017/08/03/pattern_service_mesh.html][Pattern: Service Mesh]]：介绍 Service Mesh
+- {纸质书} [[https://book.douban.com/subject/26772677/][微服务设计]]：偏理论，虽然挺薄的，看起来挺费劲，不想再看一遍了
+- {电子书} [[https://legacy.gitbook.com/book/bingohuang/12factor/details][12-Factor]]：构建 SaaS 应用方法论
+- {电子书} [[https://yeasy.gitbooks.io/docker_practice/][Docker 从入门到实践]]：比较基础的一些东西（命令和使用），后半部分可以不看
+- {纸质书} [[https://book.douban.com/subject/26644070/][凤凰项目]]：IT 小说，偏于理念没技术干货，但是值得一读

@@ -8,6 +8,7 @@
 
 - 09-04: [[file:2019/build-site-with-org-mode.org][拥抱 org-mode]]
 - 03-03: [[file:2019/best-practices-for-docker-deploy-django.org][使用 Docker 部署 Django Web server 最佳实践]]
+- 03-04: [[file:2019/2018-reading.org][2018 价值阅读]]
 
 * 2018
 
