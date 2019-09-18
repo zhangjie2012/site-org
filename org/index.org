@@ -6,10 +6,9 @@
 
 ** Entry
 
-- [[file:blog/index.org][Blog]] :: 网络日志，偏向技术（非技术的都放在了 Youth 里）
+- [[file:blog/index.org][Blog]] :: 网络日志，偏技术和思考，知识放 Wiki，非技术的都放在了 Youth 里
 - [[file:reading/links.org][Links]] :: 经常看的网站
 - [[file:wiki/index.org][Wiki]] :: 知识点整理
-- [[file:youth/index.org][Youth]] :: 绝版青春，永远年轻，永远热泪盈眶；从大学开始到现在的人生经历和感悟。
 - [[file:reading/read-books.org][Read]]、[[file:reading/unread-books.org][Unreading]] :: 读过的和打算读的书，包括电子书
 - [[file:weekly/index.org][Weekly]] :: 碎碎念，零散的记录
 
@@ -22,4 +21,6 @@
 
 ** Remember
 
-- [[file:other/duomi.org][音乐回忆]]：2014-06 之前在多米上听的歌，写脚本抓的
+- [[file:youth/index.org][Youth]] :: 永远年轻，永远热泪盈眶；从大学开始到现在的人生经历和感悟
+- [[file:other/duomi.org][音乐回忆]] :: 2014-06 之前在多米上听的歌，写脚本抓的
+- [[file:other/once.org][曾经发表在 ONCE 上的一些话]] :: 以前做的一个网站，后来关了

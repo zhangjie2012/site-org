@@ -187,3 +187,8 @@ div#postamble a {
 div#postamble a:hover {
   color: #900;
 }
+
+dl.org-dl dd {
+  padding: 4px 0 8px 25px;
+  margin-left: 0;
+}
