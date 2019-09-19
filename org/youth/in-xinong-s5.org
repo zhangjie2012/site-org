@@ -1,5 +1,6 @@
 #+SETUPFILE: ~/site/tpl/youth-tpl.org
 #+TITLE: 在西农-S5: 技术入门
+#+DATE: 2015-12-19 00:00:00
 
 #+begin_quote
 生命如此短暂，掌握技艺却要如此长久。

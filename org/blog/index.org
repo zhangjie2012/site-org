@@ -49,34 +49,24 @@
 - 06-13: [[file:2018/ingress-nginx-code-analysis-2.org][ingress-nginx 工作原理（下）：服务启动、运行和停止]]
 - 06-13: [[file:2018/ingress-nginx-code-analysis-1.org][ingress-nginx 工作原理（上）：服务初始化]]
 - 05-28: [[file:2018/money-misunderstood.org][我曾经对「钱」的一些误解]]
-- 03-04: [[file:2018/in-hangzhou-s0.org][在杭州-S0：序]]
 - 03-01: [[file:2018/go-defer-panic-reover.org][Go 的异常处理：defer, panic, recover]]
-- 01-26: [[file:2018/in-hefei-s15.org][在合肥-S15：再见七行]]
 - 01-17: [[file:2018/yanjie.org][做了一个小产品：眼界]]
 
 * 2017
 
 - 12-26: [[file:2017/wechat-open-grant.org][微信第三方平台开发：授权流程]]
 - 12-07: [[file:2017/gopl-notes.org][Go 语言圣经学习笔记]]
-- 10-02: [[file:2017/in-hefei-S14.org][在合肥-S14：两年]]
 - 09-30: [[file:2017/python-hidden-features.org][Python隐藏（使用）技巧]]
-- 09-26: [[file:2017/in-hefei-13.org][在合肥-S13：七月、八月、九月]]
 - 09-23: [[file:2017/django-profile-tools.org][Django 调优工具]]
 - 07-16: [[file:2017/recruit.org][聊最近的一次面试]]
-- 07-08: [[file:2017/in-hefei-12.org][在合肥-S12：意义在哪里？]]
 - 06-25: [[file:2017/forever-youthful.org][一如年少模样]]
-- 06-18: [[file:2017/in-hefei-11.org][在合肥-S11: 聊聊]]
 - 06-02: [[file:2017/mysql-utf8-to-utf8mb4.org][MySQL utf8->utf8mb4]]
-- 04-02: [[file:2017/in-hefei-10.org][在合肥-S10: 年后]]
 - 03-30: [[file:2017/thinking-product.org][产品感悟杂记-S1]]
 
 * 2016
 
 - 12-31: [[file:2016/2016-personal-review.org][2016 年个人总结]]
 - 12-25: [[file:2016/django-multi-db.org][Django 实现分库]]
-- 12-19: [[file:2016/in-hefei-s9.org][在合肥-S9: 生活]]
-- 12-06: [[file:2016/product-music-learn.org][在合肥-S8: 这一年多(下篇)]]
-- 11-23: [[file:2016/in-hefei-s7.org][在合肥-S7: 这一年多(上篇)]]
 - 09-20: [[file:2016/buzuojingdizhiwa.org][不做井底之蛙]]
 - 08-11: [[file:2016/shimian.org][失眠]]
 - 07-28: [[file:2016/computer-float-operation-and-pl.org][计算机浮点数处理带来的问题]]
@@ -88,22 +78,15 @@
 - 04-26: [[file:2016/wuzhen.org][乌镇之行]]
 - 04-17: [[file:2016/about-writing.org][写文字的那些事儿]]
 - 04-04: [[file:2016/from-tech-to-product.org][从技术逐渐到产品]]
-- 03-27: [[file:2016/in-hefei-s6.org][在合肥-S6]]
 - 03-23: [[file:2016/qixing-jobs.org][七行「招聘」啦]]
 - 03-19: [[file:2016/wechat-ggh-copyright.org][公众号开通了原创保护]]
-- 01-30: [[file:2016/in-hefei-s5.org][在合肥-S5]]
 - 01-17: [[file:2016/blog-up-and-down.org][在博客上的又一些折腾]]
 - 01-03: [[file:2016/2015-personal-review.org][2015 年个人总结]]
 
 * 2015
 
-- 12-22: [[file:2015/in-hefei-s4.org][在合肥-S4]]
 - 12-14: [[file:2015/python-default-param-value.org][Python 默认参数处理方式]]
-- 12-08: [[file:2015/in-hefei-s3.org][在合肥-S3]]
-- 11-23: [[file:2015/in-hefei-s2.org][在合肥-S2]]
 - 11-08: [[file:2015/graduate-student-should-have-professional-skills.org][毕业生应该具有的基本素养]]
-- 11-02: [[file:2015/in-hefei-s1.org][在合肥-S1]]
-- 10-12: [[file:2015/in-hefei-s0.org][在合肥-序]]
 - 09-27: [[file:2015/quit-hot.org][离开热血]]
 - 09-16: [[file:2015/m1983-net.org][M1983.NET]]
 - 09-06: [[file:2015/startup-aground.org][Startup News 搁浅了...]]
