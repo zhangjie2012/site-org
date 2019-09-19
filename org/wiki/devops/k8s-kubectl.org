@@ -1,0 +1,820 @@
+#+SETUPFILE: ~/site/tpl/wiki-tpl.org
+#+TITLE: K8s - kubectl
+#+DATE: 2018-08-20 17:38:19
+
+* kubectl 概览
+
+
+=kubectl= 是 K8s 集群操作的命令行接口。基本语法： =kubectl [command] [TYPE] [NAME] [flags]= ，
+
+- =command= ：指定对一个或者多个资源需要执行的操作，比如 =create=，=get=，=describe=，=delete=
+- =TYPE= ：指定资源类型（ =configmaps=, =events=, =ingresses=, =pods= 等），资源类型是大小写不敏感的，你可以使用单数、复数、简写的形式来指定，比如下面的命令有相同的输出：
+  #+BEGIN_EXAMPLE shell
+  $ kubectl get pod pod1
+  $ kubectl get pods pod1
+  $ kubectl get po pod1
+  #+END_EXAMPLE
+- =NAME= ：指定资源名字，名字是大小写敏感的，如果名字为空，则显示所有资源列表的详情。比如： =kubectl get pods=
+
+当操作多个资源时，你可以指定每个资源的类型和名称或者指定一个或者多个文件。
+
+按照类型或者名称指定资源：
+
+- 相同的类型，不同的资源组: =TYPE1 name1 name2 name<#>= ，比如 =kubectl get pod example-pod1 example-pod2=
+- 逐个的为多个资源指定类型: =TYPE1/name1 type1/name2 TYPE3/name3 TYPE<#>/name<#>= ，比如: =kubectl get pod/example-pod1 replicationcontroller/example-rc1=
+- 通过一个或者多个文件来指定资源: =-f file1 -f file2 -f file<#>= ，比如: =kubectl get pod -f ./pod.yaml=
+- =flags=: 指定可选的 flags，比如，你可以使用 =-s= 或者 =--server= flag 用指定 Kubernetes API 服务器，设置之后会覆盖默认值和任何环境变量
+
+** 操作
+
+下面是 =kubectl= 所支持的操作：
+
+- =annotate=, =kubectl annotate (-f FILENAME \| TYPE NAME \| TYPE/NAME) KEY_1=VAL_1 ... KEY_N=VAL_N [--overwrite] [--all] [--resource-version=version] [flags]=: 添加或者更新一个或多个资源的注解
+- =api-versions=, =kubectl api-version [flag]=: 列出可以用的 API 版本
+- =apply=, =kubectl apply -f FILENAME [flags]=: 使修改资源的配置生效（从文件或者标准输入中）
+- =attach=, =kubectl attach POD -c CONTAINER [-i] [-t] [flags]=: attach 到容器上
+- =autoscale=, =kubectl autoscale (-f FILENAME \| TYPE NAME \| TYPE/NAME) [--min=MINPODS] --max=MAXPODS [--cpu-percent=CPU] [flags]=: 自动缩放由 replication controller 管理的 pod 集合
+- =cluster-info=, =kubectl cluster-info [flags]=: 显示有关集群中主服务器和服务的端点信息
+- =config=, =kubectl config SUBCOMMAND [flags]=: 修改 kubeconfig 文件, 通过子命令查看细节
+- =create=, =kubectl create -f FILENAME [flags]=: 创建一个或者多个资源（从文件或者标准输入中）
+- =delete=, =kubectl delete (-f FILENAME \| TYPE [NAME \| /NAME \| -l label \| --all]) [flags]=: 删除资源, 通过文件、标准输入、或者指定的标签选择器, 或者资源
+- =describe=, =kubectl describe (-f FILENAME \| TYPE [NAME_PREFIX \| /NAME \| -l label]) [flags]=: 显示一个或者多个资源的详细状态
+- =edit=, =kubectl edit (-f FILENAME \| TYPE NAME \| TYPE/NAME) [flags]=: 编辑更新服务上的资源定义（使用默认的编辑器）
+- =exec=, =kubectl exec POD [-c CONTAINER] [-i] [-t] [flags] [-- COMMAND [args...]]=: 与 pod 中的容器交互
+- =explain=, =kubectl explain [--include-extended-apis=true] [--recursive=false] [flags]=: 获取资源的各种文档
+- =expose=, =kubectl expose (-f FILENAME \| TYPE NAME \| TYPE/NAME) [--port=port] [--protocol=TCP\|UDP] [--target-port=number-or-name] [--name=name] [----external-ip=external-ip-of-service] [--type=type] [flags]=: Expose a replication controller, service, or pod as a new Kubernetes service
+- =get=, =kubectl get (-f FILENAME \| TYPE [NAME \| /NAME \| -l label]) [--watch] [--sort-by=FIELD] [[-o \| --output]=OUTPUT_FORMAT] [flags]=: 查看资源
+- =label=, =kubectl label (-f FILENAME \| TYPE NAME \| TYPE/NAME) KEY_1=VAL_1 ... KEY_N=VAL_N [--overwrite] [--all] [--resource-version=version] [flags]=: 添加或更新资源的标签
+- =logs=, =kubectl logs POD [-c CONTAINER] [--follow] [flags]=: 为 pod 中容器的日志
+- =patch=, =kubectl patch (-f FILENAME \| TYPE NAME \| TYPE/NAME) --patch PATCH [flags]=: Update one or more fields of a resource by using the strategic merge patch process.
+- =port-forward=, =kubectl port-forward POD [LOCAL_PORT:]REMOTE_PORT [...[LOCAL_PORT_N:]REMOTE_PORT_N] [flags]=: 转发一个或者多个本地端口到 pod
+- =proxy=, =kubectl proxy [--port=PORT] [--www=static-dir] [--www-prefix=prefix] [--api-prefix=prefix] [flags]=: 运行代理到 Kubernetes API 服务器
+- =replace=, =kubectl replace -f FILENAME=: 从文件或标准输入中替换资源
+- =rolling-update=, =kubectl rolling-update OLD_CONTROLLER_NAME ([NEW_CONTROLLER_NAME] --image=NEW_CONTAINER_IMAGE \| -f NEW_CONTROLLER_SPEC) [flags]=: 滚动更新
+- =run=, ~kubectl run NAME --image=image [--env="key=value"] [--port=port] [--replicas=replicas] [--dry-run=bool] [--overrides=inline-json] [flags]~: 在集群中运行一个指定镜像
+- =scale=, =kubectl scale (-f FILENAME \| TYPE NAME \| TYPE/NAME) --replicas=COUNT [--resource-version=version] [--current-replicas=count] [flags]=: 更新指定的 replication controller 的大小
+- =version=, =kubectl version [--client] [flags]=: 显示运行在客户端和服务器的Kubernetes 版本
+
+** 资源类型
+    :PROPERTIES:
+    :CUSTOM_ID: 资源类型
+    :END:
+
+下面是 =kubectl= 做支持的资源类型和他们的简写：
+
+|----------------------------+--------|
+| 资源类型                   | 简写   |
+|----------------------------+--------|
+| apiservices                |        |
+| certificatesigningrequests | csr    |
+| clusters                   |        |
+| clusterrolebindings        |        |
+| clusterroles               |        |
+| componentstatuses          | cs     |
+| configmaps                 | cm     |
+| controllerrevisions        |        |
+| cronjobs                   |        |
+| customresourcedefinition   | crd    |
+| daemonsets                 | ds     |
+| deployments                | deploy |
+| endpoints                  | ep     |
+| events                     | ev     |
+| horizontalpodautoscalers   | hpa    |
+| ingresses                  | ing    |
+| jobs                       |        |
+| limitranges                | limits |
+| namespaces                 | ns     |
+| networkpolicies            | netpol |
+| nodes                      | no     |
+| persistentvolumeclaims     | pvc    |
+| persistentvolumes          | pv     |
+| poddisruptionbudget        | pdb    |
+| podpreset                  |        |
+| pods                       | po     |
+| podsecuritypolicies        | psp    |
+| podtemplates               |        |
+| replicasets                | rs     |
+| replicationcontrollers     | rc     |
+| resourcequotas             | quota  |
+| rolebindings               |        |
+| roles                      |        |
+| secrets                    |        |
+| serviceaccounts            | sa     |
+| services                   | svc    |
+| statefulsets               |        |
+| storageclasses             |        |
+|----------------------------+--------|
+
+** 输出选项
+
+*** 格式化输出
+     :PROPERTIES:
+     :CUSTOM_ID: 格式化输出
+     :END:
+
+语法: =kubectl [command] [TYPE] [NAME] -o=<output_format>=
+
+支持的操作有:
+
+- =-o=custom-columns=<spec>=: 使用逗号分隔的自定义列
+- =-o=custom-columns-file=<filename>=: 文件中指定自定义列
+- =-o=json=: 输出 API 对象的 JSON 格式
+- =-o=jsonpath=<template>=: jsonpath 中指定模板
+- =-o=jsonpath-file=<filename>=: 同上，模板在文件中
+- =-o=name=: 只输出资源名称
+- =-o=wide=: 输出额外的信息，对于 pods 来讲，包含节点名字
+- =-o=yaml=: 输出 YAML 格式的 API 对象
+
+下面的命令把一个单独 pod 的信息作为以 YAML 格式输出:
+
+#+BEGIN_EXAMPLE
+  kubectl get pod web-pod-13je7 -o=yaml
+#+END_EXAMPLE
+
+**** 自定义列
+
+可以使用 =custom-columns= 选项来定制输出的内容列，可以使用内联的方式指定也可以通过文件的方式: =-o=custom-columns=<spec>= 或者 =-o=custom-columns-file=<filename>= 。比如：
+
+内联：
+
+#+BEGIN_EXAMPLE
+  kubectl get pods <pod-name> -o=custom-columns=NAME:.metadata.name,RSRC:.metadata.resourceVersion
+#+END_EXAMPLE
+
+模板文件：
+
+#+BEGIN_EXAMPLE
+  kubectl get pods <pod-name> -o=custom-columns-file=template.txt
+#+END_EXAMPLE
+
+=template.txt= 文件包含：
+
+#+BEGIN_EXAMPLE
+  NAME          RSRC
+  metadata.name metadata.resourceVersion
+#+END_EXAMPLE
+
+命令运行结果：
+
+#+BEGIN_EXAMPLE
+  NAME           RSRC
+  submit-queue   610995
+#+END_EXAMPLE
+
+**** 服务端（Server-side）的列
+      :PROPERTIES:
+      :CUSTOM_ID: 服务端server-side的列
+      :END:
+
+=kubectl= 支持从服务器接受有关对象的特定信息的列，这意味着任意给定的资源，服务器会返回资源相关的行和列，供客户端输出。这样的设定保证了相同的集群提供一致的跨客户端的人类可读的输出（服务器封装了打印的细节）。
+
+这个特性在 =kubectl= 1.11 或者更高的版本默认启用，在使用 =kubectl get= 添加 =--server-print=false= 来禁用它。比如：
+
+打印 pod 的状态信息，使用下面的命令：
+
+#+BEGIN_EXAMPLE
+  kubectl get pods <pod-name> --server-print=false
+#+END_EXAMPLE
+
+输出结果像这样：
+
+#+BEGIN_EXAMPLE
+  NAME       READY     STATUS              RESTARTS   AGE
+  pod-name   1/1       Running             0          1m
+#+END_EXAMPLE
+
+*** 对象排序
+
+对于输出的行，可以指定 =--sort-by= 来指定排序方式，支持数字或者字符串字段，如果指定特定的字段，使用 jsonpath 表达式来实现。
+
+语法: =kubectl [command] [TYPE] [NAME] --sort-by=<jsonpath_exp>=
+
+** 实例：常用操作
+
+=kubectl create= - 从文件或者标准输入中创建资源。
+
+#+BEGIN_EXAMPLE
+  // 使用 example-service.yaml 中的定义创建服务
+  $ kubectl create -f example-service.yaml
+
+  // 使用 example-controller.yaml 中的定义创建一个 replication controller
+  $ kubectl create -f example-controller.yaml
+
+  // 根据目录中的 .yaml, .yml 或者 .json 文件创建对象
+  $ kubectl create -f <directory>
+#+END_EXAMPLE
+
+=kubectl get= - 列出一个或者多个资源
+
+#+BEGIN_EXAMPLE
+  // 以纯文本输出格式列出所有的 pod
+  $ kubectl get pods
+
+  // 输出 pod 的额外信息（比如节点名字）
+  $ kubectl get pods -o wide
+
+  // 列出给定资源的 replication controller，你可以使用 'rc' 来代替 replicationcontroller
+  $ kubectl get replicationcontroller <rc-name>
+
+  // 一起列出所有的 replication controllers 和 服务
+  $ kubectl get rc,services
+
+  // 列出所有的 daemon 集合，包含未初始化的
+  $ kubectl get ds --include-uninitialized
+
+  // 列出所有在 server01 上运行的 pods
+  $ kubectl get pods --field-selector=spec.nodeName=server01
+
+  // List all pods in plain-text output format, delegating the details of printing to the server
+  $ kubectl get pods --experimental-server-print
+#+END_EXAMPLE
+
+=kubectl describe= - 用来描述一个多个资源的详细状态，默认包含未被初始化的。
+
+#+BEGIN_EXAMPLE
+  // 显示节点详情
+  $ kubectl describe nodes <node-name>
+
+  // 显示 pod 的详情
+  $ kubectl describe pods/<pod-name>
+
+  // Display the details of all the pods that are managed by the replication controller named <rc-name>.
+  // Remember: Any pods that are created by the replication controller get prefixed with the name of the replication controller.
+  // 显示管理 replication controller 的所有 pods 的详情，
+  $ kubectl describe pods <rc-name>
+
+  // 显示所有 pod，不包含未初始化的
+  $ kubectl describe pods --include-uninitialized=false
+#+END_EXAMPLE
+
+#+BEGIN_QUOTE
+  注意：=kubectl get= 通常聚焦于获取同类型的一个或者多个资源。它有丰富的 flag 用来定制输出格式（使用 =-o= 或者 =--output= flag）。比如说，你可以使用 =-w= 或者 =--watch= flag
+  来观察特定对象的更新。 =kubectl describe= 命令更多的聚焦在描述特定资源的相关方面，它可能会调用一些 API 到 API server 为了构建用户视图。比如 =kubectl describe node= 命令，获取的不只是节点的信息，还包含运行在它上面的 pods，和为节点生成的事件等等。
+#+END_QUOTE
+
+=kubectl delete= - 删除资源，可以是从文件、标准输入、指定的标签选择器、名称、资源选择器或者资源等。
+
+#+BEGIN_EXAMPLE
+  // 删除 pod.yaml 文件中指定的类型和名称的资源
+  $ kubectl delete -f pod.yaml
+
+  // 删除 name=<label-name> 指定 label 的 pod 和 服务
+  $ kubectl delete pods,services -l name=<label-name>
+
+  // 删除 name=<label-name> 指定 label 的 pod 和 服务，包含未初始化的
+  $ kubectl delete pods,services -l name=<label-name> --include-uninitialized
+
+  // 删除所有的 pod，包含未初始化的
+  $ kubectl delete pods --all
+#+END_EXAMPLE
+
+=kubectl exec= - 对 pod 中的容器执行命令。
+
+#+BEGIN_EXAMPLE
+  // 获取 pod <pod-name> 中 'date' 的输出结果，默认情况下，是第一个容器的输出
+  $ kubectl exec <pod-name> date
+
+  // 获取 <pod-name> 中容器 <container-name> 的 'date' 输出结果
+  $ kubectl exec <pod-name> -c <container-name> date
+
+  // 获取一个交互的 TTY，在 <pod-name> 中运行 /bin/bash
+  $ kubectl exec -ti <pod-name> /bin/bash
+#+END_EXAMPLE
+
+=kubectl logs= - 输出 pod 中容器的日志。
+
+#+BEGIN_EXAMPLE
+  // 返回 <pod-name> 日志的快照
+  $ kubectl logs <pod-name>
+
+  // Start streaming the logs from pod <pod-name>. This is similar to the 'tail -f' Linux command.
+  $ kubectl logs -f <pod-name>
+#+END_EXAMPLE
+
+* kubectl 备忘单（Cheat Sheet）
+
+** Kubectl 自动补全
+
+*** BASH
+
+#+BEGIN_EXAMPLE
+  source <(kubectl completion bash) # setup autocomplete in bash into the current shell, bash-completion package should be installed first.
+  echo "source <(kubectl completion bash)" >> ~/.bashrc # add autocomplete permanently to your bash shell.
+#+END_EXAMPLE
+
+*** ZSH
+
+#+BEGIN_EXAMPLE
+  source <(kubectl completion zsh)  # setup autocomplete in zsh into the current shell
+  echo "if [ $commands[kubectl] ]; then source <(kubectl completion zsh); fi" >> ~/.zshrc # add autocomplete permanently to your zsh shell
+#+END_EXAMPLE
+
+** Kubectl 上下文和配置
+
+配置文件用来设置跨集群认证，暂时用不到，先不看了。
+
+** 创建对象
+
+Kubernetes 可以使用 json 或者 yaml 来定义对象，扩展文件 =.yaml=、=.yml=
+和 =.json= 都可以使用。
+
+#+BEGIN_EXAMPLE
+  kubectl create -f ./my-manifest.yaml           # 创建资源
+  kubectl create -f ./my1.yaml -f ./my2.yaml     # 从多个文件中创建资源
+  kubectl create -f ./dir                        # 根据目录中的文件创建资源
+  kubectl create -f https://git.io/vPieo         # 从 url 中创建资源
+  kubectl run nginx --image=nginx                # 启动一个 nginx 实例
+  kubectl explain pods,svc                       # 获取 pod 和 svc 的创建清单的文档
+
+  # 从标准输入创建多个 YAML 对象
+  cat <<EOF | kubectl create -f -
+  apiVersion: v1
+  kind: Pod
+  metadata:
+    name: busybox-sleep
+  spec:
+    containers:
+    - name: busybox
+      image: busybox
+      args:
+      - sleep
+      - "1000000"
+  ---
+  apiVersion: v1
+  kind: Pod
+  metadata:
+    name: busybox-sleep-less
+  spec:
+    containers:
+    - name: busybox
+      image: busybox
+      args:
+      - sleep
+      - "1000"
+  EOF
+
+  # Create a secret with several keys
+  cat <<EOF | kubectl create -f -
+  apiVersion: v1
+  kind: Secret
+  metadata:
+    name: mysecret
+  type: Opaque
+  data:
+    password: $(echo -n "s33msi4" | base64)
+    username: $(echo -n "jane" | base64)
+  EOF
+#+END_EXAMPLE
+
+** 查看，查找资源
+    :PROPERTIES:
+    :CUSTOM_ID: 查看查找资源
+    :END:
+
+#+BEGIN_EXAMPLE
+  # get：基本输出命令
+  kubectl get services                          # 列出所有的 services
+  kubectl get pods --all-namespaces             # 列出所有空间的 pods
+  kubectl get pods -o wide                      # 列出空间中的 pods，包含更多的细节
+  kubectl get deployment my-dep                 # 列出指定的 deployment
+  kubectl get pods --include-uninitialized      # 列出空间中的 pods，包含未初始化的部分
+
+  # describe：详细输出命令
+  kubectl describe nodes my-node
+  kubectl describe pods my-pod
+
+  kubectl get services --sort-by=.metadata.name # 按照名称排序
+
+  # 按照重启次数排序
+  kubectl get pods --sort-by='.status.containerStatuses[0].restartCount'
+
+  # 通过标签 app=cassandra 获取所有 pods 的版本标签
+  kubectl get pods --selector=app=cassandra rc -o \
+    jsonpath='{.items[*].metadata.labels.version}'
+
+  # 所有空间中所有的运行状态的 pods
+  kubectl get pods --field-selector=status.phase=Running
+
+  # 获取所有节点的外部 IP
+  kubectl get nodes -o jsonpath='{.items[*].status.addresses[?(@.type=="ExternalIP")].address}'
+
+  # 列出属于特定 RC 的 pod 名称
+  # "jq" command useful for transformations that are too complex for jsonpath, it can be found at https://stedolan.github.io/jq/
+  sel=${$(kubectl get rc my-rc --output=json | jq -j '.spec.selector | to_entries | .[] | "\(.key)=\(.value),"')%?}
+  echo $(kubectl get pods --selector=$sel --output=jsonpath={.items..metadata.name})
+
+  # 检查哪些节点是 ready 状态
+  JSONPATH='{range .items[*]}{@.metadata.name}:{range @.status.conditions[*]}{@.type}={@.status};{end}{end}' \
+   && kubectl get nodes -o jsonpath="$JSONPATH" | grep "Ready=True"
+
+  # List all Secrets currently in use by a pod
+  kubectl get pods -o json | jq '.items[].spec.containers[].env[]?.valueFrom.secretKeyRef.name' | grep -v null | sort | uniq
+
+  # 按照时间戳排序列出事件
+  kubectl get events --sort-by=.metadata.creationTimestamp
+#+END_EXAMPLE
+
+** 更新资源
+    :PROPERTIES:
+    :CUSTOM_ID: 更新资源
+    :END:
+
+#+BEGIN_EXAMPLE
+  kubectl rolling-update frontend-v1 -f frontend-v2.json           # 滚动更新 frontend-1 pods
+  kubectl rolling-update frontend-v1 frontend-v2 --image=image:v2  # 修改资源名称和更新镜像
+  kubectl rolling-update frontend --image=image:v2                 # 更新 fronted 镜像
+  kubectl rolling-update frontend-v1 frontend-v2 --rollback        # 中止正在进行的更新
+  cat pod.json | kubectl replace -f -                              # 基于 json 替换标准输入
+
+  # 强制替换、删除，然后重新创建资源，会引发资源停止运行
+  kubectl replace --force -f ./pod.json
+
+  # Create a service for a replicated nginx, which serves on port 80 and connects to the containers on port 8000
+  # 创建一个 nginx 副本，服务在 80 端口，并连接到容器的 8000 端口
+  kubectl expose rc nginx --port=80 --target-port=8000
+
+  # Update a single-container pod's image version (tag) to v4
+  # 更新单个容器 pod 镜像版本（tag）到 v4
+  kubectl get pod mypod -o yaml | sed 's/\(image: myimage\):.*$/\1:v4/' | kubectl replace -f -
+
+  kubectl label pods my-pod new-label=awesome                      # 添加一个标签
+  kubectl annotate pods my-pod icon-url=http://goo.gl/XXBTWq       # 添加一个注解
+  kubectl autoscale deployment foo --min=2 --max=10                # 自动扩展部署 "foo"
+#+END_EXAMPLE
+
+** 修补资源（Patching Resources）
+    :PROPERTIES:
+    :CUSTOM_ID: 修补资源patching-resources
+    :END:
+
+#+BEGIN_EXAMPLE
+  kubectl patch node k8s-node-1 -p '{"spec":{"unschedulable":true}}' # 部分更新一个节点
+
+  # 更新容器的镜像；spec.containers[*].name 是必须的因为它是一个合并的键
+  kubectl patch pod valid-pod -p '{"spec":{"containers":[{"name":"kubernetes-serve-hostname","image":"new image"}]}}'
+
+  # Update a container's image using a json patch with positional arrays
+  kubectl patch pod valid-pod --type='json' -p='[{"op": "replace", "path": "/spec/containers/0/image", "value":"new image"}]'
+
+  # Disable a deployment livenessProbe using a json patch with positional arrays
+  kubectl patch deployment valid-deployment  --type json   -p='[{"op": "remove", "path": "/spec/template/spec/containers/0/livenessProbe"}]'
+
+  # Add a new element to a positional array
+  kubectl patch sa default --type='json' -p='[{"op": "add", "path": "/secrets/1", "value": {"name": "whatever" } }]'
+#+END_EXAMPLE
+
+** 编辑资源
+
+使用编辑器可以编辑任何 API 资源。
+
+#+BEGIN_EXAMPLE
+  kubectl edit svc/docker-registry                      # 编辑名为 docker-registry 的服务
+  KUBE_EDITOR="nano" kubectl edit svc/docker-registry   # 指定交互编辑器
+#+END_EXAMPLE
+
+** 扩展资源（Scaling Resources）
+    :PROPERTIES:
+    :CUSTOM_ID: 扩展资源scaling-resources
+    :END:
+
+#+BEGIN_EXAMPLE
+  kubectl scale --replicas=3 rs/foo                                 # 将名为 'foo' 的 replicaset 缩放为 3
+  kubectl scale --replicas=3 -f foo.yaml                            # Scale a resource specified in "foo.yaml" to 3
+  kubectl scale --current-replicas=2 --replicas=3 deployment/mysql  # If the deployment named mysql's current size is 2, scale mysql to 3
+  kubectl scale --replicas=5 rc/foo rc/bar rc/baz                   # Scale multiple replication controllers
+#+END_EXAMPLE
+
+** 删除资源（Delete Resources）
+
+#+BEGIN_EXAMPLE
+  kubectl delete -f ./pod.json                                              # Delete a pod using the type and name specified in pod.json
+  kubectl delete pod,service baz foo                                        # Delete pods and services with same names "baz" and "foo"
+  kubectl delete pods,services -l name=myLabel                              # Delete pods and services with label name=myLabel
+  kubectl delete pods,services -l name=myLabel --include-uninitialized      # Delete pods and services, including uninitialized ones, with label name=myLabel
+  kubectl -n my-ns delete po,svc --all                                      # Delete all pods and services, including uninitialized ones, in namespace my-ns,
+#+END_EXAMPLE
+
+** 与正在运行的 Pods 交互
+
+#+BEGIN_EXAMPLE
+  kubectl logs my-pod                                 # 输出 pod 日志 (stdout)
+  kubectl logs my-pod --previous                      # 为前一个 container 实例输出 pod 日志 (stdout)
+  kubectl logs my-pod -c my-container                 # 输出指定 pods 中的容器日志（stdout，多容器的情况）
+  kubectl logs my-pod -c my-container --previous      # dump pod container logs (stdout, multi-container case) for a previous instantiation of a container
+  kubectl logs -f my-pod                              # stream pod logs (stdout)，类似 tail
+  kubectl logs -f my-pod -c my-container              # stream pod container logs (stdout, multi-container case)
+  kubectl run -i --tty busybox --image=busybox -- sh  # 运行一个交互 shell
+  kubectl attach my-pod -i                            # 连接到一个运行容器上
+  kubectl port-forward my-pod 5000:6000               # 将本地机器的 5000 转到转发到 my-pod 的 6000 端口上
+  kubectl exec my-pod -- ls /                         # 在已存在的 pod 上运行命令（一个容器的情况下）
+  kubectl exec my-pod -c my-container -- ls /         # 在已存在的 pod 上运行命令（多容器的情况下）
+  kubectl top pod POD_NAME --containers               # 在给定 pod 上显示它的容器的 metrics
+#+END_EXAMPLE
+
+** 与节点和集群交互
+
+#+BEGIN_EXAMPLE
+  kubectl cordon my-node                                                # 标记节点 my-node 不可调度
+  kubectl drain my-node                                                 # 排空 my-mode 准备维护（Drain my-node in preparation for maintenance）
+  kubectl uncordon my-node                                              # 标记节点 my-mode 可调度
+  kubectl top node my-node                                              # 显示给定节点的 metrics
+  kubectl cluster-info                                                  # 显示 master 和 services 的地址
+  kubectl cluster-info dump                                             # Dump current cluster state to stdout
+  kubectl cluster-info dump --output-directory=/path/to/cluster-state   # Dump current cluster state to /path/to/cluster-state
+
+  # If a taint with that key and effect already exists, its value is replaced as specified.
+  kubectl taint nodes foo dedicated=special-user:NoSchedule
+#+END_EXAMPLE
+
+** 格式化输出
+
+=kubectl= 支持使用 =-o= 或者 =-output= flag 将输出信息以特定的格式格式化到你的终端窗口。
+
+- =-o=custom-columns=<spec>=: 逗号分隔的自定义列打印列表名称
+- =-o=custom-columns-file=<filename>=: 通过 =<filename>= 来指定
+- =-o=json=: 使用 JSON 格式化输出
+- =-o=jsonpath=<template>=: jsonpath 表达式指定的字段
+- =-o=jsonpath-file=<filename>=
+- =-o=name=: 只打印资源名称
+- =-o=wide=: 输出更多的信息
+- =-o=yaml=: 使用 YAML 格式化输出
+
+* 针对 Docker 用户
+
+kubectl 与 docker-cli 很相似。然而两个命令也有一些细微的不同。下面详细的介绍了 docker 子命令，并且解释了 kubectl 等效的操作。
+
+** docker run
+
+运行一个 nginx 应用（deployment），并且暴露应用。
+
+docker：
+
+#+BEGIN_EXAMPLE
+  $ docker run -d --restart=always -e DOMAIN=cluster --name nginx-app -p 80:80 nginx
+  55c103fa129692154a7652490236fee9be47d70a8dd562281ae7d2f9a339a6db
+
+  $ docker ps
+  CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS              PORTS                NAMES
+  55c103fa1296        nginx               "nginx -g 'daemon of…"   9 seconds ago       Up 9 seconds        0.0.0.0:80->80/tcp   nginx-app
+#+END_EXAMPLE
+
+kubectl：
+
+#+BEGIN_EXAMPLE
+  # start the pod running nginx
+  $ kubectl run --image=nginx nginx-app --port=80 --env="DOMAIN=cluster"
+  deployment "nginx-app" created
+
+  # expose a port through with a service
+  $ kubectl expose deployment nginx-app --port=80 --name=nginx-http
+  service "nginx-http" exposed
+#+END_EXAMPLE
+
+默认使用 kubectl，你可以创建 Deployment 确保有 N 个 pods 在运行 nginx，N 是指 replicas 声明的数量，默认是 1。你也可以创建一个有选择器的 service 来匹配 pod 标签。
+
+默认情况下，镜像在后台运行，类似 =docker run -d ...= 。要在前台运行，请使用：
+
+#+BEGIN_EXAMPLE
+  kubectl run [-i] [--tty] --attach <name> --image=<image>
+#+END_EXAMPLE
+
+跟 =docker run ...= 不同的是，如果你指定了 =--attach= ，那你可以连接 =stdin=，=stdout= 和 =stderr= 。要从容器中 detach ，你可以键入转义序列 Ctrl+P 然后按 Ctrl+Q。
+
+因为 kubectl run 命令启动容器的 Deployment，如果终端传入了 Ctrl+C 会引发 Deployment 重启，跟 =docker run -it= 不同。销毁 Deployment 和它的 pods 你需要运行 =kubectl delete deployment <name>= 。
+
+** docker ps
+
+列出当前正在运行的内容。
+
+docker：
+
+#+BEGIN_EXAMPLE
+  $ docker ps -a
+  CONTAINER ID        IMAGE               COMMAND                  CREATED              STATUS                     PORTS                NAMES
+  14636241935f        ubuntu:16.04        "echo test"              5 seconds ago        Exited (0) 5 seconds ago                        cocky_fermi
+  55c103fa1296        nginx               "nginx -g 'daemon of…"   About a minute ago   Up About a minute          0.0.0.0:80->80/tcp   nginx-app
+#+END_EXAMPLE
+
+kubectl：
+
+#+BEGIN_EXAMPLE
+  $ kubectl get po -a
+  NAME                        READY     STATUS      RESTARTS   AGE
+  nginx-app-8df569cb7-4gd89   1/1       Running     0          3m
+  ubuntu                      0/1       Completed   0          20s
+#+END_EXAMPLE
+
+** docker attach
+
+attach 到一个运行状态的容器上。
+
+docker：
+
+#+BEGIN_EXAMPLE
+  $ docker ps
+  CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS              PORTS                NAMES
+  55c103fa1296        nginx               "nginx -g 'daemon of…"   5 minutes ago       Up 5 minutes        0.0.0.0:80->80/tcp   nginx-app
+
+  $ docker attach 55c103fa1296
+  ...
+#+END_EXAMPLE
+
+kubectl：
+
+#+BEGIN_EXAMPLE
+  $ kubectl get pods
+  NAME              READY     STATUS    RESTARTS   AGE
+  nginx-app-5jyvm   1/1       Running   0          10m
+
+  $ kubectl attach -it nginx-app-5jyvm
+  ...
+#+END_EXAMPLE
+
+Ctrl+P, Ctrl+Q 从容器中 detach 。
+
+** docker exec
+    :PROPERTIES:
+    :CUSTOM_ID: docker-exec
+    :END:
+
+在容器中执行命令。
+
+docker：
+
+#+BEGIN_EXAMPLE
+  $ docker ps
+  CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS              PORTS                NAMES
+  55c103fa1296        nginx               "nginx -g 'daemon of…"   6 minutes ago       Up 6 minutes        0.0.0.0:80->80/tcp   nginx-app
+
+  $ docker exec 55c103fa1296 cat /etc/hostname
+  55c103fa1296
+#+END_EXAMPLE
+
+kubectl：
+
+#+BEGIN_EXAMPLE
+  $ kubectl get po
+  NAME              READY     STATUS    RESTARTS   AGE
+  nginx-app-5jyvm   1/1       Running   0          10m
+
+  $ kubectl exec nginx-app-5jyvm -- cat /etc/hostname
+  nginx-app-5jyvm
+#+END_EXAMPLE
+
+使用交互命令。
+
+docker：
+
+#+BEGIN_EXAMPLE
+  $ docker exec -ti 55c103fa1296 /bin/sh
+  # exit
+#+END_EXAMPLE
+
+kubectl：
+
+#+BEGIN_EXAMPLE
+  $ kubectl exec -ti nginx-app-5jyvm -- /bin/sh
+  # exit
+#+END_EXAMPLE
+
+** docker logs
+    :PROPERTIES:
+    :CUSTOM_ID: docker-logs
+    :END:
+
+运行中进程的 stdout/stderr 日志。
+
+docker：
+
+#+BEGIN_EXAMPLE
+  $ docker logs -f a9e
+  192.168.9.1 - - [14/Jul/2015:01:04:02 +0000] "GET / HTTP/1.1" 200 612 "-" "curl/7.35.0" "-"
+  192.168.9.1 - - [14/Jul/2015:01:04:03 +0000] "GET / HTTP/1.1" 200 612 "-" "curl/7.35.0" "-"
+#+END_EXAMPLE
+
+kubectl：
+
+#+BEGIN_EXAMPLE
+  $ kubectl logs -f nginx-app-zibvs
+  10.240.63.110 - - [14/Jul/2015:01:09:01 +0000] "GET / HTTP/1.1" 200 612 "-" "curl/7.26.0" "-"
+  10.240.63.110 - - [14/Jul/2015:01:09:02 +0000] "GET / HTTP/1.1" 200 612 "-" "curl/7.26.0" "-"
+#+END_EXAMPLE
+
+pod 和容器略有不同，默认情况下进程退出，pod 不会终止。相反，pod 会重新该进程。这有点像 docker 的启动选项 =--restart=always= 但是有一个主要的区别。在 docker 中，每个进程调用的输出是连接在一起的，但是 Kubernetes 中，每个调用是分离的。
+要查看上一次运行的输出，请添加 =-previous= 参数。
+
+** docker stop 和 docker rm
+
+终止和删除运行的进程。
+
+docker：
+
+#+BEGIN_EXAMPLE
+  $ docker ps
+  CONTAINER ID        IMAGE               COMMAND                CREATED             STATUS              PORTS                         NAMES
+  a9ec34d98787        nginx               "nginx -g 'daemon of"  22 hours ago        Up 22 hours         0.0.0.0:80->80/tcp, 443/tcp   nginx-app
+
+  $ docker stop a9ec34d98787
+  a9ec34d98787
+
+  $ docker rm a9ec34d98787
+  a9ec34d98787
+#+END_EXAMPLE
+
+kubectl：
+
+#+BEGIN_EXAMPLE
+  $ kubectl get deployment nginx-app
+  NAME        DESIRED   CURRENT   UP-TO-DATE   AVAILABLE   AGE
+  nginx-app   1         1         1            1           2m
+
+  $ kubectl get po -l run=nginx-app
+  NAME                         READY     STATUS    RESTARTS   AGE
+  nginx-app-2883164633-aklf7   1/1       Running   0          2m
+
+  $ kubectl delete deployment nginx-app
+  deployment "nginx-app" deleted
+
+  $ kubectl get po -l run=nginx-app
+  # Return nothing
+#+END_EXAMPLE
+
+#+BEGIN_QUOTE
+注意，在你使用 kubectl 的时候，你不能直接删除 pod。你首先要删除拥有 pod 的 Deployment。如果你直接删除 pod，Deployement 会重新创建一个 pod。
+#+END_QUOTE
+
+** docker login
+
+在 kubectl 中没有与 =docker login= 类似的操作。
+
+** docker version
+    :PROPERTIES:
+    :CUSTOM_ID: docker-version
+    :END:
+
+获取客户端和服务器的版本。
+
+docker：
+
+#+BEGIN_EXAMPLE
+  $ docker version
+  Client version: 1.7.0
+  Client API version: 1.19
+  Go version (client): go1.4.2
+  Git commit (client): 0baf609
+  OS/Arch (client): linux/amd64
+  Server version: 1.7.0
+  Server API version: 1.19
+  Go version (server): go1.4.2
+  Git commit (server): 0baf609
+  OS/Arch (server): linux/amd64
+#+END_EXAMPLE
+
+kubectl：
+
+#+BEGIN_EXAMPLE
+  $ kubectl version
+  Client Version: version.Info{Major:"1", Minor:"6", GitVersion:"v1.6.9+a3d1dfa6f4335", GitCommit:"9b77fed11a9843ce3780f70dd251e92901c43072", GitTreeState:"dirty", BuildDate:"2017-08-29T20:32:58Z", OpenPaasKubernetesVersion:"v1.03.02", GoVersion:"go1.7.5", Compiler:"gc", Platform:"linux/amd64"}
+  Server Version: version.Info{Major:"1", Minor:"6", GitVersion:"v1.6.9+a3d1dfa6f4335", GitCommit:"9b77fed11a9843ce3780f70dd251e92901c43072", GitTreeState:"dirty", BuildDate:"2017-08-29T20:32:58Z", OpenPaasKubernetesVersion:"v1.03.02", GoVersion:"go1.7.5", Compiler:"gc", Platform:"linux/amd64"}
+#+END_EXAMPLE
+
+** docker info
+    :PROPERTIES:
+    :CUSTOM_ID: docker-info
+    :END:
+
+获取环境和配置的更细的信息。
+
+docker：
+
+#+BEGIN_EXAMPLE
+  $ docker info
+  Containers: 40
+  Images: 168
+  Storage Driver: aufs
+   Root Dir: /usr/local/google/docker/aufs
+   Backing Filesystem: extfs
+   Dirs: 248
+   Dirperm1 Supported: false
+  Execution Driver: native-0.2
+  Logging Driver: json-file
+  Kernel Version: 3.13.0-53-generic
+  Operating System: Ubuntu 14.04.2 LTS
+  CPUs: 12
+  Total Memory: 31.32 GiB
+  Name: k8s-is-fun.mtv.corp.google.com
+  ID: ADUV:GCYR:B3VJ:HMPO:LNPQ:KD5S:YKFQ:76VN:IANZ:7TFV:ZBF4:BYJO
+  WARNING: No swap limit support
+#+END_EXAMPLE
+
+kubectl：
+
+#+BEGIN_EXAMPLE
+  $ kubectl cluster-info
+  Kubernetes master is running at https://108.59.85.141
+  KubeDNS is running at https://108.59.85.141/api/v1/namespaces/kube-system/services/kube-dns/proxy
+  kubernetes-dashboard is running at https://108.59.85.141/api/v1/namespaces/kube-system/services/kubernetes-dashboard/proxy
+  Grafana is running at https://108.59.85.141/api/v1/namespaces/kube-system/services/monitoring-grafana/proxy
+  Heapster is running at https://108.59.85.141/api/v1/namespaces/kube-system/services/monitoring-heapster/proxy
+  InfluxDB is running at https://108.59.85.141/api/v1/namespaces/kube-system/services/monitoring-influxdb/proxy
+#+END_EXAMPLE

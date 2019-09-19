@@ -32,7 +32,9 @@
 *** K8s
 
 - [[file:devops/k8s-concept.org][术语]]
+- [[file:devops/k8s-kubectl.org][kubectl]]：kubectl 使用文档
 - [[file:devops/k8s-ingress.org][Ingress]]
+- [[file:devops/k8s-practice.org][实践]]
 - [[file:devops/k8s-resource.org][资源]]：各种帅帅的图
 
 ** 监控告警

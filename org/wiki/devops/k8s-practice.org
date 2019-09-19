@@ -1,0 +1,85 @@
+#+SETUPFILE: ~/site/tpl/wiki-tpl.org
+#+TITLE: K8s 实践
+#+DATE: 2018-12-04 15:04
+
+* 实例关联节点
+
+名词对应关系：
+
+- =pod= => 实例
+- =node= => 节点
+
+来源：[[https://kubernetes.io/docs/concepts/configuration/assign-pod-node/]]
+
+有多种方法可以将一个实例关联到某（几）个节点上，他们都是使用标签选择器（label selectors）来实现的。一般来讲手动是没必要的，因为调度器会自动将实例放到合理的位置上（均衡资源利用）。
+但有些时候，希望实例运行在某个节点上来获得更多的控制，比如说，保证服务运行在一台有 SSD 的节点机器上。
+
+** nodeSelector
+
+=nodeSelector= 是最简单的约束形式， =nodeSelector= 的 PodSpec 的一个字段，它是键值对的映射。实例要想在节点上运行，节点必须要与实例相关的键值对作为标签（还可以包含其他标签）。常见的做法是一对键值对。
+
+*** 给节点添加标签
+
+1. =kubectl get node= 找到集群的节点
+2. =kubectl label nodes <node-name> <label-key>=<label-value>= 给节点添加标签
+3. =kubectl get nodes --show-labels= 查看节点上附加的标签
+
+举例，将 =disktype=ssd= 添加到节点 =kubernetes-foo-node-1.c.a-robinson.internal= 上
+
+#+BEGIN_EXAMPLE
+  kubectl label nodes kubernetes-foo-node-1.c.a-robinson.internal disktype=ssd
+#+END_EXAMPLE
+
+*** 添加 nodeSelector 字段到实例配置中
+
+找到运行实例的配置文件，并添加 nodeSelector 字段：
+
+#+BEGIN_EXAMPLE
+  # pods/pod-nginx.yaml
+  apiVersion: v1
+  kind: Pod
+  metadata:
+    name: nginx
+    labels:
+      env: test
+  spec:
+    containers:
+    - name: nginx
+      image: nginx
+      imagePullPolicy: IfNotPresent
+    nodeSelector:
+      disktype: ssd
+#+END_EXAMPLE
+
+当执行 =kubectl create -f /pods/pod-nginx.yaml= 的时候，实例会自动调度到附加标签所在的节点上，你可以通过 =kubectl get pods -o wide= 来查看实例被附加到哪个节点上了。
+
+* 应用自查和调试
+
+** 查看详细信息
+
+=kubectl describe node/deployment/service/pod/ingress/...=
+
+** 查看事件
+
+- =kubectl get events= 查看 node 事件
+- =kubectl get events --namespace=xxx= 查看空间事件
+
+事件只能到节点和空间级别，不能直接查看 Deployment、ReplicaSet、Pod 的事件，但是可以通过 namespace 的事件列表过滤出来。比如：
+
+#+BEGIN_EXAMPLE
+  kubectl get events --namespace=test --field-selector involvedObject.name=test-3380989872-wxvdq
+#+END_EXAMPLE
+
+可以获取 =test-3380989872-wxvdq= 的事件。
+
+** 查看日志
+
+#+BEGIN_EXAMPLE
+  kubectl logs -f --namespace=k2 pod-name
+#+END_EXAMPLE
+
+** 进入容器
+
+#+BEGIN_EXAMPLE
+  kubectl exec -it --namespace=xxx pod-name
+#+END_EXAMPLE
