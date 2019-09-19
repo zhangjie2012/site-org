@@ -1,0 +1,64 @@
+#+SETUPFILE: ~/site/tpl/link-tpl.org
+#+TITLE: 张杰的简历
+
+* 工作经历
+
+** [[http://www.wacai.com/][挖财网络技术有限公司]]
+
+- 时间 :: 2018/02/26 至今
+- 职位 :: 运维开发
+- 产品 :: 略
+- 职责 :: 略
+- 技术栈 ::
+  + 前端：ES6、React、Ant Design、Ant Design Pro
+  + 后端：Go、Python
+  + 工具/虚拟化/框架：Docker、kubernetes
+  + DB：MongoDB、Redis
+
+** [[http://www.qixinginc.com][安徽七行信息科技有限公司]]
+
+- 时间 :: 2015-10-03 ~ 2018-01-26
+- 职位 :: 技术总监
+- 产品 ::
+  * [[http://www.aichedian.com/][爱车店]]：汽车门店管理系统（大中型）
+  * [[http://mini.aichedian.com][爱车店-迷你版]]：小型
+- 职责 :: 技术、产品、管理
+- 技术栈 ::
+  * 语言：Python3、JavaScript
+  * 平台：Mac OS、Ubuntu14.04
+  * DB：MySQL、MongoDB、Redis
+  * 框架：Django、Bootstrap3/JQuery/Webpack
+
+** [[http://www.huanle.com/][上海欢乐互娱网络科技有限公司]]
+
+- 时间 :: 2014-03-11 ~ 2015-10-01
+- 职位 :: 热血项目组 - 服务器开发工程师
+- 产品 :: 横版动作类手游 - [[http://sn.huanle.com/][热血街霸]]
+- 职责 :: 框架维护优化、业务逻辑开发、游戏数据统平台搭建、内部自动化工具开发
+- 技术栈 ::
+  * 语言：C/C++(STL/Boost)、Python2
+  * 平台：CentOS
+  * 调试调优：GDB、Perf
+  * DB：MySQL、LevelDB
+  * Web：Django、Javascript/JQuery/Kube
+
+** [[http://www.fun.tv/][风行在线（北京）]]
+
+- 时间 :: 2013-03-05 ~ 2014-02-28
+- 职位 :: 客户端底层组 - C++软件工程师
+- 产品 :: 风行视频
+- 职责 :: 任务（Task）模块维护与开发、自动化测试、数据分析、解决线上问题
+- 技术栈 ::
+  * 语言：C/C++(STL/Poco)、Python2
+  * 平台：Windows
+  * 测试：luaunit、GTest、GMock
+  * 调试调优：Virtual Studio 2010
+
+* 教育经历
+
+** [[http://www.nwsuaf.edu.cn/][西北农林科技大学]]
+
+- 时间 :: 2008-09-01 ~ 2012-06-20
+- 学历 :: 大学本科
+- 专业 :: 信息工程学院-计算机科学与技术
+- 核心课程 :: C/C++，面向对象，数据结构，操作系统，编译原理，软件工程，计算机组成原理，数电、模电、高等数学，线性代数概率论与数理统计，····
