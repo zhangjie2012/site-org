@@ -1,0 +1,97 @@
+#+SETUPFILE: ~/site/tpl/wiki-tpl.org
+#+TITLE: PS1
+#+DATE: 2018-05-31 19:13:37
+
+=PS1=: 就是用户平时的提示符； =PS2=: 第一行没输完，等待第二行输入的提示符。
+
+Linux 系统提示符是用系统变量 =PS1= 来定义的。一般系统默认的形式是: =[username@host 工作目录]$= 。
+
+用 =echo $PS1= 可以得到 =PS1= 的值，即 ~PS1="[\u@\h \w]"\$~ 。 登录后可以更改 =PS1= 的显示样式，但是当退出重启登录进入系统后，样式又变成系统默认的样式了，如果要彻底改变它的样式，只能从配置文件中改。
+
+=PS= 是在用户根目录下的 =.bash_profile= 中定义的。如:
+
+#+BEGIN_EXAMPLE
+  # .bash_profile
+  # Get the aliases and functions
+  if [ -f ~/.bashrc ]; then
+  . ~/.bashrc
+  fi
+  # User specific environment and startup programs
+  # 以下是设定的PS1的值
+  PS1="[\u@\h \w]\$"
+  PATH=$PATH:$HOME/bin
+
+  # 使用export把PS1输出，以使它可以在子shell中生效,这会造成ROOT用户的也采用此样式
+  # export PS1 要慎用
+#+END_EXAMPLE
+
+下面简单说说环境下默认的特殊符号所代表的意义:
+
+- =\d= : 代表日期，格式为weekday month date，例如: "Mon Aug 1"
+- =\H= : 完整的主机名称。例如: 我的机器名称为: fc4.linux，则这个名称就是 fc4.linux
+- =\h= : 仅取主机的第一个名字，如上例，则为fc4，.linux则被省略
+- =\t= : 显示时间为24小时格式，如: HH: MM: SS
+- =\T= : 显示时间为12小时格式
+- =\A= : 显示时间为24小时格式: HH: MM
+- =\u= : 当前用户的账号名称
+- =\v= : BASH的版本信息
+- =\w= : 完整的工作目录名称。家目录会以 ~ 代替
+- =\W= : 利用basename取得工作目录名称，所以只会列出最后一个目录
+- =\#= : 下达的第几个命令
+- =\$= : 提示字符，如果是root时，提示符为: # ，普通用户则为: $
+
+我们可以通过设置PS1变量使提示符成为彩色。在PS1中设置字符序列颜色的格式为: =\[\e[F;Bm\]= 。其中 =F= 为字体颜色，编号30~37；
+=B= 为背景色，编号40~47。
+
+可通过 =\e[0m= 关闭颜色输出；特别的，当 =B= 为 1 时，将显示加亮加粗的文字，详细请看下面的颜色表与代码表。
+
+#+BEGIN_EXAMPLE
+  前景 背景 颜色
+  -----------------------
+  30 40 黑色
+  31 41 紅色
+  32 42 綠色
+  33 43 黃色
+  34 44 藍色
+  35 45 紫紅色
+  36 46 青藍色
+  37 47 白色
+
+  代码 意义
+  -------------------------
+  0 OFF
+  1 高亮显示
+  4 underline
+  5 闪烁
+  7 反白显示
+  8 不可见
+#+END_EXAMPLE
+
+如果想要设置终端提示符的样式只要把 =$PS1= 在 =~/.bashrc= 指定即可比，比如我的设置如下:
+
+设置一:
+
+#+BEGIN_EXAMPLE
+  PS1="\[\e[32m\][\u@\h \w]$\[\e[m\]"
+  export PS1
+#+END_EXAMPLE
+
+效果:
+
+#+BEGIN_EXAMPLE
+  [LinuxSong@test ~]$
+#+END_EXAMPLE
+
+设置二:
+
+#+BEGIN_EXAMPLE
+  if [ $TERM = 'linux' ]; then
+      export PS1="[\[\e[36;1m\]\u@\h \[\e[31;1m\]\w\[\e[32;1m\]]> "
+      zhcon --utf8
+      clear
+  elif [ $TERM = "xterm" ]; then
+      export PS1="[\[\e[31;1m\]\w\e[0m]> "
+  fi
+#+END_EXAMPLE
+
+摘自: [[http://www.cnblogs.com/starspace/archive/2009/02/21/1395382.html]]

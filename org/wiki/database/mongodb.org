@@ -1,0 +1,60 @@
+#+SETUPFILE: ~/site/tpl/wiki-tpl.org
+#+TITLE: MongoDB
+#+DATE: 2018-07-09 12:02:46
+
+* 安装
+
+- 设置清华大学提供的镜像源：[[https://mirror.tuna.tsinghua.edu.cn/help/mongodb/]]，然后通过包管理工具（yum、apt 等）安装
+- 也可以使用 Docker 的方式启动，[[https://hub.docker.com/_/mongo][这里]]
+
+推荐使用 Docker，挂载存储到本地。
+
+* 常用命令
+
+** 库级别命令
+
+- =user ${db}=: 切换数据库
+- =show dbs=: 查看所有数据库
+- =show users=: 显示用户
+- =db.dropDatabase()=: 删除当前数据库
+- =db.getName()=: 查看当前数据库（名称）
+- =db.version()=: 查看当前 DB 版本
+- =db.stats()=: 查看库表状态（表、对象数量，对象大小，数据大小，存储大小，索引数量，索引大小等）
+
+** 表级别命令
+
+- =show collections=: 查看所有的 collections
+- =db.${collection}.stat()=: 查看当前表的状态（大小、数量、索引等）
+- =db.${collection}.count()=: 表行数量
+- =db.${collection}.find()=: 不设置条件时，查询所有的数据，查询条件为JSON 结构，调用 =limit= 函数可限制记录条数
+- =db.${collection}.getIndexes()=: 查看当前表的所有索引
+- =db.${collection}.dropIndex("${idx_name}")=: 删除索引， =dropIndexes()= 删除所有索引
+- =db.${collection}.distinct(field, query, options)=: 字段去重，具体请看 [[https://docs.mongodb.com/manual/reference/method/db.collection.distinct/][db.collection.distinct()]]
+
+** 其它
+
+- =help=: 万能的帮助命令，可针对库，表等分别调用，用好了基本上不需要查阅手册
+- =pretty()=: 友好的显示结果，可与各种查询命令一起使用
+
+* 备份与恢复
+
+MongoDB 中常使用 =mongodump= 来备份数据，使用 =mongorestore= 来恢复数据。
+
+- mongodump: =mongodump -h <hostname><:port> -d dbname -o dbdirectory=
+- mongorestore: =mongorestore -h <hostname><:port> -d dbname <path>=
+
+*注意*: 这两个命令特别坑的地方在于，如果不指定路径会自动选择当前目录下文件，一般命令不加任何参数会自动提示 =help= ，而这两个命令不会。所以备份和恢复两个命令一定不能搞混了，有一次我备份数据的时候使用了 mongorestore 导致旧的数据恢复了。
+
+* FAQ
+
+** Q: 如何查询嵌套内容？
+
+A: 使用 =.= 语法，比如 =db.xxx.find({"aa.bb": "cc"})= 将会查询 =xxx= 表中 =aa= 结构中的 =bb = cc= 的条目。
+
+** Q: =db.stats()= 中 =dataSize= 为什么比 =storageSize= 要大？
+
+A: =storageSize= 是实际数据库所有占用大小的总和，不做压缩的情况下，要比 =dataSize= 要大，因为它还包含未使用的空间。但是如果你使用 =WiredTiger= 存储引擎，数据在磁盘是上压缩过的，所以比 =dataSize= 看起来要小。看 [[https://stackoverflow.com/questions/34054780/how-can-mongodb-datasize-be-larger-than-storagesize][这里]]。
+
+* Resource
+
+- [[https://ruby-china.org/topics/27659][数据库 MongoDB 与 MySQL 深入对比]]

@@ -1,0 +1,28 @@
+#+SETUPFILE: ~/site/tpl/wiki-tpl.org
+#+TITLE: 进程管理
+#+DATE: 2018-09-11 15:29:32
+
+查询进程:
+
+- 查询正在运行的进程信息: =ps -ef= 或者 =ps aux=
+- 查询某个用户进程: =ps -lu user_name=
+- 查询进程ID: =pgrep xxx=
+- 完整格式显示所有的进程: =ps -ajx=
+- 显示进程信息并更新: =top=
+- 查看端口占用状态: =lsof -i:3306=
+- 查看用户 username 的进程所打开的文件: =lsof -u username=
+- 查询 init 进程当前打开的文件: =lsof -c init=
+- 查询指定的进程ID（23295）打开的文件: =lsof -p 23295=
+- 查询指定目录下被进程开启的文件（使用+D 递归目录）: =lsof +d mydir1/=
+
+终止进程:
+
+- 杀死指定PID的进程 (PID 为 Process ID): =kill PID=
+- 杀死相关进程: =kill -9 3434=
+- 杀死 job 工作 (job 为 job number): =kill %job=
+
+进程监控（top）:
+
+- =P=: 根据 CPU 使用百分比大小进行排序
+- =M=: 根据驻留内存大小进行排序
+- =i=: 使 top 不显示任何闲置或者僵死进程

@@ -1,0 +1,94 @@
+#+SETUPFILE: ~/site/tpl/wiki-tpl.org
+#+TITLE: 运维 FAQ
+#+DATE: 2018-09-11 15:29:32
+
+* Shell 相关
+
+** 登录读取配置的流程
+
+广义的 shell 分两种，一种为 login shell（通过终端登录），另外一种为 non-login shell（通过图形界面登录）。
+
+所有 shell 都会走的流程：
+
+1. =/etc/profile=: 系统整体的设置，不建议修改
+2. =/etc/inputrc=: 设置终端热键，声音等
+3. =/etc/profile.d/*sh=: 设置 bash 操作接口的颜色、语系、ll 与 ls 命令的别名、vi 命令的别名，which 的命令的别名等
+4. =/etc/profile.d/i18n.sh=: 设置语言，CentOS 7 是 =lang.sh= 脚本
+
+*** login shell
+
+1. =~/.bash_profile=
+2. =~/.bash_login=
+3. =~/.profile=
+
+bash 的 login shell 只会读取上面三个文件中的一个，而读取的顺序则是按照上面的顺序。而一般情况下 =~/.bash_profile= 中会有这样一块代码:
+
+#+BEGIN_EXAMPLE
+  # Get the aliases and functions
+  if [ -f ~/.bashrc ]; then
+      . ~/.bashrc
+  fi
+#+END_EXAMPLE
+
+如果存在 =~/.bashrc= 则使用它，而 =~/.bashrc= 中又会包含这样一段代码:
+
+#+BEGIN_EXAMPLE
+  # Source global definitions
+  if [ -f /etc/bashrc ]; then
+      . /etc/bashrc
+  fi
+#+END_EXAMPLE
+
+触发加载 =/etc/bashrc= 的内容。整理下来 login shell 的读取流程是: ~~/.bash_profile => ~/.bashrc => /etc/bashrc~ 。
+
+*** non-login shell
+
+仅仅会读 =~/.bashrc= => =/etc/bashrc=
+
+扩展: [[http://www.linuxfromscratch.org/blfs/view/svn/postlfs/profile.html][TheBash Shell Startup Files]]
+
+** =~/.profile= 和 =~/.bashrc= 的区别
+
+- 这两者都具有个性化定制功能
+- =~/.profile= 可以设定本用户专有的路径、环境变量等等，它只能登入的时候执行一次
+- =~/.bashrc= 也是某用户专有设定文档，可以设定路径，命令别名，每次 shell script 的执行都会使用它一次
+
+** =/etc/bashrc= 做了哪些事？
+
+1. 依据不同的 UID 规定 umask 的值
+2. 依据不同的 UID 规定提示符（PS1变量）
+3. 调用 =/etc/profile.d/*.sh= 的设置
+
+** =~/.bash_history= 是干嘛的？
+
+历史命令记录，登录之后读入内存。
+
+** =~/.bash_logout= 是干嘛的？
+
+记录了当我注销 bash 后系统再帮我做完指定的操作才能离开。
+
+** 查看当前 shell
+
+- 所有的系统Shell: =cat /etc/shells=
+- 查看用户对应的 shell: =cat /etc/passwd= 或者 =echo $SHELL=
+
+* 如何矫正系统时间
+
+- 修改时区: =sudo cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime=
+- 时间同步: =sudo ntpdate time.windows.com=
+
+* 如何查看机器基本信息（发行版本，CPU，内存等）
+
+- =cat /etc/os-release=: 发行版本
+- =cat /etc/issue=: 操作系统版本
+- =cat /etc/inittab=: 查看启动项，使用 systemd 的系统，已经不再需要这个文件
+- =cat /etc/passwd=: 查看所有用户的列表
+- =cat /etc/group=: 查看用户组
+- =cat /proc/version=: Linux 版本号，相当于 =uname -r=，=uname-a= 查看更多信息
+- =cat /proc/cpuinfo=: CPU 信息
+- =cat /proc/meminfo=: 内存信息(i.e. mem used, free, swap size)
+- =cat /proc/partitions=: 所有设备的所有分区
+- =cat /proc/swasps=: 所有 swap 分区的信息
+- =df -h=: 查看硬盘大小
+- =du -sh=: 查看当前文件夹大小
+- =free=: 查看系统可用内存，可选参数 =-m= =-h=

@@ -1,0 +1,370 @@
+#+SETUPFILE: ~/site/tpl/wiki-tpl.org
+#+TITLE: MySQL
+#+DATE: 2017-12-04 10:54:25
+
+* Command
+** Database
+
+- 建库: ~CREATE DATABASES db_name [charset="utf8"]~
+- 删库: =DROP DATABASES db_name=
+- 查看当前使用的数据库: =select database()=
+
+** Table
+
+- 建表: =CREATE TABLE tbl_name (<col_name_1> <TYPE1>2 [,..<col_name_n> <TYPEn>])=
+- 删表: =DROP TABLE tbl_name=
+- 显示表的结构: =desc tbl_name=, =show columns from tbl_name=
+- 增加列: =ALTER TABLE tbl_name ADD col_name TYPE=
+- 删除列: =ALTER TABLE tbl_name DROP col_name=
+- 修改列: =ALTER TABLE tbl_name MODIFY col_name TYPE=
+- 改变表的名字: =ALTER TABLE tbl_name RENAME new_tbl_name=
+- 总条目数: =SELECT COUNT(*) FROM tbl_name=
+- 查看建表语句: =SHOW CREATE TABLE tbl_name \G=
+
+索引:
+
+- 查看索引: =show index from tblname= or =show keys from tblname=
+- 创建索引:
+  - =ALTER TABLE table_name ADD INDEX index_name (column_list)=
+  - =ALTER TABLE table_name ADD UNIQUE (column_list)=
+  - =ALTER TABLE table_name ADD PRIMARY KEY (column_list)=
+  - =CREATE INDEX index_name ON table_name (column_list)=
+  - =CREATE UNIQUE INDEX index_name ON table_name (column_list)=
+- 删除索引:
+  - =DROP INDEX index_name ON table_name=
+  - =ALTER TABLE table_name DROP INDEX index_name=
+  - =ALTER TABLE table_name DROP PRIMARY KEY=
+
+查询记录:
+
+- =sql = "select * from 数据表 where 字段名=字段值 order by 字段名 [desc]"=
+- =sql = "select * from 数据表 where 字段名 like '%字段值%' order by 字段名 [desc]"=
+- =sql = "select top 10 * from 数据表 where 字段名 order by 字段名 [desc]"=
+- =sql = "select * from 数据表 where 字段名 in ('值1','值2','值3')"=
+- =sql = "select * from 数据表 where 字段名 between 值1 and 值2"=
+- =SELECT * FROM oss_shopemployee WHERE phonenum NOT REGEXP '^[0-9]+$'=: 判断某一列值是否为数字
+- =DELETE FROM oss_shopemployee WHERE phonenum NOT REGEXP '^[0-9]+$'=: 判断某一些是否不是数字
+
+更新数据记录:
+
+- ~sql="update 数据表 set 字段名=字段值 where 条件表达式"~
+- ~sql="update 数据表 set 字段1=值1,字段2=值2 字段n=值n where 条件表达式"~
+
+删除数据记录:
+
+- ~sql="delete from 数据表 where 条件表达式"~
+- ~sql="delete from 数据表" (将数据表所有记录删除)~
+
+添加数据记录:
+
+- ~sql="insert into 数据表 (字段1,字段2,字段3 …) values (值1,值2,值3 …)"~
+- ~sql="insert into 目标数据表 select * from 源数据表" (把源数据表的记录添加到目标数据表)~
+
+=DISTINCT= 使用:
+
+位置: =DISTINCT= 只能放到开头，但是与其他查询函数一起使用的时候，没有位置限制: =select play_id, count(distinct(task_id)) from task;=
+
+举例:
+
+- 在 count 计算不重复的记录的时候能用到: =SELECT COUNT( DISTINCT player_id ) FROM task;= 就是计算表中 id 不同的记录有多少条
+- 在需要返回记录不同的 id 的具体值的时候可以用: =SELECT DISTINCT player_id FROM task;= 返回表中不同的 id 的具体的值
+- 上面的 情况2 对于需要返回 mysql 表中 2 列以上的结果时会有歧义: =SELECT DISTINCT player_id, task_id FROM task;= 实际上返回的是 =player_id= 与 =task_id= 同时不相同的结果,也就是 DISTINCT 同时作用了两个字段，
+  必须得 =player_id= 与 =task_id= 都相同的才被排除了, 与我们期望的结果不一样,我们期望的是 player_id 不同被过滤, 在这种情况下，distinct 同时作用了两个字段，player_id, task_id。
+  这时候可以考虑使用 =group_concat= 函数来进行排除,不过这个 mysql 函数是在 mysql4.1 以上才支持的
+- 其实还有另外一种解决方式, 就是使用 =SELECT player_id, task_id, count(DISTINCT player_id) FROM task=
+  虽然这样的返回结果多了一列无用的count数据(有时也许就需要这个数据)
+- 同时我们还可以利用下面的方式解决上面遇到的歧义问题通过 group by 分组:
+  =select player_id, task_id from task group by player_id=
+
+** Grant
+
+- 查询所有用户: =select User from mysql.user=
+- 创建用户: =create user username identified by 'password'=
+- 删除用户: ~delete from mysql.user where User="xxx"~ -> =flush privileges=
+- 授权: =grant all privileges on db_name.tablename to username=
+- 撤销权限: =REVOKE PRIVILEGES ON db_name.* FROM 'user_name'@'localhost';=
+- 创建用户并赋权限:
+  =grant all privileges on db_name.* to news_user@'localhost' identified by 'news_password'=,
+  =@= 后面是限制的主机，可以是 IP 或者 IP 段, =%= 表示任何地方。
+- 查看用户权限: =SHOW GRANTS FOR user_name@localhost= 或者 ~SELECT * FROM mysql.user WHERE user='user_name' \G~
+
+** Backup
+
+#+BEGIN_EXAMPLE
+  mysqldump -h${hostname} -u${username} -p${password}  --add-drop-table --databases ${db_name} > backupfile.sql
+#+END_EXAMPLE
+
+同时进行压缩： =mysqldump -h${hostname} -u${username} -p${password} --add-drop-table --databases ${db_name} | gzip > backupfile.sql.gz=
+
+全量备份： =mysqldump –all-databases > allbackupfile.sql=
+
+如果只备份表结构，不备份数据，加上 =-d= 选项即可。
+
+** Restore
+
+#+BEGIN_EXAMPLE
+  mysql -h${hostname} -u${username} -p${password} < backupfile.sql
+#+END_EXAMPLE
+
+解压缩，并还原： =gunzip backupfile.sql.gz | mysql -h${hostname} -u${username} -p${password}  ${db_name}=
+
+* Data Type
+
+** BLOB 和 TEXT
+
+- BLOB 四种类型: =TINYBLOB=, =BLOB=, =MEDIUMBLOB=, =LONGBLOB=
+- TEXT 四种类型: =TINYTEXT=, =TEXT=, =MEDIUMTEXT=, =LONGTEXT=
+
+区别:
+
+1. BLOB 被视为二进制字符串, TEXT 被视为非二进制字符串
+2. BLOB 列没有字符集，并且排序和比较基于列值字节的数值值。TEXT 列有一个字符集，并且根据字符集的校对规则对值进行排序和比较
+
+** BLOB 和 TEXT 与 VARBINARY 和 VARCHAR 的不同 **
+
+1. BLOB 和 TEXT 列不能有默认值
+2. 当保存或检索 BLOB 和 TEXT 列的值时不删除尾部空格。(这与 VARBINARY 和 VARCHAR 列相同）
+3. 对于 BLOB 和 TEXT 列的索引，必须指定索引前缀的长度。对于 CHAR 和 VARCHAR，前缀长度是可选的.
+
+* Configure
+
+在线 my.cnf 生成器: [[http://imysql.com/my_cnf_generator]]
+
+** 某公司的 my.cnf 样例
+
+#+BEGIN_EXAMPLE
+  # my.cnf
+  [client]
+  port            = 3306
+  socket          = /log/mysql56/mysql.sock
+
+  [mysqld]
+  port            = 3306
+  socket          = /log/mysql56/mysql.sock
+  pid-file        = /log/mysql56/mysqld.pid
+  log-error       = /log/mysql56/error.log
+  datadir         = /data/mysql56
+  tmpdir          = /data/mysql56
+  slow_query_log_file = /log/mysql56/slow.log
+  relay-log = mysqld-relay-bin
+  long_query_time = 1
+  slow_query_log = 1
+  sql_mode = ''
+  old_passwords = 0
+
+  back_log        = 1024
+  open_files_limit = 65535
+  explicit_defaults_for_timestamp = 1
+  default-storage-engine=InnoDB
+  performance_schema = 0
+  max_connections = 16384
+  table_open_cache = 8192
+  thread_concurrency = 32
+
+  max_connect_errors = 10000
+  interactive_timeout = 512
+  wait_timeout = 256
+  max_allowed_packet = 16M
+  binlog_cache_size = 1M
+  max_heap_table_size = 64M
+  sort_buffer_size = 2M
+  join_buffer_size = 2M
+  # 8 + (max_connections / 100)
+  thread_cache_size = 1024
+  #query_cache_size = 64M
+  query_cache_limit = 16M
+  #default_table_type = INNODB
+
+  skip-external-locking
+  skip-name-resolve
+  server-id       = 0424
+
+  #*** master ***
+  log-bin= bin-log
+  binlog_format = mixed
+  binlog_rows_query_log_events = 1
+  expire_logs_days = 3
+
+  replicate_wild_ignore_table = mysql.%
+  replicate_wild_ignore_table = test.%
+  replicate_wild_ignore_table = information_schema.%
+  replicate_wild_ignore_table = performance_schema.%
+
+  #*** MyISAM Specific options ***
+  key_buffer_size = 32M
+  read_buffer_size = 2M
+  read_rnd_buffer_size = 16M
+
+  innodb_buffer_pool_instances = 8
+  innodb_old_blocks_time = 1000
+  innodb_buffer_pool_size = 36G
+  innodb_log_group_home_dir = /data/mysql56
+  innodb_data_home_dir  = /data/mysql56
+  innodb_data_file_path = ibdata1:1G:autoextend
+  innodb_autoextend_increment = 64
+  innodb_read_io_threads = 16
+  innodb_write_io_threads = 16
+  innodb_thread_concurrency = 32
+  innodb_flush_log_at_trx_commit = 2
+  innodb_flush_method = O_DIRECT
+  innodb_log_buffer_size = 128M
+  innodb_log_files_in_group = 2
+  innodb_log_file_size = 1G
+  innodb_open_files = 16384
+  innodb_file_per_table = 1
+  innodb_purge_threads = 1
+  innodb_stats_persistent = 0
+  innodb_io_capacity = 500
+  innodb_adaptive_flushing_lwm = 20
+  innodb_use_native_aio = 1
+  innodb_spin_wait_delay = 96
+  innodb_adaptive_hash_index = 0
+  innodb_sync_spin_loops = 100
+  innodb_file_format = barracuda
+  #innodb_doublewrite = 1
+  #innodb_checksum_algorithm = NONE
+
+  ### slave ###
+  #skip_slave_start
+  #slave_compressed_protocol = 1
+  slave_parallel_workers = 4
+  master-info-repository = TABLE
+  relay-log-info-repository = TABLE
+  slave_type_conversions = ALL_NON_LOSSY
+
+  [mysqldump]
+  quick
+  max_allowed_packet = 16M
+
+  [mysql]
+  no-auto-rehash
+
+  [mysqlhotcopy]
+  interactive-timeout
+
+  [mysqld_safe]
+  open-files-limit = 65535
+  #pid-file         = logs/mysqld.pid
+#+END_EXAMPLE
+
+** 慢查询
+
+开启:
+
+#+BEGIN_EXAMPLE
+  slow_query_log = 1
+  slow_query_log_file = /data/log/mysql/mysql-slow.log
+  long_query_time = 0.01
+  log-queries-not-using-indexes
+#+END_EXAMPLE
+
+分析工具一：mysqldumpslow（官方自带）
+
+- =-s= 是 order 的顺序，说明写的不够详细，俺用下来，包括看了代码，主要有 c, t , l, r和 ac, at, al, ar，分别是按照 query 次数，时间，lock 的时间和返回的记录数来排序，前面加了 a 的是倒序
+- =-t= 是top n的意思，即为返回前面多少条的数据
+- =-g= 后边可以写一个正则匹配模式，大小写不敏感的
+
+=mysqldumpslow -s c -t 20 host-slow.log=
+
+分析工具二：mysqlsla（第三方）
+
+[[https://github.com/daniel-nichter/hackmysql.com/tree/master/mysqlsla]]
+
+** Docker MySQL 设置 utf8mb4 编码
+
+[[https://hub.docker.com/_/mysql/]]
+
+#+BEGIN_EXAMPLE
+  docker run -it -d --name xxx --restart=always --network qwerty -e MYSQL_ROOT_PASSWORD=xxx  -p 3306:3306 mysql:5.7 --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+#+END_EXAMPLE
+
+官方文档说设置 =--character-set-server=utf8mb4= 和 =--collation-server=utf8mb4_unicode_ci= 即可，但事实上是不够的，还需要修改配置： 在宿主机上，添加配置文件 =mysql.cnf= ：
+
+#+BEGIN_EXAMPLE
+  [client]
+  default-character-set=utf8mb4
+
+  [mysqld]
+  character-set-client-handshake = FALSE
+  character-set-server = utf8mb4
+  collation-server = utf8mb4_unicode_ci
+
+  [mysql]
+  default-character-set=utf8mb4
+#+END_EXAMPLE
+
+然后将配置 =docker cp= 到 docker 容器的 =/etc/mysql/conf.d= ，重启容器（启动时会自动加载 =conf.d= 下的 =*.cnf= ）。 这样才能正常的支持 =utf8mb4= 编码。
+
+还有一种办法是基于官方镜像，重新制作镜像，在 Dockerfile 中将配置 =CP= 到镜像中。
+
+但是导入的数据库，emoji 表情显示为 =?= ，字符也都没有问题，具体原因还没找到。
+
+* Best Practices
+
+- 在控制台执行一条 SQL 语句: =mysql -h127.0.0.1 -uuser -ppassword db_name -e "select xxx from xxx" > aa.txt=
+- 控制台中文乱码: =set names 'utf8'=
+- MySQL 报错: Row size too large (> 8126). Changing some columns to TEXT or BLOB or using ROW_FORMAT=DYNAMIC ... 解决方案: [[http://hidba.org/?p=551][innodb使用大字段text，blob的一些优化建议]]。
+- [[http://stackoverflow.com/questions/286039/get-record-counts-for-all-tables-in-mysql-database][Get record counts for all tables in MySQL database]]
+- 系统配置文件位置: =mysql --help | grep cnf=
+- MySQL 5.6 占内存解决方法:
+  #+BEGIN_EXAMPLE
+      performance_schema_max_table_instances=400
+      table_definition_cache=400
+      table_open_cache=256
+  #+END_EXAMPLE
+- 数据库总行数: =SELECT SUM(TABLE_ROWS) FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = 'db_name'=;
+- 数据库每一个表的长度: =SELECT table_name, table_rows FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = 'test1' order by table_rows desc;=;
+- 数据库中每一个表的大小:
+  #+BEGIN_EXAMPLE
+      SELECT
+        TABLE_NAME AS `Table`,
+        ROUND((DATA_LENGTH + INDEX_LENGTH) / 1024 / 1024) AS `Size (MB)`
+      FROM
+          information_schema.TABLES
+      WHERE
+          TABLE_SCHEMA = "bookstore"
+      ORDER BY
+          (DATA_LENGTH + INDEX_LENGTH)
+      DESC;
+  #+END_EXAMPLE
+- 数据库中某一个表的大小(扩展: [[https://chartio.com/resources/tutorials/how-to-get-the-size-of-a-table-in-mysql]]):
+  #+BEGIN_EXAMPLE
+      SELECT
+      TABLE_NAME AS `Table`,
+      ROUND((DATA_LENGTH + INDEX_LENGTH) / 1024 / 1024) AS `Size (MB)`
+      FROM
+      information_schema.TABLES
+      WHERE
+      TABLE_SCHEMA = "bookstore"
+      AND
+      TABLE_NAME = "book"
+      ORDER BY
+      (DATA_LENGTH + INDEX_LENGTH)
+      DESC;
+  #+END_EXAMPLE
+- 数据库占空间大小: ~SELECT sum(DATA_LENGTH)+sum(INDEX_LENGTH) FROM information_schema.TABLES where TABLE_SCHEMA='db_name';~ 返回大小单位为字节;
+- 查询数据存储位置: =show variables like "%dir%";=;
+- 修改 root 密码:
+  - 在已知密码的情况下: =SET PASSWORD FOR 'root'@'localhost' = PASSWORD('MyNewPass');=
+  - [[http://stackoverflow.com/questions/5683154/how-do-i-find-out-my-root-mysql-password][Howdo I find out my root MySQL password?]]
+- auto_increment 存在的问题: [[http://www.kancloud.cn/taobaomysql/monthly/67122]]
+- 设置输出分隔符: =mysql -umyuser -pmydb dbname -e "select CONCAT_WS(',' , f1 , f2) from mytable;" > /tmp/mydata.txt=
+- 设置默认编码为 =ut8mb4= [fn:set-utf8mb4]
+- macOS 下 stop MySQL，使用 =mysql.server stop= 或者 =kill= 命令删掉之后会自动重启，正确的方法是找到 MySQL 的 plist，然后 unload 掉，
+  比如: =launchctl unload /usr/local/Cellar/mysql@5.6/5.6.36_1/homebrew.mxcl.mysql\@5.6.plist= ，具体见这个 [fn:kill-process]
+- 查看字符集的三种方法
+  - 查看 MySQL 服务器的字符集: =show variables like '%char%';=
+  - 查看某个库中表的字符集: =show table status from db like '%xxx%';=
+  - 查看表中每一列的字符集: =show full columns from xxx_table;=
+
+* Resource
+
+- [[https://www.pureweber.com/article/myisam-vs-innodb/][MyISAM vs InnoDB]]
+- [[http://www.cnblogs.com/8765h/archive/2011/11/25/2374167.html][SQL truncate 、delete与drop区别]]
+- [[http://blog.chinaunix.net/uid-20639775-id-3249105.html][MYSQL数据库管理之权限管理]]
+- [[http://blog.sina.com.cn/s/blog_1380b3f180102vsg5.html][根据多年经验整理的《互联网MySQL开发规范》]]
+- [[http://blog.opskumu.com/mysql-rep.html][MySQL 复制备忘]]
+
+
+[fn:set-utf8mb4] https://www.zhangjiee.com/blog/2017/mysql-utf8-to-utf8mb4.html
+[fn:kill-process] https://superuser.com/questions/159486/how-to-kill-process-in-mac-os-x-and-not-have-it-restart-on-its-own

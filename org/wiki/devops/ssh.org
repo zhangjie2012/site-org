@@ -1,0 +1,51 @@
+#+SETUPFILE: ~/site/tpl/wiki-tpl.org
+#+TITLE: SSH
+#+DATE: 2017-12-04 11:10:32
+
+** 秘钥生成
+
+=ssh-keygen -C "linux@test" -t rsa -b 2048 -f test=
+
+- =-C= 是对密钥的一个说明，有助于区分不同的密钥用途。
+- =-t= 和 =-b= 分别指定要生成的密钥类型和密钥长度。
+- =-f= 指定生成的密钥对文件名。公钥文件名为 test.pub，私钥为 test。
+
+** 服务器配置
+
+ssh 连接速度优化: 修改配置文件(=/etc/ssh/sshd_config=):
+
+#+BEGIN_EXAMPLE
+  GSSAPIAuthentication no
+  UseDNS no
+#+END_EXAMPLE
+
+ssh 调试，加上 =-v= 参数.
+
+目录权限：
+
+#+BEGIN_EXAMPLE
+  chmod 700 ~/.ssh
+  chmod 600 ~/.ssh/authorized_keys
+  chmod 400 ~/.ssh/id_rsa
+#+END_EXAMPLE
+
+** FAQ
+
+Q: 如何去掉第一次连接时提示: "Are you sure you want to continue connecting (yes/no)?"
+
+- 修改 =/etc/ssh/ssh_config=
+- 将其中的 =# StrictHostKeyChecking ask= 改成 =StrictHostKeyChecking no=
+
+Q: 修改默认端口
+
+ssh 默认的端口是 22，如果设置为 22 经常会有人尝试暴力登录，会报错：
+=There were xxx failed login attempts since the last successful login= ，一个解决的办法修改默认的端口：
+
+- 修改 =/etc/ssh/sshd_config= 中的 =Port=，然后重启 sshd
+
+ssh 连接时需要 =-p= 指定端口。
+
+** 拓展资料
+
+- [[http://wiki.tankywoo.com/tool/ssh.html]]
+- [[http://blog.knownsec.com/2012/05/ssh-%E5%85%AC%E9%92%A5%E8%AE%A4%E8%AF%81/][知道创宇·SSH 公钥认证]]
