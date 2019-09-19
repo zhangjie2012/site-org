@@ -1,0 +1,26 @@
+#+SETUPFILE: ~/site/tpl/wiki-tpl.org
+#+OPTIONS: html-postamble:nil
+#+TITLE: 基于 Prometheus 监控告警
+#+DATE: 2019-04-11 15:46
+
+* 监控告警组件
+
+[[https://blog-1252349778.cos.ap-beijing.myqcloud.com/2019/prom.png]]
+
+** 上报
+
+Prometheus 提供了各种 exporter，除了业务之外的组件（Node，Redis，MySQL等）基本已经支持，业务自身的需要对接 Prometheus Client API。
+
+** metrics 收集
+
+Prometheus 中包含 TSDB（时间序列 DB），用作数据存储。Prometheus 采用的是 pull 的方案，配置之后会按照规则定时获取 metrics 并存储到 TSDB 中，TSDB 可以序列化到本地（SSD 比较好）。
+
+** UI 显示
+
+Promethues 有自己的 Web UI，但是比较简陋。业内的做法是对接 Grafana 显示数据。Grafana 提供了丰富的 [[https://grafana.com/dashboards][Dashboards]]，直接导入即可。
+
+** 告警
+
+Grafana 自身是支持告警的，但是比较蛋疼的点在于告警规则不支持模板变量，那就约等于没有了···
+
+业内常用的做法是使用 Alertmanager，它提供了多种告警策略，甚至包含了 Webhook 的方式(自定义告警、对接自有的告警系统)。

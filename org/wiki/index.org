@@ -34,6 +34,14 @@
 - [[file:devops/k8s-concept.org][术语]]
 - [[file:devops/k8s-ingress.org][Ingress]]
 
+** 监控告警
+
+- [[file:devops/promethues.org][基于 Prometheus 的监控告警]]
+
+** 日志
+
+- [[file:devops/log.org][日志收集]]
+
 * 程序设计
 ** 前端
 
@@ -58,6 +66,7 @@
 - [[file:programming/go/package-manager.org][包管理工具]]
 - [[file:programming/go/project-layout.org][项目结构]]：摘自 [[https://github.com/golang-standards/project-layout][project-layout]]，go 工程的项目结构
 - [[file:programming/go/date-format.org][时间格式化与解析]]
+- [[file:programming/go/resource.org][资源]]：一些资源链接
 
 ** 编码工具
 

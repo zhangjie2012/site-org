@@ -1,0 +1,23 @@
+#+SETUPFILE: ~/site/tpl/wiki-tpl.org
+#+OPTIONS: html-postamble:nil
+#+TITLE: DevOps - 日志收集
+#+DATE: 2019-04-11 15:48
+
+* 一个简易的日志收集方案
+
+设计图：
+
+[[https://blog-1252349778.cos.ap-beijing.myqcloud.com/2019/log.png]]
+
+1. 主机使用 filebeat 上报日志到 Redis (=list=, =channel= 等)
+2. 起一个服务「订阅」Redis =list= 或者 =channel= 中的日志，然后：
+
+   - 按照文件名称保存到本地
+   - 根据日志中的日志级别进行告警通知
+   - 按需求将只是保存到 MySQL 或者 MongoDB 中（分表分库）
+
+可优化的地方：
+
+- 此方案适合业务量不是很大的情况下， =1000条/秒= 应该是抗的住的（ =360万/小时= ），如果业务量比这个更大怎么办：
+  + redis 拆分成多通道，水平拆分，或者换成 Kafka
+- 业务日志可以已 JSON 的方式打出，更方便检索

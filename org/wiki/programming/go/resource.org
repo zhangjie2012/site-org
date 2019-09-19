@@ -1,0 +1,6 @@
+#+SETUPFILE: ~/site/tpl/wiki-tpl.org
+#+TITLE: Go 资源
+#+DATE: 2019-03-30 12:13:41
+
++ https://talks.golang.org/2014/go4gophers.slide Go PPT
++ [[https://talks.golang.org/2012/splash.article][Go at Google: Language Design in the Service of Software Engineering]] Go 为什么是这样设计的，[[https://www.oschina.net/translate/go-at-google-language-design-in-the-service-of-software-engineering?lang=chs][中文版本]]
