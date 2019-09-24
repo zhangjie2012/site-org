@@ -19,6 +19,10 @@
 - [[file:other/duomi.org][音乐回忆]] :: 2014-06 之前在多米上听的歌，写脚本抓的
 - [[file:other/once.org][曾经发表在 ONCE 上的一些话]] :: 以前做的一个网站，后来关了
 
+** GTD
+
+- [[file:gtd/2019-M09-12.org][2019 9月-12月]]
+
 ** Social Links
 
 - [[https://github.com/zhangjie2012][Github]]

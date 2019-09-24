@@ -1,10 +1,23 @@
-* 阅读
+#+SETUPFILE: ~/site/tpl/gtd-tpl.org
+#+TITLE: 2019 9月-12月
 
-** TODO [[https://www.cs.cmu.edu/~410-s05/lectures/L31_LockFree.pdf][Lock-free]]
-** TODO [[https://deepsource.io/blog/go-modules/][Package management in Go]]，顺便研究一下 go module                 :Go:
-** TODO [[https://itnext.io/kubernetes-journey-up-and-running-out-of-the-cloud-kubernetes-overview-5012994b8955][Kubernetes Journey — Up and running out of the cloud — Kubernetes Overview]] :K8s:
-** TODO [[https://itnext.io/kubernetes-journey-up-and-running-out-of-the-cloud-master-and-worker-6328775b347f][Kubernetes Journey — Up and running out of the cloud — Master and Worker]] :K8s:
-** TODO [[https://dave.cheney.net/practical-go/presentations/qcon-china.html][Practical Go: Real world advice for writing maintainable Go programs]] :Go:
-** TODO https://reacttraining.com/react-router/web/guides/quick-start :React:
 
-深入了解一下 react-router。
+** 阅读 [0%]
+
+*** TODO Lock Free [0/2]
+
+- [ ] https://preshing.com/20120612/an-introduction-to-lock-free-programming/
+- [ ] [[https://www.cs.cmu.edu/~410-s05/lectures/L31_LockFree.pdf][Lock-free]]
+
+*** TODO [[https://deepsource.io/blog/go-modules/][Package management in Go]]，顺便研究一下 go module :Go:
+*** TODO [[https://itnext.io/kubernetes-journey-up-and-running-out-of-the-cloud-kubernetes-overview-5012994b8955][Kubernetes Journey — Up and running out of the cloud — Kubernetes Overview]] :K8s:
+*** TODO [[https://itnext.io/kubernetes-journey-up-and-running-out-of-the-cloud-master-and-worker-6328775b347f][Kubernetes Journey — Up and running out of the cloud — Master and Worker]] :K8s:
+*** TODO [[https://dave.cheney.net/practical-go/presentations/qcon-china.html][Practical Go: Real world advice for writing maintainable Go programs]] :Go:
+*** TODO https://reacttraining.com/react-router/web/guides/quick-start :React:
+
+ 深入了解一下 react-router。
+
+** 写作 [0%]
+
+*** TODO 使用 org-mode 写文章
+*** TODO 另一个角度谈谈程序员是不是青春饭

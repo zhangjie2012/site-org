@@ -1,6 +1,6 @@
 #+TITLE: Sitemap
 
-- [[file:index.org][Smells Like Teen Spirit]]
+- [[file:index.org][JerryZhang]]
 - blog
   - [[file:blog/index.org][Blog]]
   - 2011
@@ -161,7 +161,7 @@
     - [[file:blog/2019/say-something.org][未来真的会变好吗？]]
     - [[file:blog/2019/close-yanjie.org][眼界要关停了]]
 - gtd
-  - [[file:gtd/2019-M09-12.org][2019-M09-12]]
+  - [[file:gtd/2019-M09-12.org][2019 9月-12月]]
 - other
   - [[file:other/resume.org][张杰的简历]]
   - [[file:other/once.org][曾经发表在 ONCE 上的一些话]]
