@@ -3,7 +3,6 @@
 #+DATE: 2017-12-07 09:41:24
 
 * 安装
-
 ** Linux，Mac OS X 或者 FreeBSD 安装
 
 1. 前往[[https://golang.org/dl/][官网]]，下载二进制包
@@ -11,14 +10,11 @@
 3. 将 ~/usr/local/go/bin~ 添加 ~PATH~ 环境变量中，你可以将 ~export PATH=$PATH:/usr/local/go/bin~ 追加到 ~/etc/profile~ 或者 ~~/.profile~ 文件中
 4. 执行 ~go version~ 看是否安装成功
 
-设置工作目录：
+** 设置工作空间
 
-#+BEGIN_SRC shell
-export GOROOT=$HOME/projects
-export PATH=$PATH:$GOROOT/bin
-#+END_SRC
+默认的工作空间是 =$HOME/go= ，需要手动创建一下，如果要设置不同的工作目录，你需要设置GOPATH [fn:1]。
 
-将上面代码添加到 ~~/.profile~ 中。 /这里假定你的工作目录是 ~projects~ ，你也可以换成别的名字。/
+/我记得早版本的 go 是不存在默认的工作空间一说的，现在更简单了/
 
 ** 测试是否安装正确
 
@@ -37,9 +33,8 @@ func main() {
 然后编译运行：
 
 #+BEGIN_SRC go
-$ cd $HOME/projects/src/hello
-$ go build
-$ ./hello
+$ cd $HOME/go/src/hello
+$ go run hello.go
 hello, world
 #+END_SRC
 
@@ -48,15 +43,15 @@ hello, world
 GOPATH 是为了解决导入问题，用来显示 Go 代码的位置。GOPATH 必须按照规定的结构：
 
 + ~src~ 目录是用来放源代码，src 下的路径决定了导入路径和可执行文件的名称
-+ ~pkg~ 目录用来存放已安装的软件包对象，每个目标的操作系统和架构对都有自己的 pkg 子目录（pkg/GOOS_GOARCH）
-+ ~bin~ 目录用来放已经编译好的命令，比如 ~gocode~，~godef~ 等
++ ~pkg~ 目录用来存放已安装的软件包对象，每个目标的操作系统和架构对都有自己的 pkg 子目录（ =pkg/GOOS_GOARCH= ）
++ ~bin~ 目录用来放已经编译好的命令，比如 ~gocode~, ~godef~ 等
 
 GOROOT：Go 的二进制分布在 ~/usr/local/go~ 下，但是 Go 工具有可能放在不同的位置下，这种情况下你可以将 GOROOT 指向不同的位置，注意 GOROOT 在需要自定义安装位置的时候才是必须要设置的，所以 GOROOT 是可选的。
 
 添加 GOPATH 和 GOROOT：
 
 #+BEGIN_SRC shell
-export GOPATH=$HOME/projects
+export GOPATH=$HOME/go
 export PATH=$PATH:$GOPATH/bin
 export GOROOT=$HOME/go1.10
 export PATH=$PATH:$GOROOT/bin
@@ -67,13 +62,13 @@ export PATH=$PATH:$GOROOT/bin
 * 卸载
 
 1) 删除 ~/usr/local/go~ 目录
-2) 编辑 ~/etc/profile~ 或者 ~$HOME/profile~ 移除 ~PATH~ 环境变量中的 go bin 路径
+2) 删除工作目录
+3) 编辑 ~/etc/profile~ 或者 ~$HOME/profile~ 移除 ~PATH~ 环境变量中的 go bin 路径
 
 * 工具链
 
 | 名称      | 说明                                                | 安装                                            |
 |-----------+-----------------------------------------------------+-------------------------------------------------|
-| gocode    | 自动补全守护进程                                    | ~go get -u -v github.com/mdempsky/gocode~       |
 | gopls     | LSP server for Go                                   | ~go get -u -v golang.org/x/tools/gopls~         |
 | godef     | find symbol information in Go source                | ~go get -u -v github.com/rogpeppe/godef~        |
 | guru      | a tool for answering questions about Go source code | ~go get -u -v golang.org/x/tools/cmd/guru~      |
@@ -82,21 +77,21 @@ export PATH=$PATH:$GOROOT/bin
 | godoc     |                                                     | ~go get -u -v golang.org/x/tools/cmd/godoc~     |
 |-----------+-----------------------------------------------------+-------------------------------------------------|
 
+如果提示 ~go: cannot use path@version syntax in GOPATH mode~ ，需要添加: ~GO111MODULE=on go get golang.org/x/tools/cmd/godoc~ .
+
 /部分工具需要 FQ 才能安装。/
 
 * 跨平台编译
 
 1.5 版本之后，Go 支持跨平台编译（碉堡的一个功能），在编译之前指定 ~$GOOS~ 和 ~$GOARCH~ 两个环境变量即可。这两个环境变量分别表示的目标的操作系统和编译体系架构的名称。常用的值：
 
-+ ~GOOS~：~android~、~darwin~、~freebsd~、~linux~、~windows~
-+ ~GOARCH~：~arm~、~amd64~、~386~
++ ~GOOS~: ~android~ ~darwin~ ~freebsd~ ~linux~ ~windows~
++ ~GOARCH~: ~arm~ ~amd64~ ~386~
 
 完整的可选值在 [[https://golang.org/doc/install/source#environment][Optional environment variables]]。
 
-比如在 MacOS 上编译 CentOS7 下的二进制包： ~GOOS=linux GOARCH=amd64 go build main~ 。
+比如在 MacOS 上编译 CentOS7 下的二进制包:  ~GOOS=linux GOARCH=amd64 go build main~ 。
 
 相关的 Stackoverflow 帖子：[[https://stackoverflow.com/questions/20728767/all-possible-goos-value][All possible GOOS value?]] 中说明在 Go 1.7 之后，可以使用 ~go tool dist list -json~ 来显示可选的值（不加 =-json= 参数将显示为文本）。
 
-** 开发环境
-
-[[file:gocode.org][gocode]]
+[fn:1] https://github.com/golang/go/wiki/SettingGOPATH

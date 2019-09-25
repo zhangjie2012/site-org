@@ -79,7 +79,7 @@ Emacs 有很多的 [[http://melpa.org][插件]]，[[https://github.com/emacs-tw/
 #+BEGIN_QUOTE
 语言的开发环境配置一直很恼人（很费时间），我记得以前刚配置 C/C++ 的开发环境时，折腾了一个月左右时间才找到一个相对比较满意的开发环境（折腾完之后使用起来可真爽啊）： ~xcscope + etags + c++-mode~ 。
 
-写 Python 的时候也折腾了长时间的缩进问题。Go 就更不用说了···，Go 工具链很完整，但由于 Go 的版本升级很快，工具链根本跟不上 gocode 已经迁移了三次地址了。
+写 Python 的时候也折腾了长时间的缩进问题。 Go 就更不用说了···，Go 工具链很完整，但由于 Go 的版本升级很快，工具链根本跟不上，+gocode+ 已经迁移了三次地址了。
 
 后来看到了 [[https://langserver.org/][LSP（Language Server Protocol）]] 项目，感觉这个项目才是终极解法：插件化，C/S 模式。目前已经默认支持 Python 和 Go 了，虽然还是有许许多多的 Bug，但比起 2018 年我试的时候已经成熟太多了。有社区的驱动，发展很快。
 #+END_QUOTE
