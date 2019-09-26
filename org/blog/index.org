@@ -7,7 +7,6 @@
 * 2019
 
 - 09-04: [[file:2019/build-site-with-org-mode.org][拥抱 org-mode]]
-- 07-03: [[file:2019/say-something.org][未来真的会变好吗？]]
 - 07-01: [[file:2019/emacs-lisp-expand-file-name-to-string.org][emacs lisp expand-file-name to string]]
 - 06-27: [[file:2019/informer-controller-note.org][Kubernetes informer controller 原理笔记]]
 - 06-26: [[file:2019/blog-migrate-to-hk.org][博客主机被迫迁移到腾讯云香港]]
