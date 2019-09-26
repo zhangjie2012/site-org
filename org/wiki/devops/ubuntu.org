@@ -46,13 +46,25 @@
 - =Super + 空格= 多种输入法切换
 
 ** SS 代理
-
 *** 客户端
 
 1. 命令行：[[https://github.com/shadowsocks/shadowsocks-libev]]
 2. GUI：[[https://github.com/shadowsocks/shadowsocks-qt5]]
 
-GUI 版本很不稳定，不如直接使用命令行（ =ss-local= ），配合 systemd 设置服务开机启动。
+GUI 版本很不稳定，不如直接使用命令行（ =ss-local= ），配合 =systemd= 设置服务开机启动。
+
+配置文件：
+
+#+BEGIN_SRC
+{
+	"server":"",
+	"server_port": xx,
+	"local_port":1080,
+	"password":"",
+	"timeout":60,
+	"method":"chacha20-ietf-poly1305"
+}
+#+END_SRC
 
 *** Chrome 浏览器代理
 
@@ -62,7 +74,25 @@ GUI 版本很不稳定，不如直接使用命令行（ =ss-local= ），配合 
 
 *** 终端代理
 
-    Sock5 proxy：[[https://www.irif.fr/~jch/software/polipo/][Polipo]]
+Sock5 proxy：[[https://www.irif.fr/~jch/software/polipo/][Polipo]]
+
+1. 安装: =apt install polipo=
+2. 修改配置文件: =/etc/polipo/config= ，添加：
+   #+BEGIN_SRC
+   proxyAddress = "0.0.0.0"
+
+   socksParentProxy = "127.0.0.1:1080"
+   socksProxyType = socks5
+   #+END_SRC
+3. 重启: =service restart polipo=
+
+设置代理（polipo 的端口是 8123）：
+
+#+BEGIN_SRC
+export http_proxy="http://127.0.0.1:8123" export https_proxy="http://127.0.0.1:8123"
+#+END_SRC
+
+测试是否生效: =curl ip.gs=
 
 ** 软件列表
 
