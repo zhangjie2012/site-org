@@ -1,19 +1,18 @@
 #+SETUPFILE: ~/site/tpl/site-tpl.org
 #+TITLE: 使用 org-mode 搭建网站
 #+OPTIONS: toc:nil
+#+DATE: 2019-09-27 11:59:30
 
 ** 背景
 
 2018 年的 8 月份开始写 [[https://github.com/zhangjie2012/qwerty-server/][qwerty]], 陆陆续续写了有一年左右，在功能上比较完善的情况下，坚持使用了一段时间，
 还是发现了一些问题：
 
-- antd pro 这种纯前端，对搜索引擎不太友好，也就是说不好做 SEO，写的文章被浏览器不容易收录。这是个问题，
+- antd pro 这种纯前端，对搜索引擎不太友好，不好做 SEO，写的文章被浏览器不容易收录。这是个问题，
   但仅仅是这个问题倒还好，因为后来我写文章就不在意这些了。
-- 使用 django admin 做后台，文章的二次编辑有点麻烦，因为前端和后端是分离的，本身跳转到编辑就有些麻烦，
-  而且网页上的编辑毕竟没有在编辑器中编辑方便，每次都要拷贝出来，改好了再粘贴进去。
+- 使用 django admin 做后台，文章的二次编辑有点麻烦，因为前端和后端是分离的，本身跳转到编辑就有些麻烦，而且网页上的编辑毕竟没有在编辑器中编辑方便，每次都要拷贝出来，改好了再粘贴进去。
 - 备份是个问题，虽然我后来写了脚本定时备份 MySQL 然后上传到腾讯云。
-- 我也不想用云主机了，不管是阿里云还是腾讯云，你坚持用下来就知道总是会有一些奇奇怪怪的问题，本身博客
-  服务就是很轻量级的一个东西，还要操心这操心那··
+- 我也不想用云主机了，不管是阿里云还是腾讯云，你坚持用下来就知道总是会有一些奇奇怪怪的问题，本身博客服务就是很轻量级的一个东西，还要操心这操心那··
 
 上面这些问题确实是存在的，但是并不是我放弃 qwerty 的根本原因。qwerty 要解决的问题本质是还是知识管理，
 知识管理说起来简单，做起来有点难。以 Docker 为例：
@@ -33,11 +32,98 @@ qwerty 已经把这个问题解决的差不多了：
 一些点的东西先用 issue 记录，比如 零散的记录，FAQ，TODO，资源链接等。等 issue 汇总的多了整理成 wiki 或者博客。
 #+end_quote
 
-*只是操作起来有点复杂* ，wiki 是用 [simiki](http://simiki.org/) 搭建的，还是要跨几个地方，曾经也想过 qwerty 直
-接把 wiki 也做了，但是成本有点高。
+*只是操作起来有点复杂* ，wiki 是用 [[http://simiki.org/][simiki]] 搭建的，还是要跨几个地方，曾经也想过 qwerty 直接把 wiki 也做了，
+但是成本有点高。
 
 ** 转变
 
-我是个 Emacs 老用户了，其实很多人使用 Emacs 并不是因为他与 Vim 齐名的编辑功能，而是
+我是个 Emacs 老用户了，其实很多人使用 Emacs 并不是因为他与 Vim 齐名的编辑功能，而是因为 [[https://orgmode.org][org-mode]] 才使用的 Emacs，
+
+我接触 Markdown 比 org-mode 要早很多（最早用 jekyll 写博客），后来在 youtube 上看过了一个视频： [[https://www.youtube.com/watch?v=EQAd41VAXWo&t=20s][Emacs Power: Can your editor do THIS!]]
+叹为观止，有很多次想尝试 org-mode，但是被 org-mode 官方文档表现出来的「复杂」程度搞怕了。
+
+后来看过很多的 org-mode 搭建的博客，比如 [[https://www.yinwang.org/][王垠的博客]]，当然视觉冲击的比较大的还是 [[https://dirtysalt.github.io/html/blogs.html][dirtysalt]]。
+
+每次想搞一下，又觉得烦，学新的东西，还要把旧的文章迁移，然后说服自己：「Markdown 够用了，不需要 org-mode 了」。 _还是懒的缘故_ 。
+
+在前几个月，我对 Emacs 的配置进行了大 _换血_ ：
+
+- 抛弃了用了四五年的 helm，切换到了 ivy 全家桶
+- 开始使用 use-package 管理插件，大幅度提升启动速度
+- 大折腾了一次前端插件，用 rjsx 写 jsx（以前 web-mode 写 JSX 有个 bug，我给作者反馈过，一直都没解决）
+- 使用 projectile 管理 project
+- 使用 lsp 一统各种语言 IDE（虽然现在问题还是很多）
+
+呵，可真爽。
+
+经过这次折腾，让我明白了：所有新的东西被推崇，总是有一定的原因，有它自己与众不同的地方。
+
+所以，就想试试 org-mode。本来已经对 markdown 有很多的怨言了：太简单，emacs 的 markdown-mode 并不是很好，表格支持的太差了，
+但是表格对写技术博客几近刚需。
 
 ** 拥抱 org-mode
+
+org-mode 提供了丰富的格式，可以用来做写博客、笔记，规划，TODO，还有极其强大的文本样式，很多人用来写论文。
+
+看到这里，你可能有点怕了。别慌，说了这么多，本质上 org-mode 跟 markdown 一样，都是一种纯文本标记语言而已。
+
+一些主流的平台（github，gitlab），主流的博客工具（Jekyll，Hugo）都是支持 org-mode 的，把他当做 markdown 来用即可，还有专门针对
+org-mode 的博客工具，[[http://renard.github.io/o-blog/][o-blog]]，[[https://github.com/novoid/lazyblorg][lazyblorg]]。
+
+但是，你也可以不用这些工具，这些静态博客工具干的事情无非就是把 markdown/org-mode 以某种易于组织的方式转换成 html 文件。如果你用
+markdown 写博客，自己写一个脚本做个转换就行了。对于 org-mode，原生提供了将 org-mode 转换成 html 的函数 =org-html-publish-to-html=
+对了，还有将 org-mode 转换成 markdown 的函数 ==org-md-export-to-markdown= 。
+
+在此基础上封装了 =ox-publish= 包，使得只需要简单的写一些规则，批量的将 org-mode 输出到指定目录下的 html 文件，如下：
+
+#+BEGIN_SRC emacs-lisp
+(require 'ox-publish)
+(setq org-html-validation-link nil)
+
+(setq org-publish-project-alist
+      '(
+        ;; notes component
+        ("site-orgs"
+         :base-directory "~/site/org"
+         :base-extension "org"
+         :html-link-home "index.html"
+         :publishing-directory "~/site-html/"
+         :recursive t
+         :publishing-function org-html-publish-to-html
+         :headline-levels 5
+         :auto-preamble t
+         :auto-sitemap t
+         :sitemap-filename "sitemap.org"
+         :sitemap-title "Sitemap"
+         )
+        ;; static component
+        ("site-static"
+         :base-directory "~/site/static/"
+         :base-extension "css\\|js\\|png\\|jpg\\|gif\\|pdf\\|mp3\\|ogg\\|swf"
+         :publishing-directory "~/site-html/static/"
+         :recursive t
+         :publishing-function org-publish-attachment
+         )
+        ;; publish component
+        ("site" :components ("site-orgs" "site-static"))
+        ))
+#+END_SRC
+
+代码很容易理解，一部分处理 org 文件，一部分处理静态文件，发布只需要执行 =org-publish= ，选择对应的项目即可。是不是很方便？
+
+现在我将博客、Wiki、TODO，还有一些零散的记录，全部用 org 维护起来了，还为之写了一个主题（本身就是结构化的，只要写几个 CSS 样式就行了）。
+
+** 没有完美的方案
+
+没有哪一种方案是完美的， _所有完美都是相对的_ ，org-mode 相比于 jekyll 或者 wordpress 等更能满足我的需求，也就是更适合组织博客、
+笔记、TODO 等知识管理。
+
+但是，它也有一些缺点：比如说太灵活，所有的知识结构都需要手动维护，可以看一下我的网站，我是因为经历过了各种知识管理，本身对
+知识管理的需求就很明确，所以维护起来还是比较轻松的。
+
+还有一些 org-mode 自身的问题，比如没有转义字符，如果在 =[]= 中出现了 =[]= 就不好处理了，还有代码块中出现 =**= 也会被处理成标题，等等。
+
+但总体是值得一用的，比如天生支持 TOC，代码块可执行，表格（太好用了），脚注功能，还有丰富的配置选项，总之在论文中看到的骚操作，
+都可以实现了。
+
+/btw，即便你不是 Emacs 用户，也可以用 org-mode，Vim/VSCode 都支持编辑 org 文件。/

@@ -158,7 +158,6 @@
     - [[file:blog/2019/best-practices-for-docker-deploy-django.org][使用 Docker 部署 Django Web server 最佳实践]]
     - [[file:blog/2019/blog-migrate-to-hk.org][博客主机被迫迁移到腾讯云香港]]
     - [[file:blog/2019/build-site-with-org-mode.org][拥抱 org-mode]]
-    - [[file:blog/2019/say-something.org][未来真的会变好吗？]]
     - [[file:blog/2019/close-yanjie.org][眼界要关停了]]
 - gtd
   - [[file:gtd/2019-M09-12.org][2019 9月-12月]]
