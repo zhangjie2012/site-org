@@ -17,8 +17,9 @@
 *** TODO [[https://blog.docker.com/2019/07/intro-guide-to-dockerfile-best-practices/][Intro Guide to Dockerfile Best Practices]] :Docker:
 
 
-** 写作 [50%]
+** 写作 [100%]
 
-*** DONE 使用 org-mode 写文章
+*** DONE 使用 org-mode 搭建网站
     CLOSED: [2019-09-27 Fri 14:23]
-*** TODO 另一个角度谈谈程序员是不是青春饭
+*** DONE 另一个角度谈谈程序员是不是青春饭
+    CLOSED: [2019-09-27 Fri 16:40]
