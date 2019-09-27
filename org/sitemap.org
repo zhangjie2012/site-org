@@ -1,6 +1,6 @@
 #+TITLE: Sitemap
 
-- [[file:index.org][JerryZhang]]
+- [[file:index.org][Smells Like Teen Spirit]]
 - blog
   - [[file:blog/index.org][Blog]]
   - 2011
@@ -157,10 +157,11 @@
     - [[file:blog/2019/emacs-lisp-expand-file-name-to-string.org][emacs lisp expand-file-name to string]]
     - [[file:blog/2019/best-practices-for-docker-deploy-django.org][使用 Docker 部署 Django Web server 最佳实践]]
     - [[file:blog/2019/blog-migrate-to-hk.org][博客主机被迫迁移到腾讯云香港]]
+    - [[file:blog/2019/the-programmer-future.org][另一个角度谈谈程序员是不是青春饭]]
     - [[file:blog/2019/build-site-with-org-mode.org][拥抱 org-mode]]
     - [[file:blog/2019/close-yanjie.org][眼界要关停了]]
 - gtd
-  - [[file:gtd/2019-M09-12.org][2019 9月-12月]]
+  - [[file:gtd/2019-M09-12.org][2019-M09-12]]
 - other
   - [[file:other/resume.org][张杰的简历]]
   - [[file:other/once.org][曾经发表在 ONCE 上的一些话]]
