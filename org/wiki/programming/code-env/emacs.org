@@ -20,6 +20,7 @@
 
 * 基础
 ** 安装 Emacs
+*** Ubuntu
 
 直接使用系统的包管理工具安装的 Emacs 版本都很低，推荐使用源码安装，当前最新的版本是 26.3。源码编译安装即可。下面的 Ubuntu 18.04 上安装流程：
 
@@ -42,9 +43,13 @@ alias em="env TERM=xterm-256color emacs -nw"
 alias emacs="env TERM=xterm-256color emacs -nw"
 #+END_SRC
 
-备注：我常用的环境是 MacOS 和 Ubuntu，MacOS 使用 =brew install emacs=  即可。
-
 _注意_ 如果编译提示 =configure: error: The following required libraries were not found: gnutls= 需要安装 =gnutls= 开发包，使用 =apt-cache search 'libgnutls.*-dev'= 找到对应的包，然后安装 [fn:1]。
+
+*** MacOS
+
+#+BEGIN_SRC
+brew install emacs
+#+END_SRC
 
 ** 键位约定
 
@@ -216,13 +221,15 @@ Emacs 的快捷键非常多，但是除了基本的编辑操作快捷键之外�
 
 ** 如何去掉空白字符
 
-+ ~M-\~：删除光标周围的空格和 tab
-+ ~M-<SPC>~：删除光标周围的空格和 tab，但是保留一个
++ ~M-\~ ：删除光标周围的空格和 tab
++ ~M-<SPC>~ ：删除光标周围的空格和 tab，但是保留一个
 
 另外，我会给文件保存（~C-x s~）时，添加一个 hook：
 
-    (setq show-trailing-whitespace t)
-    (add-hook 'before-save-hook 'delete-trailing-whitespace)
+#+BEGIN_SRC emacs-lisp
+(setq show-trailing-whitespace t)
+(add-hook 'before-save-hook 'delete-trailing-whitespace)
+#+END_SRC
 
 这样在每次保存文件的时候，会自动删掉每行或者段落后面多于的空白字符和空行。
 
