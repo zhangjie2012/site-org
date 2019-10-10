@@ -18,6 +18,7 @@
 
 *** TODO Google: [[How to do a code review][https://google.github.io/eng-practices/review/reviewer/]] :CodeReview:
 
+*** TODO [[https://engineering.linkedin.com/blog/2019/apache-kafka-trillion-messages][https://engineering.linkedin.com/blog/2019/apache-kafka-trillion-messages]] :Kafka:
 ** 写作 [66%]
 
 
