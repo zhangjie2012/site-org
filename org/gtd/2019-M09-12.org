@@ -19,7 +19,7 @@
 *** TODO Google: [[https://google.github.io/eng-practices/review/reviewer/][How to do a code review]] :CodeReview:
 
 *** TODO [[https://engineering.linkedin.com/blog/2019/apache-kafka-trillion-messages][https://engineering.linkedin.com/blog/2019/apache-kafka-trillion-messages]] :Kafka:
-
+*** TODO https://github.com/uber-go/guide/blob/master/style.md :Go:
 ** 写作 [66%]
 *** TODO 在杭州：我结婚了
 *** DONE 使用 org-mode 搭建网站
