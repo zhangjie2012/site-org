@@ -84,7 +84,7 @@ UML 绘图始终觉得 Visio 做的最好，各种在线（比如 ProcessOn）�
 *** 其它
 
 + 科学上网
-  + PC [[https://github.com/shadowsocks/ShadowsocksX-NG][ShadowsocksX-NG]]
+  + MacOS [[https://github.com/shadowsocks/ShadowsocksX-NG][ShadowsocksX-NG]] [[https://github.com/leadscloud/ShadowsocksX-NG-R/releases][SSR]]
   + iOS Potatso Lite
 + 包管理工具
   - [[https://brew.sh/][Homebrew]]：The missing package manager for macOS
