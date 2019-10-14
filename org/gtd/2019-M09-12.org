@@ -1,8 +1,7 @@
 #+SETUPFILE: ~/site/tpl/gtd-tpl.org
 #+TITLE: 2019 9月-12月
 
-** 阅读 [0%]
-
+** 阅读 [9%]
 *** TODO Lock Free [0/2]
 
 - [ ] https://preshing.com/20120612/an-introduction-to-lock-free-programming/
@@ -20,7 +19,10 @@
 
 *** TODO [[https://engineering.linkedin.com/blog/2019/apache-kafka-trillion-messages][https://engineering.linkedin.com/blog/2019/apache-kafka-trillion-messages]] :Kafka:
 *** TODO https://github.com/uber-go/guide/blob/master/style.md :Go:
-*** TODO https://scoutapm.com/blog/understanding-load-averages :Linux:
+*** TODO [[https://pediaa.com/difference-between-multicore-and-multiprocessor/][Difference Between Multicore and Multiprocessor]] :OS:
+*** DONE https://scoutapm.com/blog/understanding-load-averages        :Linux:
+    CLOSED: [2019-10-14 Mon 22:08]
+
 
 ** 写作 [66%]
 *** TODO 在杭州：我结婚了

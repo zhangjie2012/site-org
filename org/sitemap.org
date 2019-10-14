@@ -156,9 +156,9 @@
     - [[file:blog/2019/informer-controller-note.org][Kubernetes informer controller 原理笔记]]
     - [[file:blog/2019/emacs-lisp-expand-file-name-to-string.org][emacs lisp expand-file-name to string]]
     - [[file:blog/2019/best-practices-for-docker-deploy-django.org][使用 Docker 部署 Django Web server 最佳实践]]
-    - [[file:blog/2019/build-site-with-org-mode.org][使用 org-mode 搭建网站]]
     - [[file:blog/2019/blog-migrate-to-hk.org][博客主机被迫迁移到腾讯云香港]]
     - [[file:blog/2019/the-programmer-future.org][另一个角度谈谈程序员是不是青春饭]]
+    - [[file:blog/2019/build-site-with-org-mode.org][拥抱 org-mode]]
     - [[file:blog/2019/close-yanjie.org][眼界要关停了]]
 - gtd
   - [[file:gtd/2019-M09-12.org][2019 9月-12月]]
@@ -184,6 +184,7 @@
     - [[file:weekly/2019/07.org][2019-07]]
     - [[file:weekly/2019/08.org][2019-08]]
     - [[file:weekly/2019/09.org][2019-09]]
+    - [[file:weekly/2019/10-12.org][2019-10 ~ 2019-12]]
 - wiki
   - [[file:wiki/index.org][wiki]]
   - data-structure-and-algorithm
@@ -211,8 +212,8 @@
     - [[file:wiki/devops/nginx.org][nginx]]
     - [[file:wiki/devops/rsync.org][rsync]]
     - [[file:wiki/devops/sed.org][sed]]
-    - [[file:wiki/devops/journalctl.org][systemd]]
     - [[file:wiki/devops/systemd.org][systemd]]
+    - [[file:wiki/devops/journalctl.org][systemd]]
     - [[file:wiki/devops/tar.org][tar]]
     - [[file:wiki/devops/promethues.org][基于 Prometheus 监控告警]]
     - [[file:wiki/devops/ops-faq.org][运维 FAQ]]
