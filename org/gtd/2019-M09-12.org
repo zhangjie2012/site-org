@@ -20,6 +20,8 @@
 
 *** TODO [[https://engineering.linkedin.com/blog/2019/apache-kafka-trillion-messages][https://engineering.linkedin.com/blog/2019/apache-kafka-trillion-messages]] :Kafka:
 *** TODO https://github.com/uber-go/guide/blob/master/style.md :Go:
+*** TODO https://scoutapm.com/blog/understanding-load-averages :Linux:
+
 ** 写作 [66%]
 *** TODO 在杭州：我结婚了
 *** DONE 使用 org-mode 搭建网站
@@ -27,6 +29,7 @@
 *** DONE 另一个角度谈谈程序员是不是青春饭
     CLOSED: [2019-09-27 Fri 16:40]
 
-** 其他 [100%]
 
-** TODO 搭建 Ubuntu 工作环境
+** 其他 [100%]
+*** CANCELD 搭建 Ubuntu 工作环境
+   CLOSED: [2019-10-14 Mon 14:32]
