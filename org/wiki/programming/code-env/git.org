@@ -2,7 +2,6 @@
 #+TITLE: Git
 
 * Git 基础
-
 ** 环境配置
 
 + ~git config user.name your_name~ : 设置你的用户名, 提交会显示
@@ -152,7 +151,7 @@ http.https 协议：
 
 #+BEGIN_SRC shell
 git config --global http.https://github.com.proxy socks5://127.0.0.1:1080
-git config --global --unset http.https://github.com.proxy * 取消代理
+git config --global --unset http.https://github.com.proxy // 取消代理
 #+END_SRC
 
 对于 ssh 协议，在 ~~/.ssh/config~ 中添加：
@@ -161,6 +160,7 @@ git config --global --unset http.https://github.com.proxy * 取消代理
 Host github.com
 ProxyCommand nc -X 5 -x 127.0.0.1:1080 %h %p
 #+END_SRC
+
 
 * 知识点
 
@@ -197,12 +197,12 @@ Git:
 
 上面的 ~file_a file_b1 file_c~ 就是 version2 的 *快照* 。
 
+
 * 学习资源
 
 - [[http://iissnan.com/progit/][Pro Git]]
 - [[https://github.com/aseaday/git-style-guide][Git 风格指南]]
 
-* Footnotes
 
 [fn:git-pull-rebase] https://stackoverflow.com/questions/2472254/when-should-i-use-git-pull-rebase
 
