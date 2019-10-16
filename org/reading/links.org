@@ -10,7 +10,6 @@
 - [[http://www.brendangregg.com/blog/index.html][Brendan Gregg's Blog]]: 2014 年写做游戏用研究 C++ 调优工具 Perf，的时候看过他的文章，被博客内容惊艳到了
 - [[https://dirtysalt.github.io/html/index.html][dirtysalt]]: 浮躁的时候看一看这里，心情一下就平静了
 - [[https://blog.codingnow.com/][云风的 BLOG]]: 吴云洋，资深游戏制作者，开源项目 skynet 作者
-- [[http://blog.devtang.com/][唐巧的博客]]: iOS 开发技巧、创业感悟、读书心得、产品研究笔记
 - [[http://www.raychase.net/][四火的唠叨]]: 一个纯正程序员的啰嗦
 - [[http://www.yinwang.org/][当然我在扯淡]]: 王垠大神的文章，该读还是要读的
 
