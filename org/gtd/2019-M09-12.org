@@ -1,7 +1,7 @@
 #+SETUPFILE: ~/site/tpl/gtd-tpl.org
 #+TITLE: 2019 9月-12月
 
-** 阅读 [9%]
+** 阅读 [8%]
 *** TODO Lock Free [0/2]
 
 - [ ] https://preshing.com/20120612/an-introduction-to-lock-free-programming/
@@ -23,6 +23,12 @@
 *** DONE https://scoutapm.com/blog/understanding-load-averages        :Linux:
     CLOSED: [2019-10-14 Mon 22:08]
 
+
+** 项目 [0%]
+
+*** TODO write a basic go web server  :Go:
+
+add promethus.
 
 ** 写作 [66%]
 *** TODO 在杭州：我结婚了
