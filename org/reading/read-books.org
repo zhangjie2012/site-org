@@ -9,9 +9,6 @@
 分三大类，个人管理、技术、小说。
 
 ** Personal Mangement
-   :PROPERTIES:
-   :CUSTOM_ID: personal-mangement
-   :END:
 
 - [[http://book.douban.com/subject/1775691/][少有人走的路：心智成熟的旅程]]
 - [[http://book.douban.com/subject/25852589/][少有人走的路2：勇敢的面对谎言]]
@@ -21,14 +18,8 @@
 - [[http://book.douban.com/subject/2340100/][遇见未知的自己]]
 
 ** Technology
-   :PROPERTIES:
-   :CUSTOM_ID: technology
-   :END:
 
 *** System Design
-    :PROPERTIES:
-    :CUSTOM_ID: system-design
-    :END:
 
 - [[https://bingohuang.gitbooks.io/12factor/content/zh_cn/][12-Factor]]：构建
   SaaS 应用方法论，2018 年，2 遍
@@ -166,10 +157,6 @@
   个小时火车途中看完了电子书，然后买了纸质书，推荐。2019-02-27
 
 ** Fiction
-   :PROPERTIES:
-   :CUSTOM_ID: fiction
-   :END:
-
 *** 村上春树
     :PROPERTIES:
     :CUSTOM_ID: 村上春树
