@@ -137,3 +137,9 @@ markdown 写博客，自己写一个脚本做个转换就行了。对于 org-mod
 #+BEGIN_SRC
 M-: (org-publish "project name" t)
 #+END_SRC
+
+本地调试，用 docker 创建一个 nginx 容器，然后挂载目录进去：
+
+#+BEGIN_SRC shell
+docker run -p 0.0.0.0:8080:80 -v /Users/admin/site-html:/usr/share/nginx/html:ro --rm nginx
+#+END_SRC
