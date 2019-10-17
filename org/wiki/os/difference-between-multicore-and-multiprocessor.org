@@ -1,0 +1,43 @@
+#+SETUPFILE: ~/site/tpl/wiki-tpl.org
+#+TITLE: 多核和多处理器的区别
+
+来自：[[https://pediaa.com/difference-between-multicore-and-multiprocessor/][Difference Between Multicore and Multiprocessor]]
+
+多核（multicore）和多处理器（Multiprocessor）最主要不同在于：
+
+- 多核指的是拥有多个执行单元的 CPU
+- 多处理器指的是有两个或者两个以上的 CPU 系统
+
+两个都是为了提高计算机的计算速度，多核不需要想多处理器配置那么复杂，但是多处理器更加可靠并且能够执行多个程序。
+
+简单来说，多核有单个 CPU，而多处理器有多个 CPU。
+
+** 核心条目（Key Terms）
+
+/多核，多处理器，操作系统。/
+
+[[https://wiki-1252349778.cos.ap-shanghai.myqcloud.com/2019/Difference-Between-Multicore-and-Multiprocessor-Comparison-Summary-1.jpg][https://wiki-1252349778.cos.ap-shanghai.myqcloud.com/2019/Difference-Between-Multicore-and-Multiprocessor-Comparison-Summary-1.jpg]]
+
+** 什么是多核？
+
+CPU 或者成为处理器是计算的大脑，CPU 的执行单元称之为核（core），它负责指令的读取和执行。这些指令可能是计算、输出传输、分支指令等。
+具有一个核的处理器称之为单核处理器，相应的具有多核的处理器称之为多核处理器。高性能的计算机，可能会有六核或者八核处理器。
+
+#+NAME: Figure 1: Multicore
+[[https://wiki-1252349778.cos.ap-shanghai.myqcloud.com/2019/Difference-Between-Multicore-and-Multiprocessor_Figure-1.png][https://wiki-1252349778.cos.ap-shanghai.myqcloud.com/2019/Difference-Between-Multicore-and-Multiprocessor_Figure-1.png]]
+
+多核的主要优点是能够在一个核（笔者：这里说法应该是有误的，应该是一个 CPU）上同时执行多个指令，它提高了整体的速度，还实现了并行计算。
+总体而言，多核主要用于嵌入式，网络，数字信号处理（DSP）核图形（GPU）等应用。
+
+** 什么是多处理器？
+
+多处理器有两个或者多个处理器（CPU），他们可以同时执行多个指令。因此，它增加了吞吐量，一个处理器发生故障，也不会影响其他的处理器工作。
+因此，多处理器更加可靠。
+
+#+NAME: Figure 2: Symmetric Multiprocessor
+https://wiki-1252349778.cos.ap-shanghai.myqcloud.com/2019/Difference-Between-Multicore-and-Multiprocessor_Figure-2.png
+
+多处理器可以使用共享内存或分布式内存。在一个共享内存多处理器中，每个 CPU 共享主内存和外围设备以同时执行指令。在这些类型的系统中，所有CPU都使用相同的总线来访问主存储器。
+它为所有 CPU 提供一个内存空间。大多数 CPU 将处于空闲状态，因为有更多的访问总线的流量。这些多处理器也称为对称多处理器。
+
+在分布式内存多处理器中，每个CPU都有其专用内存。每个 CPU 都可以对本地数据进行操作以执行计算任务。如果需要远程数据，CPU 可以与其他的 CPU 通信或者通过总线访问主存储器。
