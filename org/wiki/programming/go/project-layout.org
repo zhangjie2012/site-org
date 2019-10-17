@@ -1,6 +1,7 @@
 #+SETUPFILE: ~/site/tpl/wiki-tpl.org
 #+TITLE: Go 项目布局标准
 #+DATE: 2019-06-09 17:08:00
+#+OPTIONS: num:nil
 
 不管是什么语言，稍微大的项目，目录布局都会有问题，只不过有些语言的框架自身就提供了目录结构规范。
 
@@ -132,19 +133,19 @@ Go 还会忽略以 =.= 或者 =_= 开头的文件。
 
 设计和用户文档（除了 godoc 生成的文档之外）。
 
-查看 [[https://github.com/golang-standards/project-layout/blob/master/docs/README.md][/docs]] 更多范例。
+查看 [[https://github.com/golang-standards/project-layout/blob/master/docs/README.md][ =/docs= ]] 更多范例。
 
 *** =/tools=
 
 此项目的支持工具。注意，这些工具可以从 =/pkg= 和 =/internal= 目录中导入代码。
 
-查看 [[https://github.com/golang-standards/project-layout/blob/master/tools/README.md][/tools]] 更多范例。
+查看 [[https://github.com/golang-standards/project-layout/blob/master/tools/README.md][ =/tools= ]] 更多范例。
 
 *** =/examples=
 
 你的应用程序或者公共库的范例。
 
-查看 [[https://github.com/golang-standards/project-layout/blob/master/examples/README.md][/example]] 更多范例。
+查看 [[https://github.com/golang-standards/project-layout/blob/master/examples/README.md][ =/example= ]] 更多范例。
 
 *** =/third_party=
 
@@ -162,7 +163,7 @@ Git hooks.
 
 如果你不使用 github pages，就在这里放置项目的网站数据。
 
-查看 [[https://github.com/golang-standards/project-layout/blob/master/website/README.md][/website]] 更多范例。
+查看 [[https://github.com/golang-standards/project-layout/blob/master/website/README.md][ =/website= ]] 更多范例。
 
 ** 你不应该使用的目录
 
