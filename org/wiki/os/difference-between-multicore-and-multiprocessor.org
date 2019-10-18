@@ -41,3 +41,39 @@ https://wiki-1252349778.cos.ap-shanghai.myqcloud.com/2019/Difference-Between-Mul
 它为所有 CPU 提供一个内存空间。大多数 CPU 将处于空闲状态，因为有更多的访问总线的流量。这些多处理器也称为对称多处理器。
 
 在分布式内存多处理器中，每个CPU都有其专用内存。每个 CPU 都可以对本地数据进行操作以执行计算任务。如果需要远程数据，CPU 可以与其他的 CPU 通信或者通过总线访问主存储器。
+
+** 多核和多处理器的关系
+
+最近的计算机有多个 CPU，每个 CPU 都有多个核，一次性可以读取和执行几条指令。
+
+** 多核和多处理器的区别
+
+*** 定义
+
+具有两个或者多个处理单元（核）的单个 CPU 称为多核 CPU，它们能够读取和执行程序指令。多处理器具有两个或者多个 CPU 系统，允许同时处理程序。
+
+*** 执行速度
+
+- 多核可以更快的执行单个程序
+- 多处理器可以更快的执行多个程序
+
+*** 可靠性
+
+多处理器比多核更加可靠，多 CPU 之间运行程序不会相互干扰，一个 CPU 出错了，也不会影响其他的 CPU，容错性更高。
+
+*** Traffic
+
+与多处理器相比，多核通信量要少，因为所有的内核都是集成在单个芯片中。
+
+*** 总结
+
+区别在于是一个 CPU 都多个核，还是有多个 CPU。现在计算机具有多个 CPU，每个 CPU 有多个核。
+
+** 参考
+
+1. “Multi-Core Processor.” [[https://en.wikipedia.org/wiki/Multi-core_processor][Wikipedia]], Wikimedia Foundation, 25 July 2018
+
+** 图片声明
+
+1. “Cc-NUMA Multi-Core” By Ferry24.Milan – Own work (CC BY-SA 3.0) via [[https://commons.wikimedia.org/w/index.php?curid=33666102][Commons Wikimedia]]
+2. “SMP – Symmetric Multiprocessor System” By Ferry24.Milan – Own work (CC BY-SA 3.0) via [[https://commons.wikimedia.org/w/index.php?curid=17202548][Commons Wikimedia]]
