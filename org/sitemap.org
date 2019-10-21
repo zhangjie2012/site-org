@@ -225,6 +225,7 @@
   - os
     - [[file:wiki/os/epoll.org][I/O 多路复用]]
     - [[file:wiki/os/other.org][其他]]
+    - [[file:wiki/os/difference-between-multicore-and-multiprocessor.org][多核和多处理器的区别]]
 - youth
   - [[file:youth/in-hefei-s1.org][在合肥-S1]]
   - [[file:youth/in-hefei-10.org][在合肥-S10: 年后]]
