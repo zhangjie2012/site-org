@@ -248,7 +248,17 @@ Emacs 的快捷键非常多，但是除了基本的编辑操作快捷键之外�
         ))
 #+END_SRC
 
-如果发现类似问题，可以注释掉其中的两个，只保留一个，比如 ~melpta-stable~，一般能解决此问题。之前在安装 helm 的时候经常遇到依赖有问题，刚才（2019-05-31）安装 ivy 也遇到了类似的问题，给 github ivy 提了一个 [[https://github.com/abo-abo/swiper/issues/2087][issue]] 才解决了这个问题（社区的力量真强大）。
+如果发现类似问题，可以注释掉其中的两个，只保留一个，比如 ~melpta-stable~ ，一般能解决此问题。之前在安装 helm 的时候经常遇到依赖有问题，刚才（2019-05-31）安装 ivy 也遇到了类似的问题，给 github ivy 提了一个 [[https://github.com/abo-abo/swiper/issues/2087][issue]] 才解决了这个问题（社区的力量真强大）。
+
+如果有 FQ 环境，也可以在配置文件中设置 proxy ：
+
+#+BEGIN_SRC emacs-lisp
+(setq url-proxy-services
+      '(
+        ("http" . "127.0.0.1:1088")
+        ("https" . "127.0.0.1:1088")
+        ))
+#+END_SRC
 
 ** Emacs 启动速度太慢怎么办？
 
