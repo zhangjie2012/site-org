@@ -321,6 +321,10 @@ pandoc -f markdown -t org -o test.org test.md
 - [[https://github.com/redguardtoo/emacs.d][redguardtoo/emacs.d]]
 - [[https://github.com/hlissner/doom-emacs][hlissner/doom-emacs]]
 
+** Org-mode theme
+
+- [[https://jessekelly881-imagine.surge.sh][Imagine]]: 范例 [[https://jessekelly.tk/][Jesse Kelly]]
+- [[https://jessekelly881-rethink.surge.sh][Rethink]]
 
 [fn:md-to-org] https://emacs.stackexchange.com/questions/5465/how-to-migrate-markdown-files-to-emacs-org-mode-format
 
