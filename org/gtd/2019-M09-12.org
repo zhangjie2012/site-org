@@ -22,6 +22,10 @@
 *** DONE https://scoutapm.com/blog/understanding-load-averages        :Linux:
     CLOSED: [2019-10-14 Mon 22:08]
 
+*** TODO Influx Query Language (InfluxQL) :TSDB:
+
+https://docs.influxdata.com/influxdb/v1.7/query_language/data_exploration/#common-issues-with-the-select-statement
+
 ** 项目 [0%]
 *** TODO write a basic go web server                                     :Go:
 
