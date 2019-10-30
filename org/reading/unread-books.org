@@ -4,7 +4,7 @@
 #+OPTIONS: toc:t
 #+OPTIONS: num:nil
 
-目前在读：SRE、影响力
+目前在读：原则。
 
 ** System
 
@@ -43,7 +43,6 @@
 ** Technology && Internet
 
 - [[https://book.douban.com/subject/26652329/][失控：全人类的最终命运和结局]]
-- [[https://book.douban.com/subject/1786387/][影响力]]
 - [[https://book.douban.com/subject/4075835/][从优秀到卓越]]
 - [[https://book.douban.com/subject/1022936/][基业长青]]
 - [[https://book.douban.com/subject/30189843/][原则]]
