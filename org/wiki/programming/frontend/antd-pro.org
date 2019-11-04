@@ -67,7 +67,7 @@ Pro =0.x= 版本和 =1.x= 版本 =npm run start= 进度卡到 =91%= 问题，可
 
 2.0 之后， =npm run build= 生成的 css 和 js 文件名不再包含 hash 值，这样会导致即便 nginx 设置了 =index.html= 不缓存，因为 css 和 js 每个版本的名字都是一样的，导致新版本更新之后，用户只有强制刷新浏览器才能生效。
 
-解决办法是在 =/config/config.js= 中添加 =hash:true=，这是 umi 的一个配置特性：
+解决办法是在 =/config/config.js= 中添加 =hash:true= ，这是 umi 的一个配置特性：
 
 [[https://umijs.org/zh/config/#hash]]
 
