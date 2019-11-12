@@ -16,6 +16,7 @@
 - [[http://book.douban.com/subject/25749845/][把时间当做朋友]]
 - [[http://book.douban.com/subject/6709809/][暗时间]]
 - [[http://book.douban.com/subject/2340100/][遇见未知的自己]]
+- [[https://book.douban.com/subject/30189843/][原则]]，值得多读几遍的书，2019-11-12
 
 ** Technology
 *** System Design
