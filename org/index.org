@@ -11,6 +11,7 @@
 - [[file:reading/read-books.org][Read]]、[[file:reading/unread-books.org][Unreading]] :: 读过的和打算读的书，包括电子书
 - [[file:reading/links.org][Links]] :: 经常看的网站
 - [[file:other/resume.org][Resume]] :: 简历
+- [[file:other/emacs-news.org][Emacs News]] :: just for fun
 
 ** Remember
 
