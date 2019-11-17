@@ -21,11 +21,13 @@
 说明：
 
 - 对于耳机，入耳式和头戴式看个人喜好，两个切换着用效果更佳；蓝牙耳机，会有一定的音质损伤，看怎么权衡了
+- 对于显示器，我自己测试下来，Mac mini 刷新率跟不上 4K，所以只能买 2K；但是对于笔记本，最新的系统 =10.15.1= 2K 与 4K 的差距还挺大的，10.15 之前没这种感觉
 - 对于机械键盘，我买过 2 个 Cherry 的，2 个 Filco 的，还有一个 [[https://item.jd.com/3491224.html][IKBC]] 的。轴用过青轴和茶轴，还有朋友的红轴。结论供参考：
   1) 原厂轴太重要了，IKBC 算是国内做的比较好的了，用的时间长了，轴跟 Filco 的还是有一定差距的（按着手指头累）
   2) Cherry 键盘普遍比 Filco 丑，真的丑
   3) 键盘不建议买奶白色，漂亮是绝对漂亮，就是太不禁脏了，别听信洗键帽之说，我有两个键盘洗过键帽，装回去之后总感觉怪怪的
   4) 推荐茶轴，青轴不适合写代码，一来太吵，而来确实累；红轴太轻了，几乎没有任何机械键盘的快感，还是算了
+  5) 机械键盘用的时间长了，还是会比较累（难道是因为年龄大了？），后面准备低键位的红轴了
 
 ** 编码环境
 
@@ -34,18 +36,16 @@
   + [[https://www.vim.org/][Vim]]，没办法，服务器只有 Vi/Vim
 + 编码字体
   - [[https://github.com/tonsky/FiraCode][Fira Code]]
-  - [[https://github.com/adobe-fonts/source-code-pro][Source Code Pro]] 用了五年多，现在依旧认为是最美的的编程字体，最近才切换到 Fira code，Fira code 也很好看，而且棱角分明一些。
+  - [[https://github.com/adobe-fonts/source-code-pro][Source Code Pro]] 用了五年多，现在依旧认为是最美的的编程字体，最近才切换到 Fira code，Fira code 也很好看，而且棱角分明一些
+  - [[https://github.com/whorusq/sublime-text-3/blob/master/fonts/Microsoft-Yahei-Mono.ttf][Microsoft-Yahei-Mono]] 真中英文等宽等高字体，文泉驿也是，就是太丑了（目前只有这两个字体）
 + shell
   - [[https://github.com/robbyrussell/oh-my-zsh][oh-my-zsh]]
 
 ** 工具软件
 
-*** 云原生
+*** 公有云
 
-+ 容器化
-  + [[https://www.docker.com/][Docker]]
-+ 版本管理
-  - [[https://about.gitlab.com/][Gitlab]]
+目前只推荐腾讯云，UCloud 也还不错毕竟小厂。阿里云就算了，坑太多了。
 
 *** 记录
 
@@ -75,7 +75,7 @@ UML 绘图始终觉得 Visio 做的最好，各种在线（比如 ProcessOn）�
 
 *** 写作
 
-+ markup 语言
++ 文本标记语言
   - markdown
   - org-mode
 + 资源：
@@ -84,8 +84,8 @@ UML 绘图始终觉得 Visio 做的最好，各种在线（比如 ProcessOn）�
 *** 其它
 
 + 科学上网
-  + MacOS [[https://github.com/shadowsocks/ShadowsocksX-NG][ShadowsocksX-NG]] [[https://github.com/leadscloud/ShadowsocksX-NG-R/releases][SSR]]
-  + iOS Potatso Lite
+  + [[https://github.com/shadowsocks/ShadowsocksX-NG][ShadowsocksX-NG]]，没有稳定的梯子，现在都改成了 [[https://github.com/leadscloud/ShadowsocksX-NG-R/releases][SSR]] 了，
+  + iOS +Potatso Lite+ 太吃内存了，删了
 + 包管理工具
   - [[https://brew.sh/][Homebrew]]：The missing package manager for macOS
 + SSH 连接工具 & 终端模拟器
@@ -95,7 +95,7 @@ UML 绘图始终觉得 Visio 做的最好，各种在线（比如 ProcessOn）�
 + Chrome 插件
   - [[https://www.getpostman.com/][Postman]]：也可独立于 Chrome 运行
   - FireShot：网页截图
-  - [[https://github.com/FelisCatus/SwitchyOmega][SwitchyOmega]]
+  - [[https://github.com/FelisCatus/SwitchyOmega][SwitchyOmega]]： 你懂的
 + 代码生成图片
   - [[https://dawnlabs.io/carbon][carbon]]
 + 文本比较
