@@ -160,6 +160,7 @@
     - [[file:blog/2019/the-programmer-future.org][另一个角度谈谈程序员是不是青春饭]]
     - [[file:blog/2019/build-site-with-org-mode.org][拥抱 org-mode]]
     - [[file:blog/2019/close-yanjie.org][眼界要关停了]]
+    - [[file:blog/2019/rexue-tb.org][离开热血之后的第三次团建]]
 - gtd
   - [[file:gtd/2019-M09-12.org][2019-M09-12]]
 - other
