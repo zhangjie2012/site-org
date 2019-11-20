@@ -11,12 +11,6 @@ govendor: <https://github.com/kardianos/govendor>，安装： ~go get -u github.
 + 项目初始化： ~govendor init~
 + 查看文件状态： ~govendor list~
 + 添加 package 到 vendor： ~govendor add +external~
-+ 在 ~.gitignore~ 中添加 package 过滤：
-
-#+BEGIN_SRC shell
-vendor/*
-!vendor/vendor.json
-#+END_SRC
 
 ** 常规使用
 

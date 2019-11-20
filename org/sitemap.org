@@ -164,6 +164,7 @@
 - gtd
   - [[file:gtd/2019-M09-12.org][2019-M09-12]]
 - other
+  - [[file:other/emacs-news.org][Emacs News]]
   - [[file:other/resume.org][张杰的简历]]
   - [[file:other/once.org][曾经发表在 ONCE 上的一些话]]
   - [[file:other/duomi.org][音乐回忆]]
