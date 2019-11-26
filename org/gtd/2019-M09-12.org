@@ -1,13 +1,15 @@
 #+SETUPFILE: ~/site/tpl/gtd-tpl.org
 #+TITLE: 2019 9月-12月
 
-** 技术学习
+** 技术学习 [100%]
 
-*** TODO influxDB                                                      :TSDB:
+*** CANCELD influxDB                                                   :TSDB:
+    CLOSED: [2019-11-26 Tue 19:29]
+先不看了。
+*** DONE [[https://uformjs.org/#/MpI2Ij/dNFzFyTb][UForm]]                                                         :前端:
+    CLOSED: [2019-11-26 Tue 19:27]
+简单过了一遍，发现也并没有方便很多。表单一直是一个比较蛋疼的东西，不管你怎么处理，都不可能完美的满足需求。因为业务场景本身就比较复杂。
 
-- [ ] Influx Query Language (InfluxQL): https://docs.influxdata.com/influxdb/v1.7/query_language/data_exploration/#common-issues-with-the-select-statement
-
-*** TODO [[https://uformjs.org/#/MpI2Ij/dNFzFyTb][UForm]]                                                         :前端:
 ** 阅读 [16%]
 *** TODO Lock Free [0/2]
 - [ ] https://preshing.com/20120612/an-introduction-to-lock-free-programming/
@@ -32,8 +34,11 @@
 
 add promethus.
 
-** 写作 [66%]
-*** TODO 在杭州：我结婚了
+** 写作 [100%]
+*** CANCELD 在杭州：我结婚了
+    CLOSED: [2019-11-26 Tue 19:30]
+过去的时间太长了， CANCEL。
+
 *** DONE 使用 org-mode 搭建网站
     CLOSED: [2019-09-27 Fri 14:23]
 *** DONE 另一个角度谈谈程序员是不是青春饭
