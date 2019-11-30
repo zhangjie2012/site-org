@@ -4,326 +4,489 @@
 
 [[https://reacttraining.com/react-router/web/guides/quick-start][react-router]]
 
-* 主要组件
-React Router 主要分三类组件：
+* 指南
+** 主要组件
+ React Router 主要分三类组件：
 
-- 路由器（routers），比如 =<BrowserRouter>= 和 =<HashRouter>=
-- 路由匹配，比如 =<Route>= 和 =<Switch>=
-- 导航（Navigation），比如 =<Link>=, =<NavLink>= 和 =<Redirect>= ，也成为路由变更
+ - 路由器（routers），比如 =<BrowserRouter>= 和 =<HashRouter>=
+ - 路由匹配，比如 =<Route>= 和 =<Switch>=
+ - 导航（Navigation），比如 =<Link>=, =<NavLink>= 和 =<Redirect>= ，也成为路由变更
 
-所有的组件，都需要从 =react-router-dom= 库中导入。
+ 所有的组件，都需要从 =react-router-dom= 库中导入。
 
-** 路由器
+*** 路由器
 
-路由组件的核心是 React Router，对于 Web 项目， =react-router-dom= 提供了 =<BrowserRouter>= 和 =<HashRouter>= 两种 routers。
-主要区别在于他们存储 URL 和与服务器通信的方式。
+ 路由组件的核心是 React Router，对于 Web 项目， =react-router-dom= 提供了 =<BrowserRouter>= 和 =<HashRouter>= 两种 routers。
+ 主要区别在于他们存储 URL 和与服务器通信的方式。
 
-- =<BrowserRouter>= 使用正常的 URL 路径，要求正确的配置服务器地址
-- =<HashRouter>= 讲当前的路径存储再 hash 部分中，网址看起来是这样的 =http://example.com/#/your/page= 。
-  hash 值不会发送到服务器中，也就意味着不需要特殊的服务器配置。
+ - =<BrowserRouter>= 使用正常的 URL 路径，要求正确的配置服务器地址
+ - =<HashRouter>= 讲当前的路径存储再 hash 部分中，网址看起来是这样的 =http://example.com/#/your/page= 。
+   hash 值不会发送到服务器中，也就意味着不需要特殊的服务器配置。
 
-使用 Router 要确保顶层的 =<App />= 放在 Router 之中，如下：
+ 使用 Router 要确保顶层的 =<App />= 放在 Router 之中，如下：
+
+ #+BEGIN_SRC javascript
+ import React from "react";
+ import ReactDOM from "react-dom";
+ import { BrowserRouter } from "react-router-dom";
+
+ function App() {
+   return <h1>Hello React Router</h1>;
+ }
+
+ ReactDOM.render(
+   <BrowserRouter>
+     <App />
+   </BrowserRouter>,
+   document.getElementById("root")
+ );
+ #+END_SRC
+
+*** 路由匹配
+
+ 有两个路由匹配组件： =Switch= 和 =Route= 。当 =<Switch>= 渲染的时候，它会搜索它的 _子_ =<Route>= 元素，找到与当前 URL 匹配的元素。
+ 匹配到之后就会忽略其他的路由。也就意味着特殊的路径要放在不特殊路径的 *前面* 。
+
+ 如果找不到匹配项， =<Switch>= 会什么都不渲染（null）。
+
+ 值得注意的是， =<Route path>= 只会匹配 URL 的 *开头* ，不是全部。所以 ~<Route path="/">~ 总是会匹配所有的 URL。
+ 因为这个原因，我们通常把它放在 =<Switch>= 的最后。另外一个解决办法是使用 =exact= 参数，全部匹配路径，比如： ~<Route exact path="/">~ 。
+
+*** 路由变更（Nav）
+
+ React Router 提供了 =<Link>= 组件来创建链接。当使用 =<Link>= 的时候，会渲染成 anchor（ =<a>= ）。
+
+ =<NavLink>= 是 =<Link>= 的一种特殊类型，当其 prop 与当前位置匹配时，可以将其自身设置为「活动」。比如：
+
+ #+BEGIN_SRC html
+ <NavLink to="/react" activeClassName="hurray">
+   React
+ </NavLink>
+ #+END_SRC
+
+ 可以用于对当前选中的页面做一些特殊的样式设置之类的。
+
+ 如果想要强制导航，你可以使用 =<Redirect>= 。当渲染的时候，它会使用 prop 进行导航。
+
+** TODO 服务端渲染（Server Rendering）
+** 代码拆分（Code Splitting）
+
+ 代码拆分可以理解成代码按需加载。为了实现这个目标，需要使用 webpack， =@babel/plugin-syntax-dynamic-import= 和 loadable-components。
+
+ webpack 默认支持动态导入；但是，你如果使用了 Babel（比如：把 JSX 编译成 JavaScript），那么你就需要使用 @babel/plugin-syntax-dynamic-import 插件。
+ 这只是一个语法插件，意味着 Babel 不会做任何额外的转换。该插件仅允许 Babel 解析动态导入，因此 webpack 可以将 bundle 他们作为代码拆分。你的 =.babelrc= 可能长这样：
+
+ #+BEGIN_SRC javascript
+ {
+   "presets": ["@babel/preset-react"],
+   "plugins": ["@babel/plugin-syntax-dynamic-import"]
+ }
+ #+END_SRC
+
+ loadable-components 是一个库加载组件用来动态导入。它自动处理各种边缘情况，使代码拆分变的很简单。下面是使用范例：
+
+ #+BEGIN_SRC javascript
+ import loadable from "@loadable/component";
+ import Loading from "./Loading.js";
+
+ const LoadableComponent = loadable(() => import("./Dashboard.js"), {
+   fallback: <Loading />
+ });
+
+ export default class LoadableDashboard extends React.Component {
+   render() {
+     return <LoadableComponent />;
+   }
+ }
+ #+END_SRC
+
+ 当程序运行时，动态加载，fallback 是加载期间展示的组件。
+
+** 滚动恢复
+*** 滚动到顶部
+
+ 当有一个长页面时，经常有滚动到顶部的需求。使用 =<ScrollToTop>= 可以轻松解决这个问题，该组件将在每次导航时向上滚动窗口。
+
+ #+BEGIN_SRC javascript
+ import { useEffect } from "react";
+ import { useLocation } from "react-router-dom";
+
+ export default function ScrollToTop() {
+   const { pathname } = useLocation();
+
+   useEffect(() => {
+     window.scrollTo(0, 0);
+   }, [pathname]);
+
+   return null;
+ }
+ #+END_SRC
+
+ 如果你用的是 React 16.8 之前的版本，你可以用 =React.Component= 来做相同的事情：
+
+ #+BEGIN_SRC javascript
+ import React from "react";
+ import { withRouter } from "react-router-dom";
+
+ class ScrollToTop extends React.Component {
+   componentDidUpdate(prevProps) {
+     if (
+       this.props.location.pathname !== prevProps.location.pathname
+     ) {
+       window.scrollTo(0, 0);
+     }
+   }
+
+   render() {
+     return null;
+   }
+ }
+
+ export default withRouter(ScrollToTop);
+ #+END_SRC
+
+ 然后把他们放在应用的顶部，路由器的下方：
+
+ #+BEGIN_SRC
+ function App() {
+   return (
+     <Router>
+       <ScrollToTop />
+       <App />
+     </Router>
+   );
+ }
+ #+END_SRC
+
+ 如果你将标签页连接到路由器，那么当切换标签页时，你不希望滚动到顶部。而是滚动到特定位置。
+
+ #+BEGIN_SRC javascript
+ import { useEffect } from "react";
+
+ function ScrollToTopOnMount() {
+   useEffect(() => {
+     window.scrollTo(0, 0);
+   }, []);
+
+   return null;
+ }
+
+ // Render this somewhere using:
+ // <Route path="..." children={<LongContent />} />
+ function LongContent() {
+   return (
+     <div>
+       <ScrollToTopOnMount />
+
+       <h1>Here is my long content page</h1>
+       <p>...</p>
+     </div>
+   );
+ }
+ #+END_SRC
+
+ 同样，如果使用 React 16.8 以前的版本，可以这么做：
+
+ #+BEGIN_SRC javascript
+ import React from "react";
+
+ class ScrollToTopOnMount extends React.Component {
+   componentDidMount() {
+     window.scrollTo(0, 0);
+   }
+
+   render() {
+     return null;
+   }
+ }
+
+ // Render this somewhere using:
+ // <Route path="..." children={<LongContent />} />
+ class LongContent extends React.Component {
+   render() {
+     return (
+       <div>
+         <ScrollToTopOnMount />
+
+         <h1>Here is my long content page</h1>
+         <p>...</p>
+       </div>
+     );
+   }
+ }
+ #+END_SRC
+
+*** 通用的解决方案
+
+ 对于通用的解决办法（浏览器已经开始原生实现），我们讨论两件事情：
+
+ 1. 向上滚动导航，这样就不会开始一个新的底部屏幕
+ 2. 恢复滚动位置，点击「后退」和「前进」溢出元素（但不是点击链接）
+
+ 在这个点上，我们希望要有一个通用的 API，答题思路是这样的：
+
+ #+BEGIN_SRC javascript
+ <Router>
+   <ScrollRestoration>
+     <div>
+       <h1>App</h1>
+
+       <RestoredScroll id="bunny">
+         <div style={{ height: "200px", overflow: "auto" }}>
+           I will overflow
+         </div>
+       </RestoredScroll>
+     </div>
+   </ScrollRestoration>
+ </Router>
+ #+END_SRC
+
+ 首先， =ScrollRestoration= 会向上滚动导航；其次，它会用 =location.key= 保存窗口滚动位置，并且 =ScrollRestoration= 的位置放在 =sessionStorage= 。
+ 然后，当 =ScrollRestoration= 或者 =RestoredScroll= 组件挂载时，他们可以从 =sessionStorage= 中查找他们的位置。
+
+ /说了半天，原来都是设想，不看了../
+
+** 原理
+
+ 这份指南的目的是说明使用 React Router 时要具有的思维模型。我们称作「动态路由」，与你熟悉的「静态路由」完全不同 。
+
+*** 静态路由
+
+ 如果你用过 Rails，Express，Angular 等。那你就已经用过静态路由了。在这些框架中，所有的路由部分都要放在应用初始化任何渲染的前面。
+ React Router pre-v4 也是静态的（大部分）。让我们看一下在 Express 中是如何动态配置路由的：
+
+ #+BEGIN_SRC javascript
+ // Express Style routing:
+ app.get("/", handleIndex);
+ app.get("/invoices", handleInvoices);
+ app.get("/invoices/:id", handleInvoice);
+ app.get("/invoices/:id/edit", handleInvoiceEdit);
+
+ app.listen();
+ #+END_SRC
+
+ 注意，是在程序监听之前是如何生命路由的。客户端一侧的路由也是类似的。在 Angular 中，你也要提前声明好路由，
+ 然后在顶部导入他们（ =AppModule= 渲染之前）：
+
+ #+BEGIN_SRC javascript
+ // Angular Style routing:
+ const appRoutes: Routes = [
+   {
+     path: "crisis-center",
+     component: CrisisListComponent
+   },
+   {
+     path: "hero/:id",
+     component: HeroDetailComponent
+   },
+   {
+     path: "heroes",
+     component: HeroListComponent,
+     data: { title: "Heroes List" }
+   },
+   {
+     path: "",
+     redirectTo: "/heroes",
+     pathMatch: "full"
+   },
+   {
+     path: "**",
+     component: PageNotFoundComponent
+   }
+ ];
+
+ @NgModule({
+   imports: [RouterModule.forRoot(appRoutes)]
+ })
+ export class AppModule {}
+ #+END_SRC
+
+ Ember 使用了比较常规的 =routes.js= 文件，但也是在你的程序渲染之前做的：
+
+ #+BEGIN_SRC javascript
+ // Ember Style Router:
+ Router.map(function() {
+   this.route("about");
+   this.route("contact");
+   this.route("rentals", function() {
+     this.route("show", { path: "/:rental_id" });
+   });
+ });
+
+ export default Router;
+ #+END_SRC
+
+ 尽管 API 不同，但他们都是「静态路由」模型，React Router 也一直跟进到 V4。
+
+ 为了用好 React Router，你需要忘了这些。
+
+*** 动态路由
+
+ 所谓动态路由指的是在应用渲染的时候进行的路由，不是程序之外的配置或者约定。也就是说所有的路由都是 React Router 中的组件。
+ 下面是 API 审查，帮助你了解其工作原理：
+
+ 首先，在需要渲染应用的顶部添加 Router 组件：
+
+ #+BEGIN_SRC javascript
+ // react-native
+ import { NativeRouter } from "react-router-native";
+
+ // react-dom (what we'll use here)
+ import { BrowserRouter } from "react-router-dom";
+
+ ReactDOM.render(
+   <BrowserRouter>
+     <App />
+   </BrowserRouter>,
+   el
+ );
+ #+END_SRC
+
+ 然后，使用链接组件链接到新的位置：
+
+ #+BEGIN_SRC javascript
+ const App = () => (
+   <div>
+     <nav>
+       <Link to="/dashboard">Dashboard</Link>
+     </nav>
+   </div>
+ );
+ #+END_SRC
+
+ 最后，使用 Route 把路径路由到 UI 组件上。
+
+ #+BEGIN_SRC javascript
+ const App = () => (
+   <div>
+     <nav>
+       <Link to="/dashboard">Dashboard</Link>
+     </nav>
+     <div>
+       <Route path="/dashboard" component={Dashboard} />
+     </div>
+   </div>
+ );
+ #+END_SRC
+
+ Route 会渲染成 ~<Dashboard {...props}/>~, =props= 是路由器相关的信息，比如 ={ match, location, history }= ，如果用户不是 =/dashboard= 路径
+ 会渲染成 =null= 。这基本上就是路由的全部了。
+
+*** 嵌套路由
+
+ 许多路由器都有嵌套路由的概念，如果你用了 V4 的 React Router，那么你就知道它也是这样的。只要嵌套 =div= 就可以了：
+
+ #+BEGIN_SRC javascript
+ const App = () => (
+   <BrowserRouter>
+     {/* here's a div */}
+     <div>
+       {/* here's a Route */}
+       <Route path="/tacos" component={Tacos} />
+     </div>
+   </BrowserRouter>
+ );
+
+ // when the url matches `/tacos` this component renders
+ const Tacos = ({ match }) => (
+   // here's a nested div
+   <div>
+     {/* here's a nested Route,
+         match.url helps us make a relative path */}
+     <Route path={match.url + "/carnitas"} component={Carnitas} />
+   </div>
+ );
+ #+END_SRC
+
+*** 响应式路由
+* API
+** Hooks
+
+React 16.8 版本之后，React Router 利用 hook 机制添加了几种常用的 hooks：
+
+- [[https://reacttraining.com/react-router/web/api/Hooks/usehistory][useHistory]]，得到一个 history 实例
+- [[https://reacttraining.com/react-router/web/api/Hooks/uselocation][useLocation]]，得到一个 location 对象
+- [[https://reacttraining.com/react-router/web/api/Hooks/useparams][useParams]]，返回 URL 参数中变量的键值对
+- [[https://reacttraining.com/react-router/web/api/Hooks/useroutematch][useRouteMatch]]，以 =<Route>= 相同的方式 match 当前 URL
+
+** =<BrowserRouter>=
+
+=<Router>= 使用 HTML5 history API 保证 UI 界面与 URL 同步。
 
 #+BEGIN_SRC javascript
-import React from "react";
-import ReactDOM from "react-dom";
-import { BrowserRouter } from "react-router-dom";
-
-function App() {
-  return <h1>Hello React Router</h1>;
-}
-
-ReactDOM.render(
-  <BrowserRouter>
-    <App />
-  </BrowserRouter>,
-  document.getElementById("root")
-);
+<BrowserRouter
+  basename={optionalString}
+  forceRefresh={optionalBool}
+  getUserConfirmation={optionalFunc}
+  keyLength={optionalNumber}
+>
+  <App />
+</BrowserRouter>
 #+END_SRC
 
-** 路由匹配
+- =basename: string= 所有路径的基准路径
+- =getUserConfirmation: func=
+- =forceRefresh: bool= true 时，新页面导航会强制刷新页面
+- =keyLength: number= location.key 的长度，默认是 6
+- =children: node= 要渲染的子元素
 
-有两个路由匹配组件： =Switch= 和 =Route= 。当 =<Switch>= 渲染的时候，它会搜索它的 _子_ =<Route>= 元素，找到与当前 URL 匹配的元素。
-匹配到之后就会忽略其他的路由。也就意味着特殊的路径要放在不特殊路径的 *前面* 。
+** =<HashRouter>=
 
-如果找不到匹配项， =<Switch>= 会什么都不渲染（null）。
+=<Router>= 使用 URL 中的 hash 部分（比如 =window.location.hash= ）来保证你的 UI 与 URL 同步。
 
-值得注意的是， =<Route path>= 只会匹配 URL 的 *开头* ，不是全部。所以 ~<Route path="/">~ 总是会匹配所有的 URL。
-因为这个原因，我们通常把它放在 =<Switch>= 的最后。另外一个解决办法是使用 =exact= 参数，全部匹配路径，比如： ~<Route exact path="/">~ 。
-
-** 路由变更（Nav）
-
-React Router 提供了 =<Link>= 组件来创建链接。当使用 =<Link>= 的时候，会渲染成 anchor（ =<a>= ）。
-
-=<NavLink>= 是 =<Link>= 的一种特殊类型，当其 prop 与当前位置匹配时，可以将其自身设置为「活动」。比如：
-
-#+BEGIN_SRC html
-<NavLink to="/react" activeClassName="hurray">
-  React
-</NavLink>
-#+END_SRC
-
-可以用于对当前选中的页面做一些特殊的样式设置之类的。
-
-如果想要强制导航，你可以使用 =<Redirect>= 。当渲染的时候，它会使用 prop 进行导航。
-
-* TODO 服务端渲染（Server Rendering）
-* 代码拆分（Code Splitting）
-
-代码拆分可以理解成代码按需加载。为了实现这个目标，需要使用 webpack， =@babel/plugin-syntax-dynamic-import= 和 loadable-components。
-
-webpack 默认支持动态导入；但是，你如果使用了 Babel（比如：把 JSX 编译成 JavaScript），那么你就需要使用 @babel/plugin-syntax-dynamic-import 插件。
-这只是一个语法插件，意味着 Babel 不会做任何额外的转换。该插件仅允许 Babel 解析动态导入，因此 webpack 可以将 bundle 他们作为代码拆分。你的 =.babelrc= 可能长这样：
+*注意：* hash history 不支持 =location.key= 或者 =location.state= 。建议服务器配置和 =<BrowserHistory>= 一起用。
 
 #+BEGIN_SRC javascript
-{
-  "presets": ["@babel/preset-react"],
-  "plugins": ["@babel/plugin-syntax-dynamic-import"]
-}
+<HashRouter
+  basename={optionalString}
+  getUserConfirmation={optionalFunc}
+  hashType={optionalString}
+>
+  <App />
+</HashRouter>
 #+END_SRC
 
-loadable-components 是一个库加载组件用来动态导入。它自动处理各种边缘情况，使代码拆分变的很简单。下面是使用范例：
+- =basename: string=
+- =getUserConfirmation: func=
+- =hashType: string= =window.location.hash= 的编码类型，可选的值：
+  + slash，类似 =#/= ， =#/sunshine/lollipops= 。 默认选项。
+  + noslash，类似 =#= ， =#sunshine/lollipops=
+  + hashbang，类似 =#!/= ， =#!/sunshine/lollipops=
+- =children: node=
+** =<Link>=
+
+应用内部的导航（可路由的 URL）。
 
 #+BEGIN_SRC javascript
-import loadable from "@loadable/component";
-import Loading from "./Loading.js";
-
-const LoadableComponent = loadable(() => import("./Dashboard.js"), {
-  fallback: <Loading />
-});
-
-export default class LoadableDashboard extends React.Component {
-  render() {
-    return <LoadableComponent />;
-  }
-}
+<Link to="/about">About</Link>
 #+END_SRC
 
-当程序运行时，动态加载，fallback 是加载期间展示的组件。
+- =to= 导航目标，支持几种类型
+  + =string= 字符串将 location.pathname, search, hash 属性拼接起来
+    #+BEGIN_SRC javascript
+    <Link to="/courses?sort=name" />
+    #+END_SRC
+  + =object= 包含一下任何属性的对象
+    - =pathname=
+    - =search=
+    - =hash=
+    - =state=
+      #+BEGIN_SRC javascript
+      <Link
+      	to={{
+      	pathname: "/courses",
+      	search: "?sort=name",
+      	hash: "#the-hash",
+      	state: { fromDashboard: true }
+      	}}
+      />
+      #+END_SRC
+  + =function= 当前位置作为参数传给函数，返回字符串形式的或者对象形式的位置
+    #+BEGIN_SRC javascript
+    <Link to={location => ({ ...location, pathname: "/courses" })} />
+    <Link to={location => ({ ...location, pathname: "/courses" })} />
+    #+END_SRC
+- =replace: bool= true 会替换当前 history 堆栈中的链接，而不是重新添加一个
+- 其它，你也可以传递想要给 =<a>= 的项目，比如 title，id，className 等等。
 
-* 滚动恢复
-** 滚动到顶部
-
-当有一个长页面时，经常有滚动到顶部的需求。使用 =<ScrollToTop>= 可以轻松解决这个问题，该组件将在每次导航时向上滚动窗口。
-
-#+BEGIN_SRC javascript
-import { useEffect } from "react";
-import { useLocation } from "react-router-dom";
-
-export default function ScrollToTop() {
-  const { pathname } = useLocation();
-
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, [pathname]);
-
-  return null;
-}
-#+END_SRC
-
-如果你用的是 React 16.8 之前的版本，你可以用 =React.Component= 来做相同的事情：
-
-#+BEGIN_SRC javascript
-import React from "react";
-import { withRouter } from "react-router-dom";
-
-class ScrollToTop extends React.Component {
-  componentDidUpdate(prevProps) {
-    if (
-      this.props.location.pathname !== prevProps.location.pathname
-    ) {
-      window.scrollTo(0, 0);
-    }
-  }
-
-  render() {
-    return null;
-  }
-}
-
-export default withRouter(ScrollToTop);
-#+END_SRC
-
-然后把他们放在应用的顶部，路由器的下方：
-
-#+BEGIN_SRC
-function App() {
-  return (
-    <Router>
-      <ScrollToTop />
-      <App />
-    </Router>
-  );
-}
-#+END_SRC
-
-如果你将标签页连接到路由器，那么当切换标签页时，你不希望滚动到顶部。而是滚动到特定位置。
-
-#+BEGIN_SRC javascript
-import { useEffect } from "react";
-
-function ScrollToTopOnMount() {
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, []);
-
-  return null;
-}
-
-// Render this somewhere using:
-// <Route path="..." children={<LongContent />} />
-function LongContent() {
-  return (
-    <div>
-      <ScrollToTopOnMount />
-
-      <h1>Here is my long content page</h1>
-      <p>...</p>
-    </div>
-  );
-}
-#+END_SRC
-
-同样，如果使用 React 16.8 以前的版本，可以这么做：
-
-#+BEGIN_SRC javascript
-import React from "react";
-
-class ScrollToTopOnMount extends React.Component {
-  componentDidMount() {
-    window.scrollTo(0, 0);
-  }
-
-  render() {
-    return null;
-  }
-}
-
-// Render this somewhere using:
-// <Route path="..." children={<LongContent />} />
-class LongContent extends React.Component {
-  render() {
-    return (
-      <div>
-        <ScrollToTopOnMount />
-
-        <h1>Here is my long content page</h1>
-        <p>...</p>
-      </div>
-    );
-  }
-}
-#+END_SRC
-
-** 通用的解决方案
-
-对于通用的解决办法（浏览器已经开始原生实现），我们讨论两件事情：
-
-1. 向上滚动导航，这样就不会开始一个新的底部屏幕
-2. 恢复滚动位置，点击「后退」和「前进」溢出元素（但不是点击链接）
-
-在这个点上，我们希望要有一个通用的 API，答题思路是这样的：
-
-#+BEGIN_SRC javascript
-<Router>
-  <ScrollRestoration>
-    <div>
-      <h1>App</h1>
-
-      <RestoredScroll id="bunny">
-        <div style={{ height: "200px", overflow: "auto" }}>
-          I will overflow
-        </div>
-      </RestoredScroll>
-    </div>
-  </ScrollRestoration>
-</Router>
-#+END_SRC
-
-首先， =ScrollRestoration= 会向上滚动导航；其次，它会用 =location.key= 保存窗口滚动位置，并且 =ScrollRestoration= 的位置放在 =sessionStorage= 。
-然后，当 =ScrollRestoration= 或者 =RestoredScroll= 组件挂载时，他们可以从 =sessionStorage= 中查找他们的位置。
-
-/说了半天，原来都是设想，不看了../
-
-* 原理
-
-这份指南的目的是说明使用 React Router 时要具有的思维模型。我们称作「动态路由」，与你熟悉的「静态路由」完全不同 。
-
-** 静态路由
-
-如果你用过 Rails，Express，Angular 等。那你就已经用过静态路由了。在这些框架中，所有的路由部分都要放在应用初始化任何渲染的前面。
-React Router pre-v4 也是静态的（大部分）。让我们看一下在 Express 中是如何动态配置路由的：
-
-#+BEGIN_SRC javascript
-// Express Style routing:
-app.get("/", handleIndex);
-app.get("/invoices", handleInvoices);
-app.get("/invoices/:id", handleInvoice);
-app.get("/invoices/:id/edit", handleInvoiceEdit);
-
-app.listen();
-#+END_SRC
-
-注意，是在程序监听之前是如何生命路由的。客户端一侧的路由也是类似的。在 Angular 中，你也要提前声明好路由，
-然后在顶部导入他们（ =AppModule= 渲染之前）：
-
-#+BEGIN_SRC javascript
-// Angular Style routing:
-const appRoutes: Routes = [
-  {
-    path: "crisis-center",
-    component: CrisisListComponent
-  },
-  {
-    path: "hero/:id",
-    component: HeroDetailComponent
-  },
-  {
-    path: "heroes",
-    component: HeroListComponent,
-    data: { title: "Heroes List" }
-  },
-  {
-    path: "",
-    redirectTo: "/heroes",
-    pathMatch: "full"
-  },
-  {
-    path: "**",
-    component: PageNotFoundComponent
-  }
-];
-
-@NgModule({
-  imports: [RouterModule.forRoot(appRoutes)]
-})
-export class AppModule {}
-#+END_SRC
-
-Ember 使用了比较常规的 =routes.js= 文件，但也是在你的程序渲染之前做的：
-
-#+BEGIN_SRC javascript
-// Ember Style Router:
-Router.map(function() {
-  this.route("about");
-  this.route("contact");
-  this.route("rentals", function() {
-    this.route("show", { path: "/:rental_id" });
-  });
-});
-
-export default Router;
-#+END_SRC
-
-尽管 API 不同，但他们都是「静态路由」模型，React Router 也一直跟进到 V4。
-
-为了用好 React Router，你需要忘了这些。
-
-** TODO 背景
-** TODO 动态路由
-** TODO 嵌套路由
-** TODO 响应式路由
-
-* TODO Testing
-* TODO Redux Integration
-* TODO Static Routes
+** =<NavLink>=
