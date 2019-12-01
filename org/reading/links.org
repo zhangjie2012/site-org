@@ -4,8 +4,8 @@
 #+OPTIONS: toc:t
 #+OPTIONS: num:n
 
-** 博客
-*** 个人博客
+* 博客
+** 个人博客
 
 - [[http://www.brendangregg.com/blog/index.html][Brendan Gregg's Blog]]: 2014 年写做游戏用研究 C++ 调优工具 Perf，的时候看过他的文章，被博客内容惊艳到了
 - [[https://dirtysalt.github.io/html/index.html][dirtysalt]]: 浮躁的时候看一看这里，心情一下就平静了
@@ -13,7 +13,7 @@
 - [[http://www.raychase.net/][四火的唠叨]]: 一个纯正程序员的啰嗦
 - [[http://www.yinwang.org/][当然我在扯淡]]: 王垠大神的文章，该读还是要读的
 
-*** 企业/团队博客
+** 企业/团队博客
 
 - [[https://githubengineering.com/][Github 工程师博客]]: 最新的 Github 技术动态
 - [[https://eng.uber.com/][Uber 工程师博客]]
@@ -22,17 +22,17 @@
 - [[https://tech.meituan.com/][美团技术博客]]: 更新频繁，内容广泛
 - [[https://blog.ubuntu.com/][Ubuntu blog]]
 
-*** 朋友们
+** 朋友们
 
 - [[https://blog.opskumu.com/][Kumu's Blog]]
 - [[http://sunisdown.me/][sunisdown]]
 - [[https://blog.tankywoo.com/][TankyWoo]]
 
-** 项目
+* 项目
 
 侧重于企业级的工具、架构、DB 等。
 
-*** 运维
+** 运维
 
 - [[https://www.elastic.co/elk-stack][ELK]]: Elasticsearch, Logstash, Kibana
 - [[https://grafana.com/][Grafana]]: 数据可视化，监控支持 Graphite, InfluxDB, Prometheus, ES 等多种数据库
@@ -42,37 +42,37 @@
 - [[https://github.com/saltstack/salt][salt]]: 自动化运维工具
 - [[https://www.influxdata.com/time-series-platform/][TICK]]: Telegraf + InfluxDB + Chronograf + Kapacitor 组合工具栈
 
-*** 虚拟化
+** 虚拟化
 
 - [[https://www.docker.com/][Docker]]
 
-*** 数据库（SQL + NoSQL）
+** 数据库（SQL + NoSQL）
 
 - [[https://www.mongodb.com][MongoDB]]: 开源的文档式数据库，存储灵活（BSON，类 JSON）
 - [[https://www.mysql.com][MySQL]]: 关系型数据库
 - [[https://redis.io/][Redis]]: NoSQL，开源的内存结构化存储的数据库，常作为数据库，高速缓存和消息队列
 
-*** 云平台
+** 云平台
 
 - [[https://kubernetes.io/][Kubernetes]]
 - [[https://www.openstack.org/][OpenStack]]
 
-*** SCM
+** SCM
 
 - [[https://about.gitlab.com/][Gitlab]]
 
-** 其他资源
-*** 行业咨询类
+* 其他资源
+** 行业咨询类
 
 - [[https://www.infoq.cn/][InfoQ]]
 - [[https://wanqu.co/][湾区日报]]
 
-*** 论坛
+** 论坛
 
 - [[https://www.reddit.com/][Reddit]]
 - [[https://stackoverflow.com/][Stack Overflow]]
 
-*** UI 设计
+** UI 设计
 
 - [[https://ant.design/docs/spec/introduce-cn][Ant Design 设计语言]]:设计说明文档
 - [[https://www.flaticon.com/][Free Vector icons]]: 海量免费的矢量图标
@@ -80,7 +80,7 @@
 - [[https://material.io/design/introduction/][Material Design]]
 - [[https://unsplash.com/][Unsplash]]: 免费的图片资源，很棒
 
-*** awesome
+** awesome
 
 - [[https://github.com/luong-komorebi/Awesome-Linux-Software/blob/master/README_zh-CN.md][awesome linux software]]
 - [[https://github.com/JStumpp/awesome-android][awesome-android]]
@@ -113,7 +113,7 @@
 - [[https://github.com/sindresorhus/awesome][awesome]]
 - [[https://github.com/mhinz/vim-galore][vim-galore]]
 
-*** 工程师素养
+** 工程师素养
 
 - [[http://blog.knownsec.com/Knownsec_RD_Checklist/][知道创宇研发技能表v3.1]]
 - [[http://daily.zhihu.com/story/4226507][程序员の健康和效率装备列表，普通人也能参考]]
@@ -130,12 +130,13 @@
 - [[https://roadmap.sh/][Roadmaps for Developers]]：包括前端、后端和 DevOps
 - [[https://w3techs.com/][W3Techs]]: Web 相关技术统计分析
 - [[https://www.cs.usfca.edu/~galles/visualization/Algorithms.html][数据结构动图网站]]
+- [[https://stateofjs.com/][StateOfJS]]：Javascript 年度调查报告
 
-** 周刊
+* 周刊
 
 不建议订阅，搔扰比较大，而且有的不好退订，找到归档页面当成博客来看就行。
 
-*** 综合
+** 综合
 
 - [[https://betterdev.link/][Better Dev Link]]
 - [[https://umaar.com/dev-tips/][DevTips]]
@@ -143,7 +144,7 @@
 - [[https://foundersgrid.com/archives/][Founders Grid]]
 - [[https://inside.com/lists/dev/recent_issues][Inside Dev]]
 
-*** 编程语言
+** 编程语言
 
 - [[https://go.libhunt.com/newsletter/archive][Awesome Go Newsletter]]
 - [[https://css-weekly.com/archives/][CSS weekly]]
@@ -151,11 +152,11 @@
 - [[https://javascriptweekly.com/issues][JavaScript Weekly]]
 - [[https://www.pythonweekly.com/archive/][Python Weekly]]
 
-*** 数据库
+** 数据库
 
 - [[https://dbweekly.com/issues][DB Weekly]]
 - [[https://mongodb.email/issues][Mongo Weekly]]
 
-*** DevOps
+** DevOps
 
 - [[https://blog.docker.com/docker-weekly-archives/][Docker]]
