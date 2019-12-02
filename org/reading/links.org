@@ -132,6 +132,7 @@
 - [[https://www.cs.usfca.edu/~galles/visualization/Algorithms.html][数据结构动图网站]]
 - [[https://stateofjs.com/][StateOfJS]]：Javascript 年度调查报告
 - [[https://github.com/collabnix/gopherlabs][Gopher Labs]]：Go 开发 roadmap，从新手、中级到高级
+- [[https://github.com/Alikhll/golang-developer-roadmap][Go Developer Roadmap]]：Roadmap to becoming a Go developer in 2019
 
 * 周刊
 
