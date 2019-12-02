@@ -131,6 +131,7 @@
 - [[https://w3techs.com/][W3Techs]]: Web 相关技术统计分析
 - [[https://www.cs.usfca.edu/~galles/visualization/Algorithms.html][数据结构动图网站]]
 - [[https://stateofjs.com/][StateOfJS]]：Javascript 年度调查报告
+- [[https://github.com/collabnix/gopherlabs][Gopher Labs]]：Go 开发 roadmap，从新手、中级到高级
 
 * 周刊
 
