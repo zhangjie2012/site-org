@@ -199,6 +199,7 @@
     - [[file:wiki/devops/log.org][DevOps - 日志收集]]
     - [[file:wiki/devops/docker-tutorial.org][Docker 学习笔记]]
     - [[file:wiki/devops/docker-tutorial2.org][Docker 官方文档 翻译]]
+    - [[file:wiki/devops/docker-resource.org][Docker 资源]]
     - [[file:wiki/devops/dockerfile-best-practice.org][Dockerfile 最佳实践]]
     - [[file:wiki/devops/k8s-kubectl.org][K8s - kubectl]]
     - [[file:wiki/devops/k8s-ingress.org][K8s Ingress]]
