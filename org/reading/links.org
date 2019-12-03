@@ -4,136 +4,112 @@
 #+OPTIONS: toc:t
 #+OPTIONS: num:n
 
-* 博客
-** 个人博客
+* Blog & Article
 
 - [[http://www.brendangregg.com/blog/index.html][Brendan Gregg's Blog]]: 2014 年写做游戏用研究 C++ 调优工具 Perf，的时候看过他的文章，被博客内容惊艳到了
-- [[https://dirtysalt.github.io/html/index.html][dirtysalt]]: 浮躁的时候看一看这里，心情一下就平静了
-- [[https://blog.codingnow.com/][云风的 BLOG]]: 吴云洋，资深游戏制作者，开源项目 skynet 作者
 - [[http://www.raychase.net/][四火的唠叨]]: 一个纯正程序员的啰嗦
 - [[http://www.yinwang.org/][当然我在扯淡]]: 王垠大神的文章，该读还是要读的
-
-** 企业/团队博客
-
-- [[https://githubengineering.com/][Github 工程师博客]]: 最新的 Github 技术动态
+- [[https://blog.codingnow.com/][云风的 BLOG]]: 吴云洋，资深游戏制作者，开源项目 skynet 作者
+- [[https://dirtysalt.github.io/html/index.html][dirtysalt]]: 浮躁的时候看一看这里，心情一下就平静了
 - [[https://eng.uber.com/][Uber 工程师博客]]
 - [[https://engineering.videoblocks.com/][VideoBlocks Product & Engineer]]
-- [[https://tech.youzan.com/][有赞技术团队]]: 全栈的博客，涉及前后端、中间件、架构、运维、管理、大数据等方面
+- [[https://githubengineering.com/][Github 工程师博客]]: 最新的 Github 技术动态
 - [[https://tech.meituan.com/][美团技术博客]]: 更新频繁，内容广泛
-- [[https://blog.ubuntu.com/][Ubuntu blog]]
-
-** 朋友们
-
-- [[https://blog.opskumu.com/][Kumu's Blog]]
-- [[http://sunisdown.me/][sunisdown]]
-- [[https://blog.tankywoo.com/][TankyWoo]]
-
-* 项目
-
-侧重于企业级的工具、架构、DB 等。
-
-** 运维
-
-- [[https://www.elastic.co/elk-stack][ELK]]: Elasticsearch, Logstash, Kibana
-- [[https://grafana.com/][Grafana]]: 数据可视化，监控支持 Graphite, InfluxDB, Prometheus, ES 等多种数据库
-- [[https://prometheus.io/][Prometheus]]: 开源监控告警解决方案集成信息收集入库、存储，展示和告警的开源监控告警解决方案
-- [[https://www.ansible.com/][Ansible]]: 自动化运维工具
-- [[http://www.confd.io/][confd]]: 轻量级的配置管理工具
-- [[https://github.com/saltstack/salt][salt]]: 自动化运维工具
-- [[https://www.influxdata.com/time-series-platform/][TICK]]: Telegraf + InfluxDB + Chronograf + Kapacitor 组合工具栈
-
-** 虚拟化
-
-- [[https://www.docker.com/][Docker]]
-
-** 数据库（SQL + NoSQL）
-
-- [[https://www.mongodb.com][MongoDB]]: 开源的文档式数据库，存储灵活（BSON，类 JSON）
-- [[https://www.mysql.com][MySQL]]: 关系型数据库
-- [[https://redis.io/][Redis]]: NoSQL，开源的内存结构化存储的数据库，常作为数据库，高速缓存和消息队列
-
-** 云平台
-
-- [[https://kubernetes.io/][Kubernetes]]
-- [[https://www.openstack.org/][OpenStack]]
-
-** SCM
-
-- [[https://about.gitlab.com/][Gitlab]]
-
-* 其他资源
-** 行业咨询类
-
-- [[https://www.infoq.cn/][InfoQ]]
-- [[https://wanqu.co/][湾区日报]]
-
-** 论坛
-
-- [[https://www.reddit.com/][Reddit]]
-- [[https://stackoverflow.com/][Stack Overflow]]
-
-** UI 设计
-
-- [[https://ant.design/docs/spec/introduce-cn][Ant Design 设计语言]]:设计说明文档
-- [[https://www.flaticon.com/][Free Vector icons]]: 海量免费的矢量图标
-- [[https://design.google/][Google Design]]
-- [[https://material.io/design/introduction/][Material Design]]
-- [[https://unsplash.com/][Unsplash]]: 免费的图片资源，很棒
-
-** awesome
-
-- [[https://github.com/luong-komorebi/Awesome-Linux-Software/blob/master/README_zh-CN.md][awesome linux software]]
-- [[https://github.com/JStumpp/awesome-android][awesome-android]]
-- [[https://github.com/kozross/awesome-c][awesome-c]]
-- [[https://github.com/fffaraz/awesome-cpp][awesome-cpp]]
-- [[https://github.com/gztchan/awesome-design][awesome-design]]
-- [[https://github.com/rosarior/awesome-django][awesome-django]]
-- [[https://github.com/veggiemonk/awesome-docker][awesome-docker]]
-- [[https://github.com/quozd/awesome-dotnet][awesome-dotnet]]
-- [[https://github.com/emacs-tw/awesome-emacs][awesome-emacs]]
-- [[https://github.com/humiaozuzu/awesome-flask][awesome-flask]]
-- [[https://github.com/avelino/awesome-go][awesome-go]]
-- [[https://github.com/heyalexej/awesome-images][awesome-images]]
-- [[https://github.com/vsouza/awesome-ios][awesome-ios]]
-- [[https://github.com/akullpp/awesome-java][awesome-java]]
-- [[https://github.com/sorrycc/awesome-javascript][awesome-javascript]]
-- [[https://github.com/aleksandar-todorovic/awesome-linux][awesome-linux]]
-- [[https://github.com/LewisJEllis/awesome-lua][awesome-lua]]
-- [[https://github.com/jaywcjlove/awesome-mac][awesome-mac]]
-- [[https://github.com/sindresorhus/awesome-nodejs][awesome-nodejs]]
-- [[https://github.com/ziadoz/awesome-php][awesome-php]]
-- [[https://github.com/jobbole/awesome-programming-books][awesome-programming-books]]：经典编程书籍大全
-- [[https://github.com/vinta/awesome-python][awesome-python]]
-- [[https://github.com/qinwf/awesome-R][awesome-R]]
-- [[https://github.com/enaqx/awesome-react][awesome-react]]
-- [[https://github.com/markets/awesome-ruby][awesome-ruby]]
-- [[https://github.com/matteocrippa/awesome-swift][awesome-swift]]
-- [[https://github.com/jtoy/awesome-tensorflow][awesome-tensorflow]]
-- [[https://github.com/vuejs/awesome-vue][awesome-vue]]
-- [[https://github.com/sindresorhus/awesome][awesome]]
-- [[https://github.com/mhinz/vim-galore][vim-galore]]
-
-** 工程师素养
-
+- [[https://tech.youzan.com/][有赞技术团队]]: 全栈的博客，涉及前后端、中间件、架构、运维、管理、大数据等方面
 - [[http://blog.knownsec.com/Knownsec_RD_Checklist/][知道创宇研发技能表v3.1]]
 - [[http://daily.zhihu.com/story/4226507][程序员の健康和效率装备列表，普通人也能参考]]
 - [[http://www.brendangregg.com/linuxperf.html][Linux Performance]]
 - [[https://coolshell.cn/articles/17583.html][技术人员的发展之路]]
 - [[https://coolshell.cn/articles/4990.html][程序员技术练级攻略]]
-- [[https://db-engines.com/en/][DB-Engines]]: DBMS 收集和排名
-- [[https://github.com/CyC2018/CS-Notes][CS-Notes]]
+
+* DevOps
+
+侧重于企业级的工具、架构、DB 等。
+
+- [[http://www.confd.io/][confd]]: 轻量级的配置管理工具
+- [[https://about.gitlab.com/][Gitlab]]：代码管理，CI/CD，DevOps
+- [[https://github.com/saltstack/salt][salt]]: 自动化运维工具
+- [[https://grafana.com/][Grafana]]: 数据可视化，监控支持 Graphite, InfluxDB, Prometheus, ES 等多种数据库
+- [[https://kafka.apache.org/][Kafka]]: 开源的高性能的分布式的流式平台，一般用作消息中间件
+- [[https://kubernetes.io/][Kubernetes]]: 生产级别的容器编排工具
+- [[https://prometheus.io/][Prometheus]]: 开源监控告警解决方案集成信息收集入库、存储，展示和告警的开源监控告警解决方案
+- [[https://www.ansible.com/][Ansible]]: 自动化运维工具
+- [[https://www.docker.com/][Docker]]：容器
+- [[https://www.elastic.co/elk-stack][ELK]]: Elasticsearch, Logstash, Kibana
+- [[https://www.influxdata.com/][influxDB]]：时间序列 DB
+- [[https://www.influxdata.com/time-series-platform/][TICK]]: Telegraf + InfluxDB + Chronograf + Kapacitor 组合工具栈
+
+* 数据库
+
+- [[https://www.mongodb.com][MongoDB]]: 开源的文档式数据库，存储灵活（BSON，类 JSON）
+- [[https://www.mysql.com][MySQL]]: 关系型数据库
+- [[https://redis.io/][Redis]]: NoSQL，开源的内存结构化存储的数据库，常作为数据库，高速缓存和消息队列
+- [[https://pingcap.com/][TiDB]]: 开源的分布式关系型数据库，完全兼容 MySQL 协议
+
+* 技术学习 Roadmap
+
+- [[https://github.com/Alikhll/golang-developer-roadmap][Go Developer Roadmap]]：Roadmap to becoming a Go developer in 2019
+- [[https://github.com/CyC2018/CS-Notes][CS-Notes]]: 技术面试必备基础知识
 - [[https://github.com/InterviewMap/CS-Interview-Knowledge-Map][CS-Interview-Knowledge-Map]]：面试图谱
-- [[https://github.com/dbohdan/structured-text-tools][structured-text-tools]]
+- [[https://github.com/collabnix/gopherlabs][Gopher Labs]]：Go 开发 roadmap，从新手、中级到高级
 - [[https://github.com/donnemartin/system-design-primer/blob/master/README-zh-Hans.md][system-design-primer]]：系统设计入门
 - [[https://github.com/vitalets/github-trending-repos][github-trending-repos]]
 - [[https://github.com/xingshaocheng/architect-awesome][后端架构师技术图谱]]
-- [[https://roadmap.sh/][Roadmaps for Developers]]：包括前端、后端和 DevOps
-- [[https://w3techs.com/][W3Techs]]: Web 相关技术统计分析
+- [[https://roadmap.sh/][Roadmaps for Developers]]：开发者路线：包括前端、后端和 DevOps
 - [[https://www.cs.usfca.edu/~galles/visualization/Algorithms.html][数据结构动图网站]]
+- [[https://www.freecodecamp.org/news/2019-web-developer-roadmap/][The 2019 Web Developer Roadmap]]
+
+* 统计类 & 工具化
+
+- [[https://github.com/dbohdan/structured-text-tools][structured-text-tools]]
+- [[https://db-engines.com/en/][DB-Engines]]: DBMS 收集和排名
+- [[https://w3techs.com/][W3Techs]]: Web 相关技术统计分析
 - [[https://stateofjs.com/][StateOfJS]]：Javascript 年度调查报告
-- [[https://github.com/collabnix/gopherlabs][Gopher Labs]]：Go 开发 roadmap，从新手、中级到高级
-- [[https://github.com/Alikhll/golang-developer-roadmap][Go Developer Roadmap]]：Roadmap to becoming a Go developer in 2019
+
+* 采访
+
 - [[https://shimo.im/docs/whkrJWcykkTwYDKW/read][https://shimo.im/docs/whkrJWcykkTwYDKW/read]]：有关张小龙的一切采访
+
+* UI 设计
+
+- [[https://ant.design/docs/spec/introduce-cn][Ant Design 设计语言]]:设计说明文档
+- [[https://www.flaticon.com/][Free Vector icons]]: 海量免费的矢量图标
+- [[https://design.google/][Google Design]]
+- [[https://material.io/design/introduction/][Material Design]]
+- [[https://unsplash.com/][Unsplash]]: 免费的图片资源
+
+* awesome
+
+- [[https://github.com/JStumpp/awesome-android][awesome-android]]
+- [[https://github.com/LewisJEllis/awesome-lua][awesome-lua]]
+- [[https://github.com/akullpp/awesome-java][awesome-java]]
+- [[https://github.com/aleksandar-todorovic/awesome-linux][awesome-linux]]
+- [[https://github.com/avelino/awesome-go][awesome-go]]
+- [[https://github.com/emacs-tw/awesome-emacs][awesome-emacs]]
+- [[https://github.com/enaqx/awesome-react][awesome-react]]
+- [[https://github.com/fffaraz/awesome-cpp][awesome-cpp]]
+- [[https://github.com/gztchan/awesome-design][awesome-design]]
+- [[https://github.com/heyalexej/awesome-images][awesome-images]]
+- [[https://github.com/humiaozuzu/awesome-flask][awesome-flask]]
+- [[https://github.com/jaywcjlove/awesome-mac][awesome-mac]]
+- [[https://github.com/jobbole/awesome-programming-books][awesome-programming-books]]：经典编程书籍大全
+- [[https://github.com/jtoy/awesome-tensorflow][awesome-tensorflow]]
+- [[https://github.com/kozross/awesome-c][awesome-c]]
+- [[https://github.com/luong-komorebi/Awesome-Linux-Software/blob/master/README_zh-CN.md][awesome linux software]]
+- [[https://github.com/markets/awesome-ruby][awesome-ruby]]
+- [[https://github.com/matteocrippa/awesome-swift][awesome-swift]]
+- [[https://github.com/mhinz/vim-galore][vim-galore]]
+- [[https://github.com/qinwf/awesome-R][awesome-R]]
+- [[https://github.com/quozd/awesome-dotnet][awesome-dotnet]]
+- [[https://github.com/rosarior/awesome-django][awesome-django]]
+- [[https://github.com/sindresorhus/awesome-nodejs][awesome-nodejs]]
+- [[https://github.com/sindresorhus/awesome][awesome]]
+- [[https://github.com/sorrycc/awesome-javascript][awesome-javascript]]
+- [[https://github.com/veggiemonk/awesome-docker][awesome-docker]]
+- [[https://github.com/vinta/awesome-python][awesome-python]]
+- [[https://github.com/vsouza/awesome-ios][awesome-ios]]
+- [[https://github.com/vuejs/awesome-vue][awesome-vue]]
+- [[https://github.com/ziadoz/awesome-php][awesome-php]]
 
 * 周刊
 
