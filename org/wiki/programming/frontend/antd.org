@@ -17,3 +17,5 @@ function expandIcon({ expanded, expandable, record, onExpand }) {
     );
 }
 #+END_SRC
+
+https://codesandbox.io/s/8x2j898pp2
