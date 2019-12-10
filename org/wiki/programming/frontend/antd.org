@@ -1,0 +1,19 @@
+#+SETUPFILE: ~/site/tpl/wiki-tpl.org
+#+TITLE: Ant Design
+#+DATE: 2019-12-10 18:01:01
+
+
+* FAQ
+** 表格内嵌表格，无数据时不显示 icon
+
+#+BEGIN_SRC javascript
+function expandIcon({ expanded, expandable, record, onExpand }) {
+  if (!expandable || record.canExpanded === false) return null;
+
+  return (
+    <a onClick={e => onExpand(record, e)}>
+      {expanded ? <Icon type="minus-square" /> : <Icon type="plus-square" />}
+    </a>
+    );
+}
+#+END_SRC
