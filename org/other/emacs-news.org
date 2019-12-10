@@ -3,6 +3,13 @@
 
  内容大部分来自 [[https://planet.emacslife.com/][Planet Emacslife]]，[[https://www.reddit.com/r/emacs/][r/emacs]]，[[https://www.twitter.com/][Twitter]]，[[https://github.com/][Github]]，没啥原创，只是为了好玩。
 
+* 2019-12-10
+
+- [[https://github.com/hlissner/emacs-doom-themes][emacs-doom-themes]] 现代的 color-themes，不过只有 GUI 支持的较好，终端不咋行
+- [[https://orgmode.org/Changes.html][Org 9.3 版本发布了]]
+- [[https://jonathanabennett.github.io/blog/2019/05/29/writing-academic-papers-with-org-mode/][Writing Academic Papers with Org-mode]] 使用 org-mode 写学术论文
+- [[https://www.reddit.com/r/emacs/comments/e6lzci/announcement_lspmode_62_released/][lsp-mode 6.2 released]]
+
 * 2019-11-27
 
 - [[https://www.reddit.com/r/emacs/comments/e1wfoe/emacs_the_editor_for_the_next_40_years/][Emacs The Editor for the Next 40 Years]] Emacs 下一个四十年视频。 PPT 在 [[https://mirror.csclub.uwaterloo.ca/emacsconf/2019/emacsconf-2019-26-emacs-the-editor-for-the-next-forty-years--slides--pmetzger.pdf][这里]]，准备整理一下。

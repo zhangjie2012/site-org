@@ -26,6 +26,9 @@
    CLOSED: [2019-10-18 Fri 10:12]
 ** DONE https://scoutapm.com/blog/understanding-load-averages         :Linux:
    CLOSED: [2019-10-14 Mon 22:08]
+** TODO https://orgmode.org/worg/org-tutorials/non-beamer-presentations.html
+   学一下如何使用 Emacs 做幻灯片，输出一篇文章吧
+
 * 项目 [0%]
 ** TODO write a basic go web server                                      :Go:
    add promethus.
