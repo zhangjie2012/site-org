@@ -1,0 +1,187 @@
+#+SETUPFILE: ~/site/tpl/site-tpl.org
+#+TITLE: Emacs 基于 org-reveal 做幻灯片
+#+DATE: 2019-12-11 14:15:51
+
+本文大部分来自：https://github.com/yjwen/org-reveal/blob/master/Readme.org
+整理了常用的部分，使用过程中遇到问题，建议查看原文档。
+
+* 前言
+
+[[https://orgmode.org/worg/org-tutorials/non-beamer-presentations.html][官方]] 整理了几种做幻灯片的方式：[[https://github.com/eschulte/epresent][epresent]]，[[https://meyerweb.com/eric/tools/s5/][S5]]， [[https://gist.github.com/kinjo/509761][org-html5presentation.el]]，[[https://raw.githubusercontent.com/takaxp/org-tree-slide/master/org-tree-slide.el][org-tree-slide]] 和 [[https://github.com/yjwen/org-reveal/][org-reveal]]。
+但实际上使用起来只有 epresent 和 org-reveal 操作比较简单，epresent 效果有些差，演示是基于 Emacs 自身的。
+所以实践下来只有 org-reveal 上手不算难，而且效果比较好。本文只介绍 org-reveal，其他的感兴趣看一看官方说明。
+
+* Org-reveal 与 reveal.js
+
+[[https://github.com/hakimel/reveal.js/][reveal.js]] 是一个 HTML 幻灯片的框架。Org-reveal 将 Org 文档导出成 reveal.js 幻灯片，而实际负责幻灯片显示和动效（即所谓 3D 效果）等是由 reveal.js 来实现的。
+
+简而言之，Org-reveal 负责生成 HTML，而 reveal.js 控制样式和交互。
+
+* 安装
+
+org 模式下 =C-c C=e= 引导将 org 文件转换成其他的文件格式，比如 HTML, PDF。安装 =ox-reveal= 之后将出现 =Export to reveal.js HTML Presentation= 选项：
+
+- =[R]= 导出到文件
+- =[B]= 文件和浏览器（自动用浏览器打开）
+- =[S]= Current subtree to file
+
+一般情况下希望使用 =[B]= ，整体的快捷键是： =C-c C-e R R= ，还是有点麻烦，所以我绑定到 =F12= 上。
+
+#+BEGIN_SRC emacs-lisp
+(use-package ox-reveal
+    :ensure t
+    :config
+    (global-set-key [(f12)] 'org-reveal-export-to-html-and-browse)
+    (reveal-mode 1)
+    )
+#+END_SRC
+
+要想在 org-mode 使用 reveal.js 需要引入 js 文件，如下：
+
+#+BEGIN_SRC
+#+REVEAL_ROOT: https://cdn.jsdelivr.net/npm/reveal.js
+#+END_SRC
+
+也可以使用相对路径，相对路径要手动编译 reveal.js，麻烦。统一用 cdn 就可以了。
+
+还可以直接在 emacs 配置中设置路径， =(setq org-reveal-root "https://cdn.jsdelivr.net/npm/reveal.js")=
+
+_基本上所有配置的方式，都有两种，一种是 org 中自己组织，另外一种是写到 =.emacs.d= 中。_
+
+* 书写布局
+
+reveal 自动按照标题来布局，相同级别的为同一层级，体现的方式是，相同的层级的通过水平箭头切换，上下界别的通过上下箭头切换。
+
+比较好理解，具体可以看官方说明: [[https://github.com/yjwen/org-reveal/#the-hlevel][The HLevel]]。
+
+使用 =org-reveal-hlevel= 变量可以全局设置层级数量。比如：
+
+- =(setq org-reveal-hlevel 2)=
+- =#+REVEAL_HLEVEL: 2=
+
+* 显示配置项
+
+** 强制分页展示
+
+一页的大小展示不下，可以通过：
+
+#+BEGIN_SRC
+#+REVEAL: split
+#+END_SRC
+
+强制分页，如果想分页标题相同，使用 =#+REVEAL: split:t= 。
+
+** 主题和过度设置
+
+
+
+- =REVEAL_THEME= 主题 :: reveal.js 内置了提供了多种主题在 [[https://github.com/hakimel/reveal.js/tree/master/css/theme][这里]] 可选
+- =REVEAL_TRANS= 过度效果 :: 可选的有： =default|cube|page|concave|zoom|linear|fade|none=
+- =REVEAL_SPEED= 切换速度
+
+** 设置幻灯片标题
+
+默认情况 Org-reveal 会显示标题、作者、邮箱、日期和 org 文档的时间戳。由 [[https://orgmode.org/org.html#Export-Settings][Export Setting]] 控制。
+
+如果幻灯片不想要标题，可以把 =org-reveal-title-slide= 设置为 =nil= 或者在 =#+OPTIONS:= 中添加 =reveal_title_slide:nil= 。
+恢复默认的标题，设置 =org-reveal-title-slide= 为 =auto= 。
+
+*** 自定义标题
+
+有三种方式：
+
+- 设置变量 =org-reveal-title-slide= 为 HTML 字符串
+- 设置 =#OPTIONS:= 中的 =reveal_title_slide= 为 HTML 字符串
+- 使用一个或者多个选项行 =#+REVEAL_TITLE_SLIDE:= 指定 HTML
+
+支持下面转义字符：
+
+|------+-----------|
+| ~%t~ | Title     |
+| ~%s~ | Subtitle  |
+| ~%a~ | Author    |
+| ~%e~ | Email     |
+| ~%d~ | Date      |
+| ~%%~ | Literal % |
+|------+-----------|
+
+** 设置幻灯片背景
+
+背景可被设置为颜色、图片。设置的方法是设置标题属性。
+
+*** 颜色
+
+#+BEGIN_SRC
+,*** Single Colored Background
+   :PROPERTIES:
+   :reveal_background: #123456
+   :END:
+#+END_SRC
+
+*** 图片
+
+#+BEGIN_SRC
+,*** Single Image Background
+    :PROPERTIES:
+    :reveal_background: ./images/whale.jpg
+    :reveal_background_trans: slide
+    :END:
+#+END_SRC
+
+还可以设置标题背景和所有幻灯片统一背景，
+
+** 设置幻灯片大小
+
+默认会自动选择最合适的分辨率，但是你也可以手动通过 =reveal_width= 和 =reveal_height= 两个标签指定。
+
+还可以设置边距和缩放行为：
+
+- =#+REVEAL_MARGIN:= :: 浮点数设置空白边距
+- =#+REVEAL_MIN_SCALE:= :: 最小缩放比率
+- =#+REVEAL_MAX_SCALE:= :: 最大缩放比率
+
+** 幻灯片编号
+
+#+BEGIN_SRC
+#+REVEAL_INIT_OPTIONS: slideNumber:true
+#+END_SRC
+
+即可打开幻灯片编号，也可以自定义：
+
+|-------+--------------------------------------------------------|
+| "h.v" | Horizontal . vertical slide number. The same as ~true~ |
+| "h/v" | Horizontal / vertical slide number                     |
+| "c"   | Flatten slide number                                   |
+| "c/t" | Flatten slide number / total slides                    |
+|-------+--------------------------------------------------------|
+
+** 设置页眉、页脚
+
+=#+REVEAL_SLIDE_HEADER:= 和 =#+REVEAL_SLIDE_FOOTER:= 用来设置页眉和页脚。
+
+** 内容分段（Fragmented Contents）
+
+通过 =ATTR_REVEAL= 设置 =:frag frag-style= 选项可以让内容一点一点的显示出来。图片、表格和其他 HTML 都可以分段。
+还可以通知显示的动效，具体见：
+
+https://github.com/yjwen/org-reveal/blob/master/Readme.org#fragmented-contents
+
+** 代码高亮
+
+有两种方式可以实现高亮：
+
+1. 默认的 Emacs 主题
+2. 使用 [[https://highlightjs.org/][highlight.js]]，默认使用 =zenburn.css= 使用其他样式，可通过 =#+REVEAL_HIGHLIGHT_CSS= 指定。
+
+** 额外样式
+
+#+BEGIN_SRC
+,#+REVEAL_EXTRA_CSS: url-to-custom-stylesheet.css
+#+END_SRC
+
+
+* 使用技巧
+
+** 管理目录
+
+通常 TOC 很大在一个页面下放不下，你可以禁用掉它 =#+OPTIONS: toc:nil= ，然后手动调用 =M-x org-reveal-manual-toc= 生成，然后分割到多个页面下。
