@@ -6,6 +6,7 @@
 
 * 2019
 
+- 12-12: [[file:2019/use-async-wait.org][使用 async ... wait]]
 - 12-11: [[file:2019/emacs-slide.org][Emacs 基于 org-reveal 做幻灯片]]
 - 11-12: [[file:2019/rexue-tb.org][离开热血之后的第三次团建]]
 - 09-27: [[file:2019/the-programmer-future.org][另一个角度谈谈程序员是不是青春饭]]

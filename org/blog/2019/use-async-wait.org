@@ -1,0 +1,119 @@
+#+SETUPFILE: ~/site/tpl/site-tpl.org
+#+TITLE: 使用 async...wait
+#+DATE: 2019-12-12 11:45:31
+
+[[https://dvajs.com][dva.js]] 封装了 [[https://github.com/reduxjs/redux][redux]] 和 [[https://redux-saga.js.org/][redux-saga]]，是的数据流处理简单易用，所以用了 [[https://umijs.org/zh/guide/][umi]] 之后，所有的数据（状态）都用的是 dva。
+尽管如此，写起来有点费劲，假设有一个后端请求 =queryUsers= 要写好几个地方：
+
+1. =dispatch= 发出请求
+	#+BEGIN_SRC javascript
+	function queryUsers() {
+	  this.props.dispatch({
+	    type: 'user/queryUsers',
+	  })
+	}
+	#+END_SRC
+2. 写 =model/effects=
+	#+BEGIN_SRC  javascript
+	*queryUsers(_, { call, put }) {
+	  const resp = yield call(queryUsers);
+	  yield put({
+	    type: 'saveUsers',
+	    data: resp.data,
+	  });
+	},
+	#+END_SRC
+3. 写 =services=
+	#+BEGIN_SRC javascript
+	export async function queryUsers() {
+	  return request('/api/v1/users');
+	}
+	#+END_SRC
+4. 最后再写 =model/reducers=
+	#+BEGIN_SRC javascript
+	saveUsers(state, { data }) {
+	  return {
+	    ...state,
+	    users: data
+	  };
+	},
+	#+END_SRC
+5. 实际上还需要将 models.js 与 Component =connect()= 起来
+
+（这就是 redux+redux-saga 的方式）写起来比较麻烦，但是习惯了还好，代码结构比较清晰。但是遇到请求之间有依赖关系就比较麻烦了。比如说：
+
+1. 首先要通过 =id= 查到用户明细 =user-detail=
+2. 然后通过 =user-detail= 中的 =username= 查询订单列表 =order_list=
+
+使用 dva 我一般是这么做的，
+
+1. dispatch =user/queryUserDetail= 设置 model state 中的 userDetail
+2. model state =connect= 到组件的 props 中
+3. 在 React 组件中实现 =componentDidUpdate= ，判断 userDetail 状态是否变更
+  - 如果 userDetail 发生了变更，则 dispatch =user/queryUserOrderList=
+
+_因为全是异步的原因，所以只能通过「状态」同步来判断前一个操作是否已经执行完了。_
+
+我们可以通过同步的方式试一下：
+
+#+BEGIN_SRC javascript
+request('/api/v1/users').
+  then(resp => {
+    this.setState({
+      userDetail: resp.data,
+    });
+
+    request(`/api/v1/user/${resp.data.username}/orders`).
+      then(resp => {
+        this.setState({
+          userOrders: resp.data,
+        });
+      })
+  })
+#+END_SRC
+
+这样写是可以的，但是一但同步的调用多了，就会陷入 Javascript 常见的 [[http://callbackhell.com/][Callback Hell]] （因为一直在 resp 后继续调用 request）。
+
+事实上我们需要的是「异步的同步」，每个操作异步调用结束之后，再执行剩下的操作。
+
+ES6 之后引入了 =async...await= 的调用方式，上面可以改写成：
+
+#+BEGIN_SRC javascript
+queryUsers = async () => {
+  const resp = await request('/api/v1/users');
+  this.setState({
+    userDetail: resp.data,
+  })
+  this.queryOrders(resp.data.id);
+}
+queryOrders = async (userId) => {
+  const resp = await request(`/api/v1/user/${userId}/orders`);
+  this.setState({
+    userOrders: resp.data,
+  })
+}
+#+END_SRC
+
+看起来就舒服很多了。 =await= 还可以连续多个并行调用，比如：
+
+#+BEGIN_SRC javascript
+const a = await fetchA();
+const b = await fetchB();
+console.log(a, b);
+#+END_SRC
+
+=console.log= 会在 =fetchA= 和 =fetchB= 执行完毕之后再执行，但 =fetchA= 和 =fetchB= 是并行的。有点像 C++ 线程的 [[http://www.cplusplus.com/reference/thread/thread/join/][join]] 函数。
+
+-------------
+
+回到最初的问题，很多时候使用 redux 的方式写是比较麻烦的。正如 redux 作者写的 [[https://medium.com/@dan_abramov/you-might-not-need-redux-be46360cf367][You Might Not Need Redux]] 一样。
+我一开始就用的 dva，理所当然的就觉得这种写法是正确的，写了两年了，突然回过头来看，觉得完全没必要，浪费了很多时间...
+
+了解技术不能浅尝辄止，深入浅出才好。
+
+------------
+
+扩展资料：
+
+- [[https://developer.mozilla.org/zh-CN/docs/learn/JavaScript/%25E5%25BC%2582%25E6%25AD%25A5/Async_await][async和await:让异步编程更简单]]
+- [[http://es6.ruanyifeng.com/#docs/async][async 函数]]
