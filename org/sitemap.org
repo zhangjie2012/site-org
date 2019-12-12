@@ -150,6 +150,7 @@
     - [[file:blog/2019/2018-reading.org][2018 价值阅读]]
     - [[file:blog/2019/2019-chun-jie.org][2019 年春节]]
     - [[file:blog/2019/apache-vs-nginx.org][Apache Vs NGINX – 哪个是最好的 Web 服务器]]
+    - [[file:blog/2019/emacs-slide.org][Emacs 基于 org-reveal 做幻灯片]]
     - [[file:blog/2019/emacs-is-fun-1.org][Emacs 心路历程（上）]]
     - [[file:blog/2019/emacs-is-fun-2.org][Emacs 心路历程（下）]]
     - [[file:blog/2019/javascript-null-vs-undefined.org][Javascript null vs undefined]]
