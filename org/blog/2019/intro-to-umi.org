@@ -285,17 +285,20 @@ demo: https://codesandbox.io/s/click-plus-react-list-ugws4
 
 React _并不是_ 完整的前端框架解决方案，他只是提供了高效的 DOM 渲染（同样 vue.js 也是如此），脚手架解决方案。
 React 官方的脚手架是 [[https://github.com/facebook/create-react-app][create-react-app]]。
+
 * 脚手架（scaffold）
 
 经常写后端人知道后端有 Web 框架，比如：Python 的 Django，flask；Java 的 Sprint Boot；Go 的 Gin 等。一个后端的框架一般会包含那些呢？
 
-- 接入层（网络层），负责与外部通信协议命令字转换等
-- 路由层（Router），API 映射到具体的业务逻辑 handler
-- 逻辑处理层（Viewer），处理业务逻辑
-- 缓存层（Cache），页面数据缓存
-- 模型层（Model），定义数据库表，对数据库基本操作 CRUD 提供易用的接口
-- 其他：统一异常处理，日志系统，监控，调优工具等
-- 构建部署工具
+|----------------------+----------------------------------------------------|
+| 接入层（网络层）     | 负责与外部通信协议命令字转换等                     |
+| 路由层（Router）     | API 映射到具体的业务逻辑 handler                   |
+| 逻辑处理层（Viewer） | 处理业务逻辑                                       |
+| 缓存层（Cache）      | 页面数据缓存                                       |
+| 模型层（Model）      | 定义数据库表，对数据库基本操作 CRUD 提供易用的接口 |
+| 构建部署工具         |                                                    |
+| 其他                 | 统一异常处理，日志系统，监控，调优工具等           |
+|----------------------+----------------------------------------------------|
 
 （如果是微服务框架，还会提供服务注册，服务发现等能力）。
 
@@ -308,14 +311,15 @@ React 官方的脚手架是 [[https://github.com/facebook/create-react-app][crea
 
 一个前端脚手架一般会包含这些部分：
 
-- 网络请求层（request）：与后端异步通信（一般是 HTTP 请求），比较出名的有 [[https://github.com/github/fetch][fetch]]，[[https://github.com/axios/axios][axios]]；通常会对基础库再封装一层，然后提供统一的错误处理；
-- 路由层（Router）：浏览器中访问的每一个 URL 对应的逻辑处理组件，比如 [[https://reacttraining.com/react-router/web/guides/quick-start][react-router]]；还有一种称之为约定式路由，即 URL 路径与目录结构一一对应；
-- 逻辑处理层（Viewer）：具体的页面逻辑和渲染
-- 各种浏览器兼容转换
-  + TypeScript 转换成 JavaScript
-  + 将 ES6/ES7 转换成 ES5，一般使用 [[https://babeljs.io/][babel]]
-  + 将 LESS/SASS 转换成 CSS
-- 构建打包、性能优化：一般是对 [[https://webpack.js.org/][webpack]] 的二次封装；代码分割；代码打包压缩，代码混淆
+|-----------------------+---------------------------------------------------------------------------------------------------------------------------|
+| 网络请求层（request） | 与后端异步通信（一般是 HTTP 请求），比较出名的有 [[https://github.com/github/fetch][fetch]]，[[https://github.com/axios/axios][axios]]；通常会对基础库再封装一层，然后提供统一的错误处理；         |
+| 路由层（Router）      | 浏览器中访问的每一个 URL 对应的逻辑处理组件，比如 [[https://reacttraining.com/react-router/web/guides/quick-start][react-router]]；还有一种称之为约定式路由，即 URL 路径与目录结构一一对应； |
+| 逻辑处理层（Viewer）  | 具体的页面逻辑和渲染                                                                                                      |
+| 各种浏览器兼容转换    | TypeScript 转换成 JavaScript                                                                                              |
+|                       | 将 ES6/ES7 转换成 ES5，一般使用 [[https://babeljs.io/][babel]]                                                                                     |
+|                       | 将 LESS/SASS 转换成 CSS                                                                                                   |
+| 构建打包、性能优化    | 一般是对 [[https://webpack.js.org/][webpack]] 的二次封装；代码分割；代码打包压缩，代码混淆                                                             |
+|-----------------------+---------------------------------------------------------------------------------------------------------------------------|
 
 其实可以看出前端所干的事情比后端要少很多，而且远没有后端那么成熟，类似运行兼容这种应该是语言层面应该解决的问题，不应该框架来解决。但其目标也是为了减少重复工作。
 
@@ -334,8 +338,293 @@ React 官方的脚手架是 [[https://github.com/facebook/create-react-app][crea
 
 https://blog-1252349778.cos.ap-beijing.myqcloud.com/2019/from-pro-umi.png
 
-** TODO umi 安装
-** TODO 目录结构
-** TODO 实例：一个页面的生命周期
-** TODO 部署
-* TODO 结语
+** umi 安装
+
+安装脚手架：
+
+#+BEGIN_SRC shell
+npm install umi -g
+#+END_SRC
+
+新建项目：
+#+BEGIN_SRC shell
+=> mkdir umi-demo && cd umi-demo
+=> npm create umi
+? Select the boilerplate type
+  ant-design-pro  - Create project with a layout-only ant-design-pro boilerplate, use together with umi block.
+> app             - Create project with a simple boilerplate, support typescript.
+  block           - Create a umi block.
+  library         - Create a library with umi.
+  plugin          - Create a umi plugin.
+#+END_SRC
+
+这里选择 =app= 不要选择  =ant-design-pro= ，否则会增加很多的 pro template 代码，不够纯粹（不方便演示）；实际中后台项目如果为了省事可是使用 pro。
+
+#+BEGIN_SRC shell
+? Do you want to use typescript? (y/N)
+#+END_SRC
+
+=N= ，如果想使用 typescript，可以输入 =y= 。
+
+#+BEGIN_SRC shell
+? What functionality do you want to enable? (Press <space> to select, <a> to toggle all, <i> to invert selection)
+❯◯ antd
+ ◯ dva
+ ◯ code splitting
+ ◯ dll
+ ◯ internationalization
+#+END_SRC
+
+=a= 全选即可，如果你想使用其他的 react UI 组件库，这里可以不用 =antd= 换成别的。
+
+安装依赖包：
+
+#+BEGIN_SRC shell
+npm install
+#+END_SRC
+
+#+BEGIN_QUOTE
+默认情况下 umi 使用 [[https://umijs.org/zh/guide/router.html#%25E9%2585%258D%25E7%25BD%25AE%25E5%25BC%258F%25E8%25B7%25AF%25E7%2594%25B1][配置式路由]]，即 URL 对应的相应组件由配置文件中指定。你也可以 [[https://umijs.org/zh/guide/router.html#%25E7%25BA%25A6%25E5%25AE%259A%25E5%25BC%258F%25E8%25B7%25AF%25E7%2594%25B1][约定式路由]]，即 URL 由 =pages= 目录下的路径所对应的文件自动处理， 根 =/= 自动找 =index.js= 文件。对于初学者理解起来有点困难，建议用 [[https://umijs.org/zh/guide/router.html#%25E9%2585%258D%25E7%25BD%25AE%25E5%25BC%258F%25E8%25B7%25AF%25E7%2594%25B1][配置式路由]]。
+配置式路由文件在 =.umirc.js= 。
+#+END_QUOTE
+
+运行 =npm start= 。
+
+** 目录结构说明
+
+#+BEGIN_SRC shell
+.
+├── .umirc.js
+├── mock
+│   └── .gitkeep
+├── package.json
+├── src
+│   ├── app.js
+│   ├── assets
+│   │   └── yay.jpg
+│   ├── global.css
+│   ├── layouts
+│   │   ├── index.css
+│   │   └── index.js
+│   ├── locales
+│   │   └── en-US.js
+│   ├── models
+│   └── pages
+│       ├── index.css
+│       └── index.js
+└── webpack.config.js
+#+END_SRC
+
+- =mock= API mock
+- =src= 业务源代码都在这里，其中：
+  + =global.css= 全局 css 文件，约定每个 pages 下面的 css 文件只能作用于对应的 js 文件，避免 css 污染
+  + =layout= 页面布局组件
+  + =models= 全局 models
+  + =pages= 所有的 URL handler 都在这里，一个 pages 中一般会包含属于自己的 jsx，样式 css，model.js，组件等；
+  + =locales= 用于国际化，可在 =.umirc.js= 中开启关闭，使用时 =import { formatMessage } from 'umi-plugin-locale';= 然后使用 formatMessage 转换
+  + =components= 用于存放全局组件
+- =dist= =npm build= 之后，会将静态文件输出到 =dist= 中
+
+** 示例：从路由到数据展示
+
+*1. 页面路由*
+
+本示例将说明，从 URL 访问到组件生命周期开始，请求数据，然后渲染。
+
+所有的路由配置都在 =.umirc.js= 的 =routes= 下面，在 =routes/routes= 中新增：
+
+#+BEGIN_SRC javascript
+{ path: '/hello', component: './hello' }
+#+END_SRC
+
+将 hello 映射到 hello 组件中，默认会在 pages 下寻找 =hello/index.js= 文件。所以需要在 pages 下面新建 =hello/index.js= 文件：
+
+#+BEGIN_SRC javascript
+export default () => "hello, world";
+#+END_SRC
+
+然后访问 =http://localhost:8000/hello= 即可看到 hello, world 页面。
+
+*2. 异步请求数据*
+
+React 中的每一个组件，都有生命周期。 =/hello= 这个页面对应的组件也是；在 [[file:../2018/react-lifecycle.org][React 组件生命周期]] 中有说明，里面列举了常用的和不常用的部分，生命周期是 React 的组件基础，最好认真看看文档。这里只说实现：
+
+假设 hello 页面需要从后端获取一批用户信息，然后展示出来。从哪里发出请求呢？一般是从 =componentDidMount= ，他是页面首次渲染之后，第一次调用的方法，而且只会调用一次。
+
+#+BEGIN_SRC javascript
+import axios from 'axios';
+import { Component } from 'react';
+import { message } from 'antd';
+
+export default class Hello extends Component {
+  state = {
+    userList: [],
+  }
+
+  componentDidMount() {
+    this.queryUsers();
+  }
+
+  queryUsers = async () => {
+    const resp = await axios.get('/api/users');
+    if (resp.status === 200) {
+      this.setState({
+        userList: resp.data,
+      })
+    } else {
+      message.error(`请求出错：code={resp.statusText}`);
+    }
+  }
+
+  render() {
+    console.log(this.state.userList);
+    return "Hello, World";
+  }
+}
+#+END_SRC
+
+/页面逻辑复杂了，要加生命周期函数，所以改成了 class 组件（之前是函数组件），另外，需要后端请求，所以安装了 axios =npm install axios --save= ，他是一个 http 请求库，类似的还有 [[https://github.com/github/fetch][fetch]]，umi 官方提供的是 [[https://github.com/umijs/umi-request][umi-request]]，都可以。/
+
+代码里我们干了这几个事情，在 =componentDidMount= 中发起后端调用 =queryUsers= ，他是异步的（async...await 了解一下），最终正确返回时将数据设置到 =state= 中，错误提示（message 是 antd 提供的一个消息提示组件）。
+
+因为我们没有实际的后端服务，所以需要 mock 一个。在 mock 目录下新建 =user.js= 文件，然后写入：
+
+#+BEGIN_SRC javascript
+export default {
+  'GET /api/users': [
+    {
+      name: '张三',
+      gender: '男',
+      age: '22',
+      addr: '中国，北京',
+    },
+    {
+      name: '李四',
+      gender: '男',
+      age: '23',
+      addr: '中国，上海',
+    },
+    {
+      name: '王五',
+      gender: '女',
+      age: '23',
+      addr: '中国，广州',
+    },
+  ],
+};
+#+END_SRC
+
+它 mock 了一个 =/api/users= 的 =GET= 请求，并返回了一些数据。
+
+最后，刷新页面即可看到 console 显示了我们获得到的数据。
+
+*3. 数据渲染*
+
+得到后端返回的数据之后，需要将数据显示到渲染， =render= ：
+
+#+BEGIN_SRC javascript
+  render() {
+    const { userList } = this.state;
+    return (
+      <table>
+        <tbody>
+          <tr>
+            <th>姓名</th>
+            <th>性别</th>
+            <th>年龄</th>
+            <th>地址</th>
+          </tr>
+          {userList.map(item => (
+            <tr key={item.name}>
+              <td>{item.name}</td>
+              <td>{item.gender}</td>
+              <td>{item.age}</td>
+              <td>{item.addr}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    );
+  }
+#+END_SRC
+
+刷新页面即可看到数据已经显示在页面上了。
+
+*4. 美化一下*
+
+原生的表格样式比较「丑陋」，可以手动改 css 文件。umi 引入了 antd ，antd 提供了 [[https://ant.design/components/table-cn/][表格组件]]：
+
+#+BEGIN_SRC javascript
+  render() {
+    const { userList } = this.state;
+
+    const columns = [
+      { title: '姓名', dataIndex: 'name' },
+      { title: '性别', dataIndex: 'gender' },
+      { title: '年龄', dataIndex: 'age' },
+      { title: '地址', dataIndex: 'addr' },
+    ];
+
+    return <Table dataSource={userList} columns={columns} bordered />;
+  }
+#+END_SRC
+
+再刷新，就发现表格显示就美观多了。
+
+*【可选】使用 dva 请求数据*
+
+大部分时候请求数据直接 request 即可，但有组件需要通信的情况用 redux 能方便很多。所以我们将上面的例子改写成 dva 的方式。
+流程如下图：
+
+https://blog-1252349778.cos.ap-beijing.myqcloud.com/2019/dva.png
+
+需要 hello 目录下新建两个文件：
+- =model.js= （子页面的 model 只能被子页面引用）
+- =api.js= 异步发起 API 调用
+
+看起来有些麻烦（实际上已经比原生的 Redux 写法简单多了），逻辑还是很清晰的。
+这么做的好处是，model 可以被多个组件绑定一份数据变更会触发多个组件渲染，也就达到了组件数据通信的目的。
+
+** 使用 Pro template
+
+为了演示更加纯粹，所以 umi 创建项目的时候，选择了 app ，实际中后台项目建议勾选 =ant design pro= 。使用 pro 之后自动增加了几个刚需的模板：
+
+- 登录范例
+- 菜单自动生成
+- 菜单前端鉴权
+- 常用的 layout
+
+** 部署
+
+=npm build= 打包之后，在 dist 目录下生成了类似如下的文件（我希望文件带 hash 值，所以配置中添加了 =hash: true= ）：
+
+#+BEGIN_SRC shell
+.
+├── index.html
+├── layouts__index.993844f1.chunk.css
+├── layouts__index.d5b2fbe6.async.js
+├── p__hello.aaf350ae.async.js
+├── p__hello__model.js.bc91bd32.async.js
+├── p__index.29672b36.async.js
+├── p__index.fc500c15.chunk.css
+├── static
+│   └── yay.44dd3333.jpg
+├── umi.5e4f0268.js
+├── umi.efbd33bc.css
+├── vendors.4391d77a.async.js
+└── vendors.5f8d95ca.chunk.css
+
+1 directory, 12 files
+#+END_SRC
+
+一个前端渲染的（CSR）的前端应用，只需要一个 nginx 服务，将 =root= 指向静态文件所在目录即可。
+
+
+* 结语
+
+本文主要面向有一点后端或者脚本开发经验程序员，使用 umi 搭建中台前端项目入门，主要布道的入门思路是：刚开始写前端没必要深入了解每个组件的原理，先照猫画虎，知道怎么做实现可以达到什么目的就行了。
+等可以写日常业务的时候，再慢慢的深入。
+
+--------------
+
+前端框架原没有后端框架那么稳定，各种酸苦，慢慢体会吧。
