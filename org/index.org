@@ -21,7 +21,7 @@
 
 * GTD
 
-- [[file:gtd/2019-M09-12.org][2019 9月-12月]]
+- [[file:gtd/2019-Q4.org][2019 Q4 季度]]
 
 * Social Links
 
