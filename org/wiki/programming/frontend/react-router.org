@@ -490,3 +490,188 @@ React 16.8 版本之后，React Router 利用 hook 机制添加了几种常用�
 - 其它，你也可以传递想要给 =<a>= 的项目，比如 title，id，className 等等。
 
 ** =<NavLink>=
+
+=<Link>= 的特殊版本，如果匹配当前的 URL 时，自动添加风格属性。
+
+#+BEGIN_SRC javascript
+<NavLink to="/about">About</NavLink>
+#+END_SRC
+
+- =activeClassName: string= 激活状态下给定元素的 =class= ，默认是 =active= ，或者 =className= 属性联合起来
+  #+BEGIN_SRC javascript
+  <NavLink to="/faq" activeClassName="selected">
+    FAQs
+  </NavLink>
+  #+END_SRC
+- =activeStyle: object= 激活状态下的元素样式，这是一个对象
+  #+BEGIN_SRC javascript
+  <NavLink
+    to="/faq"
+    activeStyle={{
+      fontWeight: "bold",
+      color: "red"
+    }}
+  >
+    FAQs
+  </NavLink>
+  #+END_SRC
+- =exact: bool= true 时，路径完全匹配 style 才生效
+- =strict: bool= true 时，匹配是否考虑路径名上的斜杠，更多可查看 =<Route strict>= 文档
+  #+BEGIN_SRC javascript
+<NavLink strict to="/events/">
+  Events
+</NavLink>
+  #+END_SRC
+- =isActive: func= 如果你不想使用默认的判断逻辑的话，可以用该函数自定义，参数是 =(match, location)=
+- =location: object= 一般是浏览器 URL，在自定义 =isActive= 的时候，会传入
+** =<MemoryRouter>=
+
+将 URL 记录保留在内存中（不在地址栏读取或者写入），在测试和非浏览器环境中（React Native）很有用。
+
+** =<Redirect>=
+
+重定向到另外一个位置，新的位置将覆盖历史记录堆栈中的当前位置，类似服务端的 redirects （HTTP 3xx） 干的事情。
+
+- =to: string= 字符串表达的位置
+- =to: object= 对象表达的位置，路径格式必须要被 [[https://github.com/pillarjs/path-to-regexp/tree/v1.7.0][path-to-regexp@^1.7.0]] 理解
+  #+BEGIN_SRC javascript
+<Redirect
+  to={{
+    pathname: "/login",
+    search: "?utm=your+face",
+    state: { referrer: currentLocation }
+  }}
+/>
+  #+END_SRC
+  =state= 对象可以被重定向的对象直接使用，比如 =this.props.location.state.referrer= 。
+- =push: bool= 如果是 true 的话，重定向将在 history 中新增一条记录，而不是替换当前记录
+- =from: string= 重定向的来源 URL，参数会被传递到 =to= 中：
+  #+BEGIN_SRC javascript
+// Redirect with matched parameters
+<Switch>
+  <Redirect from='/users/:id' to='/users/profile/:id'/>
+  <Route path='/users/profile/:id'>
+    <Profile />
+  </Route>
+</Switch>
+  #+END_SRC
+  其它的参数会被忽略掉。 *注意：* 只能用在 =<Switch>= 中的包含路径。
+- =exact: bool= 精确匹配，等价于 Route.exact
+  *注意：* 与 =from= 结合使用的时候，只能用 =<Switch>= 中包含的路径。
+- =strict: bool= 严格匹配，等价于 Route.strict
+- =sensitive: bool= 大小写敏感匹配，等价于 Route.sensitive
+
+
+** =<Route>=
+
+Route 可能是 React Router 中最需要理解和学习的组件。它的职责是当它的路径和当前 URL 相匹配的时候，显示 UI。
+
+#+BEGIN_SRC javascript
+import React from "react";
+import ReactDOM from "react-dom";
+import { BrowserRouter as Router, Route } from "react-router-dom";
+
+ReactDOM.render(
+  <Router>
+    <div>
+      <Route exact path="/">
+        <Home />
+      </Route>
+      <Route path="/news">
+        <NewsFeed />
+      </Route>
+    </div>
+  </Router>,
+  node
+);
+#+END_SRC
+
+推荐 =<Route>= 渲染的方法是使用子元素，就上面这样。但事实上，还有一些其它的方法来渲染。这些方法主要是为了兼容 hook 引入之前路由构建的应用程序。
+
+- =<Route component>=
+- =<Route render>=
+- =<Route children> function=
+
+你应该在 Route 上只使用上面的其中一个。上面三个渲染方法都会传递相同的 route props:
+
+- =match=
+- =location=
+- =history=
+
+*component*
+
+一个 React 组件：
+
+#+BEGIN_SRC javascript
+import React from "react";
+import ReactDOM from "react-dom";
+import { BrowserRouter as Router, Route } from "react-router-dom";
+
+// All route props (match, location and history) are available to User
+function User(props) {
+  return <h1>Hello {props.match.params.username}!</h1>;
+}
+
+ReactDOM.render(
+  <Router>
+    <Route path="/user/:username" component={User} />
+  </Router>,
+  node
+);
+#+END_SRC
+
+当使用组件（而不是 =render= 和 =children= 的时候），router 根据给定的组件使用 =React.createElement= 创建一个新的 React 元素。
+也就是说，如果向组件 prop 提供了一个内联函数，那么会在每次渲染的时候创建一个新的组件。会导致现有的组件卸载和新组件的装载，而不仅仅是更新现有组件。
+使用内联函数渲染时，请使用 =render= 或者 =children= 。
+
+*render: func*
+
+可以方便的内联渲染和包装，无需上面说的不必要的重新安装。当匹配路径的时候，你可以传入一个函数。渲染函数与 component 具有相同的属性（match，location，history）。
+
+#+BEGIN_SRC js
+import React from "react";
+import ReactDOM from "react-dom";
+import { BrowserRouter as Router, Route } from "react-router-dom";
+
+// convenient inline rendering
+ReactDOM.render(
+  <Router>
+    <Route path="/home" render={() => <div>Home</div>} />
+  </Router>,
+  node
+);
+
+// wrapping/composing
+// You can spread routeProps to make them available to your rendered Component
+function FadingRoute({ component: Component, ...rest }) {
+  return (
+    <Route
+      {...rest}
+      render={routeProps => (
+        <FadeIn>
+          <Component {...routeProps} />
+        </FadeIn>
+      )}
+    />
+  );
+}
+
+ReactDOM.render(
+  <Router>
+    <FadingRoute path="/cool" component={Something} />
+  </Router>,
+  node
+);
+#+END_SRC
+
+*警告：* =<Route component>= 优先级高于 =<Route render>= ，所以不要同时使用。
+
+*children: func*
+
+TODO，看不懂。
+
+支持的参数：
+
+- =path: string | string[]=
+
+https://reacttraining.com/react-router/web/api/Route/path-string-string
