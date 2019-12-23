@@ -6,14 +6,16 @@
 #+CAPTION: Photo by Aaron Burden on Unsplash
 [[http://blog-1252349778.picbj.myqcloud.com/2018/about_blog.jpg]]
 
-** 2018-12-12
-   :PROPERTIES:
-   :CUSTOM_ID: section
-   :END:
+* 2019-09-27
+
+全面使用 org-mode，blog/wiki/weekly/link/resume/gtd 等大一统。
+再也不折腾了。
+
+* 2018-12-12
 
 拥抱 https，哈哈哈。
 
-** 2018-12-03
+* 2018-12-03
    :PROPERTIES:
    :CUSTOM_ID: section-1
    :END:
@@ -25,24 +27,23 @@
 
 严格意义上讲，是不可能跨厂商解析，如果可以，也要小心，搞不好哪天就不能解析了。
 
-** 2018-11-19
+* 2018-11-19
    :PROPERTIES:
    :CUSTOM_ID: section-2
    :END:
 
-博客从 Jekyll 迁移到了
-[[https://github.com/zhangjie2012/qwerty][qwerty]]，又删减了一些文章。
+博客从 Jekyll 迁移到了 [[https://github.com/zhangjie2012/qwerty][qwerty]]，又删减了一些文章。
 
 之前的 blog.zhangjiee.com 已经不在使用，统一使用 www.zhangjiee.com 了。
 
-** 2018-05-25
+* 2018-05-25
    :PROPERTIES:
    :CUSTOM_ID: section-3
    :END:
 
 整理博客，旧图片迁移到腾讯云，删掉部分文章。
 
-** 2016.01.16
+* 2016.01.16
    :PROPERTIES:
    :CUSTOM_ID: section-4
    :END:
@@ -50,7 +51,7 @@
 博客从香港 VPS 迁移到阿里云，基于 Bootstrap 重写主题，并用 Django
 搭建一个简易的评论系统。
 
-** 2015.02.23
+* 2015.02.23
    :PROPERTIES:
    :CUSTOM_ID: section-5
    :END:
@@ -62,7 +63,7 @@
 - 删掉了几篇无关痛痒和碎碎念的文章，只保留两种类型：1. 思考 2.
   技术，以后也仅仅写这两种;
 
-** 2013.10.20
+* 2013.10.20
    :PROPERTIES:
    :CUSTOM_ID: section-6
    :END:
@@ -73,7 +74,7 @@
 
 =git + github + markdown + jekyll + Emacs= 这个组合非常爽。
 
-** 2013.06.13
+* 2013.06.13
    :PROPERTIES:
    :CUSTOM_ID: section-7
    :END:
@@ -82,14 +83,14 @@
 
 博客会继续做，只不过会放一些略微重量级的博文。笔记类的小总结，以后就不再贴了。
 
-** 2013.06.13
+* 2013.06.13
    :PROPERTIES:
    :CUSTOM_ID: section-8
    :END:
 
 部分经常修改的文章搬迁到 github 上，包括本文。
 
-** 2013.01.18
+* 2013.01.18
    :PROPERTIES:
    :CUSTOM_ID: section-9
    :END:
@@ -97,7 +98,7 @@
 博客域名 (www.keepsimply.org)
 因若干原因被暂停，不得不使用新域名（www.perfect-is-shit.com），对大家造成不便，请见谅。
 
-** 2012.12.14
+* 2012.12.14
    :PROPERTIES:
    :CUSTOM_ID: section-10
    :END:
@@ -106,7 +107,7 @@
 
 强调一下：如果你为了网站排名而申请友链，请绕行！
 
-** 2012.10.05
+* 2012.10.05
    :PROPERTIES:
    :CUSTOM_ID: section-11
    :END:
@@ -118,7 +119,7 @@
 
 OK，就说这么多吧。最近比较颓废，该做点事情了。
 
-** 2012.08.17
+* 2012.08.17
    :PROPERTIES:
    :CUSTOM_ID: section-12
    :END:
@@ -132,7 +133,7 @@ OK，就说这么多吧。最近比较颓废，该做点事情了。
 
 做了一个决定，一定要对得起这个域名，随时保持简洁，保持我的风格。
 
-** 2012.08.09
+* 2012.08.09
    :PROPERTIES:
    :CUSTOM_ID: section-13
    :END:
@@ -149,7 +150,7 @@ STL》看过一遍，其他的都是两遍。我这么说不是为了炫耀，�
 template 去学 STL、更甚者去看源码；不敢下手的原因是自己 C++
 资历尚浅，如果言语不当，实在是害人。再想想看吧！
 
-** 2012.05.11
+* 2012.05.11
    :PROPERTIES:
    :CUSTOM_ID: section-14
    :END:
@@ -157,7 +158,7 @@ template 去学 STL、更甚者去看源码；不敢下手的原因是自己 C++
 今天看了 Adoo 的 [[http://www.roading.org/?page_id=73]]
 ，看了他给我博客的介绍，我会心的笑了，哈哈！也确实，我的博客没有一个固定的主旨，想写什么就写什么。我的人也是这样，想做什么，就去做了。
 
-** 2012.04.07
+* 2012.04.07
    :PROPERTIES:
    :CUSTOM_ID: section-15
    :END:
@@ -166,7 +167,7 @@ template 去学 STL、更甚者去看源码；不敢下手的原因是自己 C++
 [[http://www.yuehun.in][www.yuehun.in]]
 ，把博客中音乐一栏删掉，以后的音乐都放到那个博客中。喜欢音乐的朋友可以去哪里听歌、投稿等等。
 
-** 2012.03.30
+* 2012.03.30
    :PROPERTIES:
    :CUSTOM_ID: section-16
    :END:
@@ -181,7 +182,7 @@ template 去学 STL、更甚者去看源码；不敢下手的原因是自己 C++
 
 如果你要申请友情链接，请给我发邮件(chinajiezhang#gmail.com)。
 
-** 2011.11.13
+* 2011.11.13
    :PROPERTIES:
    :CUSTOM_ID: section-17
    :END:
@@ -223,10 +224,7 @@ Wiki？其实我以前也想过弄个个人博客，但是有几方面的顾虑�
 4. 文章风格。文章开头表明发布时间；正文字体为"宋体+consolas"，无首行缩进；文章末尾表明参考资源。
 5. 文章版本控制。直接续写，表明续写时间或修改时间。
 
-** INIT
-   :PROPERTIES:
-   :CUSTOM_ID: init
-   :END:
+* INIT
 
 我 2008 年上的大学，2009 年开通的 CSDN 博客，博客内容主要为 C++, Windows
 API, MFC 学习笔记。后来经 [[http://www.wutianqi.com/][TankyWoo]]
