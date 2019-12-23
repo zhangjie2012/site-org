@@ -166,7 +166,7 @@
     - [[file:blog/2019/close-yanjie.org][眼界要关停了]]
     - [[file:blog/2019/rexue-tb.org][离开热血之后的第三次团建]]
 - gtd
-  - [[file:gtd/2019-M09-12.org][2019-M09-12]]
+  - [[file:gtd/2019-Q4.org][2019 Q4]]
 - other
   - [[file:other/emacs-news.org][Emacs News]]
   - [[file:other/resume.org][张杰的简历]]

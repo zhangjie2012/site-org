@@ -8,7 +8,7 @@
 ** DONE [[https://uformjs.org/#/MpI2Ij/dNFzFyTb][UForm]]                                                          :前端:
    CLOSED: [2019-11-26 Tue 19:27]
    简单过了一遍，发现也并没有方便很多。表单一直是一个比较蛋疼的东西，不管你怎么处理，都不可能完美的满足需求。因为业务场景本身就比较复杂。
-* 阅读 [16%]
+* 阅读 [23%]
 ** TODO Lock Free [0/2]
    - [ ] https://preshing.com/20120612/an-introduction-to-lock-free-programming/
    - [ ] [[https://www.cs.cmu.edu/~410-s05/lectures/L31_LockFree.pdf][Lock-free]]
@@ -26,8 +26,9 @@
    CLOSED: [2019-10-18 Fri 10:12]
 ** DONE https://scoutapm.com/blog/understanding-load-averages         :Linux:
    CLOSED: [2019-10-14 Mon 22:08]
-** TODO https://orgmode.org/worg/org-tutorials/non-beamer-presentations.html
-   学一下如何使用 Emacs 做幻灯片，输出一篇文章吧
+** DONE https://orgmode.org/worg/org-tutorials/non-beamer-presentations.html
+   CLOSED: [2019-12-23 Mon 15:40]
+   学一下如何使用 Emacs 做幻灯片，输出一篇文章吧 => [[file:../blog/2019/emacs-slide.org][here]]
 
 * 项目 [0%]
 ** TODO write a basic go web server                                      :Go:
