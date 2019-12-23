@@ -43,6 +43,7 @@
 ** TODO 2019 年终总结
    顺便 2018-2019 一起写了算了。
 * 其他 [100%]
-*** CANCELD 搭建 Ubuntu 工作环境
+** CANCELD 搭建 Ubuntu 工作环境
     CLOSED: [2019-10-14 Mon 14:32]
     多少次尝试，还是觉得 Mac 好
+** TODO 正则表达式 Wiki
