@@ -11,7 +11,7 @@
 
 工作原理如下图（图片看不太清，可点击下载到本地查看）：
 
-[[https://blog-1252349778.cos.ap-beijing.myqcloud.com/2018/nginx-ingress/ingress-nginx-1-1.svg][[[https://blog-1252349778.cos.ap-beijing.myqcloud.com/2018/nginx-ingress/ingress-nginx-1-1.svg]]]]
+[[https://blog-1252349778.cos.ap-beijing.myqcloud.com/2018/nginx-ingress/ingress-nginx-1-1.svg]]
 
 按照图片从上到下看已经把 ingress-nginx 大体流程显示清楚了，下面将站在源码的角度从服务的生命周期（服务初始化、服务启动、服务运行、服务停止）
 简单说一下实现上的一些细节。篇幅较长，分为上、下两篇文章。
