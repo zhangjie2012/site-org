@@ -146,6 +146,7 @@
     - [[file:blog/2018/yanjie-upgrade-1-1.org][眼界发布 v1.1 版本]]
     - [[file:blog/2018/yanjie-tech-stack.org][眼界技术栈]]
   - 2019
+    - [[file:blog/2019/2017-2019-personal-review.org][2017~2019 个人总结]]
     - [[file:blog/2019/2018-personal-review.org][2018 个人总结]]
     - [[file:blog/2019/2018-reading.org][2018 价值阅读]]
     - [[file:blog/2019/2019-chun-jie.org][2019 年春节]]
