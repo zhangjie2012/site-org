@@ -6,6 +6,7 @@
 
 * 2019
 
+- 12-29: [[file:2019/tech-in-2019.org][一些技术在 2019 年统计]]
 - 12-28: [[file:2019/2017-2019-personal-review.org][2017-2019 个人总结]]
 - 12-15: [[file:2019/intro-to-umi.org][基于 umi 构建中后台前端项目入门]]
 - 12-14: [[file:2019/intro-frontend-dev.org][前端从入门到放弃]]

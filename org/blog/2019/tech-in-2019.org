@@ -1,0 +1,48 @@
+#+SETUPFILE: ~/site/tpl/site-tpl.org
+#+TITLE: 一些技术在 2019 年统计
+#+DATE: 2019-12-28 15:14:52
+
+自己使用的、熟悉的、关心的技术在 2019 年发展趋势。 *我只是搬运工。*
+
+* 编程语言
+** TODO Go
+
+官方还在开放问卷中，https://blog.golang.org/survey2019 说是 2020 年会统计公布，期待。
+
+** JavaScript
+
+官方统计：https://2019.stateofjs.com/ ，infoQ 的翻译：https://www.infoq.cn/article/WgP2OYXVvxwtmXEM5PTy
+
+我所关注的：
+
+- TypeScript 占有量稳定上涨，但我觉得 TS 适合写框架，并不适合写业务，效率太低了。但是看这架势，还是学一学比较好；
+- React 市场占有量稳居第一，Vue 虽然 star 多，原因你们懂的。 去年开始写 React，真香；
+- 去年看了 Redux 很难理解，要找时间再看看，万一理解了呢。GraphQL 需要持续关注一下；
+- JavaScript 就不要专职写后端了吧。关注一下 Next.js，如果前端技术要再进一步的化，该了解一下 SSR 了；
+- 移动端和桌面工具不应该是 JS 关注的领域，无论怎么炒，我相信最终还是会回归原生；
+- 大部分人使用 VS Code 写前端这是意料之中的，1.4% 的人用 Emacs 很不错了；
+- 除 JavaScript 之外使用的语言最多的是 Python 这也是意料之中，其次是 C# 有点意料之外了；
+- 观点：
+  + JavaScript is moving in the right direction，大致上是的
+  + Building JavaScript apps is overly complex right now， 大部分人觉得 JavaScript 开发越来越轻松了
+  + JavaScript is over-used online，几乎没啥变化
+  + I enjoy building JavaScript apps，没啥变化
+  + I would like JavaScript to be my main programming language， 一半一半吧
+
+** Python
+
+来自 jetbrains 的统计：https://www.jetbrains.com/lp/devecosystem-2019/python/
+
+- 版本：87% 的人在使用 Python 3，13% 的人使用 Python 2； /我很 2015 年就只用 Python 3 了/
+- 用途：49% 的人用于数据分析；46% 用于 Web 开发；42% 用于机器学习；37% 用于运维（SA，自动化，运维开发） /挺出乎意料的，本以为 DevOps 会是最多的/
+- Web 框架/库：43% 的人用 Django，41% 用 Flask；剩下的只有个位数，不值一提；  /Django/Flask之争从未断过/
+- 数据科学框架：58% 的人用 NumPy；46% 用 Pandas；37% 的人用 Matplotlib；36% 用 TensorFlow； 32% 用 SciPy /早些年用过 Matplotlib，其它的没用过/
+- 库：39% 用过 Requests；21% 用过 Pillow；
+- IDE/编辑器：43% 用 PyCharm；14% 用 VS Code；8% 用 Vim； /Vim 少的可怜，Emacs 都没上榜/
+
+* DevOps
+
+偏理论：
+
+- 谷歌：[[https://services.google.com/fh/files/misc/state-of-devops-2019.pdf][Accelerate: 2019 State of DevOps]]
+- puppet：[[https://blog-1252349778.cos.ap-beijing.myqcloud.com/2019/2019-state-of-devops-report-puppet-circleci-splunk_sml-1-1.pdf][2019 State of DevOps Report]]
