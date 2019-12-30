@@ -157,6 +157,7 @@
     - [[file:blog/2019/javascript-null-vs-undefined.org][Javascript null vs undefined]]
     - [[file:blog/2019/informer-controller-note.org][Kubernetes informer controller 原理笔记]]
     - [[file:blog/2019/emacs-lisp-expand-file-name-to-string.org][emacs lisp expand-file-name to string]]
+    - [[file:blog/2019/tech-in-2019.org][一些技术在 2019 年统计]]
     - [[file:blog/2019/best-practices-for-docker-deploy-django.org][使用 Docker 部署 Django Web server 最佳实践]]
     - [[file:blog/2019/use-async-wait.org][使用 async...wait]]
     - [[file:blog/2019/intro-frontend-dev.org][前端开发从入门到放弃]]
