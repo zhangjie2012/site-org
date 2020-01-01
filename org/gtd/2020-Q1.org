@@ -15,3 +15,5 @@
 ** TODO Google: [[https://google.github.io/eng-practices/review/reviewer/][How to do a code review]]                          :CodeReview:
 ** TODO [[https://engineering.linkedin.com/blog/2019/apache-kafka-trillion-messages][https://engineering.linkedin.com/blog/2019/apache-kafka-trillion-messages]] :Kafka:
 ** TODO https://github.com/uber-go/guide/blob/master/style.md            :Go:
+** TODO https://github.com/ryanmcdermott/clean-code-javascript :javascript:
+** TODO https://github.com/Q-Angelo/Nodejs-Roadmap  :node.js:

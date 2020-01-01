@@ -341,6 +341,7 @@ pandoc -f markdown -t org -o test.org test.md
 - [[https://github.com/purcell/emacs.d][purcell/emacs.d]]：久负盛名
 - [[https://github.com/redguardtoo/emacs.d][redguardtoo/emacs.d]]
 - [[https://github.com/hlissner/doom-emacs][hlissner/doom-emacs]]
+- [[https://protesilaos.com/dotemacs/][Emacs initialisation file (dotemacs)]]: wiki + 配置
 
 ** Org-mode theme
 

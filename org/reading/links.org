@@ -4,6 +4,10 @@
 #+OPTIONS: toc:t
 #+OPTIONS: num:n
 
+* 理论
+
+- [[https://functionalcs.github.io/curriculum/][A Self-Learning, Modern Computer Science Curriculum]] ，中文翻译 [[https://www.yuque.com/docs/share/97bb24b7-fe20-49aa-96bf-36033cfebe6c][如何自学现代计算机科学]]
+
 * Blog & Article
 
 - [[http://www.brendangregg.com/blog/index.html][Brendan Gregg's Blog]]: 2014 年写做游戏用研究 C++ 调优工具 Perf，的时候看过他的文章，被博客内容惊艳到了
@@ -46,11 +50,17 @@
 - [[https://redis.io/][Redis]]: NoSQL，开源的内存结构化存储的数据库，常作为数据库，高速缓存和消息队列
 - [[https://pingcap.com/][TiDB]]: 开源的分布式关系型数据库，完全兼容 MySQL 协议
 
+* 编码规范
+
+- [[https://github.com/airbnb/javascript][Airbnb JavaScript Style Guide]]
+- [[https://standardjs.com/rules-zhcn.html][JavaScript Standard Style]]
+
 * 技术学习 Roadmap
 
 - [[https://github.com/Alikhll/golang-developer-roadmap][Go Developer Roadmap]]：Roadmap to becoming a Go developer in 2019
 - [[https://github.com/CyC2018/CS-Notes][CS-Notes]]: 技术面试必备基础知识
 - [[https://github.com/InterviewMap/CS-Interview-Knowledge-Map][CS-Interview-Knowledge-Map]]：面试图谱
+- [[https://github.com/Q-Angelo/Nodejs-Roadmap][node.js roadmap]]
 - [[https://github.com/collabnix/gopherlabs][Gopher Labs]]：Go 开发 roadmap，从新手、中级到高级
 - [[https://github.com/donnemartin/system-design-primer/blob/master/README-zh-Hans.md][system-design-primer]]：系统设计入门
 - [[https://github.com/vitalets/github-trending-repos][github-trending-repos]]
@@ -58,6 +68,8 @@
 - [[https://roadmap.sh/][Roadmaps for Developers]]：开发者路线：包括前端、后端和 DevOps
 - [[https://www.cs.usfca.edu/~galles/visualization/Algorithms.html][数据结构动图网站]]
 - [[https://www.freecodecamp.org/news/2019-web-developer-roadmap/][The 2019 Web Developer Roadmap]]
+- [[https://www.yuque.com/ysfe/ykx/fedhb][前端开发者手册2019]]，[[https://frontendmasters.com/books/front-end-handbook/2019/][原文]]：虽然写的是 2019，但实际上是 roadmap
+- [[https://github.com/resumejob/awesome-resume][awesome-resume]] 开发者简历常用的词句
 
 * 统计类 & 工具化
 
