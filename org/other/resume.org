@@ -2,15 +2,14 @@
 #+TITLE: 张杰的简历
 
 * 工作经历
-
 ** [[http://www.wacai.com/][挖财网络技术有限公司]]
 
-- 时间 :: 2018/02/26 ~ 至今
-- 职位 :: 云平台研发
+- 时间 :: 2018-02-26 ~ 至今
+- 职位 :: 云平台研发工程师
 - 产品 :: 略
-- 职责 :: 略
+- 职责 :: 产品设计、前后端开发
 - 技术栈 ::
-  + 前端：ES6、React、Ant Design、Ant Design Pro
+  + 前端：ES6、React 技术栈、[[https://umijs.org/][umi]]
   + 后端：Go、Python
   + 工具/虚拟化/框架：Docker、kubernetes
   + DB：MongoDB、Redis
@@ -22,7 +21,10 @@
 - 产品 ::
   * [[http://www.aichedian.com/][爱车店]]：汽车门店管理系统（大中型）
   * [[http://mini.aichedian.com][爱车店-迷你版]]：小型
-- 职责 :: 技术、产品、管理
+- 职责 ::
+  + [5/10] 技术
+  + [3/10] 产品
+  + [2/10] 项目管理
 - 技术栈 ::
   * 语言：Python3、JavaScript
   * 平台：Mac OS、Ubuntu14.04
@@ -55,7 +57,6 @@
   * 调试调优：Virtual Studio 2010
 
 * 教育经历
-
 ** [[http://www.nwsuaf.edu.cn/][西北农林科技大学]]
 
 - 时间 :: 2008-09-01 ~ 2012-06-20
