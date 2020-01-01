@@ -167,8 +167,11 @@
     - [[file:blog/2019/build-site-with-org-mode.org][拥抱 org-mode]]
     - [[file:blog/2019/close-yanjie.org][眼界要关停了]]
     - [[file:blog/2019/rexue-tb.org][离开热血之后的第三次团建]]
+  - 2020
+    - [[file:blog/2020/hello-2020.org][你好，2020]]
 - gtd
   - [[file:gtd/2019-Q4.org][2019 Q4]]
+  - [[file:gtd/2020-Q1.org][2020 Q1]]
 - other
   - [[file:other/emacs-news.org][Emacs News]]
   - [[file:other/resume.org][张杰的简历]]
@@ -193,6 +196,8 @@
     - [[file:weekly/2019/08.org][2019-08]]
     - [[file:weekly/2019/09.org][2019-09]]
     - [[file:weekly/2019/10-12.org][2019-10 ~ 2019-12]]
+  - 2020
+    - [[file:weekly/2020/Q1.org][2020 Q1]]
 - wiki
   - [[file:wiki/index.org][wiki]]
   - data-structure-and-algorithm
