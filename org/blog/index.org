@@ -4,6 +4,10 @@
 #+OPTIONS: html-postamble:nil
 #+OPTIONS: num:nil
 
+* 2020
+
+- 01-01: [[file:2020/hello-2020.org][你好，2020]]
+
 * 2019
 
 - 12-29: [[file:2019/tech-in-2019.org][一些技术在 2019 年统计]]
