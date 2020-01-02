@@ -84,3 +84,14 @@
 工作城市也不可能一直换下去，总要有一个归宿。很多梦想也不会再去想，这样挺好。
 
 *对于未来，不必想的太长远，不必想的太多，心态开放，不辜负每一天就好。*
+
+------------------------
+
+* 别人的 2019 年
+
+- [[https://overreacted.io/my-decade-in-review/][My Decade in Review]] Dan Abramov 的 10 年经历，这哥们是 Redux 作者，貌似比我小 1 岁；
+  不算什么传奇经历，倒是各种心酸的经历... 2010 年高中毕业，没上大学，自学编程，2014 年之前都一直没有稳定的工作；
+  没有 2014 年搭了 React 的顺风车，后来自己写了 Redux，2015 年后去了 Facebook，目前在 Facebook 做 React 技术栈相关的东西
+- [[http://www.yinwang.org/blog-cn/2019/12/31/2020-new-year][2020新年寄语]] 王垠离开 Intel，十年挣扎路
+- [[https://mp.weixin.qq.com/s/xVjV3JmpUzkL0OARYLp5Fw][我的 2019 年个人总结]]：Fenng，有一天有许多话要说出的人，常默然把许多话藏在内心
+- [[https://mp.weixin.qq.com/s/JLOU4YyiX685hcfa-L9a1A][悲观者往往正确，乐观者往往成功]]：池建强
