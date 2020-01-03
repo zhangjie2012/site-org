@@ -217,6 +217,7 @@
     - [[file:wiki/devops/k8s-concept.org][K8s 中的术语]]
     - [[file:wiki/devops/k8s-practice.org][K8s 实践]]
     - [[file:wiki/devops/k8s-resource.org][K8s 资源]]
+    - [[file:wiki/devops/k8s-deployment-strategies.org][K8s 部署策略]]
     - [[file:wiki/devops/ps1.org][PS1]]
     - [[file:wiki/devops/ssh.org][SSH]]
     - [[file:wiki/devops/ubuntu.org][Ubuntu]]
