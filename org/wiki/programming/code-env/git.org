@@ -161,7 +161,6 @@ Host github.com
 ProxyCommand nc -X 5 -x 127.0.0.1:1080 %h %p
 #+END_SRC
 
-
 * 知识点
 
 基本命令让你快速的上手使用 Git，知识点能让你更好的理解 Git。
@@ -196,7 +195,6 @@ Git:
 3. 当我要用 version2 的时候，实际上得到的是 ~file_a file_b1 file_c~
 
 上面的 ~file_a file_b1 file_c~ 就是 version2 的 *快照* 。
-
 
 * 学习资源
 

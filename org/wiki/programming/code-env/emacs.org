@@ -5,16 +5,20 @@
 
 * 开始之前
 
-我在大学（2009 年左右）的时候接触 Linux（Ubuntu），选择编辑器时感觉 Vim 入门很难，只是因为好奇就选择了 Emacs。大学期间和我的第一份工作主要的开发环境是 Windows，Emacs 虽然在私下里花了很多精力折腾，但正式使用 Emacs 作为开发环境是 2014 年以后，之后工作环境主要聚焦在 CentOS/Mac/Ubuntu 上，直到现在，Emacs 都是我的主力编辑器：
+我在大学（2009 年左右）的时候接触 Linux（Ubuntu），选择编辑器时感觉 Vim 入门很难，只是因为好奇就选择了 Emacs。
+大学期间和我的第一份工作主要的开发环境是 Windows，Emacs 虽然在私下里花了很多精力折腾，但正式使用 Emacs 作为开发环境是 2014 年以后，
+之后工作环境主要聚焦在 CentOS/Mac/Ubuntu 上，直到现在，Emacs 都是我的主力编辑器：
 
 - 前端 :: JavasSript/HTML/CSS/LESS, React(jsx)
 - 后端 :: C/C++, Python/Django, Go
 - 日常 :: Shell，YAML，JSON，...
-- 写文章 :: org-mode，Markdown
+- 写文章 :: org-mode
 
-从 Emacs 22 到最新的 Emacs 26，Emacs 越来越好用了，常用的插件已经官方集成进去了，生态圈也越来越好了，有像 [[https://github.com/purcell][purcell]] 这样的牛人来领军配置，还有 [[https://github.com/syl20bnr/spacemacs][spacemacs]] 这样集大成者开箱即用的配置。以前我写过 [[https://www.zhangjiee.com/blog/emacs-simple-tutorial][Emacs 简易教程]]，那个时候（2014年）还是主要使用 C/C++ 做游戏服务器开发，那份教程已经很久没有更新了，后面我将集中经历维护这份文档。
+从 Emacs 22 到最新的 Emacs 26，Emacs 越来越好用了，常用的插件已经官方集成进去了，生态圈也越来越好了，有像 [[https://github.com/purcell][purcell]] 这样的牛人来领军配置，
+还有 [[https://github.com/syl20bnr/spacemacs][spacemacs]] 这样集大成者开箱即用的配置。以前我写过 [[https://www.zhangjiee.com/blog/emacs-simple-tutorial][Emacs 简易教程]]，那个时候（2014年）还是主要使用 C/C++ 做游戏服务器开发，
+那份教程已经很久没有更新了，后面我将集中经历维护这份文档。
 
-另外，我的配置文件在 [[https://github.com/zhangjie2012/_emacs.d][_emacs.d]]。我的邮箱是 _me@zhangjiee.com_ ，欢迎与我交流 Emacs 使用心得。
+另外，我的配置文件在 [[https://github.com/zhangjie2012/_emacs.d][_emacs.d]]。我的邮箱是 [[mailto:me@zhangjiee.com][me@zhangjiee.com]]，欢迎与我交流 Emacs 使用心得。
 
 [[https://wiki-1252349778.cos.ap-shanghai.myqcloud.com/2019/emacs-hello.png]]
 
