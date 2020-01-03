@@ -323,7 +323,7 @@ pandoc -f markdown -t org -o test.org test.md
 
 + [[https://planet.emacslife.com/][Planet Emacslife]]：Emacs 百科全书，大杂烩
 + [[https://www.reddit.com/r/emacs/][Emacs reddit channel]]：reddit 上的 Emacs 专题
-+ [http://oremacs.com/][oremacs]
++ [[http://oremacs.com/][oremacs]]
 + [[http://ergoemacs.org/emacs/emacs.html][Practical Emacs Tutorial]]：Emacs 练习手册
 + [[https://emacsthemes.com/][Emacs Themes]]：主题集合
 + [[https://github.com/emacs-tw/awesome-emacs][awesome-emacs]]
@@ -332,7 +332,7 @@ pandoc -f markdown -t org -o test.org test.md
 
 ** Article
 
-+ [[https://github.com/redguardtoo/mastering-emacs-in-one-year-guide/blob/master/guide-zh.org][一年成为 Emacs 高手 (像神一样使用编辑器)]]， _@chenbin_ 解释了 Emacs 的好处以及如何成为高手。
++ [[https://github.com/redguardtoo/mastering-emacs-in-one-year-guide/blob/master/guide-zh.org][一年成为 Emacs 高手 (像神一样使用编辑器)]]， =@chenbin= 解释了 Emacs 的好处以及如何成为高手。
 
 ** Configure reference
 
