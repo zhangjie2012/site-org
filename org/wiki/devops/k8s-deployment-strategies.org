@@ -1,0 +1,73 @@
+#+SETUPFILE: ~/site/tpl/wiki-tpl.org
+#+TITLE: K8s 部署策略
+#+DATE: 2020-01-03 10:37:34
+
+
+via K8s 中的部署策略解释：
+
+- git 地址： [[https://github.com/ContainerSolutions/k8s-deployment-strategies][ContainerSolutions/k8s-deployment-strategies]]
+- 文章：[[https://blog.container-solutions.com/kubernetes-deployment-strategies][Kubernetes deployment strategies]]
+
+/没有全部翻译，目的是为了了解几种发布策略术语，而不是实现层。/
+
+* recreate - 重新创建
+
+https://github.com/ContainerSolutions/k8s-deployment-strategies/blob/master/recreate/grafana-recreate.png
+
+服务全部停止，然后重新创建。也就是说服务是中断的。
+
+* ramped(rolling-update or incremental) - 滚动更新
+
+https://github.com/ContainerSolutions/k8s-deployment-strategies/blob/master/ramped/grafana-ramped.png
+
+逐步更新，起一个服务（启动成功，并且可以正常对外提供服务 - ready 状态 - 健康检测），然后停止一个，以此类推，所以称之为滚动更新。
+
+思路是这样的，但实际上为了增快发布时间，还可以：
+
+- 并行发布：设置每次启停的个数，比如 10 个实例，以 3 个为单位发布；
+- 最大实例个数：除了当前的实例个数，最多还可以添加多少个实例（同时存在的）；
+- 最大不可用：滚动更新过程中最多的不可用实例个数；
+
+https://blog.container-solutions.com/hs-fs/hubfs/Imported_Blog_Media/kubernetes-deployment-strategy-ramped-1024x634-1.png?width=500&name=kubernetes-deployment-strategy-ramped-1024x634-1.png
+
+控制层面在实例，无法控制实际流量。
+
+* blue/green - 蓝绿发布
+
+https://github.com/ContainerSolutions/k8s-deployment-strategies/blob/master/blue-green/grafana-blue-green.png
+
+新服务全部起来之后，把流量切过去，然后再停止旧服务。
+
+https://info.container-solutions.com/hubfs/Imported_Blog_Media/kubernetes-deployment-strategy-blue-green-1.png
+
+很显然，蓝绿发布比较费资源。
+
+* canary - 金丝雀发布
+
+https://github.com/ContainerSolutions/k8s-deployment-strategies/blob/master/canary/grafana-canary.png
+
+新版本先给一部分用户用，稳定之后再全部部署。一般用于平台测试功能稳定性。
+
+https://info.container-solutions.com/hubfs/Imported_Blog_Media/kubernetes-deployment-strategy-canary-1.png
+
+跟滚动更新很类似，但是控制的更细腻一些，而且目的也不同：个人理解，滚动更新主要是为了旧服务到新服务迁移更加平滑，让用户无感知；
+而金丝雀是为了测试产品功能。
+
+但是细粒度的流量控制，成本可能比较高。
+
+* (A/B testing using Istio) A/B 测试
+
+https://github.com/ContainerSolutions/k8s-deployment-strategies/raw/master/ab-testing/grafana-ab-testing.png
+
+在特定情况下将一部分用户路由到新功能，这种控制一般在上层控制的，控制力度更加的小，平台层比较难做。
+但是个人觉得对于产品是非常有用的功能，比如按照城市地区发布功能等。
+
+https://info.container-solutions.com/hubfs/Imported_Blog_Media/kubernetes-deployment-strategy-a-b-testing-3.png
+
+成本比较高。
+
+* shadow 影子发布
+
+https://github.com/ContainerSolutions/k8s-deployment-strategies/raw/master/shadow/grafana-shadow.png
+
+新版本和旧版本共存，并且不会互相影响。把生产版本的流量同时打到测试版本，对生产无影响，有点像我们说的预发。

@@ -53,9 +53,10 @@
 
 - [[file:devops/k8s-concept.org][术语]]
 - [[file:devops/k8s-kubectl.org][kubectl]]：kubectl 使用文档
-- [[file:devops/k8s-ingress.org][Ingress]]
+- [[file:devops/k8s-ingress.org][Ingress]]：服务暴露
 - [[file:devops/k8s-practice.org][实践]]
-- [[file:devops/k8s-resource.org][资源]]：各种帅帅的图
+- [[file:devops/k8s-deployment-strategies.org][K8s 部署策略]]：几种常见的部署策略
+- [[file:devops/k8s-resource.org][资源]]：各种帅帅的图，以及 K8s 的资源连接
 
 ** 监控告警
 
