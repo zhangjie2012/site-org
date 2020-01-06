@@ -2,7 +2,7 @@
 #+TITLE: 技术人
 #+DATE: 2019-06-02 17:28:49
 
-** 办公硬件
+* 办公硬件
 
 + 耳机
   - [[https://gradolabs.com/][Grado]] SR325e：纯手工制作耳机，长相帅的一B，就是包装丑了一点，当初是为了听摇滚买的。
@@ -29,67 +29,22 @@
   4) 推荐茶轴，青轴不适合写代码，一来太吵，而来确实累；红轴太轻了，几乎没有任何机械键盘的快感，还是算了
   5) 机械键盘用的时间长了，还是会比较累（难道是因为年龄大了？），后面准备低键位的红轴了
 
-** 编码环境
+* 编码与环境
 
-+ 代码编辑器
++ IDE/Editor /我不用 IDE/
   + [[https://www.gnu.org/software/emacs/][Emacs]]，主力编辑器，[[file:code-env/emacs.org][我的 Wiki]]
   + [[https://www.vim.org/][Vim]]，没办法，服务器只有 Vi/Vim
 + 编码字体
-  - [[https://github.com/tonsky/FiraCode][Fira Code]]
-  - [[https://github.com/adobe-fonts/source-code-pro][Source Code Pro]] 用了五年多，现在依旧认为是最美的的编程字体，最近才切换到 Fira code，Fira code 也很好看，而且棱角分明一些
+  - [[https://github.com/tonsky/FiraCode][Fira Code]]，[[https://github.com/adobe-fonts/source-code-pro][Source Code Pro]] 用了五年多，最近才切换到 Fira code，Fira code 也很好看，而且棱角分明一些
   - [[https://github.com/whorusq/sublime-text-3/blob/master/fonts/Microsoft-Yahei-Mono.ttf][Microsoft-Yahei-Mono]] 真中英文等宽等高字体，文泉驿也是，就是太丑了（目前只有这两个字体）
-+ shell
-  - [[https://github.com/robbyrussell/oh-my-zsh][oh-my-zsh]]
-
-** 工具软件
-
-*** 公有云
-
-目前只推荐腾讯云，UCloud 也还不错毕竟小厂。阿里云就算了，坑太多了。
-
-*** 记录
-
-+ 云笔记
-  - [[https://note.youdao.com/][有道云笔记]]，支持 Windows 和 Mac 平台，Mac 体验优于印象笔记，不支持 Ubuntu，手机上广告很多
-+ TODO
-  - +[[https://www.wunderlist.com/zh/][Wunderlist]]：支持 Windows 和 Mac 平台，[[https://github.com/edipox/wunderlistux][Ubuntu]]+ ，部分功能已经用 org-mode 代替了。 _gtd 是一个很艰难的事，与工具无关。_
-
-*** 设计
-
-+ 思维导图
-    - [[https://www.xmind.cn/][XMind]]
-+ UML
-    - Mac 平台下的 WPS 支持画图，很好用
-    - Windows 下当然是 Visio 啦
-
-UML 绘图始终觉得 Visio 做的最好，各种在线（比如 ProcessOn）的我也尝试过，效率太低了。
-
-*** 邮箱客户端
-
-- [[https://mail.163.com/dashi/][网易邮箱大师]]：支持 Mac 和 Windows，不支持 Linux
-
-说明：
-
-- 用了 Foxmail 几年时间，最后弃了，主要原因是现在已经没人维护了，MacOS 下邮件接收太猛的时候（告警邮件），邮件会掉线，再登录一直提示密码错误，这个问题很严重
-- [[https://getmailspring.com/][Mailspring]]：长相不错，跨全平台（Windows/MacOS/Linux），轻量级，就是 Bug 有点多
-
-*** 写作
-
-+ 文本标记语言
-  - markdown
-  - org-mode
-+ 资源：
-  - [[https://unsplash.com/][upsplash]]：免费的图片素材
-
-*** 其它
-
-+ 科学上网
-  + [[https://github.com/shadowsocks/ShadowsocksX-NG][ShadowsocksX-NG]]，没有稳定的梯子，现在都改成了 [[https://github.com/leadscloud/ShadowsocksX-NG-R/releases][SSR]] 了，
-  + iOS +Potatso Lite+ 太吃内存了，删了
 + 包管理工具
   - [[https://brew.sh/][Homebrew]]：The missing package manager for macOS
++ 版本管理
+  - git
 + SSH 连接工具 & 终端模拟器
   - [[https://www.iterm2.com/][iterm2]]
+    - zsh + [[https://github.com/robbyrussell/oh-my-zsh][oh-my-zsh]]
+    - [[https://github.com/wting/autojump][autojump]]：目录快捷跳转
   - [[https://www.netsarang.com/products/xsh_overview.html][XShell]]：可惜只支持 Windows 环境
   - [[https://gnometerminator.blogspot.com/p/introduction.html][terminator]]：Ubuntu 下优于默认的 terminal
 + Chrome 插件
@@ -100,12 +55,48 @@ UML 绘图始终觉得 Visio 做的最好，各种在线（比如 ProcessOn）�
   - [[https://dawnlabs.io/carbon][carbon]]
 + 文本比较
   - [[https://www.scootersoftware.com/][Beyond Compare]]，跨平台，[[https://blog-1252349778.cos.ap-beijing.myqcloud.com/2018/keygen.exe][注册机]]
++ 版本号约定
+  - [[https://semver.org/lang/zh-CN/][semver]]: =<MAJORL>.<MINOR>.<PATCH>= ，大部分软件发布都是用的这种规则
+  - [[https://calver.org/][calver]]: =YY.mm.<patch>= ，基于日历的版本发布，适用于对时间敏感的项目，目前使用这种规则的有 Docker、Ubuntu 等
++ 思维导图
+  - [[https://www.xmind.cn/][XMind]]，WPS 也不错
++ UML
+  - Mac 平台下的 WPS 支持画图，很好用
+  - Windows 下当然是 Visio 啦，各种在线的都感觉不好用
+
+* 工具软件
+** 公有云
+
+目前只推荐腾讯云，UCloud 也还不错毕竟小厂。阿里云就算了，坑太多了。
+
+** 记录
+
++ 云笔记
+  - [[https://note.youdao.com/][有道云笔记]]，支持 Windows 和 Mac 平台，Mac 体验优于印象笔记，不支持 Ubuntu，手机上广告很多。开始使用 org-mode 之后，云笔记也不咋用了。
++ TODO
+  - +[[https://www.wunderlist.com/zh/][Wunderlist]]：支持 Windows 和 Mac 平台，[[https://github.com/edipox/wunderlistux][Ubuntu]]+ ，部分功能用 org-mode 代替了。 gtd 是一个很艰难的事，与工具无关。
+
+** 邮箱客户端
+
+- [[https://mail.163.com/dashi/][网易邮箱大师]]：支持 Mac 和 Windows，不支持 Linux
+
+说明：
+
+- 用了 Foxmail 几年时间，最后弃了，主要原因是现在已经没人维护了，MacOS 下邮件接收太猛的时候（告警邮件），邮件会掉线，再登录一直提示密码错误，这个问题很严重
+- [[https://getmailspring.com/][Mailspring]]：长相不错，跨全平台（Windows/MacOS/Linux），轻量级，就是 Bug 有点多
+
+** 写作
+
++ 工具：Emacs [[https://orgmode.org/][org-mode]]，站点生成也是直接用 org-mode 的
++ 资源：
+  - [[https://unsplash.com/][upsplash]]：免费的图片素材
+
+** 其它
+
++ 科学上网
+  + [[https://github.com/shadowsocks/ShadowsocksX-NG][ShadowsocksX-NG]]，没有稳定的梯子，现在都改成了 [[https://github.com/leadscloud/ShadowsocksX-NG-R/releases][SSR]] 了，
+  + iOS +Potatso Lite+ 太吃内存了，删了
 + 刻录
   - [[https://unetbootin.github.io/][UNetbootin]]：Windows、MacOS、Linux
 + 录屏
   - [[https://www.cockos.com/licecap/][LICEcap]]：Windows、MacOS
-
-** 版本号约定
-
-+ [[https://semver.org/lang/zh-CN/][semver]]: =<MAJORL>.<MINOR>.<PATCH>= ，大部分软件发布都是用的这种规则
-+ [[https://calver.org/][calver]]: =YY.mm.<patch>= ，基于日历的版本发布，适用于对时间敏感的项目，目前使用这种规则的有 Docker、Ubuntu 等
