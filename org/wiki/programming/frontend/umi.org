@@ -100,6 +100,12 @@ const stockList = [...state.stockList]
 但是不知道这种方式的原理是什么。
 
 * Umi
+** 作者(sorrycc)有关 umi 的文章
+- 2018-01-31 [[https://github.com/sorrycc/blog/issues/58][Hello! umi]]
+- 2018-02-26 [[https://github.com/sorrycc/blog/issues/64][发布 umi 1.0]]
+- 2018-09-03 [[https://github.com/sorrycc/blog/issues/74][发布 umi 2.0，可插拔的企业级 react 应用框架]]
+- 2019-09-02 [[https://github.com/sorrycc/blog/issues/86][Hello! Umi UI]]  /费精力搞这玩意干啥../
+
 ** Pro 和 UmiJS
 
 Pro 封装了 umi，umi 配置文件为 =.umirc.js= 或 =config/config.js= ，Pro 中使用 =config/config.js= ，但是进行了一定的改造。
