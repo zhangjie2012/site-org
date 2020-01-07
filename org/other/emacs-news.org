@@ -3,6 +3,11 @@
 
 内容大部分来自 [[https://planet.emacslife.com/][Planet Emacslife]]，[[https://www.reddit.com/r/emacs/][r/emacs]]，[[https://www.twitter.com/][Twitter]]，[[https://github.com/][Github]]，没啥原创，只是为了好玩。
 
+* 2020-01-07
+
+- [[https://www.reddit.com/r/emacs/comments/ehk70n/are_there_any_emacs_starter_kits_which_dont/][Are there any Emacs starter kits which don't include third party packages?]]
+  不包含第三方库的 Emacs 快速启动包 => [[https://github.com/technomancy/emacs-starter-kit][emacs-starter-kit]] ，[[https://github.com/technomancy/better-defaults][better-defaults]] 以前用过，后来给删了，今天仔细看了一下内容，又给加上了
+
 * 2019-12-10
 
 - [[https://github.com/hlissner/emacs-doom-themes][emacs-doom-themes]] 现代的 color-themes，不过只有 GUI 支持的较好，终端不咋行

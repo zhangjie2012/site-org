@@ -19,9 +19,10 @@
 - [[https://book.douban.com/subject/30189843/][原则]]，值得多读几遍的书，2019-11-12
 
 * Technology
-** System Design
+** System Design & Arch
 
 - [[https://bingohuang.gitbooks.io/12factor/content/zh_cn/][12-Factor]]：构建 SaaS 应用方法论，2018 年，2 遍
+- [[https://book.douban.com/subject/27039508/][企业IT架构转型之道：阿里巴巴中台战略思想与架构实战]]：拓展视野，阿里人总是对阿里太过崇拜，官话有点多；2020-01-06
 
 ** OOP && DP
 
@@ -43,7 +44,7 @@
 
 - [[https://book.douban.com/subject/26644070/][凤凰项目]]：这是一本小说，茶余饭后可以读读，2018-10-21
 - [[https://book.douban.com/subject/26875239/][SRE：谷歌运维解密]]：类似一本文章的集合，拓展视野，2019-03-04
-
+-
 ** Unix/Linux
 
 - [[http://book.douban.com/subject/4889838/][鸟哥的Linux私房菜基础学习篇(第三版)]] : 入门 Linux 的很好选择
@@ -53,8 +54,7 @@
 - [[https://book.douban.com/subject/26772677/][微服务设计]]：不厚但读起来挺费劲，2018-08-29
 
 ** Programming Language
-
-**** C/C++
+*** C/C++
      :PROPERTIES:
      :CUSTOM_ID: cc
      :END:
@@ -82,7 +82,7 @@
   对象模型]]：2008-2012
 - [[http://book.douban.com/subject/2116929/][高质量 C++ 编程指南]]：2013
 
-**** Go
+*** Go
      :PROPERTIES:
      :CUSTOM_ID: go
      :END:
