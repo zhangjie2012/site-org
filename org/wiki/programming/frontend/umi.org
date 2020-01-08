@@ -99,6 +99,23 @@ const stockList = [...state.stockList]
 
 但是不知道这种方式的原理是什么。
 
+*2020-01-08 16:52:10 更新*
+
+https://github.com/umijs/umi/issues/816
+
+上面说的这种办法不通用，想恢复以前的使用办法可以关闭 immer，
+
+#+BEGIN_SRC javascript
+export default {
+  plugins: [
+    ['umi-plugin-dva', { immer: true }],
+  ],
+};
+#+END_SRC
+
+关闭之后又出现了 =Reducer "index" returned undefined during initialization.= 的报错，原因是 models 下面的 =*.js= 文件没有设置初始化 state，
+查看代码发现，在 models 下有一些 utils.js 文件，移出 model 目录即可。应该是认为 models 下的 .js 文件都要符合 =export { state: {} }= 这样的格式。
+
 * Umi
 ** 作者(sorrycc)有关 umi 的文章
 - 2018-01-31 [[https://github.com/sorrycc/blog/issues/58][Hello! umi]]
