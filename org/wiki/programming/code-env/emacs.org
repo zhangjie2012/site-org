@@ -72,7 +72,7 @@ Emacs 几乎所有的快捷键都是以 ~C-~ 开始的，也是 Emacs 令人诟�
 
 * 插件推荐
 
-Emacs 有很多的 [[http://melpa.org][插件]]，[[https://github.com/emacs-tw/awesome-emacs][awesome-emacs]] 是按照分类整理的。下面列一下我正在使用的插件，以及一些使用心得。
+Emacs 有很多的 [[http://melpa.org][插件]]，[[https://github.com/emacs-tw/awesome-emacs][awesome-emacs]] 是按照分类整理的。下面列一下我正在使用的插件以及一些说明：
 
 |--------------------+-------------------------------------------+--------------------------------------------------------------------------------------------|
 | 插件名称           | 插件介绍                                  | 备注                                                                                       |
@@ -98,14 +98,6 @@ Emacs 有很多的 [[http://melpa.org][插件]]，[[https://github.com/emacs-tw/
 | [[https://orgmode.org][org-mode]]           | 最牛逼的插件，没有之一                    |                                                                                            |
 | [[https://www.flycheck.org/en/latest/][Flycheck]]           | 强大的语法检查框架                        | 需要编程语言的 lint 工具配合，比如 eslint、golint。编码必备插件                            |
 |--------------------+-------------------------------------------+--------------------------------------------------------------------------------------------|
-
-#+BEGIN_QUOTE
-语言的开发环境配置一直很恼人（很费时间），我记得以前刚配置 C/C++ 的开发环境时，折腾了一个月左右时间才找到一个相对比较满意的开发环境（折腾完之后使用起来可真爽啊）： ~xcscope + etags + c++-mode~ 。
-
-写 Python 的时候也折腾了长时间的缩进问题。 Go 就更不用说了···，Go 工具链很完整，但由于 Go 的版本升级很快，工具链根本跟不上，+gocode+ 已经迁移了三次地址了。
-
-后来看到了 [[https://langserver.org/][LSP（Language Server Protocol）]] 项目，感觉这个项目才是终极解法：插件化，C/S 模式。目前已经默认支持 Python 和 Go 了，虽然还是有许许多多的 Bug，但比起 2018 年我试的时候已经成熟太多了。有社区的驱动，发展很快。
-#+END_QUOTE
 
 * 日常使用
 
@@ -187,6 +179,17 @@ Emacs 有很多的 [[http://melpa.org][插件]]，[[https://github.com/emacs-tw/
 | ~M-o 1/2/3/4...~ | 切换窗口                          |
 |------------------+-----------------------------------|
 
+** IDE
+
+语言的开发环境配置一直很费时间，我记得以前刚配置 C/C++ 的开发环境时，折腾了一个月左右时间才找到一个相对比较
+满意的开发环境（折腾完之后使用起来可真爽啊）： ~xcscope + etags + c++-mode~ 。
+
+写 Python 的时候也折腾了长时间的缩进问题。 Go 就更不用说了···，Go 工具链很完整，
+但由于 Go 的版本升级很快，工具链根本跟不上， +gocode+ 已经迁移了三次地址了。
+
+后来看到了 [[https://langserver.org/][LSP（Language Server Protocol）]] 项目，感觉这个项目才是终极解法：插件化，C/S 模式。
+目前已经默认支持 Python 和 Go 了，虽然还是有许许多多的 Bug，但比起 2018 年我试的时候已经成熟太多了。有社区的驱动，发展很快。
+
 ** 版本管理
 
 在不使用任何插件的情况下（内置的 VC），svn 和 git 都支持：
@@ -217,13 +220,38 @@ Emacs 有很多的 [[http://melpa.org][插件]]，[[https://github.com/emacs-tw/
 - [[file:../../../blog/2019/emacs-slice.org][Emacs 基于 org-reveal 做幻灯片]]
 
 * FAQ
-** 是否要使用 Evil ？
+** Emacs 启动速度太慢怎么办？
 
-因人而异，如果之前你曾是 Vim 用户，建议你用 Evil。因为我一开始就用的是 Emacs，而不是 Vim，所以我一直用的是 Emacs 的键映射。
+~M-x emacs-init-time~ 可以查看 Emacs 启动耗费时间。
 
-** 我可不可以用 Emacs 完成 XXX 能做的事情？
+多一个插件都会增加启动成本，不信你 ~emacs -Q~ 试试，所以要尽可能的减少插件。你可以使用 [[https://github.com/dacap/keyfreq][keyfreq]] 来查看你常用的快捷键有哪些。筛选出不常用的插件给干掉，这是解决启动速度慢的根本办法。
 
-没有银弹！纵然 Emacs 可能「可以做任何事情」，比如收发邮件、GTD、阅读 pdf、打开图片等等。然而我以为用合适的工具做合适的事情才是重要的.
+如何定位插件耗时？
+
+- 使用 profiler：https://punchagan.muse-amuse.in/blog/how-i-learnt-to-use-emacs-profiler/
+- 使用 esup：https://github.com/jschaf/esup
+- 使用 https://github.com/purcell/emacs.d/blob/master/lisp/init-benchmarking.el
+
+定位之后如何优化？
+
+elisp 比较熟的有自己的办法优化，当然我不熟。我的解决办法是：
+
+- 基本上不用的插件、UI 上炫酷的插件都干掉
+- 使用 [[https://github.com/jwiegley/use-package][use-package]] ，use-package 并不是包管理工具，只是一个宏，用来配置和加载包。
+  你可以设置延迟加载包，以提高第一次打开的速度。还有一个好处是，使用 use-package 组织包更清晰，对于 use-package 我还处于研究阶段，粗暴的使用 ~:init~ 和 ~:config~ 配置，实际上有很多优雅的方法
+
+** org-mode 使用
+*** 如何将 markdown 转成 org-mode
+
+~.org~ 文件可以很轻松的通过 ~org-md-export-to-markdown~ 生成 =.md= 文件。 =.md= 文件可以借助 Pandoc 生成 =.org=  [fn:md-to-org]。
+
+#+BEGIN_SRC shell
+pandoc -f markdown -t org -o test.org test.md
+#+END_SRC
+
+*** 如何排序，按列表，按标题等
+
+=org-sort*= [fn:sorting-headings-in-an-org-file]
 
 ** 使用 GUI 版本还是 Terminal ?
 
@@ -255,31 +283,6 @@ Ubuntu GUI 无法切换搜狗输入法，与默认的 Mark 快捷键冲突，解
 
 试了一下 [[https://github.com/whorusq/sublime-text-3/blob/master/fonts/Microsoft-Yahei-Mono.ttf][Microsoft YaHei Mono]]，发现效果要比文泉驿要好很多，中文还挺好看。决定终端和GUI都使用一段时间。
 
-** 如何记忆 Emacs 快捷键？
-
-Emacs 的快捷键非常多，但是除了基本的编辑操作快捷键之外（就是上面描述的内容）并不需要刻意的记忆，只要你掌握了两点：
-
-1) 在 Emacs 中所有的快捷键对应的都是一个 Lisp 函数，快捷键忘了的话，可以使用 ~M-x~ 调用函数来实现相应的功能（如果使用了 helm 或者 ivy，绑定的快捷键会自动显示出来）
-2) 查看当前 mode 的所有快捷键可以使用 ~C-h m~ 寻求帮助，正如第一条所述： ~C-h m~ 对应的函数是 ~describe-mode~
-
-另外，Emacs 有个 [[https://github.com/justbur/emacs-which-key][emacs-which-key]] 的插件，有快捷键提示。比如，在 Markdown 模式下，快捷键前缀都是 ~C-c C-c~ 但是后面你可能忘了，当你按下 ~C-c C-c~ 时，它会这样提示你：
-
-[[https://wiki-1252349778.cos.ap-shanghai.myqcloud.com/2019/emacs-wiki-which-key-0.png]]
-
-** 如何去掉空白字符
-
-+ ~M-\~ ：删除光标周围的空格和 tab
-+ ~M-<SPC>~ ：删除光标周围的空格和 tab，但是保留一个
-
-另外，我会给文件保存（~C-x s~）时，添加一个 hook：
-
-#+BEGIN_SRC emacs-lisp
-(setq show-trailing-whitespace t)
-(add-hook 'before-save-hook 'delete-trailing-whitespace)
-#+END_SRC
-
-这样在每次保存文件的时候，会自动删掉每行或者段落后面多于的空白字符和空行。
-
 ** 包安装问题
 
 因为某些原因官方的 elpa 源无法使用怎么办？ 如果没有 FQ 的环境，使用清华大学提供了 elpa 镜像源：[[https://mirror.tuna.tsinghua.edu.cn/help/elpa/][https://mirror.tuna.tsinghua.edu.cn/help/elpa/]]
@@ -307,25 +310,38 @@ Emacs 的快捷键非常多，但是除了基本的编辑操作快捷键之外�
         ))
 #+END_SRC
 
-** Emacs 启动速度太慢怎么办？
+** 如何去掉空白字符
 
-~M-x emacs-init-time~ 可以查看 Emacs 启动耗费时间。
++ ~M-\~ ：删除光标周围的空格和 tab
++ ~M-<SPC>~ ：删除光标周围的空格和 tab，但是保留一个
 
-多一个插件都会增加启动成本，不信你 ~emacs -Q~ 试试，所以要尽可能的减少插件。你可以使用 [[https://github.com/dacap/keyfreq][keyfreq]] 来查看你常用的快捷键有哪些。筛选出不常用的插件给干掉，这是解决启动速度慢的根本办法。
+另外，我会给文件保存（~C-x s~）时，添加一个 hook：
 
-如何定位插件耗时？
+#+BEGIN_SRC emacs-lisp
+(setq show-trailing-whitespace t)
+(add-hook 'before-save-hook 'delete-trailing-whitespace)
+#+END_SRC
 
-- 使用 profiler：https://punchagan.muse-amuse.in/blog/how-i-learnt-to-use-emacs-profiler/
-- 使用 esup：https://github.com/jschaf/esup
-- 使用 https://github.com/purcell/emacs.d/blob/master/lisp/init-benchmarking.el
+这样在每次保存文件的时候，会自动删掉每行或者段落后面多于的空白字符和空行。
 
-定位之后如何优化？
+** 如何显示所有安装的 package
+=C-h v package-activated-list= [fn:package-actived-list]
+** 如何更新所有的依赖包？
 
-elisp 比较熟的有自己的办法优化，当然我不熟。我的解决办法是：
+1. ~M-x list-package~
+1. ~U~ 标记所有不是最新的包
+1. ~x~ 执行更新
 
-- 基本上不用的插件、UI 上炫酷的插件都干掉
-- 使用 [[https://github.com/jwiegley/use-package][use-package]] ，use-package 并不是包管理工具，只是一个宏，用来配置和加载包。
-  你可以设置延迟加载包，以提高第一次打开的速度。还有一个好处是，使用 use-package 组织包更清晰，对于 use-package 我还处于研究阶段，粗暴的使用 ~:init~ 和 ~:config~ 配置，实际上有很多优雅的方法
+** 如何记忆 Emacs 快捷键？
+
+Emacs 的快捷键非常多，但是除了基本的编辑操作快捷键之外（就是上面描述的内容）并不需要刻意的记忆，只要你掌握了两点：
+
+1) 在 Emacs 中所有的快捷键对应的都是一个 Lisp 函数，快捷键忘了的话，可以使用 ~M-x~ 调用函数来实现相应的功能（如果使用了 helm 或者 ivy，绑定的快捷键会自动显示出来）
+2) 查看当前 mode 的所有快捷键可以使用 ~C-h m~ 寻求帮助，正如第一条所述： ~C-h m~ 对应的函数是 ~describe-mode~
+
+另外，Emacs 有个 [[https://github.com/justbur/emacs-which-key][emacs-which-key]] 的插件，有快捷键提示。比如，在 Markdown 模式下，快捷键前缀都是 ~C-c C-c~ 但是后面你可能忘了，当你按下 ~C-c C-c~ 时，它会这样提示你：
+
+[[https://wiki-1252349778.cos.ap-shanghai.myqcloud.com/2019/emacs-wiki-which-key-0.png]]
 
 ** 如何软重启 Emacs？
 
@@ -336,29 +352,19 @@ elisp 比较熟的有自己的办法优化，当然我不熟。我的解决办�
 
 两个的原理差不多， ~C-x C-e~ 是执行选中的内容， ~eval-buffer~ 是执行当前 buffer。
 
-** 如何更新所有的依赖包？
+** 我可不可以用 Emacs 完成 XXX 能做的事情？
 
-1. ~M-x list-package~
-1. ~U~ 标记所有不是最新的包
-1. ~x~ 执行更新
+没有银弹！纵然 Emacs 可能「可以做任何事情」，比如收发邮件、GTD、阅读 pdf、打开图片等等。然而我以为用合适的工具做合适的事情才是重要的.
+
+** 是否要使用 Evil ？
+
+因人而异，如果之前你曾是 Vim 用户，建议你用 Evil。因为我一开始就用的是 Emacs，而不是 Vim，所以我一直用的是 Emacs 的键映射。
 
 ** 行逆序排序
 1. ~M-x sort-lines~
 2. ~M-x reverse-region~
-** 如何将 markdown 转成 org-mode
-
-~.org~ 文件可以很轻松的通过 ~org-md-export-to-markdown~ 生成 =.md= 文件。 =.md= 文件可以借助 Pandoc 生成 =.org=  [fn:md-to-org]。
-
-#+BEGIN_SRC shell
-pandoc -f markdown -t org -o test.org test.md
-#+END_SRC
-
-** 如何显示所有安装的 package
-
-=C-h v package-activated-list= [fn:package-actived-list]
 
 * Resource
-
 ** Blog/Site/Tutorial
 
 + [[https://planet.emacslife.com/][Planet Emacslife]]：Emacs 百科全书，大杂烩
@@ -393,3 +399,5 @@ pandoc -f markdown -t org -o test.org test.md
 [fn:1] https://stackoverflow.com/questions/52722096/build-emacs-and-gnutls-not-found
 
 [fn:package-actived-list] https://stackoverflow.com/questions/13866848/how-to-save-a-list-of-all-the-installed-packages-in-emacs-24
+
+[fn:sorting-headings-in-an-org-file]
