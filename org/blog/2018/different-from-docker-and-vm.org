@@ -4,23 +4,23 @@
 
 原帖链接：https://stackoverflow.com/questions/16047306/how-is-docker-different-from-a-virtual-machine
 
-** 问题
+* 问题
 
 + Docker 是怎么做到提供完整的文件系统和网络环境隔离，但却不那么重量级呢？
 + 为什么使用 Docker 镜像部署软件比简单的部署在一致的生产环境要更容易呢？
 
-** 答案
+* 答案
 
-*** by [[https://stackoverflow.com/users/356788/ken-cochrane][Ken Cochrane]]
+** by [[https://stackoverflow.com/users/356788/ken-cochrane][Ken Cochrane]]
 
-Docker 最初使用的是 [[https://linuxcontainers.org/][LinuX Containers]]（LXC），但是后来切换到了 [[https://github.com/opencontainers/runc][runC]]（之前称为 _libcontainer_ ），它可以把同一个操作系统做为运行主机。这就允许它共享宿主机操作系统的资源。此外，它使用分层文件系统（[[http://aufs.sourceforge.net/][AuFS]]）并管理网络。
+Docker 最初使用的是 [[https://linuxcontainers.org/][LinuX Containers]]（LXC），但是后来切换到了 [[https://github.com/opencontainers/runc][runC]]（之前称为 =libcontainer= ），它可以把同一个操作系统做为运行主机。这就允许它共享宿主机操作系统的资源。此外，它使用分层文件系统（[[http://aufs.sourceforge.net/][AuFS]]）并管理网络。
 
 AuFS 是一个分层的文件系统，你可以将只读部分和写入部分合并在一起。它将操作系统部分设置为只读（给所有的容器一起共享），然后对容器挂载部分进行写入。
 
 所以说，如果你有 1 GB 大小的容器镜像；如果你想使用完整的 VM，你可能需要 1 GB 乘以你所需要的 VMs 数量（的大小）。但使用 Docker 和 AuFS 的话，你可以在容器中共享 1G 的大部分，如果你有 1000 个容器，
 你可能只需要比 1 GB 多一些的空间就足够了（假设它们用的是相同的操作系统镜像）。
 
-完整的虚拟化系统可能或者给它分配的资源，实现最小的共享。为了实现尽可能多的隔离，就会变得很重量级（需要更多的资源）。使用 Docker ，隔离少，但是很轻量级（需要更少的资源消耗）。
+完整的虚拟化系统可能或者给它分配的资源，实现最小的共享。为了实现尽可能多的隔离，就会变得很重量级（需要更多的资源）。使用 Docker，隔离少，但是很轻量级（需要更少的资源消耗）。
 所以，你可以在主机上轻松运行上千个容器，都不会抖动。假如使用的 Xen，除非你有一个巨大的主机（才能实现相同的量级），但我认为这是不可能实现的。
 
 完整的虚拟化系统启动可能需要几分钟，但是 Docker/LXC/runC 容器只需要几秒钟，甚至不超过一秒钟。
@@ -35,7 +35,7 @@ AuFS 是一个分层的文件系统，你可以将只读部分和写入部分合
 
 首先采用一致的生产环境说起来容易实施起来难，即便你使用 [[https://en.wikipedia.org/wiki/Chef_%28software%29][Chef]] 和 [[https://en.wikipedia.org/wiki/Puppet_%28software%29][Puppet]] 这种工具，也会遇到操作系统更新以及主机和环境之间发生变化其他情况。
 
-Docker 可以将操作系统的快照放到共享镜像中，并且更容易的部署在 Docker 主机上。在本地、开发环境、质检环境、生产环境中，都有相同的镜像。当然你也可以使用其他的工具，但不是那么容易或者快速。
+Docker 可以将操作系统的快照放到共享镜像中，并且更容易的部署在 Docker 主机上。在本地开发环境、质检环境、生产环境中，都有相同的镜像。当然你也可以使用其他的工具，但不是那么容易或者快速。
 
 在测试方面也非常的合适；假设你有数千个需要连接到数据库的测试，每个测试都需要有数据库的原始副本，并且不会对数据进行更改。传统的解决办法是每次测试之后使用自定义代码或者 [[https://flywaydb.org/][Flyway]] 等工具重置数据库 - 这是非常耗时的，并且意味着测试必须连续运行。
 然而，使用 Docker，你可以创建一个数据库的镜像，并且在每个测试中运行一个实例，然后运行所有的测试，因为你知道他们只是针对相同的数据库快照进行测试。因为测试的并行的，应该很快就可以完成。如果使用 VM 完成累死的工作，你试试看~
@@ -56,7 +56,7 @@ Docker 可以将操作系统的快照放到共享镜像中，并且更容易的�
 @Andy：Ken 在表述的时候一些地方把操作系统和内容混为一谈了。主机上所有容器都在同一个内核下运行的，但是其余的 OS 文件对于每个容器都是唯一的。
 #+end_quote
 
-*** by [[https://stackoverflow.com/users/2478933/manu97][manu97]]
+** by [[https://stackoverflow.com/users/2478933/manu97][manu97]]
 
 一张图即可说明容器和 VM 的区别：
 
@@ -73,10 +73,10 @@ https://blog-1252349778.cos.ap-beijing.myqcloud.com/2018/docker_vs_VM.png
 
 [[https://www.docker.com/resources/what-container#/package_software][来源]].
 
-*** by [[https://stackoverflow.com/users/1166183/ashish-bista][Ashish Bista]]
+** by [[https://stackoverflow.com/users/1166183/ashish-bista][Ashish Bista]]
 
 Docker +并不是+ 一项虚拟化技术。它依赖于实际实现基于容器的虚拟化或者操作系统级别的虚拟化工具。早先使用 LXC 驱动，后来迁移到了 libcontainer 现在改名为为 runC。
-Docker 主要专注于应用程序容器化的自动部署。应用程序容器旨在打包和运行单个服务，而系统容器设计是用于运行多个进程，向虚拟机。所以，Docker 可以看作是容器化系统上的容器管理或者应用部署工具。
+Docker 主要专注于应用程序容器化的自动部署。应用程序容器旨在打包和运行单个服务，而系统容器设计是用于运行多个进程，像虚拟机。所以，Docker 可以看作是容器化系统上的容器管理或者应用部署工具。
 
 为了理解与其它虚拟化的不同，我们先看看虚拟化及其类型。然后，就很好理解它们之间的不同了。
 
@@ -111,7 +111,7 @@ _半虚拟化（Paravirtualization）_
 
 半虚拟化也称之为 Type 1 虚拟机管理程序，直接在硬件上运行，或者「裸金属」，并直接向其上运行的虚拟机提供虚拟化服务。它帮助操作系统，虚拟化硬件，和真正的硬件协作以实现最佳性能。这些管理程序通常占用很小的空间，并且自身不需要大量的资源。
 
-![](https://blog-1252349778.cos.ap-beijing.myqcloud.com/2018/oPO6Um.png)
+https://blog-1252349778.cos.ap-beijing.myqcloud.com/2018/oPO6Um.png
 
 这种类型的例子包括 Xen，KVM，etc。
 
@@ -140,9 +140,9 @@ Linux 控制组（cgroups）子系统，是另外一个容器虚拟化的主要�
 
 主机上的所有容器共享主机的调度程序，从而节省了额外资源的需求。
 
-与虚拟机镜像相比，容器（Docker 或者 LXC ）镜像大小很小，因此容器镜像很容易分发。
+与虚拟机镜像相比，容器（Docker 或者 LXC）镜像大小很小，因此容器镜像很容易分发。
 
-容器中的资源管理是通过 cgroups 实现的，cgroups 不允许容器消耗比实际分配给它们的更多资源。但是，到目前为止，主机的所有资源在容器中都是可见的，但是不能使用。过在容器和主机上同时运行 ~top~ 或者 ~htop~ 输出的内容很类似。
+容器中的资源管理是通过 cgroups 实现的，cgroups 不允许容器消耗比实际分配给它们的更多资源。但是，到目前为止，主机的所有资源在容器中都是可见的，但是不能使用。如果在容器和主机上同时运行 ~top~ 或者 ~htop~ 输出的内容很类似。
 
 更新：
 
@@ -170,6 +170,6 @@ Linux linuxkit-025000000001 4.9.93-linuxkit-aufs #1 SMP Wed Jun 6 16:86_64 Linux
 
 所有的容器都是运行在这个 VM 中的。
 
-hypervisor.framework 有很多的限制。因为 Docker 没有在 Mac 上暴露 ~docker0~ 网络接口。因此，你无法在主机访问容器。到目前为止，~docker0~ 仅可以在 VM 内使用。
+hypervisor.framework 有很多的限制。因为 Docker 没有在 Mac 上暴露 ~docker0~ 网络接口。因此，你无法在主机访问容器。到目前为止， ~docker0~ 仅可以在 VM 内使用。
 
 Hyper-v 是 Windows 中的本机管理程序。它们还试图利用 Windows 10 的功能本地运行 Linux 系统。
