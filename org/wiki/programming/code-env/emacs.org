@@ -80,7 +80,7 @@ Emacs 有很多的 [[http://melpa.org][插件]]，[[https://github.com/emacs-tw/
 | [[https://github.com/Fanael/rainbow-delimiters][rainbow-delimiters]] | 彩虹括号                                  | 相同层级的括号相同颜色                                                                     |
 | [[https://github.com/abo-abo/ace-window][ace-window]]         | 多窗口切换                                | 以前一直用 [[https://github.com/deb0ch/emacs-winum][emacs-winum]]                                                                     |
 | [[https://github.com/abo-abo/avy][avy]]                | 光标快速定位（按照字符、单词、行等）      | 以前用的是 [[https://github.com/winterTTr/ace-jump-mode][ace-jump]]                                                                        |
-| [[https://github.com/abo-abo/swiper][ivy]]                | 一般 ido+smex，ivy，[[https://github.com/emacs-helm/helm][helm]] 三者必须选一     | helm 用了四五年，最近才切换到 ivy                                                          |
+| [[https://github.com/abo-abo/swiper][ivy]]                | 一般 ido+smex，ivy，[[https://github.com/emacs-helm/helm][helm]] 三者必须选一     |                                                                                            |
 | [[https://github.com/bbatsov/projectile][projectile]]         | 项目管理框架，在一个 Emacs 下管理多个项目 | 可以与 ivy 一起使用，[[https://github.com/ericdanan/counsel-projectile][counsel-projectile]]                                                    |
 | [[https://github.com/company-mode/company-mode][company-mode]]       | 模块化补全插件（支持各种语言和后端）      | [[https://github.com/auto-complete/auto-complete][auto-compete]] 用了几年，后来切换到了 company，auto-complete 没有 company 精准。编码必备插件 |
 | [[https://github.com/emacs-lsp/lsp-mode][lsp-mode]]           | [[https://langserver.org][LSP]] 的 Emacs 客户端                       | 目前不是特别成熟                                                                           |
@@ -88,16 +88,22 @@ Emacs 有很多的 [[http://melpa.org][插件]]，[[https://github.com/emacs-tw/
 | [[https://github.com/felipeochoa/rjsx-mode][rjsx-mode]]          | JSX mode                                  | 比 web-mode 好用很多，而且更新的快                                                         |
 | [[https://github.com/justbur/emacs-which-key][which-key]]          | 快捷键绑定提示                            |                                                                                            |
 | [[https://github.com/jwiegley/use-package][use-package]]        | 包配置隔离                                | 可设置启动时机，加速 Emacs 启动                                                            |
-| [[https://github.com/magit/magit][magit]]              | Git 版本管理                              | 启动速度太慢了，不用了                                                                     |
 | [[https://github.com/magnars/expand-region.el][expand-region]]      | 快速选中文本（单词、括号内内容、段落等）  | 比如我常用 =M-s s= 选中一个单词，用 ~M-s p~ 选中括号内内容，然后复制                       |
 | [[https://github.com/magnars/multiple-cursors.el][multiple-cursors]]   | 多鼠标操作                                | [[http://emacsrocks.com/e13.html][Emacs Rocks! Episode 13: multiple-cursors]]                                                  |
 | [[https://github.com/milkypostman/powerline][powerline]]          | mode line 看起来更漂亮一些                | 同类的还有很多                                                                             |
 | [[https://github.com/nonsequitur/git-gutter-plus][git-gutter+]]        | 提示当前 buffer 改动部分                  | 用 ~+~ 和 ~=~ 等显示出来                                                                   |
 | [[https://github.com/nschum/highlight-symbol.el][highlight-symbol]]   | 高亮当前单词                              | 在相同单词之间切换，官方使用 ~F3~ 绑定；我进行了重新绑定。 ~M- -~ 高亮当前单词             |
-| [[https://github.com/technomancy/better-defaults][better-defaults]]    | 优化 Emacs 默认显示                       |                                                                                            |
 | [[https://orgmode.org][org-mode]]           | 最牛逼的插件，没有之一                    |                                                                                            |
 | [[https://www.flycheck.org/en/latest/][Flycheck]]           | 强大的语法检查框架                        | 需要编程语言的 lint 工具配合，比如 eslint、golint。编码必备插件                            |
 |--------------------+-------------------------------------------+--------------------------------------------------------------------------------------------|
+
+一些尝试过，但是不再使用的 package：
+
+- [[https://github.com/technomancy/better-defaults][better-defaults]] 几行代码就可以达到相同的效果
+- [[https://github.com/emacs-dashboard/emacs-dashboard][dashboard]] 启动会显示最近使用过的文件，项目，标签等 华而不实啊
+- [[https://github.com/magit/magit][magit]] 评价非常高的 git package，但是我感觉太慢了，另外是习惯了命令行操作 git，常用的操作用 build-in 的功能足够了，见 [[#manual-vc][版本管理]]
+- [[https://github.com/joaotavora/yasnippet][yasnippet]] 代码片段，以前写 C++ 的时候常用，现在感觉不咋用了
+- [[https://github.com/emacs-helm/helm][helm]] 一个补全框架，用了四五年，后来用 ivy 替换掉了
 
 * 日常使用
 
@@ -191,7 +197,9 @@ Emacs 有很多的 [[http://melpa.org][插件]]，[[https://github.com/emacs-tw/
 目前已经默认支持 Python 和 Go 了，虽然还是有许许多多的 Bug，但比起 2018 年我试的时候已经成熟太多了。有社区的驱动，发展很快。
 
 ** 版本管理
-
+:PROPERTIES:
+:CUSTOM_ID: manual-vc
+:END:
 在不使用任何插件的情况下（内置的 VC），svn 和 git 都支持：
 
 |-----------+--------------------|
@@ -202,8 +210,6 @@ Emacs 有很多的 [[http://melpa.org][插件]]，[[https://github.com/emacs-tw/
 | =C-x v += | git pull，svn up   |
 | =C-x v P= | git push，svn push |
 |-----------+--------------------|
-
-[[https://magit.vc/][Magit]] 是最出名的一个插件，也是功能最完善的：只要记得 ~C-x g~ 一个快捷键就行了，然后按 ~?~ 引导操作即可。
 
 ** org-mode
 
