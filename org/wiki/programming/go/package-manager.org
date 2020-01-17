@@ -17,3 +17,44 @@ govendor: <https://github.com/kardianos/govendor>，安装： ~go get -u github.
 + git pull 下来项目后，本地同步安装 package： ~govendor sync -v~
 + 查看 package 被哪里引用： ~govendor list -v package~
 + govendor 其实并不那么好用（不然 go 的 package 管理也不会这么混乱了），升级和删除 package 等，暴力解法是：删掉 vendor 目录，重新走一遍初始化
+* Go module
+
+*2020-01-17 14:14:44 Fri update*
+
+官方的几篇介绍文章：
+
+1. [[https://blog.golang.org/using-go-modules][Using Go Modules]]
+2. [[https://blog.golang.org/migrating-to-go-modules][Migrating to Go Modules]]
+3. [[https://blog.golang.org/publishing-go-modules][Publishing Go Modules]]
+4. [[https://blog.golang.org/v2-go-modules][Go Modules: v2 and Beyond]]
+
+Go 1.11 之后官方支持包管理工具 =go mod= 。
+
+#+BEGIN_SRC
+Usage:
+
+	go mod <command> [arguments]
+
+The commands are:
+
+	download    download modules to local cache
+	edit        edit go.mod from tools or scripts
+	graph       print module requirement graph
+	init        initialize new module in current directory
+	tidy        add missing and remove unused modules
+	vendor      make vendored copy of dependencies
+	verify      verify dependencies have expected content
+	why         explain why packages or modules are needed
+#+END_SRC
+
+** 常见场景
+
+- 初始化： =go mod init= 会生成 go.mod 文件；如果在 =GOPATH= 之外的项目， =go mod init= 需要指定仓库名称
+- 添加依赖：如果 Go 发现有新的 package 引入，在执行 =go build= 或者 =go test= 会自动 finding->downloading->extracting，然后将 package 名称和版本写入到 go.mod 文件中。
+  引入一个 package，package 可能还依赖其它的 package，go.mod 只记录根依赖，你可以通过 =go list -m all= 来查看所有的依赖；
+  除了 go.mod 之外，还生成了一个 go.sum 文件用来做 hash 校验；
+  *go.mod 和 go.sum 都应该放到版本管理工具中*
+- 升级依赖， =go get= 包之后，go.mod 会自动升级到最新版本；
+  + =go list -m -versions= 可以查看包的版本
+- 移出不常用的依赖 =go mod tidy=
+- =go mod download= 下载依赖的 module 到本地缓存
