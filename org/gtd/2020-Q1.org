@@ -1,7 +1,7 @@
 #+SETUPFILE: ~/site/tpl/gtd-tpl.org
 #+TITLE: 2020 Q1
 
-* 阅读 [1/12]
+* 阅读 [2/12]
 ** TODO Lock Free [0/2]
    - [ ] https://preshing.com/20120612/an-introduction-to-lock-free-programming/
    - [ ] [[https://www.cs.cmu.edu/~410-s05/lectures/L31_LockFree.pdf][Lock-free]]
@@ -9,7 +9,9 @@
    CLOSED: [2020-01-17 Fri 10:54]
 ** TODO [[https://itnext.io/kubernetes-journey-up-and-running-out-of-the-cloud-kubernetes-overview-5012994b8955][Kubernetes Journey — Up and running out of the cloud — Kubernetes Overview]] :K8s:
 ** TODO [[https://itnext.io/kubernetes-journey-up-and-running-out-of-the-cloud-master-and-worker-6328775b347f][Kubernetes Journey — Up and running out of the cloud — Master and Worker]] :K8s:
-** TODO [[https://dave.cheney.net/practical-go/presentations/qcon-china.html][Practical Go: Real world advice for writing maintainable Go programs]] :Go:
+** DONE [[https://dave.cheney.net/practical-go/presentations/qcon-china.html][Practical Go: Real world advice for writing maintainable Go programs]] :Go:
+   CLOSED: [2020-01-17 Fri 15:30]
+没看完，写的不错。但是很多内容与 Effective Go 重复了，而且这种如何写好代码的文章，对我已经没什么提升了。
 ** TODO https://reacttraining.com/react-router/web/guides/quick-start :React:
    深入了解一下 react-router。
 ** TODO [[https://blog.docker.com/2019/07/intro-guide-to-dockerfile-best-practices/][Intro Guide to Dockerfile Best Practices]]                     :Docker:
