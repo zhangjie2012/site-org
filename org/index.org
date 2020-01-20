@@ -27,4 +27,4 @@
 
 ---------------
 
-[[file:blog/2011/about-blog.org][关于博客]] | [[file:other/emacs-news.org][Emacs News]] | [[mailto:me@zhangjie.com][邮箱]] | [[file:sitemap.org][sitemap]]
+[[file:gtd/index.org][GTD]] | [[file:weekly/index.org][碎碎念]] | [[file:blog/2011/about-blog.org][关于博客]] | [[file:other/emacs-news.org][Emacs News]] | [[mailto:me@zhangjie.com][邮箱]] | [[file:sitemap.org][sitemap]]

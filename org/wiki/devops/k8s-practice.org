@@ -1,5 +1,5 @@
 #+SETUPFILE: ~/site/tpl/wiki-tpl.org
-#+TITLE: K8s 实践
+#+TITLE: Kubernetes 实践
 #+DATE: 2018-12-04 15:04
 
 * 实例关联节点

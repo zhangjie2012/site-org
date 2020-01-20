@@ -1,0 +1,7 @@
+#+SETUPFILE: ~/site/tpl/link-tpl.org
+#+TITLE: Get Thing Done
+#+OPTIONS: html-postamble:nil
+#+OPTIONS: toc:nil
+
+- [[file:2020-Q1.org][2020 Q1]]
+- [[file:2019-Q4.org][2019 Q4]]

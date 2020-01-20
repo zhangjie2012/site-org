@@ -1,5 +1,5 @@
 #+SETUPFILE: ~/site/tpl/wiki-tpl.org
-#+TITLE: K8s 资源
+#+TITLE: Kubernetes 资源
 #+DATE: 2018-08-20 17:38:19
 
 * 架构图

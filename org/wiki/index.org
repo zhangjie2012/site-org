@@ -49,14 +49,18 @@
 - 博客:
   + [[file:../blog/2018/different-from-docker-and-vm.org][{译} Docker 和 VM 的区别]]
 
-*** K8s
+*** Kubernetes
 
-- [[file:devops/k8s-concept.org][术语]]
-- [[file:devops/k8s-kubectl.org][kubectl]]：kubectl 使用文档
-- [[file:devops/k8s-ingress.org][Ingress]]：服务暴露
-- [[file:devops/k8s-practice.org][实践]]
-- [[file:devops/k8s-deployment-strategies.org][K8s 部署策略]]：几种常见的部署策略
-- [[file:devops/k8s-resource.org][资源]]：各种帅帅的图，以及 K8s 的资源连接
+- 官方文档
+  + [[file:devops/k8s-concept.org][术语]]
+  + [[file:devops/k8s-kubectl.org][kubectl]] kubectl 使用文档
+  + [[file:devops/k8s-ingress.org][Ingress]] 服务暴露
+- 实践
+  + [[file:devops/k8s-deployment-strategies.org][部署策略]] 几种常见的部署策略
+  + [[file:devops/k8s-practice.org][实践]]
+- 书 & 文章
+  + [[https://github.com/mvallim/kubernetes-under-the-hood][kubernetes-under-the-hood]] 侧重运维部署层面，涉及整体技术架构、网络、DNS 等；如果仅是关注 Kubernetes 本身，不推荐看
+- [[file:devops/k8s-resource.org][资源]]：各种帅帅的图，以及 Kubernetes 的资源连接
 
 ** 监控告警
 
