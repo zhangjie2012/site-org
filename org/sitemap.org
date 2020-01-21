@@ -172,6 +172,7 @@
 - gtd
   - [[file:gtd/2019-Q4.org][2019 Q4]]
   - [[file:gtd/2020-Q1.org][2020 Q1]]
+  - [[file:gtd/index.org][Get Thing Done]]
 - other
   - [[file:other/emacs-news.org][Emacs News]]
   - [[file:other/resume.org][张杰的简历]]
