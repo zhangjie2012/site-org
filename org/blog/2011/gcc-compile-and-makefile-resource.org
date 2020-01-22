@@ -2,29 +2,27 @@
 #+TITLE: gcc编译选项和makefile资源汇总
 #+DATE: 2011-12-15 00:00:00
 
-*编译相关*
+* 编译相关
 
 1. [[http://blog.chinaunix.net/space.php?uid=38391&do=blog&id=2411777][Linux中gcc，g++常用编译选项]]
 2. [[http://www.cnblogs.com/showna/articles/1013401.html][GCC编译选项分析]]
-3. [[http://blog.hjenglish.com/wufen/articles/1148036.html][GCC
-   编译选项]]
+3. [[http://blog.hjenglish.com/wufen/articles/1148036.html][GCC 编译选项]]
 4. [[http://www.xfocus.net/articles/200112/320.html][gcc常用的编译选项对代码的影响:]]
-5. [[http://tigcc.ticalc.org/doc/comopts.html][GCC Command-Line
-   Options]] [有精力的话可以看看，:-)]
+5. [[http://tigcc.ticalc.org/doc/comopts.html][GCC Command-Line Options]] [有精力的话可以看看，:-)]
 
-*Makefile*
+* Makefile
 
 陈皓《跟我一起写 makefile》 目录
 
-1.  [[http://blog.csdn.net/haoel/article/details/2886]]
-2.  [[http://blog.csdn.net/haoel/article/details/2887]]
-3.  [[http://blog.csdn.net/haoel/article/details/2888]]
-4.  [[http://blog.csdn.net/haoel/article/details/2889]]
-5.  [[http://blog.csdn.net/haoel/article/details/2890]]
-6.  [[http://blog.csdn.net/haoel/article/details/2891]]
-7.  [[http://blog.csdn.net/haoel/article/details/2892]]
-8.  [[http://blog.csdn.net/haoel/article/details/2893]]
-9.  [[http://blog.csdn.net/haoel/article/details/2894]]
+1. [[http://blog.csdn.net/haoel/article/details/2886]]
+2. [[http://blog.csdn.net/haoel/article/details/2887]]
+3. [[http://blog.csdn.net/haoel/article/details/2888]]
+4. [[http://blog.csdn.net/haoel/article/details/2889]]
+5. [[http://blog.csdn.net/haoel/article/details/2890]]
+6. [[http://blog.csdn.net/haoel/article/details/2891]]
+7. [[http://blog.csdn.net/haoel/article/details/2892]]
+8. [[http://blog.csdn.net/haoel/article/details/2893]]
+9. [[http://blog.csdn.net/haoel/article/details/2894]]
 10. [[http://blog.csdn.net/haoel/article/details/2895]]
 11. [[http://blog.csdn.net/haoel/article/details/2896]]
 12. [[http://blog.csdn.net/haoel/article/details/2897]]

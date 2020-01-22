@@ -9,16 +9,20 @@
 
 水平有限，如有翻译不当，欢迎探讨、批评与指正。
 
+-----------------
+
 帖子内容：
 
-C++
-切分字符串的最优雅的方式是什么？我们假定字符串中每个单词分隔符是空格。(备注：我对C的字符串函数或者那种字符处理/存取方式不是很感兴趣。因此，请优先选择优雅而不是效率)
+#+BEGIN_QUOTE
+C++ 切分字符串的最优雅的方式是什么？我们假定字符串中每个单词分隔符是空格。
+(备注：我对C的字符串函数或者那种字符处理/存取方式不是很感兴趣。因此，请优先选择优雅而不是效率)
+#+END_QUOTE
 
 --------------
 
 我现在能想到的最好的方式是：
 
-#+BEGIN_EXAMPLE
+#+BEGIN_SRC cpp
   #include <iostream>
   #include <sstream>
   #include <string>
@@ -38,12 +42,11 @@ C++
 
       return 0;
   }
-#+END_EXAMPLE
+#+END_SRC
 
-另一种方式去萃取输入字符串的分隔符，使用标准库函数很容易实现。下面是使用
-STL 的设计方案（健壮并且优雅）：
+另一种方式去萃取输入字符串的分隔符，使用标准库函数很容易实现。下面是使用 STL 的设计方案（健壮并且优雅）：
 
-#+BEGIN_EXAMPLE
+#+BEGIN_SRC cpp
   #include <iostream>
   #include <string>
   #include <sstream>
@@ -58,16 +61,16 @@ STL 的设计方案（健壮并且优雅）：
                istream_iterator<string>(),
                ostream_iterator<string>(cout, "\n"));
   }
-#+END_EXAMPLE
+#+END_SRC
 
 如果想要把分割后的字符串放到一个容器中，而不是控制台的话，使用相同的泛型算法即可。
 
-#+BEGIN_EXAMPLE
+#+BEGIN_SRC cpp
   vector tokens;
       copy(istream_iterator(iss),
            istream_iterator(),
            back_inserter >(tokens));[/c]
-#+END_EXAMPLE
+#+END_SRC
 
 评：这种方案只能分割空格，没有伸缩性。
 
@@ -75,24 +78,21 @@ STL 的设计方案（健壮并且优雅）：
 
 使用 boost 库：
 
-#+BEGIN_EXAMPLE
+#+BEGIN_SRC cpp
   std::vector strs;
   boost::split(strs, "string to split", boost::is_any_of("\t "));
-#+END_EXAMPLE
+#+END_SRC
 
-我打赌这个要比使用 stringstream
-快的多。并且这是一个泛型模板方法，它可以用来分割任意类型的字符串(wchar,etc.
-or
-UTF-8)，使用任意的分隔符。具体请看[[http://www.boost.org/doc/libs/1_36_0/doc/html/string_algo/usage.html][文档]]。
+我打赌这个要比使用 stringstream 快的多。并且这是一个泛型模板方法，它可以用来分割任意类型的字符串(wchar,etc. or UTF-8)，使用任意的分隔符。
+具体请看[[http://www.boost.org/doc/libs/1_36_0/doc/html/string_algo/usage.html][文档]]。
 
 评：不是每个人都用 boost 的。
 
 --------------
 
-把 delim 作为作为分隔符，第一个函数把结果放到一个已经存在构造好了的
-vector 中，第二个函数返回一个新的 vector。
+把 delim 作为作为分隔符，第一个函数把结果放到一个已经存在构造好了的 vector 中，第二个函数返回一个新的 vector。
 
-#+BEGIN_EXAMPLE
+#+BEGIN_SRC cpp
   std::vector &split(const std::string &s, char delim, std::vector &elems) {
       std::stringstream ss(s);
       std::string item;
@@ -107,17 +107,17 @@ vector 中，第二个函数返回一个新的 vector。
       return split(s, delim, elems);
 
   }
-#+END_EXAMPLE
+#+END_SRC
 
 注意：这种方法不能跳过空的符号，比如下面有四个数据项，其中的一个是空的。
 
-#+BEGIN_EXAMPLE
+#+BEGIN_SRC cpp
   std::vector x = split("one:two::three", ':');
-#+END_EXAMPLE
+#+END_SRC
 
 --------------
 
-#+BEGIN_EXAMPLE
+#+BEGIN_SRC cpp
   template < class ContainerT >
   void tokenize(const std::string& str, ContainerT& tokens,
                 const std::string& delimiters = " ", const bool trimEmpty = false)
@@ -146,11 +146,11 @@ vector 中，第二个函数返回一个新的 vector。
         lastPos = pos + 1;
      }
   };
-#+END_EXAMPLE
+#+END_SRC
 
 --------------
 
-#+BEGIN_EXAMPLE
+#+BEGIN_SRC cpp
   #include <vector>
   #include <string>
   #include <sstream>
@@ -169,12 +169,12 @@ vector 中，第二个函数返回一个新的 vector。
           tokens.push_back(buf);
 
   }
-#+END_EXAMPLE
+#+END_SRC
 
 --------------
 
 笔者注：
 
 - 文中的优雅也就是我们平时所说的代码美感。
-- 本来打算把所有的英文都翻译过来的，后来发现很多实在是难以拿捏。所以后面就直接贴了代码，其实对于我们经常看代码的人，代码也许要比文字直观的多。上文代码我在
-  vs2010 上验证无误。
+- 本来打算把所有的英文都翻译过来的，后来发现很多实在是难以拿捏。所以后面就直接贴了代码，其实对于我们经常看代码的人，代码也许要比文字直观的多。
+  上文代码我在 vs2010 上验证无误。

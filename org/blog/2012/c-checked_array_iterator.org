@@ -2,29 +2,23 @@
 #+TITLE: C++ checked_array_iterator
 #+DATE: 2012-03-16 11:36:18
 
-学 STL 的时候，从来没有见过 =checked_array_iterator=
-这个迭代器。网上查了查，发现它不属于 C++ std, 它属于 C++ stdext 中。
+学 STL 的时候，从来没有见过 =checked_array_iterator= 这个迭代器。网上查了查，发现它不属于 C++ std, 它属于 C++ stdext 中。
 
-这是 [[http://cplusplus.wikidot.com/cn:stdext][StdExt - C++ STL
-Extensions]]
-[[http://cplusplus.wikidot.com/cn:stdext][网站]],令我感到奇怪的是这个网站里面居然没有
-=checked_array_iterator= 的解释。反而是在 msdn 上查到了它的用法。
+这是 [[http://cplusplus.wikidot.com/cn:stdext][StdExt - C++ STL Extensions ]][[http://cplusplus.wikidot.com/cn:stdext][网站]], 令我感到奇怪的是这个网站里面居然没有 =checked_array_iterator= 的解释。反而是在 msdn 上查到了它的用法。
 
-msdn checked_array_iterator:
-[[http://msdn.microsoft.com/zh-tw/library/aa985885%28VS.90%29.aspx]]
+msdn checked_array_iterator: http://msdn.microsoft.com/zh-tw/library/aa985885%28VS.90%29.aspx
 
-#+BEGIN_EXAMPLE
+#+BEGIN_EXAMPLE cpp
   checked_array_iterator( );
   checked_array_iterator(
-  ITerator ptr,
-  size_t size,
-  size_t index = 0
+      ITerator ptr,
+      size_t size,
+      size_t index = 0
   );
 #+END_EXAMPLE
 
-含义：构造一个默认的 checked_array_iterator 或者从一个 基本迭代器 中构造
-.(Constructs a default checked_array_iterator or a
-checked_array_iterator from an underlying iterator.)
+含义：构造一个默认的 =checked_array_iterator= 或者从一个基本迭代器中构造
+(Constructs a default checked_array_iterator or a checked_array_iterator from an underlying iterator)
 
 参数：
 
@@ -34,15 +28,14 @@ checked_array_iterator from an underlying iterator.)
   index: (任意)选取一个数组中的元素，初始化迭代器。默认使用数组的第一个元素。
 #+END_EXAMPLE
 
-/备注/：[[[http://msdn.microsoft.com/zh-tw/library/aa985965%28v=vs.100%29.aspx]]]
-checked iterator 确保你的操作不会越界(在你的容器中)。Checked iterators
-在 release builds 和 debug builds 中都使用了。
+备注：[[http://msdn.microsoft.com/zh-tw/library/aa985965%28v=vs.100%29.aspx]] checked iterator 确保你的操作不会越界(在你的容器中)。
+Checked iterators 在 release builds 和 debug builds 中都使用了。
 
 具体看这里吧：[[http://msdn.microsoft.com/zh-tw/library/aa985965%28v=vs.100%29.aspx]]
 
 举例：
 
-#+BEGIN_EXAMPLE
+#+BEGIN_EXAMPLE cpp
   // 下面代码来自: http://msdn.microsoft.com/zh-tw/library/aa985885%28VS.90%29.aspx
   // 在 code::blocks 10.05 编译不通过，说明 gcc 并不支持 stdext
   // 在 visual studio 2010 编译通过
