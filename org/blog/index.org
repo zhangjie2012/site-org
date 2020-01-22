@@ -144,7 +144,6 @@
 - 05-20: [[file:2013/macscnetworkreachabilitycreatewithaddress-refernce-from.org]["SCNetworkReachabilityCreateWithAddress" reference from]]
 - 05-14: [[file:2013/top-10-best-c-compilers-html.org][{译}10个最佳的C/C++编译器和IDEs]]
 - 04-13: [[file:2013/from-i-am-singer.org][从我是歌手所想到的]]
-- 04-07: [[file:2013/apache-set-dir-and-parked-domains.org][apache设置目录与域名绑定]]
 - 03-30: [[file:2013/about-recently-life.org][写写最近]]
 - 03-24: [[file:2013/sprintf_s-and-swprintf_s-differ-in-release-and-debu.org][sprintf_s和swprintf_s在Release和Debug不同模式表现不同]]
 - 03-21: [[file:2013/visual-leak-detector.org][C/C++ 内存泄漏检测工具 Visual Leak Detector ]]

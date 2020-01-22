@@ -2,35 +2,34 @@
 #+TITLE: 再谈 new/delete/malloc/free
 #+DATE: 2013-07-28 00:00:00
 
-** 缘由
+* 缘由
    :PROPERTIES:
    :CUSTOM_ID: 缘由
    :END:
 
-从一开始搞 =C/C++= 的时候，一直在时不时的探究
-=new/delete && malloc/free=
-几者之间的关系。没有一本书确切的，深入的探讨它们的具体机制。只是零星的从一些书，一些博客中有所涉及。比如：《Effective
-C++》。本想题目标为"深入浅出 xxx"，后来想了一下有些夸大了，嘻嘻。
+从一开始搞 =C/C++= 的时候，一直在时不时的探究 =new/delete && malloc/free= 几者之间的关系。没有一本书确切的，深入的探讨它们的具体机制。
+只是零星的从一些书，一些博客中有所涉及。比如：《Effective C++》。本想题目标为"深入浅出 xxx"，后来想了一下有些夸大了，嘻嘻。
 
 促使我写这篇文章的原因包括两个主要方面：
 
 *其一*
 
-在公司代码中遇到过 =new[] -> delete=
-这样的用法(也包括=std::auto_ptr=传入数组指针)。大家认为对于内置类型这样用没有问题，也不会导致内存泄漏。我对此表示怀疑，并且进行了探究(查资料，发帖提问)。兴许不会导致内存泄漏，但是这样用是不合法的，可能会导致未定义的行为。我个人觉得这个问题比较关键(很简单的问题，大家可能没有意识到)，于是在公司内部的
-redmine 上发帖阐述，目的其实特别简单，就是那样不太好，建议
-=new[]<->delete[]= 配对使用，而且也没有多少工作量。
+在公司代码中遇到过 =new[] -> delete= 这样的用法(也包括 =std::auto_ptr= 传入数组指针)。大家认为对于内置类型这样用没有问题，也不会导致内存泄漏。
+我对此表示怀疑，并且进行了探究(查资料，发帖提问)。兴许不会导致内存泄漏，但是这样用是不合法的，可能会导致未定义的行为。
+我个人觉得这个问题比较关键(很简单的问题，大家可能没有意识到)，于是在公司内部的 redmine 上发帖阐述，目的其实特别简单，就是那样不太好，
+建议 =new[]<->delete[]= 配对使用，而且也没有多少工作量。
 
 有几个同学的评论，我很受用：
 
 牛总：
 
 #+BEGIN_QUOTE
-  用=new[]=申请，如果用=delete=而不用=delete[]=释放的话，行为可能不止是泄露（可能的一种），我记得行为是不确定（泄露，崩溃，越界，其他乱七八糟的问题）。
+用 =new[]= 申请，如果用 =delete= 而不用 =delete[]= 释放的话，行为可能不止是泄露（可能的一种），我记得行为是不确定
+（泄露，崩溃，越界，其他乱七八糟的问题）。
 
-  这是我10多年前学的某通信公司的编程规范，技术应该不会发生翻天覆地的变化吧？
+这是我10多年前学的某通信公司的编程规范，技术应该不会发生翻天覆地的变化吧？
 
-  BTW，这些问题最基本的静态工具都能扫描出来，如果是看代码出来的，那我们的程序只能祈祷上帝了...
+BTW，这些问题最基本的静态工具都能扫描出来，如果是看代码出来的，那我们的程序只能祈祷上帝了...
 #+END_QUOTE
 
 丁亮：
@@ -54,18 +53,24 @@ redmine 上发帖阐述，目的其实特别简单，就是那样不太好，建
 寒辉：
 
 #+BEGIN_QUOTE
-  如果对于int/char（自身不会再进一步申请资源，管理资源）这类的内置类型，new[]和delete匹配使用是可以的，我没有去找直接的证据（stdc++之类的实现证据），但是示例代码证明不存在资源泄露。想一想c中malloc和free匹配使用时，它们从来就没有考虑过释放的资源是数组还是单个对象，不是吗？。我所见过的自行设计内存管理的软件代码是在申请实际大小内存之外再额外加上一个整数大小的空间(一般就在返回指针地址的前面四个字节)，记录这个申请是多大的内存。释放时根据这个size将内存返还到内存管理链表中。
+如果对于 int/char（自身不会再进一步申请资源，管理资源）这类的内置类型，new[] 和 delete 匹配使用是可以的，
+我没有去找直接的证据（stdc++之类的实现证据），但是示例代码证明不存在资源泄露。想一想 c 中 malloc 和 free 匹配使用时，
+它们从来就没有考虑过释放的资源是数组还是单个对象，不是吗？。我所见过的自行设计内存管理的软件代码是在申请实际大小内存之外再额外
+加上一个整数大小的空间(一般就在返回指针地址的前面四个字节)，记录这个申请是多大的内存。释放时根据这个size将内存返还到内存管理链表中。
 
-  new/delete对比malloc/free，有多一项的任务就是在申请（释放）内存后（前）构建（销毁）对象，在构建/销毁函数中往往涉及进一步申请/释放资源。如果对这类对象的内存管理，不能做到匹配调用，则不能保证对象自身管理的资源是否正确使用，我想所谓的不确定行为就表现在这里。至于调用构建函数前和销毁函数后，那块内存就是一块内存（荒草地），根据其大小申请内存或者释放即可。
+=new/delete= 对比 =malloc/free= ，有多一项的任务就是在申请（释放）内存后（前）构建（销毁）对象，在构建/销毁函数中往往涉及进一步申请/释放资源。
+如果对这类对象的内存管理，不能做到匹配调用，则不能保证对象自身管理的资源是否正确使用，我想所谓的不确定行为就表现在这里。
+至于调用构建函数前和销毁函数后，那块内存就是一块内存（荒草地），根据其大小申请内存或者释放即可。
 
-  我所见到的静态工具检查出来的不匹配，多是int/char之类动态申请的数组，我们想办法让它们匹配使用就是了。这样做最直接的好处就是真的问题不会掩盖在那些伪问题里面，对我们代码质量的提高是有好处的。
+我所见到的静态工具检查出来的不匹配，多是 int/char 之类动态申请的数组，我们想办法让它们匹配使用就是了。
+这样做最直接的好处就是真的问题不会掩盖在那些伪问题里面，对我们代码质量的提高是有好处的。
 #+END_QUOTE
 
 *其二*
 
 请看代码：
 
-#+BEGIN_EXAMPLE
+#+BEGIN_SRC cpp
   class data_stream
   {
   public:
@@ -112,7 +117,7 @@ redmine 上发帖阐述，目的其实特别简单，就是那样不太好，建
 
        return 0;
    }
-#+END_EXAMPLE
+#+END_SRC
 
 两个问题：
 
@@ -120,7 +125,7 @@ redmine 上发帖阐述，目的其实特别简单，就是那样不太好，建
 2. 合不合法 ?
 3. 基于这两个原因，我打算深入的探究一下原因。
 
-** new/delete/malloc/free 基本知识
+* new/delete/malloc/free 基本知识
    :PROPERTIES:
    :CUSTOM_ID: newdeletemallocfree-基本知识
    :END:
@@ -132,10 +137,9 @@ redmine 上发帖阐述，目的其实特别简单，就是那样不太好，建
 3. new operator 构造函数
 4. 返回指针
 
-delete 与之相似，先调用该对象的析构函数，然后调用 free 来释放 size
-大小的内存块。于是我们可以这样使用：
+delete 与之相似，先调用该对象的析构函数，然后调用 free 来释放 size 大小的内存块。于是我们可以这样使用：
 
-#+BEGIN_EXAMPLE
+#+BEGIN_SRC cpp
   void* operator new(size_t size) throw(std::bad_alloc) {
       std::cout << "in operator new | alloc size: " << size << std::endl;
       void * p = malloc(size);
@@ -174,32 +178,32 @@ delete 与之相似，先调用该对象的析构函数，然后调用 free 来�
 
       return 0;
   }
-#+END_EXAMPLE
+#+END_SRC
 
 输出为：
 
-#+BEGIN_EXAMPLE
+#+BEGIN_SRC
   in operator new | alloc size: 24
   in data_stream ctor
   in data_stream dtor
   operator delete
-#+END_EXAMPLE
+#+END_SRC
 
 我们还可以这么用：
 
-#+BEGIN_EXAMPLE
+#+BEGIN_SRC cpp
   void *p = malloc(sizeof(data_stream));
   data_stream *ds  = new(p) data_stream();
   delete ds;
-#+END_EXAMPLE
+#+END_SRC
 
 又或者直接用栈内存：
 
-#+BEGIN_EXAMPLE
+#+BEGIN_SRC cpp
   char buff[sizeof(data_stream)];
   data_stream *ds = new(buff) data_stream();
   ds->~data_stream();
-#+END_EXAMPLE
+#+END_SRC
 
 =new[]/delete[]= 流程:
 
@@ -208,12 +212,11 @@ delete 与之相似，先调用该对象的析构函数，然后调用 free 来�
 3. 分别调用构造函数
 4. 返回指针
 
-delete[] 与之相似，先分别调用每个数组对象的析构函数，然后用 free
-释放大小为 size 的内存块。
+delete[] 与之相似，先分别调用每个数组对象的析构函数，然后用 free 释放大小为 size 的内存块。
 
 验证例子：
 
-#+BEGIN_EXAMPLE
+#+BEGIN_SRC cpp
   void* operator new(size_t size) throw(std::bad_alloc) {
       std::cout << "in operator new | alloc size: " << size << std::endl;
       void * p = malloc(size);
@@ -260,11 +263,11 @@ delete[] 与之相似，先分别调用每个数组对象的析构函数，然�
 
       return 0;
   }
-#+END_EXAMPLE
+#+END_SRC
 
 输出：
 
-#+BEGIN_EXAMPLE
+#+BEGIN_SRC
   in operator new[] | alloc size: 76
   in data_stream ctor
   in data_stream ctor
@@ -273,58 +276,55 @@ delete[] 与之相似，先分别调用每个数组对象的析构函数，然�
   in data_stream dtor
   in data_stream dtor
   operator delete[]
-#+END_EXAMPLE
+#+END_SRC
 
 一旦我们这样调用时：
 
-#+BEGIN_EXAMPLE
+#+BEGIN_SRC cpp
   data_stream *ds_array = new data_stream[3];
 
   delete ds_array;
-#+END_EXAMPLE
+#+END_SRC
 
 输出：
 
-#+BEGIN_EXAMPLE
+#+BEGIN_SRC
   in operator new[] | alloc size: 7
   in data_stream ctor
   in data_stream ctor
   in data_stream ctor
   in data_stream dtor
   operator delete
-#+END_EXAMPLE
+#+END_SRC
 
 并发生了崩溃（为什么会崩溃？稍后详细分析）。
 
 可是当我们使用内置类型(build-in)的时候：
 
-#+BEGIN_EXAMPLE
+#+BEGIN_SRC cpp
   int *int_array = new int[3];
   delete int_array;
-#+END_EXAMPLE
+#+END_SRC
 
 输出：
 
-#+BEGIN_EXAMPLE
+#+BEGIN_SRC
   in operator new[] | alloc size: 12
   operator delete
-#+END_EXAMPLE
+#+END_SRC
 
 没有任何问题；
 
 综上：
 
 - new(new[]) 和 delete(delete[]) 实质上都是调用 malloc 和 free。
-- malloc 的时候我们传入了大小，free
-  的时候并没有告诉编译器我需要释放的内存大小，编译器如何知道它应该释放多少空间呢？
-- 为什么内置类型 =new[]->delete=没问题，而类对象发生了崩溃呢？
+- malloc 的时候我们传入了大小，free 的时候并没有告诉编译器我需要释放的内存大小，编译器如何知道它应该释放多少空间呢？
+- 为什么内置类型 =new[]->delete =没问题，而类对象发生了崩溃呢？
 
-我想到了寒辉曾经跟我说的，编译器一定在某个地方记录了内存申请的大小，new
-和 delete
-只是多了一个调用析构函数的步骤。但是，编译器记录的不仅仅是这些，否则，怎么解释
-=new[]->delete= 对于类对象崩溃呢？大不了就内存泄漏啊！
+我想到了寒辉曾经跟我说的，编译器一定在某个地方记录了内存申请的大小，new 和 delete 只是多了一个调用析构函数的步骤。
+但是，编译器记录的不仅仅是这些，否则，怎么解释 =new[]->delete= 对于类对象崩溃呢？大不了就内存泄漏啊！
 
-** 追踪溯源
+* 追踪溯源
    :PROPERTIES:
    :CUSTOM_ID: 追踪溯源
    :END:
@@ -333,7 +333,7 @@ delete[] 与之相似，先分别调用每个数组对象的析构函数，然�
 
 编译器把可用内存分成了块，然后用一个双线链表把所有的块连接起来(malloc中调用编译器提供的内存分配函数)。
 
-#+BEGIN_EXAMPLE
+#+BEGIN_SRC cpp
   #define nNoMansLandSize 4
 
   typedef struct _CrtMemBlockHeader
@@ -371,21 +371,21 @@ delete[] 与之相似，先分别调用每个数组对象的析构函数，然�
   #define _IGNORE_BLOCK    3
   #define _CLIENT_BLOCK    4
   #define _MAX_BLOCKS      5
-#+END_EXAMPLE
+#+END_SRC
 
-*** 内置类型
+** 内置类型
     :PROPERTIES:
     :CUSTOM_ID: 内置类型
     :END:
 
-#+BEGIN_EXAMPLE
+#+BEGIN_SRC cpp
   int *int_array = new int[16];
   delete [] int_array;
-#+END_EXAMPLE
+#+END_SRC
 
-我测试的时候： =int_array= 首地址为 =0x004E4DF8=。所在的内存块为：
+我测试的时候： =int_array= 首地址为 =0x004E4DF8= 。所在的内存块为：
 
-#+BEGIN_EXAMPLE
+#+BEGIN_SRC
   0x004E4DC8  00 00 00 00 00 00 00 00 9a 0e 3e 17 a9 a5 00 1c  ........?.&gt;.??..
   0x004E4DD8  c0 47 4e 00 00 00 00 00 00 00 00 00 00 00 00 00  ?GN.............
   0x004E4DE8  40 00 00 00 01 00 00 00 a0 00 00 00 fd fd fd fd  @.......?...????
@@ -399,16 +399,17 @@ delete[] 与之相似，先分别调用每个数组对象的析构函数，然�
   0x004E4E28  cd cd cd cd cd cd cd cd cd cd cd cd cd cd cd cd  ???????????????? -> 用户内存
   0x004E4E38  fd fd fd fd ab ab ab ab ab ab ab ab ee fe ee fe  ????????????????
   -> 四字节的gap: 0xfdfdfdfd 表示结束。备注:用户内存使用两个四字节的 gap 包围起来。
-#+END_EXAMPLE
+#+END_SRC
 
-这也就解释了为什么编译器会知道我们申请了多大空间，释放空间的时候，我们只需要提供释放内存的首地址，编译器可以推算出我们申请了多大的空间，进而进行了释放(所谓释放就是链表节点删除，当然还有一些重置操作)。
+这也就解释了为什么编译器会知道我们申请了多大空间，释放空间的时候，我们只需要提供释放内存的首地址，编译器可以推算出我们申请了多大的空间，
+进而进行了释放(所谓释放就是链表节点删除，当然还有一些重置操作)。
 
-*** 单个类对象
+** 单个类对象
     :PROPERTIES:
     :CUSTOM_ID: 单个类对象
     :END:
 
-#+BEGIN_EXAMPLE
+#+BEGIN_SRC cpp
   class data_stream
   {
   public:
@@ -427,22 +428,22 @@ delete[] 与之相似，先分别调用每个数组对象的析构函数，然�
 
   data_stream *ds_array = new data_stream();
   delete ds_array;
-#+END_EXAMPLE
+#+END_SRC
 
 分析：
 
-#+BEGIN_EXAMPLE
+#+BEGIN_SRC
   0x00A54DE8  10 00 00 00 01 00 00 00 a0 00 00 00 fd fd fd fd  ........?...????
   -> nDatasize(size_t:4) 0x10 即: 16 个字节(int+float+double)
   0x00A54DF8  cd cd cd cd cd cd cd cd cd cd cd cd cd cd cd cd  ???????????????? -> 用户内存
-#+END_EXAMPLE
+#+END_SRC
 
-*** 类对象数组
+** 类对象数组
     :PROPERTIES:
     :CUSTOM_ID: 类对象数组
     :END:
 
-#+BEGIN_EXAMPLE
+#+BEGIN_SRC cpp
   void* operator new[](size_t size) throw(std::bad_alloc) {
       std::cout << "in operator new[] | alloc size: " << size << std::endl;
       void * p = malloc(size);
@@ -466,72 +467,60 @@ delete[] 与之相似，先分别调用每个数组对象的析构函数，然�
 
   data_stream *ds_array = new data_stream[4];
   delete []ds_array;
-#+END_EXAMPLE
+#+END_SRC
 
 类对象数组和普通的类对象有所差别，我分两步进行分析：
 
 第一步：=operator new[](size_t size)=
 
-从=p=的地址开始：
+从 =p= 的地址开始：
 
-#+BEGIN_EXAMPLE
+#+BEGIN_SRC
   0x00204DE8  14 00 00 00 01 00 00 00 a0 00 00 00 fd fd fd fd  ........?...????
   -> nDatasize(size_t:4) 0x14 即：20 个字节
   0x00204DF8  cd cd cd cd cd cd cd cd cd cd cd cd cd cd cd cd  ???????????????? -> 用户内存
   0x00204E08  cd cd cd cd fd fd fd fd ab ab ab ab ab ab ab ab  ????????????????
-#+END_EXAMPLE
+#+END_SRC
 
 纳尼？不应该是 16 个字节么？怎么多了 4 个字节？ 继续往下看。
 
 第二步: =data_stream *ds_array = new data_stream[4];= 中的 =ds_array= 值
 
-#+BEGIN_EXAMPLE
+#+BEGIN_SRC
   0x00204DDC  00 00 00 00 00 00 00 00 00 00 00 00 14 00 00 00  ................
   0x00204DEC  01 00 00 00 a0 00 00 00 fd fd fd fd 04 00 00 00  ....?...????....
   -> nDatasize(size_t:4) 向前偏移了四个字节
   -> 多余的四个字节是 0x04 即 4，也就是数组的长度。
   0x00204DFC  cd cd cd cd cd cd cd cd cd cd cd cd cd cd cd cd  ????????????????
   0x00204E0C  fd fd fd fd ab ab ab ab ab ab ab ab 00 00 00 00  ????????????....
-#+END_EXAMPLE
+#+END_SRC
 
-注意，原因来了！=ds_array= 的地址是 =0x00204DFC= 而不是 =operator new[]=
-中返回的内存地址
-=0x00204DF8=。只是向后偏移了4个字节。多余的四个字节用来存储数组的长度。
+注意，原因来了！ =ds_array= 的地址是 =0x00204DFC= 而不是 =operator new[]= 中返回的内存地址 =0x00204DF8= 。
+只是向后偏移了 4 个字节。多余的四个字节用来存储数组的长度。
 
-推测(无事实依据)：申请完内存后，是编译器把数组的大小放到前四个字节，并向后偏移了4个字节，进行我们所看到的指针(=data_stream=)赋值。这个偏移操作
-malloc
-并不知道(对赋值操作反汇编以后，你可以看到执行构造函数时的地址偏移，以及赋值时的偏移。)，malloc
-所知道的内存是包括这四个字节的，也就是他申请了 20 个字节，到时候释放 20
-个字节。而当调用 =delete[]= 的时候，先把指针偏移回去，回到 =free=
-所能理解的格式。这样数组的大小对于 =malloc/free= 就是黑盒操作。
+推测(无事实依据)：申请完内存后，是编译器把数组的大小放到前四个字节，并向后偏移了 4 个字节，进行我们所看到的指针(=data_stream=)赋值。
+这个偏移操作 malloc 并不知道(对赋值操作反汇编以后，你可以看到执行构造函数时的地址偏移，以及赋值时的偏移。)，malloc 所知道的内存是包括这四个字节的，
+也就是他申请了 20 个字节，到时候释放 20 个字节。而当调用 =delete[]= 的时候，先把指针偏移回去，回到 =free= 所能理解的格式。
+这样数组的大小对于 =malloc/free= 就是黑盒操作。
 
-好了，现在我们来解释 =new[]->delete=
-一个对象数组为什么是会崩溃。=new[]/delete[]=
-会有一个向前/向后偏移四个字节的操作，当 new[] 之后，用 delete
-并没有进行指针的偏移，直接把对应数据进行类型转换成=_CrtMemBlockHeader=，因此转换之后的=_CrtMemBlockHeader=变量都是无效的，进而
-=free= 内存崩溃。
+好了，现在我们来解释 =new[]->delete= 一个对象数组为什么是会崩溃。 =new[]/delete[]= 会有一个向前/向后偏移四个字节的操作，当 =new[]= 之后，
+用 delete 并没有进行指针的偏移，直接把对应数据进行类型转换成 =_CrtMemBlockHeader= ，因此转换之后的 =_CrtMemBlockHeader= 变量都是无效的，
+进而 =free= 内存崩溃。
 
-** 总结
+* 总结
    :PROPERTIES:
    :CUSTOM_ID: 总结
    :END:
 
-1. 对于内置类型，=new[]->= 怎么对应都不会有问题， =free=
-   只需要一个首地址，通过指针偏移可以获取到下一个内存块和上一个内存的地址，把这个内存块从链表中删除就
-   ok 了。
-2. 对于类对象数组，赋值过程中编译器做了一些 free
-   层面不知道的偏移，所以一旦 =new[]= 和 =delete[]= 不对应，会发生崩溃。
+1. 对于内置类型，=new[]->= 怎么对应都不会有问题， =free= 只需要一个首地址，通过指针偏移可以获取到下一个内存块和上一个内存的地址，
+   把这个内存块从链表中删除就 ok 了。
+2. 对于类对象数组，赋值过程中编译器做了一些 free 层面不知道的偏移，所以一旦 =new[]= 和 =delete[]= 不对应，会发生崩溃。
 
-这只是从技术层面去分析机制，不代表分析没问题就可以滥用，况且这只是针对
-VS2010，不同的编译器应该会有不同的实现方式。
+这只是从技术层面去分析机制，不代表分析没问题就可以滥用，况且这只是针对 VS2010，不同的编译器应该会有不同的实现方式。
 
-为了保证跨平台不会出问题，强烈建议大家还是老老实实的去找好对应关系=malloc->free=,=new->delete=,=new[]->delete[]=。遵循标准来，不要投机取巧。
+为了保证跨平台不会出问题，强烈建议大家还是老老实实的去找好对应关系 =malloc->free=, =new->delete=, =new[]->delete[]= 。遵循标准来，不要投机取巧。
 
 btw:
 
-1. 其实，分析过程是有漏洞的，我发现内存块与 =_CrtMemBlockHeader=
-   不能完全对应上，原因没有深究.
-2. 推荐
-   [[http://www.codeguru.com/cpp/w-p/win32/tutorials/article.php/c9535/Inside-CRT-Debug-Heap-Management.htm][inside
-   CRT: Debug Heap Management]]，经常用 VS
-   调试的童鞋看了之后会非常有感触的，灰常奈斯一个帖子。
+1. 其实，分析过程是有漏洞的，我发现内存块与 =_CrtMemBlockHeader= 不能完全对应上，原因没有深究.
+2. 推荐 [[http://www.codeguru.com/cpp/w-p/win32/tutorials/article.php/c9535/Inside-CRT-Debug-Heap-Management.htm][inside CRT: Debug Heap Management]]，经常用 VS 调试的童鞋看了之后会非常有感触的，灰常奈斯一个帖子。

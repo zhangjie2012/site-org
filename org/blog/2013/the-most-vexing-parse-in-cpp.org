@@ -2,14 +2,13 @@
 #+TITLE: the most vexing parse
 #+DATE: 2013-12-04 00:00:00
 
-前几天群里遇到一个问题，后来经过在sof[[http://stackoverflow.com/questions/20207960/left-operand-has-type-stdstringstream-cdecl-stdstring][提问]]之后，才知道了这是C++一个"坑"。英文叫"the
-most vexing parse"，翻译过来就是"最蛋疼的解析"。
+前几天群里遇到一个问题，后来经过在 StackOverflow [[http://stackoverflow.com/questions/20207960/left-operand-has-type-stdstringstream-cdecl-stdstring][提问]] 之后，才知道了这是 C++ 一个"坑"。英文叫"the most vexing parse"，翻译过来就是"最蛋疼的解析"。
 
 --------------
 
-"the most vexing parse" 实际上指的是C++语法上的一种二义性，举例来说，
+"the most vexing parse" 实际上指的是 C++ 语法上的一种二义性，举例来说，
 
-#+BEGIN_EXAMPLE
+#+BEGIN_SRC cpp
   class Timer
   {
   public:
@@ -36,31 +35,28 @@ most vexing parse"，翻译过来就是"最蛋疼的解析"。
   test.cpp: In function ‘int main(int, char**)’:
   test.cpp:21:24: error: request for member ‘get_time’ in ‘time_keeper’,
      which is of non-class type ‘TimerKeeper(Timer (*)())’
-#+END_EXAMPLE
+#+END_SRC
 
-其实我们的本意是要用一个 =Timer= 的匿名对象来构造一个 =TimerKeeper=
-的对象，但是编译器把那一行当成了一个函数声明，所以报的错为 =time_keeper=
-不是一个类类型，而是一个返回值为
-=TimerKeeper=,传入是一个返回值是=Timer=，没有输入参数的匿名参数。
+其实我们的本意是要用一个 =Timer= 的匿名对象来构造一个 =TimerKeeper= 的对象，但是编译器把那一行当成了一个函数声明，
+所以报的错为 =time_keeper= 不是一个类类型，而是一个返回值为 =TimerKeeper=,传入是一个返回值是 =Timer= ，没有输入参数的匿名参数。
 
 一种解决办法是为参数外层加上一个括号，强制让编译器以为这是一个变量定义：
 
-#+BEGIN_EXAMPLE
+#+BEGIN_SRC cpp
   TimerKeeper time_keeper( (Timer()) );
-#+END_EXAMPLE
+#+END_SRC
 
-C++11 为我们提供了统一的初始化方式(使用={}=)，可以用来解决此类问题，如：
+C++11 为我们提供了统一的初始化方式(使用 ={}= )，可以用来解决此类问题，如：
 
-#+BEGIN_EXAMPLE
+#+BEGIN_SRC cpp
   TimerKeepper time_keeper{ Timer{} };
-#+END_EXAMPLE
+#+END_SRC
 
-以上大部分译自： [[file:en.wikipedia.org/wiki/Most_vexing_parse][Most
-vexing parse]]
+以上大部分译自： [[file:en.wikipedia.org/wiki/Most_vexing_parse][Most vexing parse]]
 
 --------------
 
-其实在此之前曾经遇到过为什么不可以显示调用类的无参构造函数呢，比如
-=ClassObj obj()=，以前搞明白了编译器把这一行代码认为是一个函数声明了。再次遇到类似的问题还是卡了很长时间。
+其实在此之前曾经遇到过为什么不可以显示调用类的无参构造函数呢，比如 =ClassObj obj()= ，以前搞明白了编译器把这一行代码认为是一个函数声明了。
+再次遇到类似的问题还是卡了很长时间。
 
 感觉还是需要多总结记录，无论多小的知识点，有的时候卡在了视野的盲区，愣是找不到原因。

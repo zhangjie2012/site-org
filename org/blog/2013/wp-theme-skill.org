@@ -2,12 +2,11 @@
 #+TITLE: WordPress主题开发总结（下）：技巧
 #+DATE: 2013-01-17 15:46:33
 
-本文主要包括在 WordPress
-开发中会遇到的一些问题（随机文章，记录文章浏览量，热评文章，SITEINFO，PageNav）及解决方案。
+本文主要包括在 WordPress 开发中会遇到的一些问题（随机文章，记录文章浏览量，热评文章，SITEINFO，PageNav）及解决方案。
 
 注意：看这些技巧之前，首先一定要了解基本的 WordPress 主题结构。
 
-** 获取发布文章
+* 获取发布文章
    :PROPERTIES:
    :CUSTOM_ID: 获取发布文章
    :END:
@@ -26,18 +25,14 @@
   <?php endforeach; ?>
 #+END_EXAMPLE
 
-numberposts 指的是文章数量
+numberposts 指的是文章数量。orderby 值为 pubdate 表示最近发布，当值为 rand 时，表示随机，也就是随机获取文章。
 
-orderby 值为 pubdate 表示最近发布，当值为 rand
-时，表示随机，也就是随机获取文章。
-
-** 显示热"点"文章列表
+* 显示热"点"文章列表
    :PROPERTIES:
    :CUSTOM_ID: 显示热点文章列表
    :END:
 
-首先要实现文章浏览量，就这个功能而言，把下面的两个函数添加到
-functions.php 中。
+首先要实现文章浏览量，就这个功能而言，把下面的两个函数添加到 functions.php 中。
 
 #+BEGIN_EXAMPLE
   function getPostViews($postID) {
@@ -72,8 +67,7 @@ functions.php 中。
   <?php echo getPostViews(get_the_ID()); ?>[/php]
 #+END_EXAMPLE
 
-但是，如果要把热门点击文章按列表显示，上面这个方法就不行了，我用的是插件（WP-PostViews）。在需要显示该文章浏览次数处，调用
-the_views 方法：
+但是，如果要把热门点击文章按列表显示，上面这个方法就不行了，我用的是插件（WP-PostViews）。在需要显示该文章浏览次数处，调用 the_views 方法：
 
 #+BEGIN_EXAMPLE
   <?php if(function_exists('the_views')) { the_views(); } ?>
@@ -91,14 +85,13 @@ the_views 方法：
 
 至于显示的效果需要你的 css 和 WP-PostViews 后台设置相配合。
 
-** 显示热"评"文章列表
+* 显示热"评"文章列表
    :PROPERTIES:
    :CUSTOM_ID: 显示热评文章列表
    :END:
 
-在 functions.php 中添加如下
-simple_get_most_review，这个函数我是从网上拷贝的，foreach
-中添加了显示文章评论个数的代码，否则显示出来的只是热评文章的标题。你在使用的时候，建议手动修改一下。
+在 functions.php 中添加如下 simple_get_most_review，这个函数我是从网上拷贝的，foreach 中添加了显示文章评论个数的代码，
+否则显示出来的只是热评文章的标题。你在使用的时候，建议手动修改一下。
 
 #+BEGIN_EXAMPLE
   /*
@@ -144,8 +137,7 @@ simple_get_most_review，这个函数我是从网上拷贝的，foreach
   }
 #+END_EXAMPLE
 
-在需要显示热评列表的地方，调用
-=simple_get_most_review=（参数含义请看函数声明）。
+在需要显示热评列表的地方，调用 =simple_get_most_review= （参数含义请看函数声明）。
 
 #+BEGIN_EXAMPLE
   <ul>
@@ -153,7 +145,7 @@ simple_get_most_review，这个函数我是从网上拷贝的，foreach
   </ul>
 #+END_EXAMPLE
 
-** 显示 SITEINFO
+* 显示 SITEINFO
    :PROPERTIES:
    :CUSTOM_ID: 显示-siteinfo
    :END:
@@ -169,15 +161,14 @@ simple_get_most_review，这个函数我是从网上拷贝的，foreach
   最后更新：<?php $last = $wpdb->get_results("SELECT MAX(post_modified) AS MAX_m FROM $wpdb->posts WHERE (post_type = 'post' OR post_type = 'page') AND (post_status = 'publish' OR post_status = 'private’)");$last = date('Y-n-j', strtotime($last[0]->MAX_m));echo $last; ?>
 #+END_EXAMPLE
 
-** 无插件实现 PageNav
+* 无插件实现 PageNav
    :PROPERTIES:
    :CUSTOM_ID: 无插件实现-pagenav
    :END:
 
-[[http://blog.wpjam.com/m/native-pagenavi/][WordPress 技巧：不用插件实现
-Pagenavi 功能]]
+[[http://blog.wpjam.com/m/native-pagenavi/][WordPress 技巧：不用插件实现 Pagenavi 功能]]
 
-** 杂项
+* 杂项
    :PROPERTIES:
    :CUSTOM_ID: 杂项
    :END:
@@ -201,7 +192,7 @@ Pagenavi 功能]]
 - =edit_post_link('Edit', '|', '')=
   显示一个可以用来编辑当前日志的编辑链接。第一个参数用来确定显示的文字，第二个参数是显示在文字前面的字符，第三个参数是显示在文字后面的字符。
 
-** 参考文章
+* 参考文章
    :PROPERTIES:
    :CUSTOM_ID: 参考文章
    :END:

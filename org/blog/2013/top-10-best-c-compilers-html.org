@@ -2,7 +2,7 @@
 #+TITLE: [译]10个最佳的C/C++编译器和IDEs
 #+DATE: 2013-05-14 00:00:00
 
-** 声明
+* 声明
    :PROPERTIES:
    :CUSTOM_ID: 声明
    :END:
@@ -11,141 +11,127 @@
 - 翻译仅以技术学习和交流为目的，如需转载请标明本文链接并全文转载。
 - 水平有限，如有翻译不当，欢迎探讨、批评与指正。
 
-** 译文
+* 译文
    :PROPERTIES:
    :CUSTOM_ID: 译文
    :END:
 
-在今时的计算环境(computing
-environment)中，编程语言扮演者着一个很重要的角色。编程语言的良好运用，可以让PC硬件配置真实的利用起来。有许多的编程语言都是从最初的计算机中衍生出来的。其中的一些已经不再能够满足现在的计算环境，但是有一些仍旧可以毅力不倒，C
-和 C++ 就是那个群体中的两个。C/C++
-是强大的编程语言，每一个程序员都应该知道它们，这两门语言是其他编程语言的基础。除此之外，这些编程语言也广泛的应用在与硬件交互上。任何追求效率的程序员和编程语言经常依赖于编程环境（使用编译器或者IDEs进行编码）。
+在今时的计算环境(computing environment)中，编程语言扮演者着一个很重要的角色。编程语言的良好运用，可以让 PC 硬件配置真实的利用起来。
+有许多的编程语言都是从最初的计算机中衍生出来的。其中的一些已经不再能够满足现在的计算环境，但是有一些仍旧可以毅力不倒。
 
-对于编程新手来说，各种不同的的 C/C++ 编译器或者 IDE
-，都可以为他们提供友好的编码环境。为此，我们今天给大家分享 10 个最佳的
-C/C++ 编译器和
+C 和 C++ 就是那个群体中的两个。C/C++ 是强大的编程语言，每一个程序员都应该知道它们，这两门语言是其他编程语言的基础。
+除此之外，这些编程语言也广泛的应用在与硬件交互上。任何追求效率的程序员和编程语言经常依赖于编程环境（使用编译器或者IDEs进行编码）。
+
+对于编程新手来说，各种不同的的 C/C++ 编译器或者 IDE ，都可以为他们提供友好的编码环境。为此，我们今天给大家分享 10 个最佳的 C/C++ 编译器和
 IDEs，并说明它们所提供的特性。按照你的喜好进行选择，他们可以让你的编码工作更加简单有效。
 
-*** 1. Eclipse
+** Eclipse
     :PROPERTIES:
     :CUSTOM_ID: eclipse
     :END:
 
 [[https://blog-1252349778.cos.ap-beijing.myqcloud.com/2013/10-best-compilers/eclipse.jpeg]]
 
-Eclipse IDE 是一个开源的编码工具，为 C/C++
-程序员提供许多高级的功能。包括强大的语法高亮、调试、自动代码完成。Eclipse
-分别支持 Windows、Linux 和 Mac OS X
-平台。对新手来说，它使得编码变的更简单了。
+Eclipse IDE 是一个开源的编码工具，为 C/C++ 程序员提供许多高级的功能。包括强大的语法高亮、调试、自动代码完成。
+Eclipse 分别支持 Windows、Linux 和 Mac OS X 平台。对新手来说，它使得编码变的更简单了。
 
 下载链接：[[http://www.eclipse.org/downloads/moreinfo/c.php]]
 
 使用 Eclipse 需要安装 Java 运行时，从下面的链接下载 JRE：
+
 [[http://www.oracle.com/technetwork/java/javase/downloads/jre7-downloads-1880261.html]]
 
-*** 2. NetBeans
+** NetBeans
     :PROPERTIES:
     :CUSTOM_ID: netbeans
     :END:
 
 [[https://blog-1252349778.cos.ap-beijing.myqcloud.com/2013/10-best-compilers/netbeans.png]]
 
-NetBeans 是另外一个开源的
-IDE，有代码高亮，自动格式匹配，单元测试，代码助手（code
-assistance）等特性。
+NetBeans 是另外一个开源的 IDE，有代码高亮，自动格式匹配，单元测试，代码助手（code assistance）等特性。
 
 下载链接：[[https://netbeans.org/downloads/index.html]]
 
-*** 3. Code::Blocks
+** Code::Blocks
     :PROPERTIES:
     :CUSTOM_ID: codeblocks
     :END:
 
 [[https://blog-1252349778.cos.ap-beijing.myqcloud.com/2013/10-best-compilers/codeblocks.png]]
 
-Code::Blocks 是一个开源的，跨平台并且可扩展的 C++ IDE。CB
-的最大特性是，按照所需，你可以通过可用插件来扩展它。
+Code::Blocks 是一个开源的，跨平台并且可扩展的 C++ IDE。CB 的最大特性是，按照所需，你可以通过可用插件来扩展它。
 
 下载链接：[[http://www.codeblocks.org/downloads]]
 
-*** 4. Digital Mars
+** Digital Mars
     :PROPERTIES:
     :CUSTOM_ID: digital-mars
     :END:
 
-Digital Mars 是另外一个免费的 C/C++ 编译器，包括命令行和 GUI
-两个版本，相比其他的编译器， Digital Mars 具有更快的编译和链接速度。
+Digital Mars 是另外一个免费的 C/C++ 编译器，包括命令行和 GUI 两个版本，相比其他的编译器， Digital Mars 具有更快的编译和链接速度。
 
 下载链接：[[http://www.digitalmars.com/]]
 
-*** 5. C Free
+** C Free
     :PROPERTIES:
     :CUSTOM_ID: c-free
     :END:
 
 [[https://blog-1252349778.cos.ap-beijing.myqcloud.com/2013/10-best-compilers/c-free.gif]]
 
-C free 是一个传统的 turbo C 编译器的替代品。它是一个小的 C IDE
-，但是具有许多优秀的特性。值得注意的是 C free 不是一个免费的 IDE
-，不过你可以免费的使用30天。
+C free 是一个传统的 turbo C 编译器的替代品。它是一个小的 C IDE，但是具有许多优秀的特性。值得注意的是 C free 不是一个免费的 IDE，
+不过你可以免费的使用30天。
 
 下载链接：[[http://www.programarts.com/cfree_en/download.htm]]
 
-*** 6. Sky IDE
+** Sky IDE
     :PROPERTIES:
     :CUSTOM_ID: sky-ide
     :END:
 
 [[https://blog-1252349778.cos.ap-beijing.myqcloud.com/2013/10-best-compilers/sky_ide.png]]
 
-Sky IDE
-是一个多编译(multi-compiler)，多视窗(multi-view)，多工程(multi-project)，和多层面(multi-profile)的免费
-C++ IDE。Sky IDE 也支持其他的编程语言比如，java, php 和
-JavaScript。它具有强大的文本处理能力，颜色高亮，自动匹配，行追踪（line
-tracker）。
+Sky IDE 是一个多编译(multi-compiler)，多视窗(multi-view)，多工程(multi-project)，和多层面(multi-profile)的免费 C++ IDE。
+Sky IDE 也支持其他的编程语言比如，java, php 和 JavaScript。它具有强大的文本处理能力，颜色高亮，自动匹配，行追踪（line tracker）。
 
 下载链接：[[http://www.download.hr/software-skyide.html]]
 
-*** 7. Dev C++
+** Dev C++
     :PROPERTIES:
     :CUSTOM_ID: dev-c
     :END:
 
 [[https://blog-1252349778.cos.ap-beijing.myqcloud.com/2013/10-best-compilers/dev_cpp.png]]
 
-Dev C++ 使用 MinGW (gcc端口)作为它的编译器。Dev C++ 也支持 C
-语言，它的特性包括，基于GCC，语法高亮，自动代码补全，工程管理和打印输出。
+Dev C++ 使用 MinGW (gcc端口)作为它的编译器。Dev C++ 也支持 C 语言，它的特性包括，基于GCC，语法高亮，自动代码补全，工程管理和打印输出。
 
 下载链接：[[http://www.bloodshed.net/dev/devcpp.html]]
 
-*** 8. CodeLite
+** CodeLite
     :PROPERTIES:
     :CUSTOM_ID: codelite
     :END:
 
 [[https://blog-1252349778.cos.ap-beijing.myqcloud.com/2013/10-best-compilers/codelite.png]]
 
-CodeLite有点像 Code::Blocks，也是开源、跨平台的 C/C++ IDE。可以在
-Windows，Linux 和 Mac OS 平台下工作。
+CodeLite有点像 Code::Blocks，也是开源、跨平台的 C/C++ IDE。可以在 Windows，Linux 和 Mac OS 平台下工作。
 
 下载链接：[[http://codelite.org/LiteEditor/Download]]
 
-*** 9. MinGW
+** MinGW
     :PROPERTIES:
     :CUSTOM_ID: mingw
     :END:
 
-MinGW 提供一系列的编码工具集，和本地的应用程序相匹配，包含的 GCC
-端口包括 C、C++、ADA 和 Fortan 编译器。它是一个开源的编译器。
+MinGW 提供一系列的编码工具集，和本地的应用程序相匹配，包含的 GCC 端口包括 C、C++、ADA 和 Fortan 编译器。它是一个开源的编译器。
 
 下载链接：[[http://sourceforge.net/projects/mingw/files/]]
 
-*** 10. Ultimate++:
+** Ultimate++:
     :PROPERTIES:
     :CUSTOM_ID: ultimate
     :END:
 
-U++ 是一个跨平台的 RAD IDE，主要针对 C++ 程序员的工作效率。它包括了一套
-GUI 和 SQL 库。U++ 可以和 GCC，Virtual C++ ，MingGW一起工作。
+U++ 是一个跨平台的 RAD IDE，主要针对 C++ 程序员的工作效率。它包括了一套 GUI 和 SQL 库。U++ 可以和 GCC，Virtual C++ ，MingGW一起工作。
 
 下载链接：[[http://www.ultimatepp.org/www$uppweb$download$en-us.html][http://www.ultimatepp.org/www$uppweb$download$en-us.html]]
