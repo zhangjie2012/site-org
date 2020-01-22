@@ -4,7 +4,7 @@
 
 Look at code:
 
-#+BEGIN_EXAMPLE
+#+BEGIN_SRC cpp
   #include <iostream>
   #include <string>
 
@@ -31,7 +31,7 @@ Look at code:
 
       return 0;
   }
-#+END_EXAMPLE
+#+END_SRC
 
 Debug it in VS2010, I get that information:
 
@@ -73,15 +73,12 @@ One Answer make me understand:
   evaluation) completes.
 #+END_QUOTE
 
-thanks for
-[[http://stackoverflow.com/users/19563/charles-bailey][Charles Bailey]].
+thanks for [[http://stackoverflow.com/users/19563/charles-bailey][Charles Bailey]].
 
-** Reference
+* Reference
    :PROPERTIES:
    :CUSTOM_ID: reference
    :END:
 
-- [[http://stackoverflow.com/questions/1654150/scope-of-exception-object-in-c/1654187#1654187][Scope
-  of exception object in C++]]
-- [[http://stackoverflow.com/questions/20966681/where-c-exception-parameter-store-in-memory][where
-  C++ exception parameter store in memory?]]
+- [[http://stackoverflow.com/questions/1654150/scope-of-exception-object-in-c/1654187#1654187][Scope of exception object in C++]]
+- [[http://stackoverflow.com/questions/20966681/where-c-exception-parameter-store-in-memory][where C++ exception parameter store in memory?]]
