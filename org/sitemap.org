@@ -45,7 +45,6 @@
     - [[file:blog/2013/wp-theme-design-and-thinking.org][WordPress主题开发总结（上）：设计与思考]]
     - [[file:blog/2013/wp-theme-skill.org][WordPress主题开发总结（下）：技巧]]
     - [[file:blog/2013/top-10-best-c-compilers-html.org][[译]10个最佳的C/C++编译器和IDEs]]
-    - [[file:blog/2013/apache-set-dir-and-parked-domains.org][apache设置目录与域名绑定]]
     - [[file:blog/2013/differences-between-std-cpp11-and-std-gnu11.org][differences between -std=c++11 and -std=gnu++11]]
     - [[file:blog/2013/sprintf_s-and-swprintf_s-differ-in-release-and-debu.org][sprintf_s和swprintf_s在Release和Debug不同模式表现不同]]
     - [[file:blog/2013/the-most-vexing-parse-in-cpp.org][the most vexing parse]]
