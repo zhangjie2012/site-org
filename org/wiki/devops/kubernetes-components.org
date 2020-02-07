@@ -1,0 +1,70 @@
+#+SETUPFILE: ~/site/tpl/wiki-tpl.org
+#+TITLE: Kubernetes 组件
+#+DATE: 2020-02-04 17:27:47
+
+* Master 组件
+
+** kube-apiserver
+
+Kubernetes 控制前端，所有的组件都是通过 APIserver 来交互的。
+
+** etcd
+
+兼具一致性的高可用的分布式 KV 数据库。集群中的所有数据都是存储在 etcd 中。
+
+** kube-scheduler
+
+负责 Pod 的调度，监听未指定运行节点的 Pod，根据调度策略为 Pod 选择一个节点。调度策略考虑因素：
+
+- Pod(s) 自身资源需求
+- 硬件/软件/策略约束
+- 亲和性和反亲和性
+- 数据位置
+- 工作负载间的干扰和最后时限
+
+** kube-controller-manager
+
+Kubernetes 有很多的独立的控制器，逻辑上应该是独立的进程，但是为了降低复杂度，全部编译成了一个可执行文件中，在同一个进程中运行。
+包括：
+
+- 节点控制器（Node Controller）：负责在节点出现故障时进行通知和响应。
+- 副本控制器（Replication Controller）：负责为系统中的每个副本控制器对象维护正确数量的 Pod。
+- 端点控制器（Endpoints Controller）: 填充端点(Endpoints)对象(即加入 Service 与 Pod)。
+- 服务帐户和令牌控制器（Service Account & Token Controllers）: 为新的命名空间创建默认帐户和 API 访问令牌。
+
+* Node 组件
+
+** kubelet
+
+节点上的代理。
+
+kubelet 接收一组通过各类机制提供给它的 PodSpecs，确保 PodSpecs 中描述的容器处于运行状态且健康。kubelet 不会管理非 Kubernetes 创建的容器。
+
+** kube-proxy
+
+节点上运行的网络代理，实现 Kubernetes Service 概念的一部分。
+
+kube-proxy 维护节点的网络规则。这些规则允许从集群内部或者外部的网络回话与 Pod 进行网络通信。
+
+** 容器运行时（Container Runtime）
+
+运行时是负责运行容器的软件。
+
+Kubernetes 支持多个容器运行环境：Docker，containerd，cri-o，rktlet 以及任何实现 Kubernetes CRI（Container Runtime Interface）
+
+* 插件（Addons）
+
+插件都属于 =kube-system= 命名空间。
+
+** DNS
+** 用户界面（Dashboard）
+
+Kubernetes 集群的 Web UI。
+
+** 容器资源监控
+
+将容器常见的时间序列度量值保存到一个集中的数据库中，并提供浏览这些数据的界面。
+
+** 集群层面日志
+
+负责容器的日志数据收集，并保存到日志存储中，存储能够提供搜索和浏览接口。

@@ -1,0 +1,8 @@
+#+SETUPFILE: ~/site/tpl/wiki-tpl.org
+#+TITLE: Kubernetes API
+#+DATE: 2020-02-04 21:30:02
+
+- [[https://github.com/kubernetes/community/blob/master/contributors/devel/sig-architecture/api-conventions.md][API 协议文档]] 面向希望深入了解 Kubernetes API 结构的用户，想要扩展 API 的开发人员。
+- [[https://kubernetes.io/docs/reference/][API 参考文档]] 描述 API 规范，客户端库，命令行参考，配置参考，设计文档等。
+
+*Kubernetes 被分成多个组件，各部分通过 API 相互交互。*
