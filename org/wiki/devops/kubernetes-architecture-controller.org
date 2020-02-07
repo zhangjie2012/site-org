@@ -1,0 +1,5 @@
+#+SETUPFILE: ~/site/tpl/wiki-tpl.org
+#+TITLE: Kubernetes 控制器
+#+DATE: 2020-02-07 14:49:19
+
+控制器通过监听 apiserver 中的集群公共状态，然后将当前状态变成期望状态。

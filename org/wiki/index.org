@@ -53,7 +53,7 @@
 
 - 官方文档
   + 概述：[[file:devops/kubernetes-components.org][组件]]、[[file:devops/kubernetes-overview-api.org][API]]、[[file:devops/kubernetes-overview-objects.org][对象]]
-  + 架构：[[file:devops/kubernetes-architechture-nodes.org][节点]]
+  + 架构：[[file:devops/kubernetes-architechture-nodes.org][节点]]、[[file:devops/kubernetes-architecture-controller.org][控制器]]、[[file:devops/kubernetes-architecture-master-node-communication.org][Master-Node 通信]]
   + [[file:devops/k8s-kubectl.org][kubectl]] kubectl 使用文档
   + [[file:devops/k8s-ingress.org][Ingress]] 服务暴露
 - 实践
