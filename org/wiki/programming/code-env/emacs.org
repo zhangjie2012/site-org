@@ -407,4 +407,4 @@ Emacs 的快捷键非常多，但是除了基本的编辑操作快捷键之外�
 
 [fn:package-actived-list] https://stackoverflow.com/questions/13866848/how-to-save-a-list-of-all-the-installed-packages-in-emacs-24
 
-[fn:sorting-headings-in-an-org-file]
+[fn:sorting-headings-in-an-org-file] https://emacs.stackexchange.com/questions/30547/sort-list-by-checked-unchecked-state
