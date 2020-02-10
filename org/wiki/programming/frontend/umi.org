@@ -2,7 +2,7 @@
 #+TITLE: umi
 #+DATE: 2020-01-06 14:58:32
 
-* Pro 时代
+* Pro
 [[https://pro.ant.design/docs/getting-started-cn][Ant Design Pro]] 是一个前端的基于 React 脚手架（框架，开箱即用，提供了菜单和路由、数据处理等），
 设计是用于企业级中后台解决方案（内部系统之类的）。
 ** 技术栈
@@ -60,69 +60,12 @@ https://v2-pro.ant.design/docs/upgrade-v2-cn 文档只是写了迁移流程，�
 
 _总之：前端这一套东西真是让人心力俱疲。_
 
-** FAQ
-
-*** 部署时，文件名添加 hash 值
-
-2.0 之后， =npm run build= 生成的 css 和 js 文件名不再包含 hash 值，这样会导致即便 nginx 设置了 =index.html= 不缓存，因为 css 和 js 每个版本的名字都是一样的，导致新版本更新之后，用户只有强制刷新浏览器才能生效。
-
-解决办法是在 =/config/config.js= 中添加 =hash:true= ，这是 umi 的一个配置特性：
-
-[[https://umijs.org/zh/config/#hash]]
-
-*** npm run start 报错
-
-=npm run start= 的时候，报错：
-
-#+BEGIN_QUOTE
-  Module build failed: Error: The 'decorators' plugin requires a
-  'decoratorsBeforeExport' option, whose value must be a boolean. If you
-  are migrating from Babylon/Babel 6 or want to use the old decorators
-  proposal, you should use the 'decorators-legacy' plugin instead of
-  'decorators'.
-#+END_QUOTE
-
-解决的办法是用 =npm install= ，不要使用 cnpm 这种镜像。讨论在 [[https://github.com/ant-design/ant-design-pro/issues/2043][ant-design-pro issues#2043 ]]，好像也没有看到具体的原因，应该是依赖问题。
-
-之前用 npm 的时候也有类似的情况，一般是因为包依赖有问题，因为是镜像缘故，包的同步总会有先后顺序，卡到中间的时候就会出现依赖版本问题。
-
-其实不光是 npm，其它的镜像也会出这种情况，比如 Emacs 的源引发的问题：[[https://github.com/abo-abo/swiper/issues/2087][swiper issue#2087]]
-** v1 升级 v2 之后报错：An immer producer returned a new value *and* modified its draft.
-
-https://github.com/umijs/umi/issues/592
-
-之前在 reducers 中使用了 state，但是升级之后不允许这么用了（好像是说简化写法，具体可以看 [[https://umijs.org/zh/guide/config.html#%25E9%2585%258D%25E7%25BD%25AE%25E6%2596%2587%25E4%25BB%25B6][配置文件]]）。一种 hack 的解决办法是上面 issue 中提到的：
-
-#+BEGIN_SRC javascript
-const stockList = [...state.stockList]
-#+END_SRC
-
-但是不知道这种方式的原理是什么。
-
-*2020-01-08 16:52:10 更新*
-
-https://github.com/umijs/umi/issues/816
-
-上面说的这种办法不通用，想恢复以前的使用办法可以关闭 immer，
-
-#+BEGIN_SRC javascript
-export default {
-  plugins: [
-    ['umi-plugin-dva', { immer: true }],
-  ],
-};
-#+END_SRC
-
-关闭之后又出现了 =Reducer "index" returned undefined during initialization.= 的报错，原因是 models 下面的 =*.js= 文件没有设置初始化 state，
-查看代码发现，在 models 下有一些 utils.js 文件，移出 model 目录即可。应该是认为 models 下的 .js 文件都要符合 =export { state: {} }= 这样的格式。
-
 * Umi
 ** 作者(sorrycc)有关 umi 的文章
 - 2018-01-31 [[https://github.com/sorrycc/blog/issues/58][Hello! umi]]
 - 2018-02-26 [[https://github.com/sorrycc/blog/issues/64][发布 umi 1.0]]
 - 2018-09-03 [[https://github.com/sorrycc/blog/issues/74][发布 umi 2.0，可插拔的企业级 react 应用框架]]
 - 2019-09-02 [[https://github.com/sorrycc/blog/issues/86][Hello! Umi UI]]  /费精力搞这玩意干啥../
-
 ** Pro 和 UmiJS
 
 Pro 封装了 umi，umi 配置文件为 =.umirc.js= 或 =config/config.js= ，Pro 中使用 =config/config.js= ，但是进行了一定的改造。
@@ -172,3 +115,73 @@ Pro =0.x= 版本和 =1.x= 版本 =npm run start= 进度卡到 =91%= 问题，可
 
 React 全家桶（react，react-router，redux 等）了解之后，使用官方的的 create-react-app 来创建应用，UI 库自己选型即可。这样的好处是遇到了问题
 网上都有足够的资料帮你解决，社区也很好。坦白说，阿里开源的 antd 系列，社区都不怎么好。
+* FAQ
+** 部署时，文件名添加 hash 值
+
+2.0 之后， =npm run build= 生成的 css 和 js 文件名不再包含 hash 值，这样会导致即便 nginx 设置了 =index.html= 不缓存，因为 css 和 js 每个版本的名字都是一样的，导致新版本更新之后，用户只有强制刷新浏览器才能生效。
+
+解决办法是在 =/config/config.js= 中添加 =hash:true= ，这是 umi 的一个配置特性：
+
+[[https://umijs.org/zh/config/#hash]]
+
+** npm run start 报错
+
+=npm run start= 的时候，报错：
+
+#+BEGIN_QUOTE
+  Module build failed: Error: The 'decorators' plugin requires a
+  'decoratorsBeforeExport' option, whose value must be a boolean. If you
+  are migrating from Babylon/Babel 6 or want to use the old decorators
+  proposal, you should use the 'decorators-legacy' plugin instead of
+  'decorators'.
+#+END_QUOTE
+
+解决的办法是用 =npm install= ，不要使用 cnpm 这种镜像。讨论在 [[https://github.com/ant-design/ant-design-pro/issues/2043][ant-design-pro issues#2043 ]]，好像也没有看到具体的原因，应该是依赖问题。
+
+之前用 npm 的时候也有类似的情况，一般是因为包依赖有问题，因为是镜像缘故，包的同步总会有先后顺序，卡到中间的时候就会出现依赖版本问题。
+
+其实不光是 npm，其它的镜像也会出这种情况，比如 Emacs 的源引发的问题：[[https://github.com/abo-abo/swiper/issues/2087][swiper issue#2087]]
+** v1 升级 v2 之后报错：An immer producer returned a new value *and* modified its draft.
+
+https://github.com/umijs/umi/issues/592
+
+之前在 reducers 中使用了 state，但是升级之后不允许这么用了（好像是说简化写法，具体可以看 [[https://umijs.org/zh/guide/config.html#%25E9%2585%258D%25E7%25BD%25AE%25E6%2596%2587%25E4%25BB%25B6][配置文件]]）。一种 hack 的解决办法是上面 issue 中提到的：
+
+#+BEGIN_SRC javascript
+const stockList = [...state.stockList]
+#+END_SRC
+
+但是不知道这种方式的原理是什么。
+
+*2020-01-08 16:52:10 更新*
+
+https://github.com/umijs/umi/issues/816
+
+上面说的这种办法不通用，想恢复以前的使用办法可以关闭 immer，
+
+#+BEGIN_SRC javascript
+export default {
+  plugins: [
+    ['umi-plugin-dva', { immer: true }],
+  ],
+};
+#+END_SRC
+
+关闭之后又出现了 =Reducer "index" returned undefined during initialization.= 的报错，原因是 models 下面的 =*.js= 文件没有设置初始化 state，
+查看代码发现，在 models 下有一些 utils.js 文件，移出 model 目录即可。应该是认为 models 下的 .js 文件都要符合 =export { state: {} }= 这样的格式。
+** 部署到非根路径报错：Uncaught SyntaxError: Unexpected token '<'
+   :PROPERTIES:
+   :CUSTOM_ID: faq-uncaught-syntaxerror-unexpected-token
+   :END:
+
+这个错误一般是因为 html 中 script src 引用的 js 文件有错（不是 js 格式的）。下面是 umi 部署到非根路径流程（假定路径为 =/base= ）：
+
+1. umi 的 [[https://umijs.org/zh/guide/config.html][配置文件]] 中添加 =base= 和 =publicPath= 为 =/base/=
+2. 构建的 dist 文件多加一层目录 base
+3. nginx
+   #+BEGIN_SRC nginx
+   location /base {
+     # 用于配合 browserHistory使用
+     try_files $uri $uri/ /index.html;
+   }
+   #+END_SRC
