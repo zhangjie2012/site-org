@@ -1,7 +1,6 @@
 #+SETUPFILE: ~/site/tpl/wiki-tpl.org
 #+TITLE: Go 包选择与对比
 #+DATE: 2019-03-14 17:50:00
-
 * 日志
 可能是 Go 尚年轻，行业对 Go 的应用领域还比较宽泛，也可能是开源的缘故，Go package 普遍造轮子的现象比较明显。
 
@@ -36,7 +35,7 @@ Uber 开源的日志系统。
 ** 结论
 
 - 高性能的系统，推荐使用 zap；
-- 业务系统推荐使用 logrus，glog 的日志级别（ ~V()~ ）很容易误导开发人员，个人体验并不是很好。
+- 业务系统推荐使用 logrus，glog 的日志级别（ ~V()~ ）很容易误导开发人员，体验并不是很好。
 
 * Redis
 
@@ -74,7 +73,7 @@ MongoDB 官方在 2018 年的 2 月 14 日发布了 MongoDB Go Driver Alpha 版�
 
 代码如下：
 
-#+BEGIN_EXAMPLE
+#+begin_src go
   func yieldIndexModel(key string, unique bool, order int) mongo.IndexModel {
       keys := bsonx.Doc{{Key: key, Value: bsonx.Int32(int32(order))}}
       index := mongo.IndexModel{
@@ -99,7 +98,9 @@ MongoDB 官方在 2018 年的 2 月 14 日发布了 MongoDB Go Driver Alpha 版�
 
       // ...
   }
-#+END_EXAMPLE
+#+end_src
+
+#+RESULTS:
 
 去掉 =SetMaxTime= 之后就正常了。
 
