@@ -44,10 +44,10 @@ sudo make install
 
 #+BEGIN_SRC shell
 alias em="env TERM=xterm-256color emacs -nw"
-alias emacs="env TERM=xterm-256color emacs -nw"
 #+END_SRC
 
-_注意_ 如果编译提示 =configure: error: The following required libraries were not found: gnutls= 需要安装 =gnutls= 开发包，使用 =apt-cache search 'libgnutls.*-dev'= 找到对应的包，然后安装 [fn:1]。
+_注意_ 如果编译提示 =configure: error: The following required libraries were not found: gnutls= 需要安装 =gnutls= 开发包，
+使用 =apt-cache search 'libgnutls.*-dev'= 找到对应的包，然后安装 [fn:1]。
 
 *** MacOS
 
