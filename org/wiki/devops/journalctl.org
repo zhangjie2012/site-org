@@ -1,5 +1,5 @@
 #+SETUPFILE: ~/site/tpl/wiki-tpl.org
-#+TITLE: systemd
+#+TITLE: journalctl
 #+DATE: 2018-06-01 15:50:40
 
 systemd 拥有强大的处理与系统日志记录功能，不像其他工具，日志被分散在整套系统中。
@@ -11,7 +11,7 @@ systemd 尝试提供一套集中化管理系统，统一处理内核及用户级
 
 日志文件位置，基本配置: ~/etc/systemd/journald.conf~ ，调整文件： ~/etc/logrotate.conf~ 。
 
-** 常规操作
+* 常规操作
 
 + ~-n~: 显示最后几行；
 + ~-f~: 显示最新信息，类似（ ~tail -f~ ）；
@@ -20,12 +20,12 @@ systemd 尝试提供一套集中化管理系统，统一处理内核及用户级
 + ~--disk-usage~: 查看日志所占磁盘空间；
 + ~-r~: 逆序显示日志（排查问题时比较方便）；
 
-** 过滤条件
+* 过滤条件
 
 + 按照 unit 过滤: ~journalctl -u nginx.service~ ，可以指定多个 unit 合并查看日志
 + 按照时间过滤: ~--since~ 和 ~--until~ ，用来设置时间段，时间格式支持多种，比如: ~YYYY-MM-DD HH:MM:SS~
 
-** 输出格式
+* 输出格式
 
 可使用 ~-o~ 指定输出格式（只列出常用的），
 
@@ -37,6 +37,6 @@ systemd 尝试提供一套集中化管理系统，统一处理内核及用户级
 
 更多的 journalctl 用法，可以通过 ~man~ 命令获取。
 
-** 参考
+* 参考
 
 + <https://www.digitalocean.com/community/tutorials/how-to-use-journalctl-to-view-and-manipulate-systemd-logs>

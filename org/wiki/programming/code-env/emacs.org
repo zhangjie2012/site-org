@@ -400,14 +400,12 @@ Emacs 的快捷键非常多，但是除了基本的编辑操作快捷键之外�
 * Resource
 ** Blog/Site/Tutorial
 
-+ [[https://planet.emacslife.com/][Planet Emacslife]]：Emacs 百科全书，大杂烩
-+ [[https://www.reddit.com/r/emacs/][Emacs reddit channel]]：reddit 上的 Emacs 专题
-+ [[http://oremacs.com/][oremacs]]
-+ [[http://ergoemacs.org/emacs/emacs.html][Practical Emacs Tutorial]]：Emacs 练习手册
-+ [[https://emacsthemes.com/][Emacs Themes]]：主题集合
 + [[https://github.com/emacs-tw/awesome-emacs][awesome-emacs]]
++ [[https://planet.emacslife.com/][Planet Emacslife]]：Emacs 百科全书，大杂烩
++ [[https://emacsthemes.com/][Emacs Themes]]：主题集合
++ [[http://oremacs.com/][oremacs]]
 + [[http://melpa.org/][melpa]] 插件集合
-+ [[https://sachachua.com/blog/category/emacs/][Living an awesome Life]]：Emacs category
++ [[https://www.youtube.com/watch?v=cod2ABxlrV8&list=PL9KxKa8NpFxIcNQa9js7dQQIHc81b0-Xg&index=9][using emacs]]：youtube 视频
 
 ** Article
 
