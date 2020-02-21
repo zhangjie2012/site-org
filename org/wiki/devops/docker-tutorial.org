@@ -51,21 +51,18 @@ Registry => Repositories => Tags = Image
 - Ubuntu：https://docs.docker.com/install/linux/docker-ce/ubuntu/
 - CentOS：https://docs.docker.com/install/linux/docker-ce/centos/
 
-整体都比较简单，国内注意使用镜像加速器，可选的 Registry migrrors：
+** 设置加速器
 
-- Docker 中国：https://registry.docker-cn.com
-- 网易云：http://hub-mirror.c.163.com/
-- daocloud：https://www.daocloud.io/mirror， 推荐
+推荐 Azure 的源，[[https://github.com/Azure/container-service-for-azure-china/blob/master/aks/README.md][AKS on Azure China Best Practices]]
 
 修改配置 ~/etc/docker/daemon.json~ ：
 
-#+BEGIN_SRC
-    {
-    	"registry-mirrors": [
-    		"http://hub-mirror.c.163.com/",
-    		"https://registry.docker-cn.com"
-    	]
-    }
+#+BEGIN_SRC javascript
+  {
+      "registry-mirrors": [
+          "https://dockerhub.azk8s.cn"
+      ]
+  }
 #+END_SRC
 
 重启： ~service docker restart~ ，查看信息： ~docker version~ 。
