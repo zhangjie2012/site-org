@@ -3,20 +3,13 @@
 #+TITLE: Ubuntu
 #+DATE: 2018-09-10 21:39:56
 
-** 设置国内源
+* 设置国内源
 
 1. [[https://mirror.tuna.tsinghua.edu.cn/help/ubuntu/]]
 2. =apt update=
 3. =apt upgrade=
 
-** 如何启动 ROOT 用户
-
-默认的 root 是被锁定的，要先指定一个密码：=sudo passwd root= ，Ubuntu 默认禁用 root ssh ，需要打开：
-
-1. =vim /etc/ssh/sshd_config= 将 =PermitRootLogin= 的 =without-password= 改为 =yes=
-2. =restart ssh=
-
-** apt-get update 和 apt-get upgrade 的区别
+* apt-get update 和 apt-get upgrade 的区别
 
 先运行 =update= ，然后再运行 =upgrade= 。它们两个没有包含对方的功能，各自做的事情不同。
 
@@ -34,7 +27,7 @@
 + [[https://askubuntu.com/questions/94102/what-is-the-difference-between-apt-get-update-and-upgrade]]
 + [[https://askubuntu.com/questions/194651/why-use-apt-get-upgrade-instead-of-apt-get-dist-upgrade]]
 
-** Ubuntu 18.04 快捷键
+* Ubuntu 18.04 快捷键
 
 - =Super= 打开活动菜单，然后可以搜索应用程序、查看正在运行的 GUI 程序、切换工作区
 - =Super + L= 锁屏
@@ -45,15 +38,15 @@
 - =Super + M= 切换到通知栏
 - =Super + 空格= 多种输入法切换
 
-** SS 代理
-*** 客户端
+* SS 代理
+** 客户端
 
 1. 命令行：[[https://github.com/shadowsocks/shadowsocks-libev]] =sudo apt install shadowsocks-libev=
 2. GUI：[[https://github.com/shadowsocks/shadowsocks-qt5]]
 
 GUI 版本很不稳定，不如直接使用命令行（ =ss-local= ），配合 =systemd= 设置服务开机启动。
 
-**** ss-local 配置
+*** ss-local 配置
 
 配置文件在 =/etc/shadowsocks-libev= 目录下。文件内容改为：
   #+BEGIN_SRC
@@ -69,13 +62,13 @@ GUI 版本很不稳定，不如直接使用命令行（ =ss-local= ），配合 
 
 systemd unit 名字为： =shadowsock-libev= 直接重启即可。设置开机启动 =systemctl enable shadowsock-libev= 。
 
-*** Chrome 浏览器代理
+** Chrome 浏览器代理
 
 因为鸡生蛋，蛋生鸡的问题，需要手动安装 [[https://github.com/FelisCatus/SwitchyOmega][SwitchyOmega]]，新版本的 Chrome 不允许安装第三方的插件，会报错。一个投机取巧的办法是将 crx 后缀改为 zip，打开开发者模式，然后拖入，经测试可行。
 
 规则列表网址： =https://raw.githubusercontent.com/gfwlist/gfwlist/master/gfwlist.txt=
 
-*** 终端代理
+** 终端代理
 
 Sock5 proxy：[[https://www.irif.fr/~jch/software/polipo/][Polipo]]
 
@@ -97,7 +90,7 @@ export http_proxy="http://127.0.0.1:8123" export https_proxy="http://127.0.0.1:8
 
 测试是否生效: =curl ip.gs=
 
-** 软件列表
+* 软件列表
 
 - 搜狗输入法
 - 网易云音乐：经测试 Ubuntu 下的网易云音乐比较吃资源
@@ -111,27 +104,7 @@ export http_proxy="http://127.0.0.1:8123" export https_proxy="http://127.0.0.1:8
 
 [[https://getmailspring.com/][Mailspring]] 只是看起来漂亮，Bug 太多了。
 
-** 启动速度慢调试
-
-- =systemd-analyze=
-- =systemd-analyze critical-chain=
-
-via: [[https://www.dedoimedo.com/computers/ubuntu-beaver-slow-boot.html]]
-
-** 系统设置被卸载掉了，如何安装回来？
-
-#+BEGIN_EXAMPLE
-  sudo apt-get install gnome-control-center
-#+END_EXAMPLE
-
-** 安装 xfce 之后，卸载不干净怎么办？
-
-- 卸载 =xfce4-*=
-- 卸载 =xubuntu-*=
-
-网上教程很多，但是有一点要注意：zsh 不支持 =apt remove xfce4-*= 这种语法，要切换到 bash 才行。
-
-** 几种桌面对比
+* 几种桌面对比
    :PROPERTIES:
    :CUSTOM_ID: 几种桌面对比
    :END:
@@ -146,3 +119,27 @@ via: [[https://www.dedoimedo.com/computers/ubuntu-beaver-slow-boot.html]]
 资源消耗和 UI 体验成正比，GNOME 3 和 KDE 差不太多，其次是 LXQT，Xfce 体验最差，但是占用资源的确少，而且快。
 
 /不想再尝试桌面版了，还是老老实实的用 GNOME3，后面有了本子玩玩其它发行版。/
+* FAQ
+** 安装 xfce 之后，卸载不干净怎么办？
+
+- 卸载 =xfce4-*=
+- 卸载 =xubuntu-*=
+
+网上教程很多，但是有一点要注意：zsh 不支持 =apt remove xfce4-*= 这种语法，要切换到 bash 才行。
+** 系统设置被卸载掉了，如何安装回来？
+
+#+BEGIN_EXAMPLE
+  sudo apt-get install gnome-control-center
+#+END_EXAMPLE
+** 如何启动 ROOT 用户
+
+默认的 root 是被锁定的，要先指定一个密码： =sudo passwd root= ，Ubuntu 默认禁用 root ssh，需要打开：
+
+1. =vim /etc/ssh/sshd_config= 将 =PermitRootLogin= 的 =without-password= 改为 =yes=
+2. =restart ssh=
+** 启动速度慢调试
+
+- =systemd-analyze=
+- =systemd-analyze critical-chain=
+
+via: [[https://www.dedoimedo.com/computers/ubuntu-beaver-slow-boot.html]]
