@@ -1,14 +1,51 @@
 #+SETUPFILE: ~/site/tpl/gtd-tpl.org
 #+TITLE: 2020 Q1
 
-* 阅读 [2/12]
+* 学习计划
+** Kubernetes：中线的学习计划
+*** TODO 第一阶段目标：入门
+    SCHEDULED: <2020-02-02 Sat>
+
+*KR*
+
+- 熟悉 Kubernetes 概念、架构、组件
+- 使用 kubectl 可以完成大部分 Kubernetes 资源查询和 debug
+
+*Action* [0/1]
+
+- [-] 通读 Kubenetes 文档一遍 [28%]
+  - [X] 架构与组件
+  - [X] 容器
+  - [ ] Pod 与控制器
+  - [ ] 存储
+  - [ ] 配置
+  - [ ] service 与 Ingress
+  - [ ] 调度与策略
+
+** emacs-lisp：超长线的学习计划
+*** TODO 第一阶段：熟悉语言基本语法
+    SCHEDULED: <2020-02-22 Sat>
+
+*KR* 可以 *完全* 看懂 emacs 配置
+
+*Action* [0%]
+
+- [ ] 文章：[[http://steve-yegge.blogspot.com/2008/01/emergency-elisp.html][Emergency Elisp]]
+- [ ] 在线教程：[[http://ergoemacs.org/emacs/elisp.html][Practical Emacs Lisp]]
+- [ ] 电子书 [[https://github.com/chrisdone/elisp-guide][elisp-guide]]
+
+*** TODO 第二阶段目标：能够手写配置，做优化
+
+* 阅读 [33%]
 ** TODO Lock Free [0/2]
    - [ ] https://preshing.com/20120612/an-introduction-to-lock-free-programming/
    - [ ] [[https://www.cs.cmu.edu/~410-s05/lectures/L31_LockFree.pdf][Lock-free]]
 ** DONE [[https://deepsource.io/blog/go-modules/][Package management in Go]]                                         :Go:
    CLOSED: [2020-01-17 Fri 10:54]
-** TODO [[https://itnext.io/kubernetes-journey-up-and-running-out-of-the-cloud-kubernetes-overview-5012994b8955][Kubernetes Journey — Up and running out of the cloud — Kubernetes Overview]] :K8s:
-** TODO [[https://itnext.io/kubernetes-journey-up-and-running-out-of-the-cloud-master-and-worker-6328775b347f][Kubernetes Journey — Up and running out of the cloud — Master and Worker]] :K8s:
+** DONE [[https://itnext.io/kubernetes-journey-up-and-running-out-of-the-cloud-kubernetes-overview-5012994b8955][Kubernetes Journey — Up and running out of the cloud — Kubernetes Overview]] :K8s:
+   CLOSED: [2020-02-22 Sat 09:42]
+** DONE [[https://itnext.io/kubernetes-journey-up-and-running-out-of-the-cloud-master-and-worker-6328775b347f][Kubernetes Journey — Up and running out of the cloud — Master and Worker]] :K8s:
+   CLOSED: [2020-02-22 Sat 09:42]
 ** DONE [[https://dave.cheney.net/practical-go/presentations/qcon-china.html][Practical Go: Real world advice for writing maintainable Go programs]] :Go:
    CLOSED: [2020-01-17 Fri 15:30]
 没看完，写的不错。但是很多内容与 Effective Go 重复了，而且这种如何写好代码的文章，对我已经没什么提升了。
@@ -19,10 +56,10 @@
 ** TODO [[https://engineering.linkedin.com/blog/2019/apache-kafka-trillion-messages][https://engineering.linkedin.com/blog/2019/apache-kafka-trillion-messages]] :Kafka:
 ** TODO https://github.com/uber-go/guide/blob/master/style.md            :Go:
 ** TODO https://github.com/ryanmcdermott/clean-code-javascript :javascript:
-** TODO https://github.com/Q-Angelo/Nodejs-Roadmap  :node.js:
+   出一份 JavaScript 编码规范，与 React 一起写的时候，这玩意挺让人头疼的
+** TODO https://github.com/Q-Angelo/Nodejs-Roadmap            :nodejs:
 
-* 其它
-
+* 其它 [100%]
 ** DONE [[https://github.com/golang/tools/blob/master/gopls/doc/emacs.md]] :emacs:
    CLOSED: [2020-01-17 Fri 14:04]
 
