@@ -1,0 +1,15 @@
+#+SETUPFILE: ~/site/tpl/wiki-tpl.org
+#+OPTIONS: html-postamble:nil
+#+TITLE: Grafana
+#+DATE: 2020-02-24 11:00:19
+
+* 安装
+** 使用 Docker
+
+#+begin_src shell
+docker pull grafana/grafana
+docker run -d -p 3000:3000 grafana/grafana
+#+end_src
+
+然后浏览器访问 =localhost:3000= 就可以了，默认的登录账号和密码都是 =admin= ，首次登录需要修改密码。
+也可以在配置文件 =/etc/grafana/grafana.ini= 中查看或者修改认证信息。

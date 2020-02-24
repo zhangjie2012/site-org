@@ -26,7 +26,9 @@
 *** TODO 第一阶段：熟悉语言基本语法
     SCHEDULED: <2020-02-22 Sat>
 
-*KR* 可以 *完全* 看懂 emacs 配置
+*KR*
+
+1. 可以 _完全_ 看懂 emacs 配置
 
 *Action* [0%]
 

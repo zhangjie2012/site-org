@@ -68,6 +68,7 @@ spec:
     image: busybox
     command: ['sh', '-c', 'echo Hello Kubernetes! && sleep 3600']
 #+END_SRC
+
 * Pods
 ** Pod 是什么？
 
@@ -156,3 +157,44 @@ Pod 中包含容器进程，Pod 终止时，优雅的终止容器中的服务是
 ** API 对象
 
 Pod 是 REST API 的顶级资源，https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.17/#pod-v1-core。
+* Pod 的生命周期
+** Pod phase
+
+Pod 的 =status= 字段是一个 PodStatus 对象，其中包含一个 =phase= 字段。
+
+Pod 的阶段（phase）是一个简单的，高层次的总结了 Pod 在生命周期中的状态；它并不是对容器或者 Pod 状态的全面检测之后的汇总，
+也不是一个全面的状态机。
+
+对阶段的定义有严格的保护，除了下面列举的值之外，不应该有其它的值。
+
+|-------------+--------------------------------------------------------------------------------------------------|
+| 值          | 描述                                                                                             |
+|-------------+--------------------------------------------------------------------------------------------------|
+| ~Pending~   | Pod 已被 Kubernetes 接受，但容器镜像还没被创建。这包括了被调度的时间和镜像下载时间，可能有点费时 |
+| ~Running~   | Pod 已经绑定到节点上，所有的容器已经被创建。至少一个容器在运行或者正在启动、重新启动             |
+| ~Succeeded~ | Pod 中所有的容器已成功终止，并且不会重新启动                                                     |
+| ~Failed~    | Pod 中所有容器都已终止，并且至少有一个容器因故障而终止。也就是要么容器非 0 退出，要么被系统终止  |
+| ~Unknown~   | 因为某种原因，无法获得 Pod 的状态，通常是和 Pod 所在主机通信故障                                 |
+|-------------+--------------------------------------------------------------------------------------------------|
+
+** Pod conditions
+
+Pod 包含一个 PodStatus 对象，包含一个数组来记录 Pod 通过或者未通过。其中的每个元素都有六个可能的字段：
+
+- =lastProbeTime= 提供最近一次 Pod 探测的时间
+- =lastTransitionTime= 提供最近一次状态变换的时间
+- =message= 人类可读的状态变更的详细信息
+- =reason= 唯一的驼峰命名的一个单词来描述最后一次状态变换
+- =status= 字符串，可能的值为 =True= =False= =Unknown=
+- =type= 字符串，可能的值为：
+  + =PodScheduled= Pod 已经被调度到节点；
+  + =Ready= Pod 已经可以处理请求，应该将它添加到匹配 services 的负载均衡池中；
+  + =Initialized= 所有的初始化容器（Init Containers）已经初始化成功；
+  + =ContainersReady= Pod 中所有的容器都已经就绪。
+
+** TODO 容器探针（probes）
+** TODO Pod 和容器状态
+*** TODO 容器状态
+*** TODO 容器 readiness gate
+*** TODO 重启策略
+** Pod 的一生（lifetime）
