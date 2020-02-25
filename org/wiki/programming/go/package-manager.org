@@ -59,6 +59,23 @@ The commands are:
 - 移出不常用的依赖 =go mod tidy=
 - =go mod download= 下载依赖的 module 到本地缓存
 
+** vendor 目录说明
+
+从上面的几篇文章可以看到基本上没有再提 vendor 目录的事，虽然 go mod 命令确实有支持。
+官方 wiki 里有说明： [[https://github.com/golang/go/wiki/Modules#how-do-i-use-vendoring-with-modules-is-vendoring-going-away][How do I use vendoring with modules? Is vendoring going away?]]
+
+Go modules 的设计之初是想完全放弃 vendor 目录的，但是社区的 [[https://groups.google.com/forum/#!msg/golang-dev/FTMScX1fsYk/uEUSjBAHAwAJ][反馈]] 导致保留了对 vendor 的支持。
+
+简单来讲，如果要支持的话，可以这样：
+
+- =go mod vendor= 会根据 go.mod 中的文件重置 vendor 目录，将依赖的包拷贝入内
+- 默认情况下， =go build= 会忽略 =vendor= 中的内容
+- 指定了 =-mod=vendor= 情况下才会从根目录下的 vendor 目录找包依赖，这种情况下会忽略 go.mod 的内容。
+  注意，只会从项目的顶级目录下找，其它目录下的会被忽略。
+- 如果希望全局支持的话，可以设置 ~GOFLAGS=-mod=vendor~ 环境变量。
+
+/所以，对于用户来讲，是不是可以考虑不再关心 vendor 目录了？/
+
 ** go mod 使用私有库
 
 不使用 go mod 私有库直接手动拷贝到 =$GOPATH/src= 下面就可以用了，使用 go mod 之后，依赖库的位置放在了 =$GOPATH/pkg/mod= 下面，并且还有 go.sum 校验，
