@@ -1,0 +1,161 @@
+#+SETUPFILE: ~/site/tpl/wiki-tpl.org
+#+OPTIONS: html-postamble:nil
+#+TITLE: Prometheus
+#+DATE: 2020-02-25 14:42:47
+
+* 概念
+** 数据模型
+*** Metric 名字和标签（labels）
+
+每一个时间序列都是一个唯一标识，标识由它的 /metric 名字/ 和可选的 key-value 对称之为 /标签(labels)/ 组成。
+
+/metric 名字/ 一般表达要被测量的系统的一些特性（比如： =http_requests_total= 表示收到的 http 请求数量）。
+命名格式为：ASCII 字母和数字，以及下划线和冒号。必须符合正则表达式 =[a-zA-Z_:][a-zA-Z0-9_:]*=
+
+注意：冒号是给用户定义的规则预留的。在 exporters 或者 direct instrumentation 中不应该使用它。
+
+labels 用作同一种 metric 的多纬统计（比如：在所有的 HTTP 请求中方法为 =POST= 的 =/api/tracks= 有哪些）。查询语言允许基于这些纬度进行过滤和聚合。
+修改任何 label 值，添加或者移出 label 都会创建一个新的时间序列。
+
+label 名字由 ASCII 字母，数字和下划线组成，比如符合正则表达式 =[a-zA-Z_][a-zA-Z0-9_]*= ，双下划线 =__= 开头的保留内内部使用。
+
+label 的值可以是任意的 Unicode 字符。值如果是空的，被认为 label 不存在。
+
+*** 样本
+
+样本构成了实际的时间序列数据。每个样本包括：
+
+- 一个 float64 的值
+- 毫秒精度的时间戳
+
+*** 表达式（Notation）
+
+由一个 metric 名字和一组标签组成，通常使用一下符号来标识时间序列：
+
+#+begin_src
+<metric name>{<label name>=<label value>, ...}
+#+end_src
+
+举例，metric 名字为 =api_http_request_total= ，有两个 labels ~method="POST"~ 和 ~handler="/messages"~ ，可以被写为：
+
+#+begin_src
+api_http_requests_total{method="POST", handler="/messages"}
+#+end_src
+
+** Metric 类型
+
+Prometheus 客户端库提供了四种核心的 Metric 类型。
+
+|-------------+------------------------------------------------------+--------------------------------------|
+| Metric 类型 | 说明                                                 | 举例                                 |
+|-------------+------------------------------------------------------+--------------------------------------|
+| Counter     | 单调递增的计数器，其值只能一直递增或者重启时重置为 0 | 请求总数，可能完成任务或者错误的数量 |
+| Gauge       | 表示可以增加或者减少的值。                           | 当前温度、内存、并发请求数           |
+| Histogram   | 对观察值采样，分组和统计                             | 请求时长、回包大小等                 |
+| Summary     | 类似 Histogram，提供了按百分比跟踪结果的方法         |                                      |
+|-------------+------------------------------------------------------+--------------------------------------|
+
+补充说明：
+
+- Counter 不要用计数器来表示可能会减小的值。例如，不要对当前运行的进程数量使用计数器，而应该使用 gauge。
+- Histogram 会暴露出多个采样的时间序列，假如说名称为 =<basename>=
+  + 观察桶的累积计数器，暴露为 ~<basename>_bucket{le="<upper inclusive bound>"}~
+  + 所有观测值的总和，暴露为 ~<basename>_sum~
+  + 观察到的事件数量，暴露为 ~<basename>_count~ （等价于 ~<basename>_bucket{le="+Inf"}~ ）
+  使用 =histogram_quantile()= 函数计算出 histogram 的分位数
+- Summary 会暴露出多个采样的时间序列，假如说名称为 =<basename>=
+  + 流观测时间 φ-quantiles （0 ≤ φ ≤ 1），暴露为 ~<basename>{quantile="<φ>"}~
+  + 所有观测值的总和，暴露为 ~<basename>_sum~
+  + 观察到的事件数量，暴露为 ~<basename>_count~
+
+官方提供了几种常见编程语言的 SDK 库：
+
+- [[https://pkg.go.dev/github.com/prometheus/client_golang/prometheus][Go]]
+- [[https://github.com/prometheus/client_java][Java]]
+- [[https://github.com/prometheus/client_python][Python]]
+- [[https://github.com/prometheus/client_ruby][Ruby]]
+
+** Jobs 和 instances
+
+在 Prometheus 术语中，获取 metric 的端点（endpoint）叫做 /instance（实例）/ ，通常对应一个单独的进程。
+具有相同 instance 目的的集合，比如进程的水平扩展多个实例，叫做 /job/ 。
+
+比如说，一个 API job 有四个实例并行：
+
+- job =api-server=
+  - instance 1 =1.2.3.4:5670=
+  - instance 2 =1.2.3.4:5671=
+  - instance 3 =5.6.7.8:5670=
+  - instance 4 =5.6.7.8:5671=
+
+*** 自动生成 labels 和时间序列
+
+当 Prometheus 从目标获取数据时，会自动将一些 labels 添加到获取的时间序列上，用来区别获取目标：
+
+- =job= 目标集合所属的 job 名称
+- =instance= =<host>:<port>= 被获取目标的 URL 的一部分
+
+如果这些 label 已经存在，产生的行为依赖于 =honor_labels= 的配置选项。
+
+对于每一个抓取的实例，Promethues 都会存储如下的时间序列样本：
+
+- ~up{job="<job-name>", instance="<instance-id>"}~ =1= 表示健康， =0= 表示抓取失败
+- ~scrape_duration_seconds{job="<job-name>", instance="<instance-id>"}~ 抓取的持续时间
+- ~scrape_samples_post_metric_relabeling{job="<job-name>", instance="<instance-id>"}~
+- ~scrape_samples_scraped{job="<job-name>", instance="<instance-id>"}~ 目标暴露的样本数
+- ~scrape_series_added{job="<job-name>", instance="<instance-id>"}~
+
+=up= 时间序列对于实例可用性检测很有用。
+
+* Prometheus
+** TODO 开始
+** TODO 安装
+** TODO 配置
+** 查询
+*** 函数（Functions）
+**** irate 与 rate
+
+=irate(v range-vector)= 计算范围内时间序列的 _每秒_ 瞬时增加率，是 _基于最后两个点_ 计算的。数值中断（比如机器重启，计数器重置）会自动调整。
+
+=rate(v range-vector)= 计算范围内事件序列的 _平均每秒_ 的增长率，是 _基于所有数据点的_ 。
+
+irate 和 rate 都只能和计数器（Counter）一起使用。因为两个计算的算法不同，所以使用场景略微不同：
+
+- irate 适用于快速变化计数器
+- rate 适用于告警以及计数器缓慢变化的计数场景下的图形展示
+
+不管是 irate 还是 rate 最终的结果是速率，不是增长的值，这一点很重要。有如下样本数据：
+
+#+BEGIN_SRC
+2201 @1570868068.053
+2204 @1570868083.053
+2205 @1570868098.053
+2216 @1570868113.053
+#+END_SRC
+
+irate 的计算方法为：
+
+#+BEGIN_SRC
+(2216-2205)/(1570868113.053-1570868098.053) = 0.7333333333333333
+#+END_SRC
+
+rate 的计算方法为：
+
+#+BEGIN_SRC
+(2216-2205)/(1570868113.053-1570868098.053) = 0.7333333333333333
+(2205-2204)/(1570868098.053-1570868083.053) = 0.06666666666666667
+(2204-2201)/(1570868083.053-1570868068.053) = 0.2
+(0.7333333333333333 + 0.06666666666666667 + 0.2) / 3 = 0.3333333333333333
+#+END_SRC
+
+/一开始对 TSDB 不是很了解的情况下，不自己算一下还是不是很好理解的。/
+
+根据上面的计算方法也可以看出：
+
+- 对于 irate 时间段的选择 =[1m]= 还是 =[5m]= ，只要有数据，就没区别； 而 rate 的区别就很大，时间越长越平滑；
+- rate 不会把数值中的毛刺直接暴露出来，通过平均值计算潜在的问题就是会有 _长尾问题_ 。
+
+选择 irate 还是 rate 视业务场景而定。
+** TODO 存储
+** TODO Federation
+** TODO 管理 API

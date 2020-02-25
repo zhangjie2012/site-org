@@ -194,7 +194,7 @@ Emacs 有很多的 [[http://melpa.org][插件]]，[[https://github.com/emacs-tw/
 | ~<f2> g/l~       | 字体变大或者缩小（GUI 有效）      |
 |------------------+-----------------------------------|
 
-** IDE
+《》** IDE
 
 语言的开发环境配置一直很费时间，我记得以前刚配置 C/C++ 的开发环境时，折腾了一个月左右时间才找到一个相对比较
 满意的开发环境（折腾完之后使用起来可真爽啊）： ~xcscope + etags + c++-mode~ 。
@@ -204,6 +204,12 @@ Emacs 有很多的 [[http://melpa.org][插件]]，[[https://github.com/emacs-tw/
 
 后来看到了 [[https://langserver.org/][LSP（Language Server Protocol）]] 项目，感觉这个项目才是终极解法：插件化，C/S 模式。
 目前已经默认支持 Python 和 Go 了，虽然还是有许许多多的 Bug，但比起 2018 年我试的时候已经成熟太多了。有社区的驱动，发展很快。
+
+*** LSP 使用
+
+=lsp-workspace-folders-remove= 可以移出之前添加的 workspace，但是如果遇到大的目录变更，一个一个的移出很慢。
+目前似乎没有提供一次性 remove all 的方法。一个解决办法是删除 lsp 的存储文件（lsp 提供了 =lsp-session-file= 变量来定义文件路径，
+默认在 =.emacs.d/.lsp-session-*= 路径下，如果没找到也可以在 lsp 源代码中搜索 lsp-session-file）。
 
 ** 版本管理
    :PROPERTIES:
