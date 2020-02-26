@@ -1,8 +1,22 @@
 #+SETUPFILE: ~/site/tpl/gtd-tpl.org
 #+TITLE: 2020 Q1
 
-* 学习计划
-** Kubernetes：中线的学习计划
+* 学习计划 [0/3]
+** TODO Promethues：短期学习计划
+   DEADLINE: <2020-06-01 Mon> SCHEDULED: <2020-02-26 Wed>
+
+*KR* [0/5]
+
+- [ ] 基本使用（概念、数据模型、report/query API）
+- [ ] 与 Docker 和 Kubernetes 结合
+- [ ] 生态 -> grafana
+- [ ] TSDB 理论
+
+*action* [0/5]
+
+- [ ] [[https://prometheus.io/docs/introduction/overview/][官方文档]]
+
+** TODO Kubernetes：中线的学习计划
 *** TODO 第一阶段目标：入门
     SCHEDULED: <2020-02-02 Sat>
 
@@ -22,7 +36,7 @@
   - [ ] service 与 Ingress
   - [ ] 调度与策略
 
-** emacs-lisp：超长线的学习计划
+** TODO emacs-lisp：超长线的学习计划
 *** TODO 第一阶段：熟悉语言基本语法
     SCHEDULED: <2020-02-22 Sat>
 
@@ -37,8 +51,7 @@
 - [ ] 电子书 [[https://github.com/chrisdone/elisp-guide][elisp-guide]]
 
 *** TODO 第二阶段目标：能够手写配置，做优化
-
-* 阅读 [33%]
+* 阅读 [28%]
 ** TODO Lock Free [0/2]
    - [ ] https://preshing.com/20120612/an-introduction-to-lock-free-programming/
    - [ ] [[https://www.cs.cmu.edu/~410-s05/lectures/L31_LockFree.pdf][Lock-free]]
@@ -60,7 +73,8 @@
 ** TODO https://github.com/ryanmcdermott/clean-code-javascript :javascript:
    出一份 JavaScript 编码规范，与 React 一起写的时候，这玩意挺让人头疼的
 ** TODO https://github.com/Q-Angelo/Nodejs-Roadmap            :nodejs:
-
+** TODO 制定 Prometheus 计划
+** TODO 命令行 curl 学习
 * 其它 [100%]
 ** DONE [[https://github.com/golang/tools/blob/master/gopls/doc/emacs.md]] :emacs:
    CLOSED: [2020-01-17 Fri 14:04]

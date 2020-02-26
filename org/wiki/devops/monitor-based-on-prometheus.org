@@ -3,24 +3,39 @@
 #+TITLE: 基于 Prometheus 监控告警
 #+DATE: 2019-04-11 15:46
 
+* 监控架构
 
 [[https://blog-1252349778.cos.ap-beijing.myqcloud.com/2019/prom.png]]
 
-* 上报
+这是一个常规的监控架构，从 metrics 生成、收集、到查询展示。
 
-Prometheus 提供了各种 exporter，除了业务之外的组件（Node，Redis，MySQL等）基本已经支持，业务自身的需要对接 Prometheus Client API。
+** 生成度量指标（metric）
 
-* metrics 收集
+Prometheus 提供了各种 [[https://prometheus.io/docs/instrumenting/exporters/][exporter]]，常见的系统和一些开源框架框架都已经支持。
+比如我们常用的：Node（系统主机）、MySQL、Redis、Kafka、Ceph、HAProxy，尤其是云原生相关的系统支持更加完备。
 
-Prometheus 中包含 TSDB（时间序列 DB），用作数据存储。Prometheus 采用的是 pull 的方案，配置之后会按照规则定时获取 metrics 并存储到 TSDB 中，
-TSDB 可以序列化到本地（SSD 比较好）。
+自己的 API server 对接需要使用 [[https://prometheus.io/docs/instrumenting/clientlibs/][clientlibs]]，自己也可以 [[https://prometheus.io/docs/instrumenting/writing_exporters/][写 exporter]]。
 
-* UI 显示
+** metrics 收集
+
+Prometheus 中包含 TSDB（时间序列 DB），用作数据存储。
+Prometheus 采用的是 pull 的方案，配置之后会按照规则定时获取 metrics 并存储到 TSDB 中，TSDB 可以序列化到本地（SSD 比较好）。
+
+** UI 显示
 
 Promethues 有自己的 Web UI，但是比较简陋。业内的做法是对接 Grafana 显示数据。Grafana 提供了丰富的 [[https://grafana.com/dashboards][Dashboards]]，直接导入即可。
 
-* 告警
+** 告警
 
 Grafana 自身是支持告警的，但是比较蛋疼的点在于告警规则不支持模板变量，那就约等于没有了···
 
 业内常用的做法是使用 Alertmanager，它提供了多种告警策略，甚至包含了 Webhook 的方式(自定义告警、对接自有的告警系统)。
+
+* 对接 Kubernetes
+
+Kubernetes 原生暴露了很多的集群（节点、Job、Ingress、Namespace 等）的 metric，具体可以看 [[https://github.com/kubernetes/kube-state-metrics/][kubernetes/kube-state-metrics]] 。
+
+[[https://github.com/google/cadvisor][google/cadvisor]] 对容器的资源使用情况（metric）进行暴露，是专门用来解决容器监控指标问题的。
+它可以对接多种存储，包括 Prometheus，暴露的指标、类型、描述、单位等在 [[https://github.com/google/cadvisor/blob/master/docs/storage/prometheus.md][Monitoring cAdvisor with Prometheus]] 有说明。
+
+[[https://github.com/google/cadvisor/blob/master/docs/runtime_options.md][cAdvisor 运行时选项]] 可作为配置参考，其中 ~--enable_load_reader=true~ 才能收集到 CPU 负载数据，否则都是 0。
