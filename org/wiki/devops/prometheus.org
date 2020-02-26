@@ -76,7 +76,6 @@ Prometheus 客户端库提供了四种核心的 Metric 类型。
 - [[https://github.com/prometheus/client_ruby][Ruby]]
 
 ** Jobs 和 instances
-
 在 Prometheus 术语中，获取 metric 的端点（endpoint）叫做 /instance（实例）/ ，通常对应一个单独的进程。
 具有相同 instance 目的的集合，比如进程的水平扩展多个实例，叫做 /job/ 。
 
@@ -107,7 +106,7 @@ Prometheus 客户端库提供了四种核心的 Metric 类型。
 
 =up= 时间序列对于实例可用性检测很有用。
 
-* Prometheus
+* TODO Prometheus
 ** TODO 开始
 ** TODO 安装
 ** TODO 配置
@@ -135,18 +134,18 @@ irate 和 rate 都只能和计数器（Counter）一起使用。因为两个计�
 
 irate 的计算方法为：
 
-#+BEGIN_SRC
+     #+BEGIN_SRC
 (2216-2205)/(1570868113.053-1570868098.053) = 0.7333333333333333
-#+END_SRC
+     #+END_SRC
 
 rate 的计算方法为：
 
-#+BEGIN_SRC
+     #+BEGIN_SRC
 (2216-2205)/(1570868113.053-1570868098.053) = 0.7333333333333333
 (2205-2204)/(1570868098.053-1570868083.053) = 0.06666666666666667
 (2204-2201)/(1570868083.053-1570868068.053) = 0.2
 (0.7333333333333333 + 0.06666666666666667 + 0.2) / 3 = 0.3333333333333333
-#+END_SRC
+     #+END_SRC
 
 /一开始对 TSDB 不是很了解的情况下，不自己算一下还是不是很好理解的。/
 
@@ -156,6 +155,343 @@ rate 的计算方法为：
 - rate 不会把数值中的毛刺直接暴露出来，通过平均值计算潜在的问题就是会有 _长尾问题_ 。
 
 选择 irate 还是 rate 视业务场景而定。
+*** HTTP API
+
+稳定的 API 都在 =/api/v1= 路径下。
+**** 格式
+
+回包格式是 JSON，每个成功的 API 状态码都是 =2xx= 。
+
+无效的 API 请求会返回 JSON 错误对象和 HTTP 响应码之一：
+
+- =400 Bad Request= 参数不存在或者错误
+- =422 Unprocessable Entity= 表达式不可被执行
+- =503 Service Unavailabl= 请求超时或者中断
+
+对于没有到达 API 端点（endpoint）之前的错误，返回其它的非 2xx 的代码。
+
+如果存在不会影响正常执行的错误，则会返回一系列的警告。成功执行的数据会返回在 data 字段。
+
+回包的 JSON 格式如下：
+
+#+begin_src js
+  {
+      "status": "success" | "error",
+      "data": <data>,
+
+      // Only set if status is "error". The data field may still hold
+      // additional data.
+      "errorType": "<string>",
+      "error": "<string>",
+
+      // Only if there were warnings while executing the request.
+      // There will still be data in the data field.
+      "warnings": ["<string>"]
+  }
+#+end_src
+
+输入的时间格式可以是：
+
+- [[https://www.ietf.org/rfc/rfc3339.txt][RFC3339]] 格式
+- Unix 秒级别的时间戳，可以带小数位
+
+输出的时间格式一般是 Unix 秒级别的时间戳。
+
+名字中重复的参数以 =[]= 方式展现。
+
+=<series_selector>= 是类似 =http_requests_total= 和 =http_requests_total{method=~"(GET|POST)"}= 这种格式的时间序列选择器的占位符，
+而且需要 URL-encoded。
+
+=<duration>=  是 =[0-9]+[smhdwy]= 格式的字符串的占位符，比如说 =5m= 表示持续 5 分钟。
+
+=<bool>= 是布尔值 =true= =false= 字符串的占位符。
+
+**** 表达式查询
+查询语言表达式可以在单个瞬间或者一段时间内求值。
+
+***** 瞬时查询
+
+下面两个 API 查询单个时间点的值：
+
+#+begin_src
+GET /api/v1/query
+POST /api/v1/query
+#+end_src
+
+查询参数：
+
+- ~query=<string>~ Prometheus 查询字符串
+- ~time=<rfc3339 | unix_timestamp>~ 时间戳，可选的。默认是当前时间戳
+- ~timeout=<duration>~ 超时时间，可选的。默认值是 =-query.timeout= 标识的值
+
+你可以使用 =POST= 方法配合 =Content-Type: application/x-www-form-urlencoded= 头实现请求 body 的 URL-encoded
+（当查询条件超过 URL 字符限制时很有用）。
+
+返回值中 =data= 有如下格式：
+
+#+begin_src js
+{
+  "resultType": "matrix" | "vector" | "scalar" | "string",
+  "result": <value>
+}
+#+end_src
+
+=<value>= 是查询数据，不同的 =resultType= 有不同的格式。 /下面的表达式查询结果格式中有详细说明。/
+
+下面的例子执行了 =up= 表达式在 =2015-07-01T20:10:51.781Z= ：
+
+#+begin_src
+$ curl 'http://localhost:9090/api/v1/query?query=up&time=2015-07-01T20:10:51.781Z'
+{
+   "status" : "success",
+   "data" : {
+      "resultType" : "vector",
+      "result" : [
+         {
+            "metric" : {
+               "__name__" : "up",
+               "job" : "prometheus",
+               "instance" : "localhost:9090"
+            },
+            "value": [ 1435781451.781, "1" ]
+         },
+         {
+            "metric" : {
+               "__name__" : "up",
+               "job" : "node",
+               "instance" : "localhost:9100"
+            },
+            "value" : [ 1435781451.781, "0" ]
+         }
+      ]
+   }
+}
+#+end_src
+
+***** 范围查询
+
+以下 API 查询一段时间内的范围数据：
+
+#+begin_src
+GET /api/v1/query_range
+POST /api/v1/query_range
+#+end_src
+
+查询参数：
+
+- ~query=<string>~ 查询表达式
+- ~start=<rfc3339 | unix_timestamp>~ 开始时间戳
+- ~end=<rfc3339 | unix_timestamp>~ 结束时间戳
+- ~step=<duration | float>~ 查询步长： =duration= 格式或者浮点数的秒
+- ~timeout=<duration>~ 超时时间，默认为 =-query.timeout= 的值
+
+请求方式和返回值格式与瞬时请求的相同，不再赘述。
+
+下面的例子查询了表达式 =up= 超过 30s 范围并且 15s 的步长的值：
+
+#+begin_src
+$ curl 'http://localhost:9090/api/v1/query_range?query=up&start=2015-07-01T20:10:30.781Z&end=2015-07-01T20:11:00.781Z&step=15s'
+{
+   "status" : "success",
+   "data" : {
+      "resultType" : "matrix",
+      "result" : [
+         {
+            "metric" : {
+               "__name__" : "up",
+               "job" : "prometheus",
+               "instance" : "localhost:9090"
+            },
+            "values" : [
+               [ 1435781430.781, "1" ],
+               [ 1435781445.781, "1" ],
+               [ 1435781460.781, "1" ]
+            ]
+         },
+         {
+            "metric" : {
+               "__name__" : "up",
+               "job" : "node",
+               "instance" : "localhost:9091"
+            },
+            "values" : [
+               [ 1435781430.781, "0" ],
+               [ 1435781445.781, "0" ],
+               [ 1435781460.781, "1" ]
+            ]
+         }
+      ]
+   }
+}
+#+end_src
+
+**** 查询元数据（metadata）
+***** 通过 label 匹配找到时间序列
+
+下面的 API 通过 label 找到匹配的时间序列列表：
+
+#+begin_src
+GET /api/v1/series
+POST /api/v1/series
+#+end_src
+
+URL 查询参数：
+
+- ~match[]=<series_selector>~ 重复的序列选择器列表，作为筛选条件。至少需要提供一个参数
+- ~start=<rfc3339 | unix_timestamp>~ 起始时间
+- ~end=<rfc3339 | unix_timestamp>~ 结束时间
+
+查询结果 =data= 由每个时间序列的 名称-值 对的目标组成。
+
+下面的例子返回所有匹配选择器 =up= 或者 ~process_start_time_seconds{job="prometheus"}~ 匹配的序列：
+
+#+begin_src
+$ curl -g 'http://localhost:9090/api/v1/series?' --data-urlencode 'match[]=up' --data-urlencode 'match[]=process_start_time_seconds{job="prometheus"}'
+{
+   "status" : "success",
+   "data" : [
+      {
+         "__name__" : "up",
+         "job" : "prometheus",
+         "instance" : "localhost:9090"
+      },
+      {
+         "__name__" : "up",
+         "job" : "node",
+         "instance" : "localhost:9091"
+      },
+      {
+         "__name__" : "process_start_time_seconds",
+         "job" : "prometheus",
+         "instance" : "localhost:9090"
+      }
+   ]
+}
+#+end_src
+
+***** 获取 label 名称
+下面 API 获取所有的 label 名称：
+
+#+begin_src
+GET /api/v1/labels
+POST /api/v1/labels
+#+end_src
+
+返回值 =data= 字段是一个字符串的 label 名称列表。下面是一个例子：
+
+#+begin_src
+$ curl 'localhost:9090/api/v1/labels'
+{
+    "status": "success",
+    "data": [
+        "__name__",
+        "call",
+        "code",
+        "config",
+        "dialer_name",
+        "endpoint",
+        "event",
+        "goversion",
+        "handler",
+        "instance",
+        "interval",
+        "job",
+        "le",
+        "listener_name",
+        "name",
+        "quantile",
+        "reason",
+        "role",
+        "scrape_job",
+        "slice",
+        "version"
+    ]
+}
+#+end_src
+
+***** 查询 label 值
+
+下面的 API 通过 =label_name= 返回所有的值列表：
+
+#+begin_src
+GET /api/v1/label/<label_name>/values
+#+end_src
+
+下面的例子查询所有的 =job= label 的值：
+
+#+begin_src
+$ curl http://localhost:9090/api/v1/label/job/values
+{
+   "status" : "success",
+   "data" : [
+      "node",
+      "prometheus"
+   ]
+}
+#+end_src
+
+**** 表达式查询结果格式
+表达式查询结果在 =data= 中的 =result= 属性中。JSON 不支持特殊的浮点值，比如 =NaN= =Inf= =-Inf= 等，
+所以会被转换成 JSON 字符串，而不是原数字。
+
+***** 范围向量（Range vectors）
+
+=matrix= 类型表示范围向量， =result= 属性格式如下：
+
+#+begin_src js
+[
+  {
+    "metric": { "<label_name>": "<label_value>", ... },
+    "values": [ [ <unix_time>, "<sample_value>" ], ... ]
+  },
+  ...
+]
+#+end_src
+
+***** 瞬间向量（Instant vectors）
+
+=vector= 类型表示瞬间向量， =result= 属性格式如下：
+
+#+begin_src js
+[
+  {
+    "metric": { "<label_name>": "<label_value>", ... },
+    "value": [ <unix_time>, "<sample_value>" ]
+  },
+  ...
+]
+#+end_src
+
+***** 标量（Scalars）
+
+=scalar= 类型表示标量， =result= 属性格式如下：
+
+#+begin_src js
+[ <unix_time>, "<scalar_value>" ]
+#+end_src
+
+***** 字符串（Strings）
+
+=string= 类型表示字符串， =result= 属性格式如下：
+
+#+begin_src js
+[ <unix_time>, "<string_value>" ]
+#+end_src
+
+**** TODO 目标（targets）
+**** TODO 规则（Rules）
+**** TODO 告警（Alerts）
+**** TODO 查询目标元数据
+**** TODO 查询 metric 元数据
+**** TODO Alertmanagers
+**** TODO 状态（status）
+**** TODO TSDB 管理 APIs
 ** TODO 存储
 ** TODO Federation
 ** TODO 管理 API
+* TODO 可视化
+* TODO Instrumenting
+* TODO Operating
+* TODO 告警（Alerting）
+* TODO 最佳实践
+* TODO 指南（GUIDES）
