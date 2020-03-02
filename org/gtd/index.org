@@ -1,6 +1,5 @@
 #+SETUPFILE: ~/site/tpl/link-tpl.org
 #+TITLE: Get Thing Done
-#+OPTIONS: html-postamble:nil
 #+OPTIONS: toc:nil
 
 * 如何制定计划

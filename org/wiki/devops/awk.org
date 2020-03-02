@@ -2,7 +2,7 @@
 #+TITLE: awk
 #+DATE: 2017-12-04 11:37:43
 
-** 工作方式
+* 工作方式
 
 awk 脚本结构: ~awk 'BEGIN{ statements } statements2 END{ statements }'~
 
@@ -31,7 +31,7 @@ seq 100 | awk '/13/,/15/'
 cat /etc/passwd| awk '/mai.*mail/,/news.*news/'
 #+END_SRC
 
-** 常用内建函数
+* 常用内建函数
 
 - ~index(string, search_string)~: 返回 search_string 在 string 中出现的位置
 - ~sub(regex, replacement_str, string)~: 将正则匹配到的第一处内容替换为 ~replacement_str~

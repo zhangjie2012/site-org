@@ -1,5 +1,4 @@
 #+SETUPFILE: ~/site/tpl/wiki-tpl.org
-#+OPTIONS: html-postamble:nil
 #+TITLE: Ubuntu
 #+DATE: 2018-09-10 21:39:56
 

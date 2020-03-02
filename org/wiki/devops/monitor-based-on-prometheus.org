@@ -1,5 +1,6 @@
 #+SETUPFILE: ~/site/tpl/wiki-tpl.org
-#+OPTIONS: html-postamble:nil
+
+
 #+TITLE: 基于 Prometheus 监控告警
 #+DATE: 2019-04-11 15:46
 

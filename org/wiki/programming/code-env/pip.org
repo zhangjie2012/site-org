@@ -1,5 +1,4 @@
 #+SETUPFILE: ~/site/tpl/wiki-tpl.org
-#+OPTIONS: html-postamble:nil
 #+TITLE: pip
 #+OPTIONS: toc:nil
 #+DATE: 2017-12-04 11:34:03

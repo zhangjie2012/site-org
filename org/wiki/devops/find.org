@@ -1,5 +1,4 @@
 #+SETUPFILE: ~/site/tpl/wiki-tpl.org
-#+OPTIONS: html-postamble:nil
 #+TITLE: find
 #+DATE: 2018-12-13 22:50
 

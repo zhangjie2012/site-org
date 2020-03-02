@@ -1,6 +1,5 @@
 #+SETUPFILE: ~/site/tpl/weekly-tpl.org
 #+TITLE: Weekly
-#+OPTIONS: html-postamble:nil
 #+OPTIONS: toc:nil
 
 * 2020

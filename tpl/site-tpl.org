@@ -1,4 +1,4 @@
-#+OPTIONS: html-link-use-abs-url:nil html-postamble:auto
+#+OPTIONS: html-link-use-abs-url:nil
 #+OPTIONS: html-preamble:t html-scripts:t html-style:t
 #+OPTIONS: html5-fancy:nil tex:t
 #+HTML_DOCTYPE: xhtml-strict
@@ -12,8 +12,7 @@
 #+HTML_HEAD_EXTRA: <link rel="stylesheet" type="text/css" href="/static/site.css"/>
 #+INFOJS_OPT:
 #+CREATOR: <a href="https://www.gnu.org/software/emacs/">Emacs</a> 26.2 (<a href="https://orgmode.org">Org</a> mode 9.1.9)
-##+OPTIONS: num:nil
 #+LANGUAGE: zh
 #+EMAIL: me@zhangjiee.com
 #+AUTHER: JerryZhang
-#+OPTIONS: timestamp:nil date:t
+#+OPTIONS: date:t

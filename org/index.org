@@ -1,6 +1,5 @@
 #+SETUPFILE: ~/site/tpl/link-tpl.org
 #+TITLE: JerryZhang
-#+OPTIONS: html-postamble:nil
 #+OPTIONS: toc:nil
 #+OPTIONS: num:nil
 

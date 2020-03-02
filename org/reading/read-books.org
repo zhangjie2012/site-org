@@ -1,6 +1,5 @@
 #+SETUPFILE: ~/site/tpl/link-tpl.org
 #+TITLE: 读过的书
-#+OPTIONS: html-postamble:nil
 #+OPTIONS: toc:t
 #+OPTIONS: num:n
 

@@ -1,5 +1,4 @@
 #+SETUPFILE: ~/site/tpl/wiki-tpl.org
-#+OPTIONS: html-postamble:nil
 #+TITLE: DevOps - 日志收集
 #+DATE: 2019-04-11 15:48
 

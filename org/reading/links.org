@@ -1,6 +1,5 @@
 #+SETUPFILE: ~/site/tpl/link-tpl.org
 #+TITLE: Links
-#+OPTIONS: html-postamble:nil
 #+OPTIONS: toc:t
 #+OPTIONS: num:n
 
