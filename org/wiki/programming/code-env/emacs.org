@@ -74,6 +74,50 @@ Emacs 几乎所有的快捷键都是以 ~C-~ 开始的，也是 Emacs 令人诟�
 
 每个初学者建议先阅读 Emacs 的 ~help-with-tutorial~ （ =C-h t= ）。走一遍，基本上就可以流畅的操作 Emacs 了。
 
+** 包安装与管理
+
+因为某些原因官方的 elpa 源无法使用怎么办？ 可使用清华大学提供了 elpa 镜像源：[[https://mirror.tuna.tsinghua.edu.cn/help/elpa/][https://mirror.tuna.tsinghua.edu.cn/help/elpa/]] 。替代下面的：
+
+#+BEGIN_SRC emacs-lisp
+(setq package-archives
+      '(
+        ("gnu" . "https://elpa.gnu.org/packages/")
+        ("melpa" . "https://melpa.org/packages/")
+        ("melpa-stable" . "https://stable.melpa.org/packages/")
+        ("org" . "https://orgmode.org/elpa/")
+        ))
+#+END_SRC
+
+=melpa= 一般是最新的（daily build），支持最新的特性当然也不稳定； =melpa-stable= 对应的是正式版，如果没有很大的折腾劲的话，建议使用 stable。
+
+如果有代理的话，可以设置 HTTP 代理：
+
+#+BEGIN_SRC emacs-lisp
+(setq url-proxy-services
+      '(
+        ("http" . "127.0.0.1:1080")
+        ("https" . "127.0.0.1:1080")
+        ))
+#+END_SRC
+
+或者 Emacs 启动时添加 =http_proxy= 。比如 =http_proxy=http://127.0.0.1:1080 emacs= 。
+
+我使用 [[https://github.com/jwiegley/use-package][use-package]] 来简化和规范包的配置，因为源不统一，经常会遇到包依赖问题，比如 [[https://github.com/abo-abo/swiper/issues/2087][issues#2087]]；
+还有时会遇到有的包想用稳定版本，有的包想用最新版本的情况。所以在配置的时候，通过 =(setq use-package-always-pin t)= 规范 use-package，
+强制显式指定源，这样可以满足更多的个性化需求。比如：
+
+#+begin_src emacs-lisp
+(use-package swiper
+  :pin melpa
+  :ensure t
+  :config
+  (global-set-key (kbd "C-s") 'swiper)
+  (global-set-key (kbd "M-s .") 'swiper-isearch-thing-at-point)
+  )
+#+end_src
+
+上面的 =pin= 可以设置为 =package-archives= 列表中的值。
+
 * 插件推荐
 
 Emacs 有很多的 [[http://melpa.org][插件]]，[[https://github.com/emacs-tw/awesome-emacs][awesome-emacs]] 是按照分类整理的。下面列一下我正在使用的插件以及一些说明：
@@ -227,15 +271,30 @@ Emacs 有很多的 [[http://melpa.org][插件]]，[[https://github.com/emacs-tw/
 | =C-x v P= | git push，svn push |
 |-----------+--------------------|
 
-** org-mode
+** Org Mode
    :PROPERTIES:
    :CUSTOM_ID: manual-org-mode
    :END:
 
 [[https://orgmode.org/][org-mode]] 是 Emacs 最强力的插件，没有之一。可以用来做 GTD，博客/Wiki工具，写书，写论文等。
+orgmode 是 emacs 自带的 package，但是一般自带的版本比较低。更新到最新版本的办法：
+
+将 =("org" . "https://orgmode.org/elpa/")= 添加到 =package-archives= 中，然后：
+
+#+begin_src emacs-lisp
+  (use-package org
+    :pin org
+    :ensure org-plus-contrib
+    )
+#+end_src
+
+注意是 =org-plus-contrib= ，而不是 =org= 。
+
+常用快捷键：
 
 |-------------+--------------------------------------------------------------|
 | 快捷键      | 功能                                                         |
+|-------------+--------------------------------------------------------------|
 | =C-c C-e=   | Export or Publish                                            |
 | =C-c C-l=   | 插入链接等                                                   |
 | =C-c '=     | 在另外一个窗口编辑：代码，表格，公式等                       |
@@ -243,6 +302,8 @@ Emacs 有很多的 [[http://melpa.org][插件]]，[[https://github.com/emacs-tw/
 | =C-c C-o=   | 打开当前链接 ~org-open-at-point~                             |
 | =C-c C-,=   | 插入结构化模板（类似代码，引用等），orgmode 9.2 版本之后支持 |
 |-------------+--------------------------------------------------------------|
+
+扩展：
 
 - [[file:../../../blog/2019/build-site-with-org-mode.org][使用 org-mode 搭建网站]]
 - [[file:../../../blog/2019/emacs-slice.org][Emacs 基于 org-reveal 做幻灯片]]
@@ -325,39 +386,6 @@ Ubuntu GUI 无法切换搜狗输入法，与默认的 Mark 快捷键冲突，解
 
 试了一下 [[https://github.com/whorusq/sublime-text-3/blob/master/fonts/Microsoft-Yahei-Mono.ttf][Microsoft YaHei Mono]]，发现效果要比文泉驿要好很多，中文还挺好看。决定终端和 GUI 都使用一段时间。
 
-** 包安装问题（如何设置代理）
-
-因为某些原因官方的 elpa 源无法使用怎么办？ 如果没有 FQ 的环境，使用清华大学提供了 elpa 镜像源：[[https://mirror.tuna.tsinghua.edu.cn/help/elpa/][https://mirror.tuna.tsinghua.edu.cn/help/elpa/]]
-
-包依赖问题导致安装失败，函数不存在等问题，怎么解决？ 这种情况一般是因为依赖的包版本有问题，当安装时存在多个源时，不管源之间的同步速度有多快，
-总会有版本滞后的问题。所以，安装时尽可能只选一个同一个源，比如：
-
-#+BEGIN_SRC emacs-lisp
-(setq package-archives
-      '(
-        ("gnu" . "https://elpa.gnu.org/packages/")
-        ("melpa" . "https://melpa.org/packages/")
-        ("melpa-stable" . "https://stable.melpa.org/packages/")
-        ))
-#+END_SRC
-
-如果发现类似问题， ~melpta~ 和 ~melpta-stable~ 只保留一个，一般能解决此问题。之前在安装 helm 的时候经常遇到依赖有问题，
-刚才（2019-05-31）安装 ivy 也遇到了类似的问题，给 github ivy 提了一个 [[https://github.com/abo-abo/swiper/issues/2087][issue]] 才解决了这个问题（社区的力量真强大）。
-
-另外一种办法就是设置代理，可以可以在配置文件中设置 proxy ：
-
-#+BEGIN_SRC emacs-lisp
-(setq url-proxy-services
-      '(
-        ("http" . "127.0.0.1:1080")
-        ("https" . "127.0.0.1:1080")
-        ))
-#+END_SRC
-
-或者 Emacs 启动时添加 =http_proxy= 。比如 =http_proxy=http://127.0.0.1:1080 emacs=
-
-<2020-03-03 11:26 Tue> 更新： =melpa= 一般是最新的（daily build），支持最新的特性当然也不稳定； =melpa-stable= 对应的是正式版，如果没有 /很大/ 的折腾劲的话，建议使用 stable。
-
 ** 如何去掉空白字符
 
 + ~M-\~ ：删除光标周围的空格和 tab
@@ -413,10 +441,14 @@ Emacs 的快捷键非常多，但是除了基本的编辑操作快捷键之外�
 2. ~M-x reverse-region~
 
 * Troubleshooting
-
 ** 安装 lsp-mode 报错 spinner-1.7.3 is unavailable？
 
 spinner 在 =gnu= 中，确保 =package-archives= 中包含 =https://elpa.gnu.org/packages/= 。
+
+** lsp go: Suspicious state fromsyntax checker go-vet ?
+
+错误是由 flycheck 报出来的，高于 1.12 的 Go =go vet= 已被废弃，而是使用 =go tool vet= 代替。 flycheck 最新稳定的版本还停留在 =Flycheck 31= 支持到 go1.11 。
+解决办法是要么升级 flycheck，使用 =melpa= 源，不要用 =melpa-stable= 即可 [fn:2]。
 
 * Resource
 ** Blog/Site/Tutorial
@@ -446,6 +478,8 @@ spinner 在 =gnu= 中，确保 =package-archives= 中包含 =https://elpa.gnu.or
 - [[https://jessekelly881-imagine.surge.sh][Imagine]]: 范例 [[https://jessekelly.tk/][Jesse Kelly]]
 - [[https://jessekelly881-rethink.surge.sh][Rethink]]
 
+* Footnotes
+
 [fn:md-to-org] https://emacs.stackexchange.com/questions/5465/how-to-migrate-markdown-files-to-emacs-org-mode-format
 
 [fn:1] https://stackoverflow.com/questions/52722096/build-emacs-and-gnutls-not-found
@@ -453,3 +487,5 @@ spinner 在 =gnu= 中，确保 =package-archives= 中包含 =https://elpa.gnu.or
 [fn:package-actived-list] https://stackoverflow.com/questions/13866848/how-to-save-a-list-of-all-the-installed-packages-in-emacs-24
 
 [fn:sorting-headings-in-an-org-file] https://emacs.stackexchange.com/questions/30547/sort-list-by-checked-unchecked-state
+
+[fn:2] https://github.com/hlissner/doom-emacs/issues/1225
