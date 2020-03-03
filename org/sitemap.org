@@ -235,7 +235,6 @@
     - [[file:wiki/devops/ubuntu.org][Ubuntu]]
     - [[file:wiki/devops/awk.org][awk]]
     - [[file:wiki/devops/cron.org][crontab]]
-    - [[file:wiki/devops/curl.org][curl]]
     - [[file:wiki/devops/find.org][find]]
     - [[file:wiki/devops/nginx.org][nginx]]
     - [[file:wiki/devops/rsync.org][rsync]]
