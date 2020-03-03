@@ -1,7 +1,12 @@
 #+SETUPFILE: ~/site/tpl/wiki-tpl.org
 #+TITLE: wiki
 
-* 操作系统
+* 桌面系统
+
+- [[file:desktop/ubuntu.org][Ubuntu]]
+- [[file:desktop/linux-mint.org][Linux Mint]]
+
+* 操作系统理论
 
 - [[file:os/epoll.org][I/O 多路复用]]
 - [[file:os/difference-between-multicore-and-multiprocessor.org][多核和多处理器的区别]]: 多核是一个 CPU 有多个处理单元（core），多处理器是多个 CPU。现在计算机支持多个处理器，并且每个处理器有多个核。
@@ -32,7 +37,7 @@
 
 - 基础命令 :: [[file:devops/awk.org][awk]]，[[file:devops/sed.org][sed]]，[[file:devops/tar.org][tar]]，[[file:devops/rsync.org][rsync]]，[[file:devops/cron.org][crontab]]，[[file:devops/find.org][find]]，[[file:devops/process-mgr.org][进程管理]]，[[file:devops/ssh.org][SSH]]
 - 配置 :: [[file:devops/ps1.org][PS1]]
-- 操作系统 :: [[file:devops/ubuntu.org][Ubuntu]]，[[file:devops/ops-faq.org][系统 FAQ]]
+- 操作系统 :: [[file:devops/ops-faq.org][运维 FAQ]]
 - 系统管理 :: [[file:devops/systemd.org][systemd]] 和 [[file:devops/journalctl.org][journalctl]]
 
 ** 中间件

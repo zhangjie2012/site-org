@@ -1,0 +1,41 @@
+#+SETUPFILE: ~/site/tpl/wiki-tpl.org
+#+TITLE: Linux Mint
+#+DATE: 2020-03-03 20:28:21
+
+系统版本： =Linux Mint 19.3=
+
+* 安装
+
+Dell 电脑安装时没有盘符可选，点击加号报错 ="None" type objects is not subscriptable= 。解决办法是 F12 进 BIOS SATA 设置从 RAID ON 改为 AHCI。
+
+* 软件源
+
+进入 Software Sources， *Mirrors* 可以按照位置选择最佳的源，我统一用的清华大学的。
+
+* FQ (SSR)
+
+https://github.com/qingshuisiyuan/electron-ssr-backup
+
+* 常用软件
+
+** 中文输入法
+
+1. =System setting= -> =Input method= -> =Simplified Chinese= -> logout/login
+2. 安装 [[https://pinyin.sogou.com/linux/?r=pinyin][搜狗拼音输入法]]
+3. 重启电脑 /很重要/
+4. fcitx-configuration，点加号，勾掉 "Only Show Current Language"，选择搜狗拼音
+
+** 字体
+
+** Thunderbird
+
+[[https://service.exmail.qq.com/cgi-bin/help?subtype=1&id=28&no=1000585][腾讯企业邮箱配置]]
+
+** Chrome
+
+https://www.google.com/intl/zh-CN/chrome/ 点击下载，选择 64 位 deb 即可。
+
+* 心得
+
+使用 Linux 发行版（无论是什么系列的），核心的东西就在命令行，不要想着应用软件有多好用，跟 Windows/MacOS 是没有可比性的。
+但是换来的是绝对的清静和专注。
