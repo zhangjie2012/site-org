@@ -31,12 +31,11 @@
 下载源码：[[http://mirrors.ustc.edu.cn/gnu/emacs/][http://mirrors.ustc.edu.cn/gnu/emacs/]]
 
 #+BEGIN_SRC shell
-apt install make
-apt install gcc
+apt install make gcc g++ autoconf
 apt-get install build-essential texinfo libx11-dev libxpm-dev libjpeg-dev libpng-dev libgif-dev libtiff-dev libgtk2.0-dev libncurses-dev
 ./autogen.sh
 ./configure
-make -j2
+make -j4
 sudo make install
 #+END_SRC
 

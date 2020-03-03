@@ -27,6 +27,8 @@ https://github.com/qingshuisiyuan/electron-ssr-backup
 
 ** 字体
 
+- Jetbrains Mono
+- Microsoft-Yahei-Mono
 ** Thunderbird
 
 [[https://service.exmail.qq.com/cgi-bin/help?subtype=1&id=28&no=1000585][腾讯企业邮箱配置]]
