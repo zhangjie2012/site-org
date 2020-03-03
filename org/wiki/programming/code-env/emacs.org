@@ -341,7 +341,7 @@ Ubuntu GUI 无法切换搜狗输入法，与默认的 Mark 快捷键冲突，解
         ))
 #+END_SRC
 
-如果发现类似问题，可以注释掉其中的两个，只保留一个，比如 ~melpta-stable~ ，一般能解决此问题。之前在安装 helm 的时候经常遇到依赖有问题，
+如果发现类似问题， ~melpta~ 和 ~melpta-stable~ 只保留一个，一般能解决此问题。之前在安装 helm 的时候经常遇到依赖有问题，
 刚才（2019-05-31）安装 ivy 也遇到了类似的问题，给 github ivy 提了一个 [[https://github.com/abo-abo/swiper/issues/2087][issue]] 才解决了这个问题（社区的力量真强大）。
 
 另外一种办法就是设置代理，可以可以在配置文件中设置 proxy ：
@@ -355,6 +355,8 @@ Ubuntu GUI 无法切换搜狗输入法，与默认的 Mark 快捷键冲突，解
 #+END_SRC
 
 或者 Emacs 启动时添加 =http_proxy= 。比如 =http_proxy=http://127.0.0.1:1080 emacs=
+
+<2020-03-03 11:26 Tue> 更新： =melpa= 一般是最新的（daily build），支持最新的特性当然也不稳定； =melpa-stable= 对应的是正式版，如果没有 /很大/ 的折腾劲的话，建议使用 stable。
 
 ** 如何去掉空白字符
 
@@ -409,6 +411,12 @@ Emacs 的快捷键非常多，但是除了基本的编辑操作快捷键之外�
 ** 行逆序排序
 1. ~M-x sort-lines~
 2. ~M-x reverse-region~
+
+* Troubleshooting
+
+** 安装 lsp-mode 报错 spinner-1.7.3 is unavailable？
+
+spinner 在 =gnu= 中，确保 =package-archives= 中包含 =https://elpa.gnu.org/packages/= 。
 
 * Resource
 ** Blog/Site/Tutorial
