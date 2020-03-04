@@ -29,11 +29,22 @@ Dell 电脑安装时没有盘符可选，点击加号报错 ="None" type objects
 3. 重启电脑 /很重要/
 4. fcitx-configuration，点加号，勾掉 "Only Show Current Language"，选择搜狗拼音
 
-** 代码编辑器：Emacs
+** SNS
 
-源码安装，具体见 [[file:../programming/code-env/emacs.org][Emacs]] 中的安装小节。
+- Telegram：通过软件中心可直接安装
+
+** 编码环境
+
+- [[https://ohmyz.sh/][Oh My ZSH]]
+  1. =apt install zsh=
+  2. =chsh -s $(which zsh)= /要登出，然后再登录才能生效/
+  3. =sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"=
+- Git: =apt intall git= [[file:~/site/org/wiki/programming/code-env/git.org][git wiki]]
+- Emacs: 源码安装，具体见 [[file:../programming/code-env/emacs.org][Emacs]] 中的安装小节。
 
 ** 字体
+
+=sudo apt install language-pack-zh-hans= 安装中文字体。
 
 - Jetbrains Mono: 终端
 - Microsoft-Yahei-Mono: Emacs GUI
