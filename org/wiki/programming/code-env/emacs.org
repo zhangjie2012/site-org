@@ -24,9 +24,9 @@
 
 * 基础
 ** 安装 Emacs
-*** Ubuntu
+*** Ubuntu/Linux Mint
 
-直接使用系统的包管理工具安装的 Emacs 版本都很低，推荐使用源码安装，当前最新的版本是 26.3。源码编译安装即可。下面是 Ubuntu 18.04 上安装流程：
+直接使用系统的包管理工具安装的 Emacs 版本都很低，推荐使用源码安装，当前最新的版本是 26.3。源码编译安装即可。下面是 Linux Mint 19 上安装流程：
 
 下载源码：[[http://mirrors.ustc.edu.cn/gnu/emacs/][http://mirrors.ustc.edu.cn/gnu/emacs/]]
 
