@@ -15,7 +15,7 @@ Dell 电脑安装时没有盘符可选，点击加号报错 ="None" type objects
 * 常用软件
 ** FQ (SSR)
 
-1. https://github.com/qingshuisiyuan/electron-ssr-backup 设置订阅源，然后更新
+1. https://github.com/shadowsocksrr/electron-ssr 设置订阅源，然后更新
 2. 开启全局代理
 3. Chrome 安装 SwitchyOmega 并设置，规则列表网址： =https://raw.githubusercontent.com/gfwlist/gfwlist/master/gfwlist.txt=
 4. 关闭全局代理

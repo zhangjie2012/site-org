@@ -206,6 +206,9 @@
     - [[file:wiki/database/mongodb.org][MongoDB]]
     - [[file:wiki/database/mysql.org][MySQL]]
     - [[file:wiki/database/redis.org][Redis]]
+  - desktop
+    - [[file:wiki/desktop/linux-mint.org][Linux Mint]]
+    - [[file:wiki/desktop/ubuntu.org][Ubuntu]]
   - devops
     - [[file:wiki/devops/log.org][DevOps - 日志收集]]
     - [[file:wiki/devops/docker-tutorial.org][Docker 学习笔记]]
@@ -232,7 +235,6 @@
     - [[file:wiki/devops/ps1.org][PS1]]
     - [[file:wiki/devops/prometheus.org][Prometheus]]
     - [[file:wiki/devops/ssh.org][SSH]]
-    - [[file:wiki/devops/ubuntu.org][Ubuntu]]
     - [[file:wiki/devops/awk.org][awk]]
     - [[file:wiki/devops/cron.org][crontab]]
     - [[file:wiki/devops/find.org][find]]

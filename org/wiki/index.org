@@ -72,7 +72,7 @@
 ** 监控告警
 
 - TSDB：[[file:devops/prometheus.org][Prometheus]]
-- [[file:devops/monitor-base-on-promethues.org][基于 Prometheus 的监控告警]]
+- [[file:devops/monitor-based-on-promethues.org][基于 Prometheus 的监控告警]]
 - [[file:devops/grafana.org][Grafana]] 开源的监控平台
 
 ** 日志
