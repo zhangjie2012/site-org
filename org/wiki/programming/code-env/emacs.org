@@ -456,7 +456,11 @@ spinner 在 =gnu= 中，确保 =package-archives= 中包含 =https://elpa.gnu.or
 + [[https://planet.emacslife.com/][Planet Emacslife]]：Emacs 百科全书，大杂烩
 + [[https://emacsthemes.com/][Emacs Themes]]：主题集合
 + [[http://oremacs.com/][oremacs]]
-+ [[https://www.youtube.com/watch?v=cod2ABxlrV8&list=PL9KxKa8NpFxIcNQa9js7dQQIHc81b0-Xg&index=9][using emacs]]：youtube 视频
+
+** Media
+
+- [[https://cestlaz.github.io/stories/emacs/][Using Emacs Series]]：cestlaz 的使用 Emacs 系列，偏向于插件介绍。
+- [[https://www-users.cs.umn.edu/~kauffman/tooltime/][ToolTime]] 前两节是讲 Emacs 的，理论+实践，有视频还有配套的 PPT，一般的资料都是讲什么用，而这个课程讲了为什么是这样，由浅入深；非常推荐。
 
 ** Article
 
