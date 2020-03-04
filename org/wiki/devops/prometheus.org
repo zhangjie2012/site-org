@@ -317,6 +317,39 @@ Prometheus 客户端库提供了四种核心的 Metric 类型。
 ** TODO 安装
 ** TODO 配置
 ** 查询
+*** 基础（Basic）
+
+Prometheus 提供了叫做 PromQL 的查询语言，允许用户来选择和汇总时间序列数据。
+表达式的执行结果数据以表格的方式显示，在浏览器上显示图形；或者外部系统通过 HTTP API 来调用。
+
+**** 表达语言的数据类型
+
+Prometheus 表达语言中，一个表达式或者子表达式可以计算为以下四中类型之一：
+
+- *瞬时向量* 一组时间序列，每个时间序列包含一个样本，所有的样本有相同的时间戳；
+- *范围向量* 一组时间序列，每个时间序列包含多个时间序列样本；
+- *标量（Scalar）* 一个简单的浮点型值；
+- *字符串（String）* 一个字符串值，当前未使用；
+
+返回值类型是由查询表达式决定的，比如瞬时向量是可以直接被绘制成图形的。
+
+**** 字面（Literals）
+
+***** 字符串字面（String literals）
+
+可以在单引号、双引号、反引号中包含的字符串为字符串字面值。
+
+PromQL 可以像 Go 一样进行 [[https://golang.org/ref/spec#String_literals][规则转义]]。单引号或者双引号可以使用 =\= 进行转义。反引号内不会字符不会进行任何转义。
+与 Go 不同 Prometheus 不会在反引号内丢弃换行符。比如：
+
+#+begin_src
+"this is a string"
+'these are unescaped: \n \\ \t'
+`these are not unescaped: \n ' " \t`
+#+end_src
+
+https://prometheus.io/docs/prometheus/latest/querying/basics/
+
 *** 函数（Functions）
 **** irate 与 rate
 
