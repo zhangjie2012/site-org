@@ -1,6 +1,10 @@
 #+SETUPFILE: ~/site/tpl/weekly-tpl.org
 #+TITLE: 2020 Q1
 
+* 2020-03-04 20:08:07 Tue
+
+即日起，All in Linux mint，没别的，Just for fun。
+
 * 2020-03-03 11:17:16 Tue
 
 再也不乱升级 Emacs package 了，一早上时间没了。全部回退到 stable 版本了。

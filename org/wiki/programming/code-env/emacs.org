@@ -456,7 +456,6 @@ spinner 在 =gnu= 中，确保 =package-archives= 中包含 =https://elpa.gnu.or
 + [[https://planet.emacslife.com/][Planet Emacslife]]：Emacs 百科全书，大杂烩
 + [[https://emacsthemes.com/][Emacs Themes]]：主题集合
 + [[http://oremacs.com/][oremacs]]
-+ [[http://melpa.org/][melpa]] 插件集合
 + [[https://www.youtube.com/watch?v=cod2ABxlrV8&list=PL9KxKa8NpFxIcNQa9js7dQQIHc81b0-Xg&index=9][using emacs]]：youtube 视频
 
 ** Article
