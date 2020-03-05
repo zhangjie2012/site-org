@@ -2,17 +2,21 @@
 #+TITLE: tar
 #+DATE: 2017-12-26 13:07:19
 
-** tar
+* tar
 
 + 打包: ~tar cvf filename.tar filename~
 + 解包: ~tar xvf filename.tar~
 
-** gz
+* gz
 
 + 解压: ~gunzip filename.gz~ 或者 ~gzip -d filename.tar~
 + 压缩: ~gzip filename~
 
-** tar.gz tgz
+* tar.gz tgz
 
 + 解压: ~tar zxvf filename.tar.gz~
 + 压缩: ~tar zcvf filename.tar.gz filename~
+
+* tar.xz
+
+=tar -xvJf filename.tar.xz=
