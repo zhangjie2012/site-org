@@ -40,6 +40,12 @@ Dell 电脑安装时没有盘符可选，点击加号报错 ="None" type objects
   2. =chsh -s $(which zsh)= /要登出，然后再登录才能生效/
   3. =sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"=
 - Git: =apt intall git= [[file:~/site/org/wiki/programming/code-env/git.org][git wiki]]
+- Vim
+  #+begin_src
+  apt install vim
+  git clone git@github.com:zhangjie2012/dotfiles.git .dotfiles
+  ln -s .dotfiles/_vimrc .vimrc
+  #+end_src
 - Emacs: 源码安装，具体见 [[file:../programming/code-env/emacs.org][Emacs]] 中的安装小节。
 
 ** 字体
