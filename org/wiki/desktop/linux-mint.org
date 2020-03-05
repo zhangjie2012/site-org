@@ -47,6 +47,10 @@ Dell 电脑安装时没有盘符可选，点击加号报错 ="None" type objects
   ln -s .dotfiles/_vimrc .vimrc
   #+end_src
 - Emacs: 源码安装，具体见 [[file:../programming/code-env/emacs.org][Emacs]] 中的安装小节。
+- [[https://github.com/ggreer/the_silver_searcher][ag]] 比 grep, ack 快的搜索工具 =apt install silversearcher-ag=
+- [[https://github.com/wting/autojump][autojump]] 控制台目录快速跳转 =apt install autojump=
+  因为用的是 zsh，所以要在 =.zshrc= 中添加 =plugins=(autojump)=
+- Docker =apt install docker.io= ，然后设置 Mirror 为 =https://dockerhub.azk8s.cn/=
 
 ** 字体
 
