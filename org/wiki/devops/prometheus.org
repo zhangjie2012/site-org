@@ -334,7 +334,6 @@ Prometheus 表达语言中，一个表达式或者子表达式可以计算为以
 返回值类型是由查询表达式决定的，比如瞬时向量是可以直接被绘制成图形的。
 
 **** 字面（Literals）
-
 ***** 字符串字面（String literals）
 
 可以在单引号、双引号、反引号中包含的字符串为字符串字面值。
@@ -348,8 +347,22 @@ PromQL 可以像 Go 一样进行 [[https://golang.org/ref/spec#String_literals][
 `these are not unescaped: \n ' " \t`
 #+end_src
 
-https://prometheus.io/docs/prometheus/latest/querying/basics/
+***** 浮点字面（Float literals）
 
+标量的浮点值可以被写为以下形式的数字： =[-](digits)[.(digits)]= 。
+
+#+begin_src
+-2.43
+#+end_src
+
+**** TODO 时间序列选择器
+***** 瞬时向量选择器
+瞬时向量允许在给定的时间戳下选择一组时间序列和每个样本的样本值：在最简单的形式中，仅制定度量名称。
+这会产生一个瞬时向量，和包含该度量名称（metric name）的所有时间序列元素。
+**** TODO 子查询
+**** TODO 函数
+**** TODO 注释
+**** TODO 陷阱（Gotchas）
 *** 函数（Functions）
 **** irate 与 rate
 
