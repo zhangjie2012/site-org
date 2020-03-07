@@ -65,7 +65,7 @@ Registry => Repositories => Tags = Image
   }
 #+END_SRC
 
-重启： ~service docker restart~ ，查看信息： ~docker version~ 。
+重启： ~service docker restart~ ，查看信息： ~docker info~ 。
 
 * 镜像操作
 
