@@ -6,9 +6,15 @@
 
 * 设置国内源
 
+手动设置：
+
 1. [[https://mirror.tuna.tsinghua.edu.cn/help/ubuntu/]]
 2. =apt update=
 3. =apt upgrade=
+
+自动选择：
+
+软件和更新 -> Ubuntu 软件 -> 下载自 -> 选一个国内的镜像源
 
 * Ubuntu 18.04 快捷键
 
@@ -100,6 +106,20 @@ export http_proxy="http://127.0.0.1:8123" export https_proxy="http://127.0.0.1:8
 - SNS
   + Telegram =apt install telegram-desktop=
 - Docker
+
+* GNOME 美化
+
+安装工具：
+
+#+begin_src shell
+sudo apt install gnome-tweaks
+sudo apt install gnome-tweak-tool
+sudo apt install chrome-gnome-shell
+#+end_src
+
+https://extensions.gnome.org/ 比较实用的几个扩展插件： Dash to Dock、OpenWeather、Netspeed
+
+重启 GNOME tips： =Alt+F2 -> r=
 
 * 几种桌面对比
    :PROPERTIES:
