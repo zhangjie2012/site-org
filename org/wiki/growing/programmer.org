@@ -2,8 +2,6 @@
 #+TITLE: 技术人
 #+DATE: 2019-06-02 17:28:49
 
-Linux 发行版相关软件见 [[file:~/site/org/wiki/desktop/linux-mint.org][Linux Mint]] 。
-
 * 办公硬件
 
 + 耳机
@@ -42,6 +40,8 @@ Linux 发行版相关软件见 [[file:~/site/org/wiki/desktop/linux-mint.org][Li
   - [[https://www.jetbrains.com/lp/mono/][Jetbrains Mono]]
 + 包管理工具
   - [[https://brew.sh/][Homebrew]]：The missing package manager for macOS
++ 命令行搜索
+  - [[https://github.com/ggreer/the_silver_searcher][ag]]
 + 版本管理
   - git
 + SSH 连接工具 & 终端模拟器
@@ -66,6 +66,7 @@ Linux 发行版相关软件见 [[file:~/site/org/wiki/desktop/linux-mint.org][Li
 + UML
   - Mac 平台下的 WPS 支持画图，很好用
   - Windows 下当然是 Visio 啦，各种在线的都感觉不好用
++ Docker
 
 * 工具软件
 ** 公有云
