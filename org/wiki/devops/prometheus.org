@@ -4,6 +4,8 @@
 
 基于 [[https://prometheus.io/docs/introduction/overview/][官方文档]] 的笔记，根据个人使用场景有些侧重点。
 
+需要边看边练习的话，可以用自己的主机搭建一个临时的监控平台，可参考 [[file:monitor-based-on-prometheus.org][基于 Promethetheus 监控告警]] 中的示例。
+
 * 引言（Introduction） [4/7]
 ** TODO 概览
 ** TODO 第一步

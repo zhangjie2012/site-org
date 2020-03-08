@@ -107,6 +107,10 @@ export http_proxy="http://127.0.0.1:8123" export https_proxy="http://127.0.0.1:8
   + Telegram =apt install telegram-desktop=
 - Docker
 
+微信：
+
+http://www.ubuntukylin.com/applications/24-cn.html
+
 * GNOME 美化
 
 安装工具：

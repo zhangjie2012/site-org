@@ -30,6 +30,8 @@ Grafana 自身是支持告警的，但是比较蛋疼的点在于告警规则不
 
 业内常用的做法是使用 Alertmanager，它提供了多种告警策略，甚至包含了 Webhook 的方式(自定义告警、对接自有的告警系统)。
 
+** TODO 示例：本机系统监控平台搭建
+
 * 对接 Kubernetes
 
 Kubernetes 原生暴露了很多的集群（节点、Job、Ingress、Namespace 等）的 metric，具体可以看 [[https://github.com/kubernetes/kube-state-metrics/][kubernetes/kube-state-metrics]] 。
