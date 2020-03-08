@@ -2,7 +2,7 @@
 #+TITLE: Ubuntu
 #+DATE: 2018-09-10 21:39:56
 
-系统版本： =Ubuntu 18.04=
+系统版本： =Xubuntu 18.04=
 
 * 设置国内源
 
@@ -15,17 +15,6 @@
 自动选择：
 
 软件和更新 -> Ubuntu 软件 -> 下载自 -> 选一个国内的镜像源
-
-* Ubuntu 18.04 快捷键
-
-- =Super= 打开活动菜单，然后可以搜索应用程序、查看正在运行的 GUI 程序、切换工作区
-- =Super + L= 锁屏
-- =Super + D= 显示桌面
-- =Super + A= 显示应用程序菜单
-- =Super + Tab= 在运行的的应用程序之间切换， =Super + `= 在实例之间切换
-- =Super + 箭头= 移动窗口位置，左分屏，又分屏，全屏幕等
-- =Super + M= 切换到通知栏
-- =Super + 空格= 多种输入法切换
 
 * 代理
 
@@ -139,7 +128,24 @@ https://extensions.gnome.org/ 比较实用的几个扩展插件： Dash to Dock�
 
 资源消耗和 UI 体验成正比，GNOME 3 和 KDE 差不太多，其次是 LXQT，Xfce 体验最差，但是占用资源的确少，而且快。
 
-/不想再尝试桌面版了，还是老老实实的用 GNOME3，后面有了本子玩玩其它发行版。/
+<2020-03-08 13:13:22 日>
+
+GNOME 太不稳定了，换到了 Xubuntu，世界顿时清净了。
+
+* Xfce
+
+快捷键：
+
+|------------------+----------|
+| 快捷键           | 描述     |
+| =Ctrl + Alt + D= | 显示桌面 |
+| =Alt + F4=       | 关闭窗口 |
+| =Ctrl + ESC=     | 打开菜单 |
+|------------------+----------|
+
+http://xahlee.info/linux/linux_xfce_keyboard_shortcuts.html
+
+如何移动 panel：https://forum.xfce.org/viewtopic.php?id=7310
 
 * FAQ
 ** 安装 xfce 之后，卸载不干净怎么办？

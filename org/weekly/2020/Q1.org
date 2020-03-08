@@ -1,6 +1,12 @@
 #+SETUPFILE: ~/site/tpl/weekly-tpl.org
 #+TITLE: 2020 Q1
 
+* 2020-03-08 14:47:08 日
+
+三四天的 Linux 桌面版折腾终于结束了，试了 Linux Mint/LUbuntu/Ubuntu/XUbuntu，每次总是耐不住折腾 UI，耗费了很多时间。
+
+最终决定使用 Xubuntu，省资源稳定性也好，就这样吧，不再在这方面费时间了，开始干活。
+
 * 2020-03-06 11:28:02 Fri
 
 只写前端的时候，就会把产品形态和交互想的很清楚，后端 API 只要提需求满足就可以了；
