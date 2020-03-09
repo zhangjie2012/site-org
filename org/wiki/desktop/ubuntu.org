@@ -100,20 +100,6 @@ export http_proxy="http://127.0.0.1:8123" export https_proxy="http://127.0.0.1:8
 
 http://www.ubuntukylin.com/applications/24-cn.html
 
-* GNOME 美化
-
-安装工具：
-
-#+begin_src shell
-sudo apt install gnome-tweaks
-sudo apt install gnome-tweak-tool
-sudo apt install chrome-gnome-shell
-#+end_src
-
-https://extensions.gnome.org/ 比较实用的几个扩展插件： Dash to Dock、OpenWeather、Netspeed
-
-重启 GNOME tips： =Alt+F2 -> r=
-
 * 几种桌面对比
    :PROPERTIES:
    :CUSTOM_ID: 几种桌面对比
@@ -180,3 +166,13 @@ via: [[https://www.dedoimedo.com/computers/ubuntu-beaver-slow-boot.html]]
 使用 bluetoothctl 添加设备 TRUST：
 
 控制台输入 bluetoothctl， =devices= 查看设备列表，找到蓝牙对应的 MAC 地址，然后 =trush <mac-addr>= 即可。
+
+** fcitx + 搜狗拼音经常会出现某一个核 CPU 占 100 的情况
+
+网上说在 fctix 输入法配置 -> 附加组件 -> 高级 -> 然后把 "搜狗云拼音" 去掉就可以了。
+
+不确定是否可行，先试试。后面不行的话就不用搜狗拼音了。
+
+** 重启 fcitx 之后，Emacs GUI 无法进行输入法切换
+
+=Ctrl+Space= 默认被认为了 Emacs 中的文本 Mark Active，解决办法是重启 Emacs 。
