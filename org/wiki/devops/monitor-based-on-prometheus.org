@@ -113,12 +113,12 @@ scrape_configs:
 
 *** Grafana
 
-使用 Docker 部署， 下载镜像： =sudo docker pull grafana/grafana:5.4.3=
+使用 Docker 部署， 下载镜像： =sudo docker pull grafana/grafana:6.6.2=
 
 创建容器：
 
 #+begin_src shell
-sudo docker run -it --restart=always -d -p 3000:3000 --name grafana grafana/grafana:5.4.3
+sudo docker run -it --restart=always -d -p 3000:3000 --name grafana grafana/grafana:6.6.2
 #+end_src
 
 浏览器访问： =http://127.0.0.1:3000= 初始的账号密码都是 =admin= 。
@@ -126,6 +126,8 @@ sudo docker run -it --restart=always -d -p 3000:3000 --name grafana grafana/graf
 添加数据源 Prometheus，注意要写宿主机的 IP。
 
 Grafana 官网提供了很多的 [[https://grafana.com/grafana/dashboards][dashboards]]，找一个 node_exporter 的 dashboard ID 比如： =11074= ，在 Grafana 中导入即可（记得选择数据源）。
+
+/记忆 metric name 和 prometheus 表达式是挺难的，所以每次找一些现成的 dashboard，熟悉熟悉语法，然后自己再写就会简单许多。/
 
 * 对接 Kubernetes
 
