@@ -73,7 +73,7 @@
 ** TODO https://github.com/ryanmcdermott/clean-code-javascript :javascript:
    出一份 JavaScript 编码规范，与 React 一起写的时候，这玩意挺让人头疼的
 ** TODO https://github.com/Q-Angelo/Nodejs-Roadmap            :nodejs:
-** TODO 制定 Prometheus 计划
+** BLOCK 制定 Prometheus 计划
 ** TODO 命令行 curl 学习
 * 其它 [100%]
 ** DONE [[https://github.com/golang/tools/blob/master/gopls/doc/emacs.md]] :emacs:
