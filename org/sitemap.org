@@ -207,7 +207,6 @@
     - [[file:wiki/database/mysql.org][MySQL]]
     - [[file:wiki/database/redis.org][Redis]]
   - desktop
-    - [[file:wiki/desktop/linux-mint.org][Linux Mint]]
     - [[file:wiki/desktop/ubuntu.org][Ubuntu]]
   - devops
     - [[file:wiki/devops/log.org][DevOps - 日志收集]]
