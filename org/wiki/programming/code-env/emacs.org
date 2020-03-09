@@ -307,13 +307,19 @@ orgmode 是 emacs 自带的 package，但是一般自带的版本比较低。更
 - [[file:../../../blog/2019/build-site-with-org-mode.org][使用 org-mode 搭建网站]]
 - [[file:../../../blog/2019/emacs-slice.org][Emacs 基于 org-reveal 做幻灯片]]
 
-/2020-02-15 10:15:16/
+<2020-02-15 10:15:16>
 
 orgmode 9.2 之后不再直接支持 =<s [Tab]= 的快捷方式插入代码块，而提供了统一的 =org-insert-structure-template= 函数，快捷键为 =C-c c-,= 。
 如果想要提供以前的简洁方式，需要引入 =org-tempo= ，比如 =(require 'org-tempo)= 我使用的是 =(use-package org-tempo)= 。具体见：
 
 - [[https://emacs.stackexchange.com/questions/46988/why-do-easy-templates-e-g-s-tab-in-org-9-2-not-work][Why do easy templates, .e.g, “< s TAB” in org 9.2 not work?]]
 - [[https://orgmode.org/manual/Structure-Templates.html][org-mode 16.2 Structure Templates]]
+
+<2020-03-09 17:13:03 Mon>
+
+orgmode 中 =_= 和 =^= 会被输出成下标和上标语法，可以在 =+OPTIONS= 中设置 =^:nil= 来禁掉它。
+
+- https://emacs.stackexchange.com/questions/10549/org-mode-how-to-export-underscore-as-underscore-instead-of-highlight-in-html
 
 * FAQ
 ** Emacs 启动速度太慢怎么办？
