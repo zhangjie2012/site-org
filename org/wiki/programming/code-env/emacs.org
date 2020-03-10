@@ -486,6 +486,24 @@ spinner 在 =gnu= 中，确保 =package-archives= 中包含 =https://elpa.gnu.or
 - [[https://jessekelly881-imagine.surge.sh][Imagine]]: 范例 [[https://jessekelly.tk/][Jesse Kelly]]
 - [[https://jessekelly881-rethink.surge.sh][Rethink]]
 
+** 知名的 Emacs 用户有哪些？
+
+[[http://ergoemacs.org/misc/famous_emacs_users.html][Famous Emacs Users]]
+
+- Donald Knuth: 计算机程序设计艺术的作者
+- Julian Assange: 维基解密 董事与发言人
+- 松本行弘: Ruby 之父，而且做过 How Emacs changed my life 的演讲，[[https://www.slideshare.net/yukihiro_matz/how-emacs-changed-my-life][ppt]]
+- Rich Hickey: Clojure 之父
+- Joe Armstrong: Erlang 语言设计者和主架构师
+- Andrei Alexandrescu: D lang 创建者之一
+- [[https://zh.wikipedia.org/wiki/%E5%8F%B2%E8%92%82%E8%8A%AC%C2%B7%E6%B2%83%E7%88%BE%E5%A4%AB%E5%8B%92%E5%A7%86][Stephen Wolfram]]
+
+[[https://usesthis.com/interviews/graydon.hoare/][Graydon Hoare]] 也使用 Emacs，他是 Rust 编程语言项目的启动者。
+
+[[http://wenshanren.org/?p=418][Famous Emacs Users (that are not famous for using Emacs)]] 也列举了很多知名的和非知名的 Emacs 用户。
+
+[以上均来自 [[https://www.reddit.com/r/emacs/comments/fdxvuw/which_famous_devs_use_emacs/][reddit]] 的讨论帖。]
+
 * Footnotes
 
 [fn:md-to-org] https://emacs.stackexchange.com/questions/5465/how-to-migrate-markdown-files-to-emacs-org-mode-format
