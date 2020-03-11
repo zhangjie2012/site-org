@@ -9,7 +9,7 @@
 大学期间和我的第一份工作主要的开发环境是 Windows，Emacs 虽然在私下里花了很多精力折腾，但正式使用 Emacs 作为开发环境是 2014 年以后，
 之后工作环境主要聚焦在 Mac/CentOS/Ubuntu 上，直到现在，Emacs 都是我的主力编辑器：
 
-- 前端 :: JavasSript/HTML/CSS/LESS, React(jsx)
+- 前端 :: JavaSript/HTML/CSS/LESS, React(jsx)
 - 后端 :: C/C++, Python/Django, Go
 - 日常 :: Shell，YAML，JSON，...
 - 写文章 :: org-mode
@@ -480,6 +480,7 @@ spinner 在 =gnu= 中，确保 =package-archives= 中包含 =https://elpa.gnu.or
 - [[https://github.com/redguardtoo/emacs.d][redguardtoo/emacs.d]]
 - [[https://github.com/hlissner/doom-emacs][hlissner/doom-emacs]]
 - [[https://protesilaos.com/dotemacs/][Emacs initialisation file (dotemacs)]]: wiki + 配置
+- [[http://www.emacs-bootstrap.com/][emacs-bootstrap]]: 动态生成 Emacs 配置
 
 ** org-mode theme
 
