@@ -142,6 +142,7 @@ Emacs 有很多的 [[http://melpa.org][插件]]，[[https://github.com/emacs-tw/
 | [[https://github.com/felipeochoa/rjsx-mode][rjsx-mode]]          | JSX mode                             | 比 web-mode 好用很多，而且更新的快                                   |
 | [[https://github.com/jwiegley/use-package][use-package]]        | 包配置隔离                           | 可设置启动时机，加速 Emacs 启动                                      |
 | [[https://github.com/justbur/emacs-which-key][which-key]]          | 快捷键绑定提示                       |                                                                      |
+| [[https://github.com/tumashu/cnfonts][cnfonts]]            | GUI 中英文混排等宽                   |                                                                      |
 |--------------------+--------------------------------------+----------------------------------------------------------------------|
 
 一些尝试过，但是不再使用的 package：
@@ -364,7 +365,7 @@ pandoc -f markdown -t org -o test.org test.md
 
 不管是使用 GUI 还是 Terminal，全凭个人喜好。我之前一直用终端，最近（2019-06-04）切换到了 GUI。
 
-/2019-06-15 10:03:35/
+<2019-06-15 10:03:35>
 
 在尝试了两周的 GUI 之后，最终还是切换到了 Terminal。主要原因是：
 
@@ -377,19 +378,27 @@ pandoc -f markdown -t org -o test.org test.md
 
 对 GUI 最大的怀念是可以无缝的跟系统的剪切板融合，比如在别的地方 ~Ctrl + c~ 复制的内容，可以在 Emacs 中 ~M-y~ 粘贴过来，反之亦然。
 
-/2019-06-24 10:29:43/
+<2019-06-24 10:29:43>
 
 Ubuntu 下文泉驿是 OK 的，还不错，MacOS 有点丑。习惯了之后还有点离不开 GUI（快捷键真舒服啊），准备用终端写代码，GUI 写文档（文章），
 准备适应一段时间。
 
-/2019-07-08 20:57:06/
+<2019-07-08 20:57:06>
 
 Ubuntu GUI 无法切换搜狗输入法，与默认的 Mark 快捷键冲突，解决办法是修改 locale， ~/etc/default/locale~ 中添加 ~LC_CTYPE=zh_CN.UTF-8~ ，
 然后重启即可（中文桌面情况下是没有这个问题的）。
 
-/2019-11-17 16:18:19/
+<2019-11-17 16:18:19>
 
 试了一下 [[https://github.com/whorusq/sublime-text-3/blob/master/fonts/Microsoft-Yahei-Mono.ttf][Microsoft YaHei Mono]]，发现效果要比文泉驿要好很多，中文还挺好看。决定终端和 GUI 都使用一段时间。
+
+<2020-03-12 16:45:19>
+
+使用 [[https://github.com/tumashu/cnfonts][cnfonts]] 进行中英文混排的配置，终结了 GUI 上字体的折腾（虽然不是特别完美）。
+
+从今天开始，All in GUI，再见终端。
+
+终于可以使用自己喜爱的主题，而不用考虑终端是否兼容了~
 
 ** 如何去掉空白字符
 
@@ -517,7 +526,6 @@ spinner 在 =gnu= 中，确保 =package-archives= 中包含 =https://elpa.gnu.or
 [以上均来自 [[https://www.reddit.com/r/emacs/comments/fdxvuw/which_famous_devs_use_emacs/][reddit]] 的讨论帖。]
 
 * Footnotes
-
 
 [fn:md-to-org] https://emacs.stackexchange.com/questions/5465/how-to-migrate-markdown-files-to-emacs-org-mode-format
 
