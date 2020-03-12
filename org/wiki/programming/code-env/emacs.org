@@ -445,6 +445,17 @@ Emacs 的快捷键非常多，但是除了基本的编辑操作快捷键之外�
 1. ~M-x sort-lines~
 2. ~M-x reverse-region~
 
+** eshell git diff 高亮
+
+在 =.git/config= 文件中添加[fn:3]：
+
+#+begin_src
+[color]
+    ui = always
+#+end_src
+
+因为我用的是 eshell，ansi-term 默认就是一个 ansi color 的 term。但是用惯了 eshell 不想换了。
+
 * Troubleshooting
 ** 安装 lsp-mode 报错 spinner-1.7.3 is unavailable？
 
@@ -507,6 +518,7 @@ spinner 在 =gnu= 中，确保 =package-archives= 中包含 =https://elpa.gnu.or
 
 * Footnotes
 
+
 [fn:md-to-org] https://emacs.stackexchange.com/questions/5465/how-to-migrate-markdown-files-to-emacs-org-mode-format
 
 [fn:1] https://stackoverflow.com/questions/52722096/build-emacs-and-gnutls-not-found
@@ -516,3 +528,5 @@ spinner 在 =gnu= 中，确保 =package-archives= 中包含 =https://elpa.gnu.or
 [fn:sorting-headings-in-an-org-file] https://emacs.stackexchange.com/questions/30547/sort-list-by-checked-unchecked-state
 
 [fn:2] https://github.com/hlissner/doom-emacs/issues/1225
+
+[fn:3] http://mbork.pl/2018-06-10_Git_diff_in_Eshell
