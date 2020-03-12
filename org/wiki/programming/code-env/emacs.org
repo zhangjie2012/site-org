@@ -124,25 +124,24 @@ Emacs 有很多的 [[http://melpa.org][插件]]，[[https://github.com/emacs-tw/
 |--------------------+--------------------------------------+----------------------------------------------------------------------|
 | 插件名称           | 插件介绍                             | 备注                                                                 |
 |--------------------+--------------------------------------+----------------------------------------------------------------------|
-| [[https://www.flycheck.org/en/latest/][Flycheck]]           | 强大的语法检查框架                   | 需要编程语言的 lint 工具配合，比如 eslint、golint。编码必备。        |
 | [[https://github.com/abo-abo/ace-window][ace-window]]         | 多窗口切换                           | 以前一直用 [[https://github.com/deb0ch/emacs-winum][emacs-winum]]                                               |
 | [[https://github.com/abo-abo/avy][avy]]                | 光标快速定位（按照字符、单词、行等） | 以前用的是 [[https://github.com/winterTTr/ace-jump-mode][ace-jump]]                                                  |
+| [[https://github.com/tumashu/cnfonts][cnfonts]]            | GUI 中英文混排等宽                   |                                                                      |
 | [[https://github.com/company-mode/company-mode][company-mode]]       | 模块化补全框架（支持各种语言）       | 相同的还有 auto-complete，但它没有 company 精准。编码必备。          |
-| [[https://github.com/emacsmirror/diminish][diminish]]           |                                      | 减少一些 mode 在 mode line 上的显示                                  |
+| [[https://github.com/seagle0128/doom-modeline][doom-modeline]]      | modeline 看起来漂亮一些              | 依赖 [[https://github.com/domtronn/all-the-icons.el][all-the-icons]] _GUI 才可用_                                      |
 | [[https://github.com/magnars/expand-region.el][expand-region]]      | 快速选中文本                         | 比如我常用 =M-s s= 选中一个单词，用 ~M-s p~ 选中括号内内容，然后复制 |
+| [[https://www.flycheck.org/en/latest/][Flycheck]]           | 强大的语法检查框架                   | 需要编程语言的 lint 工具配合，比如 eslint、golint。编码必备。        |
 | [[https://github.com/nonsequitur/git-gutter-plus][git-gutter+]]        | 提示当前 buffer 改动部分             | 用 ~+~ 和 ~=~ 等显示出来                                             |
 | [[https://github.com/nschum/highlight-symbol.el][highlight-symbol]]   | 高亮当前单词                         |                                                                      |
 | [[https://github.com/abo-abo/swiper][ivy]]                | 通用完成前端                         | 一般 ido+smex，ivy，[[https://github.com/emacs-helm/helm][helm]] 三者必须选一                                |
 | [[https://github.com/emacs-lsp/lsp-mode][lsp-mode]]           | [[https://langserver.org][LSP]] 的 Emacs 客户端                  | -目前不是特别成熟-                                                   |
 | [[https://github.com/magnars/multiple-cursors.el][multiple-cursors]]   | 多鼠标操作                           | [[http://emacsrocks.com/e13.html][Emacs Rocks! Episode 13: multiple-cursors]]                            |
 | [[https://orgmode.org][org-mode]]           | 最牛逼的插件，没有之一               |                                                                      |
-| [[https://github.com/milkypostman/powerline][powerline]]          | mode line 看起来更漂亮一些           | 同类的还有很多                                                       |
 | [[https://github.com/bbatsov/projectile][projectile]]         | 项目管理框架                         | 可以与 ivy 一起使用，[[https://github.com/ericdanan/counsel-projectile][counsel-projectile]]                              |
 | [[https://github.com/Fanael/rainbow-delimiters][rainbow-delimiters]] | 彩虹括号                             | 相同层级的括号相同颜色                                               |
 | [[https://github.com/felipeochoa/rjsx-mode][rjsx-mode]]          | JSX mode                             | 比 web-mode 好用很多，而且更新的快                                   |
 | [[https://github.com/jwiegley/use-package][use-package]]        | 包配置隔离                           | 可设置启动时机，加速 Emacs 启动                                      |
 | [[https://github.com/justbur/emacs-which-key][which-key]]          | 快捷键绑定提示                       |                                                                      |
-| [[https://github.com/tumashu/cnfonts][cnfonts]]            | GUI 中英文混排等宽                   |                                                                      |
 |--------------------+--------------------------------------+----------------------------------------------------------------------|
 
 一些尝试过，但是不再使用的 package：
@@ -150,9 +149,11 @@ Emacs 有很多的 [[http://melpa.org][插件]]，[[https://github.com/emacs-tw/
 - [[https://github.com/auto-complete/auto-complete][auto-complete]] 自动完成插件，后来用 company 替换了
 - [[https://github.com/technomancy/better-defaults][better-defaults]] 几行代码就可以达到相同的效果
 - [[https://github.com/emacs-dashboard/emacs-dashboard][dashboard]] 启动会显示最近使用过的文件，项目，标签等 华而不实啊
-- [[https://github.com/magit/magit][magit]] 评价非常高的 git package，但是我感觉太慢了，另外是习惯了命令行操作 git，常用的操作用 build-in 的功能足够了，见 [[#manual-vc][版本管理]]
-- [[https://github.com/joaotavora/yasnippet][yasnippet]] 代码片段，以前写 C++ 的时候常用，现在感觉不咋用了
+- [[https://github.com/emacsmirror/diminish][diminish]] 减少一些 mode 在 modeline 上的显示，doom-modeline 显示已经很精简了
 - [[https://github.com/emacs-helm/helm][helm]] 一个补全框架，用了四五年，后来用 ivy 替换掉了
+- [[https://github.com/magit/magit][magit]] 评价非常高的 git package，但是我感觉太慢了，另外是习惯了命令行操作 git，常用的操作用 build-in 的功能足够了，见 [[#manual-vc][版本管理]]
+- [[https://github.com/milkypostman/powerline][powerline]] 用了一段时间，后来用 doom-modeline 替换掉了
+- [[https://github.com/joaotavora/yasnippet][yasnippet]] 代码片段，以前写 C++ 的时候常用，现在感觉不咋用了
 
 * 日常使用
 
@@ -171,20 +172,24 @@ Emacs 有很多的 [[http://melpa.org][插件]]，[[https://github.com/emacs-tw/
 | ~C-x g~   | 打开 git-gutter+                                      |
 | ~C-x n/p~ | 上一个/下一个 git 改动                                |
 | ~C-x r~   | revert 当前改动                                       |
+| ~F12~     | semantic-or-imenu，显示当前文件的全局变量、类，方法等 |
 | ~F3~      | 打开 Eshell                                           |
-| ~F4~      | 插入当前时间                                          |
+| ~F4~      | 插入当前时间，比如 <2020-03-12 22:07:58 四>           |
 | ~F6~      | 显示当前文件路径                                      |
 | ~F7~      | 执行前一条命令                                        |
-| ~F12~     | semantic-or-imenu，显示当前文件的全局变量、类，方法等 |
 | ~M--~     | 高亮当前单词， ~M-p/n~ 跳转到上一个和下一个           |
 | ~M-m~     | 不断扩大区域的选中                                    |
 | ~M-s ;~   | 跳转到单词                                            |
-| ~M-s P~   | 选中括号内的内容                                      |
+| ~M-s D~   | 切换到暗色主题                                        |
 | ~M-s f~   | 选中当前函数                                          |
 | ~M-s i~   | 跳转到指定符开始的单词                                |
 | ~M-s j~   | 快速跳转到行                                          |
 | ~M-s k~   | 复制指定行到当前行                                    |
 | ~M-s l~   | 打开/关闭行号                                         |
+| ~M-s L~   | 切换到亮色主题                                        |
+| ~M-s m~   | 选中注释                                              |
+| ~M-s p~   | 选中括号内的内容(包含括号)                            |
+| ~M-s P~   | 选中括号内的内容                                      |
 | ~M-s s~   | 选中当前单词                                          |
 | ~M-y~     | kill-ring                                             |
 |-----------+-------------------------------------------------------|
@@ -193,14 +198,13 @@ Emacs 有很多的 [[http://melpa.org][插件]]，[[https://github.com/emacs-tw/
 
 选中要改动的单词，然后：
 
-|-----------+----------------------|
-| 快捷键    | 功能                 |
-| ~M-s >~   | 选择下一个相同的单词 |
-| ~M-s <~   | 选择上一个相同的单词 |
-| ~M-s C-a~ | 选择所有与单词相同的 |
-| ~M-s a~   | 选择行首             |
-| ~M-s e~   | 选择行位             |
-|-----------+----------------------|
+|-----------+------------------------|
+| 快捷键    | 功能                   |
+| ~M-s ;~   | 选择当前函数选中的单词 |
+| ~M-s >~   | 选择下一个相同的单词   |
+| ~M-s <~   | 选择上一个相同的单词   |
+| ~M-s C-a~ | 选择所有与单词相同的   |
+|-----------+------------------------|
 
 ** 项目管理
 
