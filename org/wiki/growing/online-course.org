@@ -1,0 +1,12 @@
+#+SETUPFILE: ~/site/tpl/wiki-tpl.org
+#+TITLE: 在线课程
+#+DATE: 2020-03-13 23:33:35
+
+* TODO Tool Time Lecture Series [3/4]
+
+https://www-users.cs.umn.edu/~kauffman/tooltime
+
+- [X] Session 1: Emacs Editing Basics
+- [X] Session 2: Emacs Customization with Lisp
+- [X] Session 3: Unix Text Tools
+- [ ] Session 4: Bash Scripting
