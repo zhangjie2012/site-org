@@ -49,23 +49,7 @@ func main() {
 
 * 插件和 IDE
 
-我使用 Emacs 写 Go 代码：
-
-- [[https://github.com/dominikh/go-mode.el][go-mode]] 是 go 的 mirror mode，语法高亮和一些简单的 IDE 功能，依赖 go-guru，go-rename
-- [[https://github.com/emacs-lsp/lsp-mode/][emacs-lsp/lsp-mode]] 是 [[https://langserver.org/][LSP]] 的 Emacs 实现。只是一个客户端，server 用的是 [[https://github.com/golang/tools/tree/master/gopls][gopls]]，还依赖 goimports
-
-安装：
-
-#+BEGIN_SRC
-go get -u -v golang.org/x/tools/cmd/guru
-go get -u -v golang.org/x/tools/cmd/gorename
-go get -u -v golang.org/x/tools/gopls
-go get -u -v golang.org/x/tools/cmd/goimports
-#+END_SRC
-
-/部分工具需要 FQ 才能安装。/
-
-Emacs 配置见：https://github.com/zhangjie2012/_emacs.d/blob/master/lisp/init-lsp.el
+见 [[file:~/site/org/wiki/programming/code-env/emacs.org][emacs]] 中的 IDE 小结。
 
 * 跨平台编译
 
