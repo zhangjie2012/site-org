@@ -6,7 +6,7 @@
 
 需要边看边练习的话，可以用自己的主机搭建一个临时的监控平台，可参考 [[file:monitor-based-on-prometheus.org][基于 Promethetheus 监控告警]] 中的示例。
 
-* 引言（Introduction） [6/7]
+* DONE 引言（Introduction） [7/7]
 ** DONE 概览
    CLOSED: [2020-03-11 三 23:06]
 *** 什么是 Prometheus?
@@ -165,7 +165,205 @@ rate(promhttp_metric_handler_requests_total{code="200"}[1m])
 仅从 Prometheus 的指标不能很好的说明 Promethues 的功能，为了更好的了解 Prometheus 可以做什么，
 我们建议你浏览其它 exporter 的文档。[[https://prometheus.io/docs/guides/node-exporter/][使用 Node Exporter 监控 Linux 或者 macOS]] 文档可能是一个更好的起点。
 
-** TODO 与替代品的比较
+** DONE 与替代品的比较 [5/5]
+	 CLOSED: [2020-03-15 日 22:13]
+*** DONE Prometheus vs. Graphite
+		CLOSED: [2020-03-15 日 16:36]
+**** 范围（Scope）
+
+[[https://graphite.readthedocs.io/en/latest/][Graphite]] 致力于成为具有查询语言和图形特性的被动的（passtive）时间序列数据库。其它的任何问题都可以通过外部组件解决。
+
+Prometheus 是一个完整的监控和趋势分析系统，包括内置的主动抓取，存储，查询，查询，绘图的基于时间序列数据库的告警。
+它有自己的世界观（哪些 endpoints 应该存在，什么时间序列模式意味着有问题等等），并且尝试积极的寻找错误。
+
+**** 数据模型
+
+Graphite 存储具名的时间序列的数值样本，跟 Prometheus 很像。然而，Prometheus 的元数据模型更加的丰富：
+Graphite 的指标名称由点分隔的部分组成，隐式的表达多维度。Prometheus 通过键值对的标签来显示的表达，
+然后附加到指标名称上。这样查询语言可以通过这些标签轻松的进行过滤、分组和匹配。
+
+进一步，尤其是 Graphite 和 [[https://github.com/statsd/statsd][Statsd]] 一起工作时，通常在所有监控的实例上仅存储聚合数据，而不是将实例作为一个维度，
+然后深入分析单个有问题的实例。
+
+比如，存储 API server 的 HTTP 请求的返回码为 =500= 并且方法为 =POST= 到 =/tracks= 的到达点通常在 Graphite/StatsD
+这样表示：
+
+#+begin_src
+stats.api-server.tracks.post.500 -> 93
+#+end_src
+
+在 Prometheus 中样本数据编码是这样（假定是三个 api-server 实例）：
+
+#+begin_src
+api_server_http_requests_total{method="POST",handler="/tracks",status="500",instance="<sample1>"} -> 34
+api_server_http_requests_total{method="POST",handler="/tracks",status="500",instance="<sample2>"} -> 28
+api_server_http_requests_total{method="POST",handler="/tracks",status="500",instance="<sample3>"} -> 31
+#+end_src
+
+**** 存储
+
+Graphite 使用 [[https://graphite.readthedocs.org/en/latest/whisper.html][Whisper]] 存储时间序列数据在本地，是一个 RRD 风格的数据库，它希望样本以固定时间间隔到达。
+每个时间序列都被存储在分隔的文件中，一段时间后，新样本会覆盖旧样本。
+
+Prometheus 也是每个时间序列单独的文件，但是允许在获取数据或者与运算规则时以任意时间间隔存储样本。
+由于仅增加了新的样本，所以老的数据可以被任意保留。Promethues 对于很多短暂的经常变化的时间序列可以运作良好。
+
+**** 总结
+
+Prometheus 除了更容易运行和集成到你的环境之外，还提供了丰富的数据模型和查询语言。
+如果你想要一个长期保留历史数据的集群方案，Graphite 可能是一个更好的选择。
+
+*** DONE Prometheus vs. InfluxDB
+		CLOSED: [2020-03-15 日 20:53]
+
+[[https://influxdata.com/][InfluxDB]] 是一个开源的时间序列数据库，商业版本支持水平扩展和集群。Prometheus 开始开发近一年后，InfluxDB 项目才发布的，
+因为当时我们无法把它作为替代方案。尽管如此，两者之间仍然存在着明显的差异，并且两个系统面向不同的用户。
+
+**** 范围（Scope）
+
+为了公平的比较，我们还比如把 [[https://github.com/influxdata/kapacitor][Kapacitor]] 和 InfluxDB 放一起考虑，它们结合一起来，可以解决 Prometheus 和
+Alertmanager 相同的问题。
+
+The same scope differences as in the case of Graphite apply here for InfluxDB itself。
+此外，InfluxDB 还提供了连续查询，等价于 Prometheus 的记录规则（recording rules）。
+
+Kapacitor 的范围是 Prometheus 记录规则，告警规则和 Alertmanager 的通知功能的组合。
+Prometheus 提供了[[https://www.robustperception.io/translating-between-monitoring-languages][更加强大的查询语言来进行图形显示和告警]]。Prometheus 告警管理器还提供了告警分组、去重和静默等功能。
+
+**** 数据模型/存储
+
+和 Prometheus 一样，InfluxDB 数据模型有有键值对作为标签（label），名字叫做标签（tags）。
+此外，InfluxDB 还有二级标签，称之为字段（fields），但适用范围有限。
+InfluxDB 支持纳秒精度的时间戳，float64，int64，bool 和字符串数据类型。相比而言，Prometheus 支持 float64 的数据类型，
+但对字符串和毫秒的精度支持有限。
+
+InfluxDB 使用 [[https://docs.influxdata.com/influxdb/v1.7/concepts/storage_engine/][日志结构合并树的变种来存储带有时间分片的预写日志的存储]]。与 Prometheus 每个时间序列仅附加文件的方法相比，
+此方法更适合记录事件。
+
+[[https://grafana.com/blog/2016/01/05/logs-and-metrics-and-graphs-oh-my/][日志、指标和图形，我的天]] 描述了事件日志和指标记录的不同。
+
+**** 架构
+
+Prometheus 服务器彼此独立运行，仅依靠本地存储来实现核心功能：抓取、规则处理和告警。开源的 InfluxDB 版本类似。
+
+设计上，商业版本的 InfluxDB 产品是一个分布式的存储集群，存储和查询由多个节点一次处理。
+
+这意味着商业的 InfluxDB 将更易于水平扩展，而且意味着你必须从一开始就要管理分布式系统的复杂性。
+Prometheus 运行起来更简单，但是有些时候你需要根据产品、服务和数据中心等类似的边界明确的分片。
+独立服务器（可以并行冗余运行）也可以为您提供更好的可靠性和故障隔离。
+
+Kapacitor 的开源版本没有规则、告警或者通知的内置分布式/冗余选项，可以由用户通过手动分片来扩展，跟 Promethues 像似。
+Influx 提供了 [[https://docs.influxdata.com/enterprise_kapacitor/v1.5/][企业级的 Kapacitor]]，支持高可用/冗余的告警系统。
+
+相比之下，Prometheus 和 Alertmanager 通过运行多余的 Prometheus 副本，然后使用告警管理器的高可用性模式提供了完全开源冗余选项。
+
+**** 总结
+
+两个系统有很大的相似性。都有标签（一个叫 label，一个叫 tag）来高效的支持多维指标。都有基本相同的数据压缩算法。
+两个都有广泛的集成，包括彼此之间的集成。都有 hooks 允许你来进一步扩展它们，例如使用统计工具分析数据或者执行自动化操作。
+
+InfluxDB 更好的地方：
+
+- 当你需要进行事件记录的时候。
+- 商业选项提供了 influxDB 集群选项，这对于长期数据存储会更好。
+- 最终在副本之间保持一直的数据视图。
+
+Prometheus 更好的地方：
+
+- 当你的主要面对的是指标的时候。
+- 更强劲的查询语言、告警和通知功能。
+- 图形和告警的可用性和正常运行时间（uptime）更好。
+
+InfluxDB 由一家商业公司按照开放核心（open-core）模型进行维护，提供了像闭源集群，托管和支持的高级功能。
+Prometheus 是一个完全开源的独立项目，由许多公司和个人维护，其中一些还提供商业服务和支持。
+
+*** DONE Prometheus vs. OpenTSDB
+		CLOSED: [2020-03-15 日 21:49]
+
+[[http://opentsdb.net/][OpenTSDB]] 是一个基于 [[https://hadoop.apache.org/][Hadoop]] 和 [[https://hbase.apache.org/][HBase]] 的分布式的时间序列数据库。
+
+**** 范围
+
+这里的适用范围和 Graphite 应用相同。
+
+**** 数据模型
+
+OpenTSDB 的数据模型几乎和 Prometheus 相同：时间序列由一组任意的键值对标识（OpenTSDB 的 tags 是 Prometheus 的 labels）。所有的指标数据是 [[http://opentsdb.net/docs/build/html/user_guide/writing/index.html#time-series-cardinality][存储在一起的]]，限制指标的基数。
+虽然有一些细微的差异：Prometheus 允许标签值中包含任务的字符，OpenTSDB 做了更多的限制。OpenTSDB 也缺乏完整的查询语言，只允许简单的聚合和数学运算。
+
+**** 存储
+
+OpenTSDB 是在 Hadoop 和 HBase 之上实现的，这意味着水平扩展比较简单，但是你一开始就要接受运行 Hadoop/HBase 集群的总体复杂性。
+
+Prometheus 最初运行起来会很简单，但是一旦超出单个节点的容量，就需要明确的分片。
+
+**** 总结
+
+Prometheus 提供了更丰富的查询语言，可以处理更高的基数指标，并且是构建完整监控系统的一部分。如果你已经在运行 Hadoop 并重视长期存储的优势，那么 OpenTSDB 是一个不错的选择。
+
+*** DONE Prometheus vs. Nagios
+		CLOSED: [2020-03-15 日 22:03]
+
+[[https://www.nagios.org/][Nagios]] 是一个始于 20 世纪 90 年代（1990s）的 NetSaint 监控系统。
+
+**** 范围
+
+Nagios 主要基于脚本退出码进行告警。它们被称为 "checks"。单个告警支持静默，但是不会进行分组，路由或者重复数据删除。
+
+有各种各样的插件。比如，通过管道传输几千字节的 perfData 插件，可以返回时间序列数据库（比如 Graphite）或者使用
+NRPE 在远程机器上运行检查。
+
+**** 数据模型
+
+Nagios 是基于主机的。每个主机可以有有一个或者多个服务，并且每个服务执行一项检查。
+
+没有标签或者查询语言的概念。
+
+**** 存储
+
+除了检查状态之外，Nagios 本身没有存储空间。有些插件可以存储诸如可视化的数据。
+
+**** 架构
+
+Nagios 服务器是独立的，所有的检查配置均通过文件进行。
+
+**** 总结
+
+ Nagios 适用于黑盒（blackbox）探测足够小型或者静态的系统的基本监控。
+
+ 如果你想要白盒监控，或者动态的或者基于云环境的，那么 Promethesu 是不错的选择。
+
+*** DONE Prometheus vs. Sensu
+		CLOSED: [2020-03-15 日 22:13]
+
+[[https://sensu.io/][Sensu]] 是一个组合的监控管道，允许复用现有的 Nagios 检查。
+
+**** 范围
+
+The same general scope differences as in the case of Nagios apply here.
+
+还有一个 [[https://docs.sensu.io/sensu-core/latest/reference/clients/#what-is-the-sensu-client-socket][套接字客户端]]，允许将临时检查结果推送到 Sensu 中。
+
+**** 数据模型
+
+Sensu 和 Nagios 有相同粗糙的数据模型。
+
+**** 存储
+
+Sensu 使用 Redis 来存储监控数据，包括 Sensu 客户端注册表，检查结果，检查执行记录，和当前事件数据。
+
+**** 架构
+
+Sensu 有许多组件。它使用 RabbitMQ 传送，Redis 存储当前状态，并使用单独的服务器进行处理和 API 访问。
+
+可以将 Sensu 部署的所有组件（RabbitMQ，Redis 和 Sensu Server/API）集群化，以实现高可用和冗余配置。
+
+**** 总结
+
+如果你已经有 Nagios 安装并且希望水平扩展，或者想利用 Sensu 的自动注册功能，那么 Sensu 是一个不错的选择。
+
+如果你想要做白盒监控，或者动态的或者基于云环境的，那么 Prometheus 是一个不错的选择。
+
 ** DONE FAQ
    CLOSED: [2020-03-01 Sun 18:19]
 
@@ -367,7 +565,7 @@ Prometheus 的规划，更全面的了解可以参考相关组件的 issue，比
 - Target ::
   要收集目标的定义。比如，应用到什么标签，连接鉴权，以及如何收集等其他信息。
 
-* 概念
+* DONE 概念
 ** 数据模型
 *** Metric 名字和标签（labels）
 
