@@ -10,3 +10,18 @@ https://www-users.cs.umn.edu/~kauffman/tooltime
 - [X] Session 2: Emacs Customization with Lisp
 - [X] Session 3: Unix Text Tools
 - [ ] Session 4: Bash Scripting
+
+* TODO [[https://www.youtube.com/watch?v=bju_FdCo42w&list=PLtK75qxsQaMLZSo7KL-PmiRarU7hrpnwK][The Linux Basics Course: Beginer to Sysadmin, Step to Step]] [0/10]
+
+https://www.youtube.com/watch?v=bju_FdCo42w&list=PLtK75qxsQaMLZSo7KL-PmiRarU7hrpnwK
+
+- [ ] 1. Linux Sysadmin Basics -- Course Introduction
+- [ ] 2. Linux Sysadmin Basics 01 -- Setting up a Linux Virtual Machine
+- [ ] 3. Linux Command-Line for Beginers: Your First 5 Minutes
+- [ ] 4. Linux Sysadmin Basics 02 -- Basic Commands
+- [ ] 5. Linux Sysadmin 02.1 - More Basic Commands
+- [ ] 6. Linux Command-Line for Beginners: What happening this machine?
+- [ ] 7. Linux Sysadmin Basics 03 -- Text Editors
+- [ ] 8. Linux Sysadmin Basics 04 -- Shell Features -- Pipes and Redirection
+- [ ] 9. Linux Sysadmin Basics 4.1 -- Filtering Output and Finding Things
+- [ ] 10. Linux Sysadmin Basics 05 -- Package Management with apt-get
