@@ -3,54 +3,19 @@
 
 * 学习计划 [0/3]
 ** TODO Promethues：短期学习计划
-   DEADLINE: <2020-06-01 Mon> SCHEDULED: <2020-02-26 Wed>
+		DEADLINE: <2020-06-01 Mon> SCHEDULED: <2020-02-26 Wed>
 
-*KR* [0/5]
+ *KR* [0/5]
 
-- [ ] 基本使用（概念、数据模型、report/query API）
-- [ ] 与 Docker 和 Kubernetes 结合
-- [ ] 生态 -> grafana
-- [ ] TSDB 理论
+ - [ ] 基本使用（概念、数据模型、report/query API）
+ - [ ] 与 Docker 和 Kubernetes 结合
+ - [ ] 生态 -> grafana
+ - [ ] TSDB 理论
 
-*action* [0/5]
+ *action* [0/5]
 
-- [ ] [[https://prometheus.io/docs/introduction/overview/][官方文档]]
+ - [ ] [[https://prometheus.io/docs/introduction/overview/][官方文档]]
 
-** TODO Kubernetes：中线的学习计划
-*** TODO 第一阶段目标：入门
-    SCHEDULED: <2020-02-02 Sat>
-
-*KR*
-
-- 熟悉 Kubernetes 概念、架构、组件
-- 使用 kubectl 可以完成大部分 Kubernetes 资源查询和 debug
-
-*Action* [0/1]
-
-- [-] 通读 Kubenetes 文档一遍 [28%]
-  - [X] 架构与组件
-  - [X] 容器
-  - [ ] Pod 与控制器
-  - [ ] 存储
-  - [ ] 配置
-  - [ ] service 与 Ingress
-  - [ ] 调度与策略
-
-** TODO emacs-lisp：超长线的学习计划
-*** TODO 第一阶段：熟悉语言基本语法
-    SCHEDULED: <2020-02-22 Sat>
-
-*KR*
-
-1. 可以 _完全_ 看懂 emacs 配置
-
-*Action* [0%]
-
-- [ ] 文章：[[http://steve-yegge.blogspot.com/2008/01/emergency-elisp.html][Emergency Elisp]]
-- [ ] 在线教程：[[http://ergoemacs.org/emacs/elisp.html][Practical Emacs Lisp]]
-- [ ] 电子书 [[https://github.com/chrisdone/elisp-guide][elisp-guide]]
-
-*** TODO 第二阶段目标：能够手写配置，做优化
 * 阅读 [28%]
 ** TODO Lock Free [0/2]
    - [ ] https://preshing.com/20120612/an-introduction-to-lock-free-programming/
