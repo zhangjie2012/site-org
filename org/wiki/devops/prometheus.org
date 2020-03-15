@@ -6,7 +6,7 @@
 
 需要边看边练习的话，可以用自己的主机搭建一个临时的监控平台，可参考 [[file:monitor-based-on-prometheus.org][基于 Promethetheus 监控告警]] 中的示例。
 
-* 引言（Introduction） [5/7]
+* 引言（Introduction） [6/7]
 ** DONE 概览
    CLOSED: [2020-03-11 三 23:06]
 *** 什么是 Prometheus?
@@ -63,7 +63,108 @@ Prometheus 很重视可靠性，即使在有故障的时候，始终可以看到
 如果你需要 100% 的准确性（例如按请求计费），这种情况下，就不是一个好的选择了，收集的数据可能不够详细和完整。
 /简单来讲，Promethues 就是做监控来用的，不要专门作为业务存储。
 
-** TODO 第一步
+** DONE 第一步
+	 CLOSED: [2020-03-15 日 15:22]
+
+Prometheus 是一个监控平台，它从监控目标通过 HTTP 获取度量指标。
+Prometheus 的第一个监控目标是 Prometheus 自己，它提供了各种各样的宿主级别的指标，包括内存利用率，垃圾回收等等。
+
+*** 下载
+
+在 [[https://prometheus.io/download/][下载]] 页面下载对应平台的二进制包，然后解压即可使用。
+
+#+begin_src shell
+> wget https://github.com/prometheus/prometheus/releases/download/v2.16.0/prometheus-2.16.0.linux-amd64.tar.gz
+> tar zxvf prometheus-2.16.0.linux-amd64.tar.gz
+> ls
+console_libraries  consoles  LICENSE  NOTICE  prometheus  prometheus.yml  promtool  tsdb
+#+end_src
+
+*** 配置
+
+Prometheus 配置是 [[https://yaml.org/start.html][YAML]] 格式的，下载之后会提供了一个配置样本文件 =prometheus.yml= 。
+
+我们删掉了原文件中的一些注释，使得文件变的更加简介。
+
+#+begin_src yaml
+	global:
+		scrape_interval:     15s
+		evaluation_interval: 15s
+
+	rule_files:
+		# - "first_rules.yml"
+		# - "second_rules.yml"
+
+	scrape_configs:
+		- job_name: 'prometheus'
+			static_configs:
+			- targets: ['localhost:9090']
+#+end_src
+
+样例中的配置主要包含三块：
+
+- =global= 控制 Prometheus 全局配置
+	+ =scrape_interval= 控制向目标获取指标的间隔，你可以在目标配置中覆盖此配置
+	+ =evaluation_interval= 控制多久执行规则，Prometheus 通过这些规则来控制时间新的时间序列和生成告警
+- =rule_files= 指定 Prometheus 加载的规则的位置
+- =scape_configs= 控制 Prometheus 监控那些资源，因为 Promethues 服务通过 HTTP 暴露了自己的监控数据，
+  所以我们可以配置一个叫做 =prometheus= 的任务（job），用来抓取 Prometheus 暴露的时间序列数据。
+	它包含一个简单的、静态的配置，目标是： =localhost:9090= 。
+	默认情况下，Prometheus 是向 =http://localhost:9090/metrics= 请求数据的。
+
+*** 启动 Prometheus
+
+使用我们新创建的配置文件 Prometheus，切换到 Prometheus 二进制文件的目录并执行：
+
+#+begin_src sh
+./prometheus --config.file=prometheus.yml
+#+end_src
+
+启动之后，你应该可以在浏览器访问 http://localhost:9090， 大约 30 秒时间之后，就可以看到它收集到的自身的度量指标。
+
+你也可以通过 http://localhost:9090/metrics 访问暴露的度量数据，来验证 Prometheus 是否正在运行。
+
+*** 在浏览器上使用表达式
+
+ 访问 http://localhost:9090/graph ，"Graph" 菜单，然后可以看到 "Graph" 和 "Console" 两个页签。
+
+ Prometheus 输出了一个叫做 =promhttp_metric_handler_requests_total= 的指标，用来表示 Prometheus 已经处理的
+ =/metrics= 请求总数。在表达式执行框输入：
+
+ #+begin_src
+ promhttp_metric_handler_requests_total
+ #+end_src
+
+ 应该会返回多个不同的时间序列（以及每个时间序列记录的最新值），所有的度量名称都是 =promhttp_metric_handler_requests_total=
+ 但标签不同。这些标签表示不同的请求状态。
+
+ 如果你只想关注 HTTP 返回码为 =200= 的请求，你可以添加筛选条件：
+
+ #+begin_src
+ promhttp_metric_handler_requests_total{code="200"}
+ #+end_src
+
+ 要查看返回的时间序列总数，你可以：
+
+ #+begin_src
+ count(promhttp_metric_handler_requests_total)
+ #+end_src
+
+*** 使用图形界面
+
+切换到 "Graph" 页签，可以查看表达式执行结果的图形。
+
+比如，下面的表达式绘制了每秒请求 =/metrics= 返回码为 =200= 的速率：
+
+#+begin_src
+rate(promhttp_metric_handler_requests_total{code="200"}[1m])
+#+end_src
+
+*** 监控其它目标
+
+仅从 Prometheus 的指标不能很好的说明 Promethues 的功能，为了更好的了解 Prometheus 可以做什么，
+我们建议你浏览其它 exporter 的文档。[[https://prometheus.io/docs/guides/node-exporter/][使用 Node Exporter 监控 Linux 或者 macOS]] 文档可能是一个更好的起点。
+
 ** TODO 与替代品的比较
 ** DONE FAQ
    CLOSED: [2020-03-01 Sun 18:19]
