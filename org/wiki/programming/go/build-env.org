@@ -2,11 +2,7 @@
 #+TITLE: 构建环境
 #+DATE: 2017-12-07 09:41:24
 
-* 安装 Go 工具
-
-*2020-01-17 11:04:18 Fri*
-
-基于 Go 1.13 更新，https://golang.org/doc/install。
+* 安装 Go
 
 ** Linux, macOS, and FreeBSD tarballs
 

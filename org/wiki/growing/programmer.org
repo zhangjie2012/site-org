@@ -23,11 +23,11 @@
 - 对于耳机，入耳式和头戴式看个人喜好，两个切换着用效果更佳；蓝牙耳机，会有一定的音质损伤，看怎么权衡了
 - 对于显示器，我自己测试下来，Mac mini 刷新率跟不上 4K，所以只能买 2K；但是对于笔记本，最新的系统 =10.15.1= 2K 与 4K 的差距还挺大的，10.15 之前没这种感觉
 - 对于机械键盘，我买过 2 个 Cherry 的，2 个 Filco 的，还有一个 [[https://item.jd.com/3491224.html][IKBC]] 的。轴用过青轴和茶轴，还有朋友的红轴。结论供参考：
-  1) 原厂轴太重要了，IKBC 算是国内做的比较好的了，用的时间长了，轴跟 Filco 的还是有一定差距的（按着手指头累）
-  2) Cherry 键盘普遍比 Filco 丑，真的丑
-  3) 键盘不建议买奶白色，漂亮是绝对漂亮，就是太不禁脏了，别听信洗键帽之说，我有两个键盘洗过键帽，装回去之后总感觉怪怪的
-  4) 推荐茶轴，青轴不适合写代码，一来太吵，而来确实累；红轴太轻了，几乎没有任何机械键盘的快感，还是算了
-  5) 机械键盘用的时间长了，还是会比较累（难道是因为年龄大了？），后面准备低键位的红轴了
+  1. 原厂轴太重要了，IKBC 算是国内做的比较好的了，用的时间长了，轴跟 Filco 的还是有一定差距的（按着手指头累）
+  2. Cherry 键盘普遍比 Filco 丑，真的丑
+  3. 键盘不建议买奶白色，漂亮是绝对漂亮，就是太不禁脏了，别听信洗键帽之说，我有两个键盘洗过键帽，装回去之后总感觉怪怪的
+  4. 推荐茶轴，青轴不适合写代码，一来太吵，而来确实累；红轴太轻了，几乎没有任何机械键盘的快感，还是算了
+  5. 机械键盘用的时间长了，还是会比较累（难道是因为年龄大了？），后面准备低键位的红轴了
 
 * 编码与环境
 
@@ -40,20 +40,21 @@
   - [[https://www.jetbrains.com/lp/mono/][Jetbrains Mono]]
 + 包管理工具
   - [[https://brew.sh/][Homebrew]]：The missing package manager for macOS
-+ 命令行搜索
-  - [[https://github.com/ggreer/the_silver_searcher][ag]]
 + 版本管理
   - git
++ 命令行使用优化
+  - [[https://github.com/ggreer/the_silver_searcher][ag]]
+  - [[https://github.com/wting/autojump][autojump]]：目录快捷跳转
+  - [[https://github.com/tmux/tmux][tmux]]：终端复用
 + SSH 连接工具 & 终端模拟器
   - [[https://www.iterm2.com/][iterm2]]
-    - zsh + [[https://github.com/robbyrussell/oh-my-zsh][oh-my-zsh]]
-    - [[https://github.com/wting/autojump][autojump]]：目录快捷跳转
+  - zsh + [[https://github.com/robbyrussell/oh-my-zsh][oh-my-zsh]]
   - [[https://www.netsarang.com/products/xsh_overview.html][XShell]]：可惜只支持 Windows 环境
   - [[https://gnometerminator.blogspot.com/p/introduction.html][terminator]]：Ubuntu 下优于默认的 terminal
 + Chrome 插件
   - [[https://www.getpostman.com/][Postman]]：也可独立于 Chrome 运行
   - FireShot：网页截图
-  - [[https://github.com/FelisCatus/SwitchyOmega][SwitchyOmega]]： 你懂的
+  - [[https://github.com/FelisCatus/SwitchyOmega][SwitchyOmega]]：你懂的
 + 代码生成图片
   - [[https://dawnlabs.io/carbon][carbon]]
 + 文本比较
@@ -76,7 +77,8 @@
 ** 记录
 
 + 云笔记
-  - [[https://note.youdao.com/][有道云笔记]]，支持 Windows 和 Mac 平台，Mac 体验优于印象笔记，不支持 Ubuntu，手机上广告很多。开始使用 org-mode 之后，云笔记也不咋用了。
+  - [[https://note.youdao.com/][有道云笔记]]，支持 Windows 和 Mac 平台，Mac 体验优于印象笔记，不支持 Ubuntu，手机上广告很多。
+    开始使用 org-mode 之后，云笔记也不咋用了。
 + TODO
   - +[[https://www.wunderlist.com/zh/][Wunderlist]]：支持 Windows 和 Mac 平台，[[https://github.com/edipox/wunderlistux][Ubuntu]]+ ，部分功能用 org-mode 代替了。 gtd 是一个很艰难的事，与工具无关。
 
@@ -98,7 +100,7 @@
 ** 其它
 
 + 科学上网
-  + [[https://github.com/shadowsocks/ShadowsocksX-NG][ShadowsocksX-NG]]，没有稳定的梯子，现在都改成了 [[https://github.com/leadscloud/ShadowsocksX-NG-R/releases][SSR]] 了，
+  + [[https://github.com/shadowsocks/ShadowsocksX-NG][ShadowsocksX-NG]]，没有稳定的梯子，现在都改成了 [[https://github.com/paradiseduo/ShadowsocksX-NG-R8][ShadowsocksX-NG-R8]] 了
   + iOS +Potatso Lite+ 太吃内存了，删了
 + 刻录
   - [[https://unetbootin.github.io/][UNetbootin]]：Windows、MacOS、Linux

@@ -172,6 +172,7 @@
   - [[file:gtd/2019-Q4.org][2019 Q4]]
   - [[file:gtd/2020-Q1.org][2020 Q1]]
   - [[file:gtd/index.org][Get Thing Done]]
+  - [[file:gtd/personal-management.org][个人管理]]
 - other
   - [[file:other/emacs-news.org][Emacs News]]
   - [[file:other/resume.org][张杰的简历]]
@@ -249,6 +250,7 @@
   - growing
     - [[file:wiki/growing/think-back.org][一日三省]]
     - [[file:wiki/growing/mgr.org][个人管理]]
+    - [[file:wiki/growing/online-course.org][在线课程]]
     - [[file:wiki/growing/programmer.org][技术人]]
   - os
     - [[file:wiki/os/epoll.org][I/O 多路复用]]
