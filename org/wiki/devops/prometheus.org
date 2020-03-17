@@ -668,8 +668,220 @@ Prometheus 客户端库提供了四种核心的 Metric 类型。
 
 =up= 时间序列对于实例可用性检测很有用。
 
-* TODO Prometheus
-** TODO 开始
+* TODO Prometheus [1/6]
+** DONE 开始
+   CLOSED: [2020-03-17 二 22:11]
+
+这是一个 "Hello World" 风格的教程，已简单的方式展示了如何安装、配置和使用 Prometheus。
+你将在本地下载并运行 Prometheus，对其进行配置以抓取自身和示例应用程序，然后用收集来的时间序列数据库查询，
+设置规则和绘图。
+
+*** 下载和运行
+
+到 [[https://prometheus.io/download/][下载]] 页面找到你平台的 Prometheus 包，然后解压和运行。
+
+#+begin_src
+tar xvfz prometheus-*.tar.gz
+cd prometheus-*
+#+end_src
+
+在启动之前，我们要先配置它。
+
+*** 配置 Prometheus 然后监控它自己
+
+Prometheus 从 HTTP 到达点收集指标数据，Prometheus 自己的服务也以相同的方式暴露了数据，它可以抓取自己数据
+监控自己的健康情况。
+
+虽然仅收集 Prometheus 服务自身的数据，在实际情况下并不是很有用，但的确是一个很好的开始范例。
+保存下面的 Prometheus 配置并命名为 =prometheus.yml= 文件。
+
+#+begin_src yaml
+  global:
+	scrape_interval:     15s # By default, scrape targets every 15 seconds.
+
+	# Attach these labels to any time series or alerts when communicating with
+	# external systems (federation, remote storage, Alertmanager).
+	external_labels:
+	  monitor: 'codelab-monitor'
+
+  # A scrape configuration containing exactly one endpoint to scrape:
+  # Here it's Prometheus itself.
+  scrape_configs:
+	# The job name is added as a label `job=<job_name>` to any timeseries scraped from this config.
+	- job_name: 'prometheus'
+
+	  # Override the global default and scrape targets from this job every 5 seconds.
+	  scrape_interval: 5s
+
+	  static_configs:
+		- targets: ['localhost:9090']
+#+end_src
+
+*** 启动 Prometheus
+
+切换到包含 Prometheus 二进制文件的目录然后运行：
+
+#+begin_src sh
+# Start Prometheus.
+# By default, Prometheus stores its database in ./data (flag --storage.tsdb.path).
+./prometheus --config.file=prometheus.yml
+#+end_src
+
+Prometheus 启动之后，您就可以在 localhost:9090 浏览到有关其自身的状态页。等几秒中的时候，应该就可以看到收集的数据了。
+
+你也可以访问 localhost:9090/metrics 来查看 Prometheus 服务暴露的指标数据。
+
+*** 在浏览器使用表达式
+
+打开 http://localhost:9090/graph 然后选择 Console 查看 Graph 页签。
+
+Prometheus 暴露了一个 =prometheus_target_interval_length_seconds= 度量指标（目标收集之间实际的时间间隔）。
+在表达式控制台中输入：
+
+#+begin_src
+prometheus_target_interval_length_seconds
+#+end_src
+
+这应该会返回多个不同的时间序列（以及每个时间序列记录的最新值），所有的度量指标名称都是 =prometheus_target_interval_length_seconds=
+只不过标签不同，标签表示不同的延迟百分比和目标组间隔。
+
+如果我们只对 99% 的延迟感兴趣，可以用以下查询来检索：
+
+#+begin_src
+prometheus_target_interval_length_seconds{quantile="0.99"}
+#+end_src
+
+要返回时间序列的总数，可以：
+
+#+begin_src
+count(prometheus_target_interval_length_seconds)
+#+end_src
+
+*** 使用图形界面
+
+选择 Graph 页签。下面的表达式表示每秒创建 chunks 的速率：
+
+#+begin_src
+rate(prometheus_tsdb_head_chunks_created_total[1m])
+#+end_src
+
+*** 启用一些样本目标
+
+Go 的客户端库有一个例子，道出了具有不同的延迟分布的虚拟 RPC 延迟。
+
+确保你已经安装了 Go 编译器，并且设置了可以正常运行的 Go 构建环境。
+
+下载 Prometheus 的 Go 客户端库，然后启动三个示例进程：
+
+#+begin_src sh
+# Fetch the client library code and compile example.
+git clone https://github.com/prometheus/client_golang.git
+cd client_golang/examples/random
+go get -d
+go build
+
+# Start 3 example targets in separate terminals:
+./random -listen-address=:8080
+./random -listen-address=:8081
+./random -listen-address=:8082
+#+end_src
+
+现在，
+http://localhost:8080/metrics，
+http://localhost:8081/metrics，
+http://localhost:8088/metrics
+就可以看到三个样本目标了。
+
+*** 配置 Prometheus 监控样本目标
+
+这三个到达点（endpoint）统称为 =example-random= 的作业。假设，其中的两个 endpoints 是生产的目标，
+第三个是表示金丝雀示例。为了达到这一目的，我们要对目标（targets）进行分组，生产的一组，金丝雀的一组。
+
+如下，添加到你的配置文件，然后重启 prometheus：
+
+#+begin_src yaml
+scrape_configs:
+	- job_name:       'example-random'
+
+	  # Override the global default and scrape targets from this job every 5 seconds.
+	  scrape_interval: 5s
+
+	  static_configs:
+		- targets: ['localhost:8080', 'localhost:8081']
+		  labels:
+			group: 'production'
+
+		- targets: ['localhost:8082']
+		  labels:
+			group: 'canary'
+#+end_src
+
+然后你可以在浏览器验证，比如说输入 =rpc_durations_seconds= 指标。
+
+*** 配置规则将抓取的数据汇总到新的时间序列
+
+尽管在这个例子中不存在问题，但是在临时计算时，汇总数千个时间序列的查询可能会变慢。为了提高效率，Prometheus 允许
+你通过配置记录规则将表达式提前记录到新的时间序列中。
+假设我们比较在意示例 5 分钟窗口内中所测得所有实例的（但保留作业和服务维度） RPC 平均每秒的速率，我可能会这样写：
+
+#+begin_src
+avg(rate(rpc_durations_seconds_count[5m])) by (job, service)
+#+end_src
+
+尝试运行这个表达式。
+
+我们将这个表达式产生的时间序列记录到称为 =job_service:rpc_durations_seconds_count:avg_rate5m= 中，
+将下面的内容写到一个新建的文件 =prometheus.rules.yml= 中：
+
+#+begin_src yaml
+groups:
+- name: example
+  rules:
+  - record: job_service:rpc_durations_seconds_count:avg_rate5m
+    expr: avg(rate(rpc_durations_seconds_count[5m])) by (job, service)
+#+end_src
+
+然后让 Prometheus 选择这个新的规则，添加 =rule_files= 声明到你的 =prometheus.yml= 文件中。现在，配置应如下：
+
+#+begin_src yaml
+global:
+  scrape_interval:     15s # By default, scrape targets every 15 seconds.
+  evaluation_interval: 15s # Evaluate rules every 15 seconds.
+
+  # Attach these extra labels to all timeseries collected by this Prometheus instance.
+  external_labels:
+    monitor: 'codelab-monitor'
+
+rule_files:
+  - 'prometheus.rules.yml'
+
+scrape_configs:
+  - job_name: 'prometheus'
+
+    # Override the global default and scrape targets from this job every 5 seconds.
+    scrape_interval: 5s
+
+    static_configs:
+      - targets: ['localhost:9090']
+
+  - job_name:       'example-random'
+
+    # Override the global default and scrape targets from this job every 5 seconds.
+    scrape_interval: 5s
+
+    static_configs:
+      - targets: ['localhost:8080', 'localhost:8081']
+        labels:
+          group: 'production'
+
+      - targets: ['localhost:8082']
+        labels:
+          group: 'canary'
+#+end_src
+
+使用新的配置文件，重启 Prometheus 服务，然后验证新的时间序列指标名为 =job_service:rpc_durations_seconds_count:avg_rate5m=
+已经可用。
+
 ** TODO 安装
 ** TODO 配置
 ** 查询
