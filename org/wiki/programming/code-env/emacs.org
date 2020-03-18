@@ -319,12 +319,16 @@ orgmode 是 emacs 自带的 package，但是一般自带的版本比较低。更
 | =C-c C-x p= | 插入标题 =PROPERTIES=                                        |
 | =C-c C-o=   | 打开当前链接 ~org-open-at-point~                             |
 | =C-c C-,=   | 插入结构化模板（类似代码，引用等），orgmode 9.2 版本之后支持 |
+| =C-c C-c=   | 标题上添加 Tag，可以用来分类或者打标签                       |
 |-------------+--------------------------------------------------------------|
 
 扩展：
 
 - [[file:../../../blog/2019/build-site-with-org-mode.org][使用 org-mode 搭建网站]]
 - [[file:../../../blog/2019/emacs-slice.org][Emacs 基于 org-reveal 做幻灯片]]
+- GTD 相关文章：
+  - [[https://emacs.cafe/emacs/orgmode/gtd/2017/06/30/orgmode-gtd.html][Orgmode for GTD]]
+  - [[http://members.optusnet.com.au/~charles57/GTD/gtd_workflow.html][How I use Emacs and Org-mode to implement GTD]]
 
 <2020-02-15 10:15:16>
 
