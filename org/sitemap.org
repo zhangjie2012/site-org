@@ -244,6 +244,7 @@
     - [[file:wiki/devops/systemd.org][systemd]]
     - [[file:wiki/devops/journalctl.org][systemd]]
     - [[file:wiki/devops/tar.org][tar]]
+    - [[file:wiki/devops/tmux.org][tmux]]
     - [[file:wiki/devops/monitor-based-on-prometheus.org][基于 Prometheus 监控告警]]
     - [[file:wiki/devops/ops-faq.org][运维 FAQ]]
     - [[file:wiki/devops/process-mgr.org][进程管理]]
