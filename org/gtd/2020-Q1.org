@@ -16,7 +16,7 @@
 
  - [ ] [[https://prometheus.io/docs/introduction/overview/][官方文档]]
 
-* 阅读 [25%]
+* 阅读 [29%]
 ** TODO Lock Free [0/2]
    - [ ] https://preshing.com/20120612/an-introduction-to-lock-free-programming/
    - [ ] [[https://www.cs.cmu.edu/~410-s05/lectures/L31_LockFree.pdf][Lock-free]]
@@ -29,7 +29,7 @@
 ** DONE [[https://dave.cheney.net/practical-go/presentations/qcon-china.html][Practical Go: Real world advice for writing maintainable Go programs]] :Go:
    CLOSED: [2020-01-17 Fri 15:30]
 没看完，写的不错。但是很多内容与 Effective Go 重复了，而且这种如何写好代码的文章，对我已经没什么提升了。
-** TODO https://reacttraining.com/react-router/web/guides/quick-start :React:
+** BLOCK https://reacttraining.com/react-router/web/guides/quick-start :React:
    深入了解一下 react-router。
 ** TODO [[https://blog.docker.com/2019/07/intro-guide-to-dockerfile-best-practices/][Intro Guide to Dockerfile Best Practices]]                     :Docker:
 ** TODO Google: [[https://google.github.io/eng-practices/review/reviewer/][How to do a code review]]                          :CodeReview:
@@ -38,10 +38,12 @@
 ** TODO https://github.com/ryanmcdermott/clean-code-javascript :javascript:
    出一份 JavaScript 编码规范，与 React 一起写的时候，这玩意挺让人头疼的
 ** TODO https://github.com/Q-Angelo/Nodejs-Roadmap            :nodejs:
-** BLOCK 制定 Prometheus 计划
+** DONE 制定 Prometheus 计划
+   CLOSED: [2020-03-17 Tue 16:23]
 ** TODO 命令行 curl 学习
 ** TODO [[https://grafana.com/blog/2016/01/05/logs-and-metrics-and-graphs-oh-my/][Logs and Metrics and Graphs, Oh My!]] :prometheus:
 ** TODO [[https://coreos.com/blog/prometheus-transforming-monitoring-over-years][Prometheus - transforming monitoring over the years]] :prometheus:
+** TODO Go web server
 * 其它 [100%]
 ** DONE [[https://github.com/golang/tools/blob/master/gopls/doc/emacs.md]] :emacs:
    CLOSED: [2020-01-17 Fri 14:04]
