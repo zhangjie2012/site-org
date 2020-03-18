@@ -138,6 +138,7 @@ Emacs 有很多的 [[http://melpa.org][插件]]，[[https://github.com/emacs-tw/
 | [[https://github.com/magnars/multiple-cursors.el][multiple-cursors]]   | 多鼠标操作                           | [[http://emacsrocks.com/e13.html][Emacs Rocks! Episode 13: multiple-cursors]]                            |
 | [[https://orgmode.org][org-mode]]           | 最牛逼的插件，没有之一               |                                                                      |
 | [[https://github.com/bbatsov/projectile][projectile]]         | 项目管理框架                         | 可以与 ivy 一起使用，[[https://github.com/ericdanan/counsel-projectile][counsel-projectile]]                              |
+| [[https://github.com/skuro/plantuml-mode][plantuml-mode]]      | [[https://plantuml.com/][PlantUML]] 的 Emacs mode               | 需要安装环境                                                         |
 | [[https://github.com/Fanael/rainbow-delimiters][rainbow-delimiters]] | 彩虹括号                             | 相同层级的括号相同颜色                                               |
 | [[https://github.com/felipeochoa/rjsx-mode][rjsx-mode]]          | JSX mode                             | 比 web-mode 好用很多，而且更新的快                                   |
 | [[https://github.com/jwiegley/use-package][use-package]]        | 包配置隔离                           | 可设置启动时机，加速 Emacs 启动                                      |
