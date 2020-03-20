@@ -45,7 +45,7 @@ func main() {
 
 * 插件和 IDE
 
-见 [[file:~/site/org/wiki/programming/code-env/emacs.org][emacs]] 中的 IDE 小结。
+见 [[file:../code-env/emacs.org][emacs]] 中的 IDE 小结。
 
 * 跨平台编译
 
