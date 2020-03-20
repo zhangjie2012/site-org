@@ -126,7 +126,6 @@ Emacs 有很多的 [[http://melpa.org][插件]]，[[https://github.com/emacs-tw/
 |--------------------+--------------------------------------+----------------------------------------------------------------------|
 | [[https://github.com/abo-abo/ace-window][ace-window]]         | 多窗口切换                           | 以前一直用 [[https://github.com/deb0ch/emacs-winum][emacs-winum]]                                               |
 | [[https://github.com/abo-abo/avy][avy]]                | 光标快速定位（按照字符、单词、行等） | 以前用的是 [[https://github.com/winterTTr/ace-jump-mode][ace-jump]]                                                  |
-| [[https://github.com/tumashu/cnfonts][cnfonts]]            | GUI 中英文混排等宽                   |                                                                      |
 | [[https://github.com/company-mode/company-mode][company-mode]]       | 模块化补全框架（支持各种语言）       | 相同的还有 auto-complete，但它没有 company 精准。编码必备。          |
 | [[https://github.com/seagle0128/doom-modeline][doom-modeline]]      | modeline 看起来漂亮一些              | 依赖 [[https://github.com/domtronn/all-the-icons.el][all-the-icons]] _GUI 才可用_                                      |
 | [[https://github.com/magnars/expand-region.el][expand-region]]      | 快速选中文本                         | 比如我常用 =M-s s= 选中一个单词，用 ~M-s p~ 选中括号内内容，然后复制 |
@@ -155,6 +154,7 @@ Emacs 有很多的 [[http://melpa.org][插件]]，[[https://github.com/emacs-tw/
 - [[https://github.com/magit/magit][magit]] 评价非常高的 git package，但是我感觉太慢了，另外是习惯了命令行操作 git，常用的操作用 build-in 的功能足够了，见 [[#manual-vc][版本管理]]
 - [[https://github.com/milkypostman/powerline][powerline]] 用了一段时间，后来用 doom-modeline 替换掉了
 - [[https://github.com/joaotavora/yasnippet][yasnippet]] 代码片段，以前写 C++ 的时候常用，现在感觉不咋用了
+- [[https://github.com/tumashu/cnfonts][cnfonts]] GUI 中英文混排等宽，等宽是可以了，但是不等高啊.. 中英文的输入跳跃太难受了
 
 * 日常使用
 
@@ -380,48 +380,9 @@ pandoc -f markdown -t org -o test.org test.md
 
 ** 使用 GUI 版本还是 Terminal ?
 
-这个分歧很大，使用 GUI 可以让你很完备的使用 Emacs，不用担心快捷键冲突，具有更好的编辑效果，但是经常会有编码问题，如果使用终端的话，
-只要设置终端的编码就可以了；而且汉字的字体设置也很繁琐（我使用中英文等宽的 ~WenQuanYi Zen Hei Mono~ 解决了这个问题）。
+推荐 GUI 的人比 Terminal 的多很多，这个分歧很大，各有优劣势。
 
-使用终端的问题是快捷键很大概率冲突，因为 Emacs 几乎占了所有的快捷键。比如我会使用 ~M + 1/2/3/..~ 切换 Emacs 中的窗口，
-而这个往往是很多终端切换页签的快捷键（Ubuntu 和 Windows 下的 Xshell 都是如此）。要自己重新设置快捷键。
-
-不管是使用 GUI 还是 Terminal，全凭个人喜好。我之前一直用终端，最近（2019-06-04）切换到了 GUI。
-
-<2019-06-15 10:03:35>
-
-在尝试了两周的 GUI 之后，最终还是切换到了 Terminal。主要原因是：
-
-+ 大部分编码等宽字体都不是中英文等宽的，比如我最喜爱的 ~Source Code Pro~ ，你看到的终端等宽大多是因为终端帮你设置了字体的高度和宽度。
-  ~Ubuntu mono~ 和 ~M +1~ 是中英文等宽的，但不是等高的，编辑的时候跳跃让人很不爽。文泉驿是一个绝对的等宽和等高字体，
-  但是 Mac 下的字体实在太丑了～
-+ 以前我最大的快捷键冲突是切换页签的 ~M - 1/2/3/...~ ，最近发现了 [[https://github.com/abo-abo/ace-window][ace-window]] ，使用 ~M - o 1/2/3~ 切换页签，解决了这个问题。
-+ 最后一个问题是工作流，因为工作性质的原因，不管是做服务器开发还是前端开发，都是需要实时的跟终端交互，GUI 和 终端切换，
-  没有终端自身两个页签切换来的流畅。
-
-对 GUI 最大的怀念是可以无缝的跟系统的剪切板融合，比如在别的地方 ~Ctrl + c~ 复制的内容，可以在 Emacs 中 ~M-y~ 粘贴过来，反之亦然。
-
-<2019-06-24 10:29:43>
-
-Ubuntu 下文泉驿是 OK 的，还不错，MacOS 有点丑。习惯了之后还有点离不开 GUI（快捷键真舒服啊），准备用终端写代码，GUI 写文档（文章），
-准备适应一段时间。
-
-<2019-07-08 20:57:06>
-
-Ubuntu GUI 无法切换搜狗输入法，与默认的 Mark 快捷键冲突，解决办法是修改 locale， ~/etc/default/locale~ 中添加 ~LC_CTYPE=zh_CN.UTF-8~ ，
-然后重启即可（中文桌面情况下是没有这个问题的）。
-
-<2019-11-17 16:18:19>
-
-试了一下 [[https://github.com/whorusq/sublime-text-3/blob/master/fonts/Microsoft-Yahei-Mono.ttf][Microsoft YaHei Mono]]，发现效果要比文泉驿要好很多，中文还挺好看。决定终端和 GUI 都使用一段时间。
-
-<2020-03-12 16:45:19>
-
-使用 [[https://github.com/tumashu/cnfonts][cnfonts]] 进行中英文混排的配置，终结了 GUI 上字体的折腾（虽然不是特别完美）。
-
-从今天开始，All in GUI，再见终端。
-
-终于可以使用自己喜爱的主题，而不用考虑终端是否兼容了~
+对我来说，GUI 中英文等宽等高的问题无法解决，折腾了很多次，最终决定实用终端，不折腾了。
 
 ** 如何去掉空白字符
 
