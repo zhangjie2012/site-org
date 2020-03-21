@@ -490,7 +490,8 @@ spinner 在 =gnu= 中，确保 =package-archives= 中包含 =https://elpa.gnu.or
 
 - [[https://jessekelly881-imagine.surge.sh][Imagine]]: 范例 [[https://jessekelly.tk/][Jesse Kelly]]
 - [[https://jessekelly881-rethink.surge.sh][Rethink]]
-- [[https://github.com/gongzhitaao/orgcss][orgcss]]: 范例 [[https://github.com/gongzhitaao/orgcss][CSS for Org-exported HTML]]
+- [[https://github.com/gongzhitaao/orgcss][orgcss]]: 范例 [[https://gongzhitaao.org/orgcss/][CSS for Org-exported HTML]]
+- [[https://github.com/fniessen/org-html-themes][org-html-themes]]
 - 我自己网站的 CSS 文件：https://raw.githubusercontent.com/zhangjie2012/site/master/static/site.css
 
 ** 知名的 Emacs 用户有哪些？
