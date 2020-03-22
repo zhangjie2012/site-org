@@ -16,7 +16,7 @@
 
  - [ ] [[https://prometheus.io/docs/introduction/overview/][官方文档]]
 
-* 阅读 [29%]
+* 阅读 [35%]
 ** TODO Lock Free [0/2]
    - [ ] https://preshing.com/20120612/an-introduction-to-lock-free-programming/
    - [ ] [[https://www.cs.cmu.edu/~410-s05/lectures/L31_LockFree.pdf][Lock-free]]
@@ -43,7 +43,9 @@
 ** TODO 命令行 curl 学习
 ** TODO [[https://grafana.com/blog/2016/01/05/logs-and-metrics-and-graphs-oh-my/][Logs and Metrics and Graphs, Oh My!]] :prometheus:
 ** TODO [[https://coreos.com/blog/prometheus-transforming-monitoring-over-years][Prometheus - transforming monitoring over the years]] :prometheus:
-** TODO Go web server
+** DONE Go web server
+   CLOSED: [2020-03-22 日 22:37]
+   [[file:../wiki/programming/go/build-web-server-stack.org][构建 Web 技术栈]]
 * 其它 [100%]
 ** DONE [[https://github.com/golang/tools/blob/master/gopls/doc/emacs.md]] :emacs:
    CLOSED: [2020-01-17 Fri 14:04]
