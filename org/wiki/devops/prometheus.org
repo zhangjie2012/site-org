@@ -6,9 +6,8 @@
 
 需要边看边练习的话，可以用自己的主机搭建一个临时的监控平台，可参考 [[file:monitor-based-on-prometheus.org][基于 Promethetheus 监控告警]] 中的示例。
 
-* DONE 引言（Introduction） [7/7]
-** DONE 概览
-   CLOSED: [2020-03-11 三 23:06]
+* 引言（Introduction）
+** 概览
 *** 什么是 Prometheus?
 
 Prometheus 是一个开源的监控告警系统，最初由 [[https://soundcloud.com/][SoundCloud]] 构建。2012 年成立以来，许多公司和组织都开始使用 Prometheus，拥有非常活跃的开发人员和用户社区。
@@ -63,8 +62,7 @@ Prometheus 很重视可靠性，即使在有故障的时候，始终可以看到
 如果你需要 100% 的准确性（例如按请求计费），这种情况下，就不是一个好的选择了，收集的数据可能不够详细和完整。
 /简单来讲，Promethues 就是做监控来用的，不要专门作为业务存储。
 
-** DONE 第一步
-	 CLOSED: [2020-03-15 日 15:22]
+** 第一步
 
 Prometheus 是一个监控平台，它从监控目标通过 HTTP 获取度量指标。
 Prometheus 的第一个监控目标是 Prometheus 自己，它提供了各种各样的宿主级别的指标，包括内存利用率，垃圾回收等等。
@@ -165,8 +163,7 @@ rate(promhttp_metric_handler_requests_total{code="200"}[1m])
 仅从 Prometheus 的指标不能很好的说明 Promethues 的功能，为了更好的了解 Prometheus 可以做什么，
 我们建议你浏览其它 exporter 的文档。[[https://prometheus.io/docs/guides/node-exporter/][使用 Node Exporter 监控 Linux 或者 macOS]] 文档可能是一个更好的起点。
 
-** DONE 与替代品的比较 [5/5]
-	 CLOSED: [2020-03-15 日 22:13]
+** 与替代品的比较 [5/5]
 *** DONE Prometheus vs. Graphite
 		CLOSED: [2020-03-15 日 16:36]
 **** 范围（Scope）
@@ -364,8 +361,7 @@ Sensu 有许多组件。它使用 RabbitMQ 传送，Redis 存储当前状态，�
 
 如果你想要做白盒监控，或者动态的或者基于云环境的，那么 Prometheus 是一个不错的选择。
 
-** DONE FAQ
-   CLOSED: [2020-03-01 Sun 18:19]
+** FAQ
 
 经常被问到的一些问题。
 
@@ -514,22 +510,19 @@ could be implemented, but it is not a priority right now.
 
 如果你需要 TLS 或者身份认证，我们建议在 Prometheus 前面放一个反向代理。比如：[[https://www.robustperception.io/adding-basic-auth-to-prometheus-with-nginx/][使用 Nginx 向 Prometheus 添加基本的身份验证]]。
 
-** DONE ROADMAP
-   CLOSED: [2020-02-29 Sat 11:29]
+** ROADMAP
 
 Prometheus 的规划，更全面的了解可以参考相关组件的 issue，比如 [[https://github.com/prometheus/prometheus/issues][prometheus issues]]。
 
 见：https://prometheus.io/docs/introduction/roadmap/
 
-** DONE Media
-   CLOSED: [2020-02-29 Sat 11:27]
+** Media
 
 有个 [[https://www.reddit.com/r/PrometheusMonitoring/][subreddit]] 收集了网上所有与 Prometheus 相关的资源。
 
 资源列表看官方文档吧：https://prometheus.io/docs/introduction/media/
 
-** DONE 专有名词表（Glossary）
-   CLOSED: [2020-02-29 Sat 11:24]
+** 专有名词表（Glossary）
 
 - 告警（alert） ::
   告警是 Prometheus 的告警规则运行触发的结果，告警从 Prometheus 发送到 AlertManager。
@@ -565,7 +558,7 @@ Prometheus 的规划，更全面的了解可以参考相关组件的 issue，比
 - Target ::
   要收集目标的定义。比如，应用到什么标签，连接鉴权，以及如何收集等其他信息。
 
-* DONE 概念
+* 概念
 ** 数据模型
 *** Metric 名字和标签（labels）
 
@@ -668,9 +661,8 @@ Prometheus 客户端库提供了四种核心的 Metric 类型。
 
 =up= 时间序列对于实例可用性检测很有用。
 
-* TODO Prometheus [1/6]
-** DONE 开始
-   CLOSED: [2020-03-17 二 22:11]
+* TODO Prometheus [0/4]
+** 开始
 
 这是一个 "Hello World" 风格的教程，已简单的方式展示了如何安装、配置和使用 Prometheus。
 你将在本地下载并运行 Prometheus，对其进行配置以抓取自身和示例应用程序，然后用收集来的时间序列数据库查询，
@@ -882,7 +874,79 @@ scrape_configs:
 使用新的配置文件，重启 Prometheus 服务，然后验证新的时间序列指标名为 =job_service:rpc_durations_seconds_count:avg_rate5m=
 已经可用。
 
-** TODO 安装
+** 安装
+
+*** 使用预编译的二进制包
+
+我们为大多数官方的 Prometheus 组件提供了预编译二进制文件。查看 [[https://prometheus.io/download/][下载链接]]。
+
+*** 通过源代码
+
+用源代码编译 Prometheus 组件，查看各自仓库中的 =Makefile= 。
+
+*** 使用 Docker
+
+所有的 Prometheus 组件服务镜像都在 [[https://quay.io/repository/prometheus/prometheus][quay.io]] 或者 [[https://hub.docker.com/r/prom/prometheus/][Docker Hub]]。
+
+最简单的方式使用 Docker 启动 Prometheus： =docker run -p 9090:9090 prom/prometheus= 。
+
+Prometheus 镜像以卷的方式存储实际的指标。生产环境部署强烈建议使用 [[https://docs.docker.com/storage/volumes/][容器数据卷]] 的方式来简化升级中的管理数据。
+
+有几种使用配置的选择，下面是两个例子：
+
+**** 卷 & 绑定挂载
+
+把你的 =prometheus.yml= 从宿主机挂载到容器中：
+
+#+begin_src sh
+  docker run \
+		 -p 9090:9090 \
+		 -v /tmp/prometheus.yml:/etc/prometheus/prometheus.yml \
+		 prom/prometheus
+#+end_src
+
+或者添加额外的卷到配置中：
+
+#+begin_src sh
+  docker run \
+		 -p 9090:9090 \
+		 -v /path/to/config:/etc/prometheus \
+		 prom/prometheus
+#+end_src
+
+**** 自定义镜像
+
+为了避免在外部管理配置文件，配置可以添加到镜像中。如果配置文件是静态的，并且在所有的环境中都是相同的，这种方法很不错。
+
+为此，创建一个有 Prometheus 配置和 Dockerfile 的新目录，如下：
+
+#+begin_src dockerfile
+  FROM prom/prometheus
+  ADD prometheus.yml /etc/prometheus/
+#+end_src
+
+然后构建和运行：
+
+#+begin_src sh
+  docker build -t my-prometheus .
+  docker run -p 9090:9090 my-prometheus
+#+end_src
+
+一个更高级的做法时，使用工具在开始时动态生成配置，甚至可以使用守护程序定期更新。
+
+**** 使用配置管理系统
+
+一些第三方的配置管理系统：
+
+- Ansible ::
+  + [[https://github.com/cloudalchemy/ansible-prometheus][Cloud Alchemy/ansible-prometheus]]
+- Chef ::
+  + [[https://github.com/rayrod2030/chef-prometheus][rayrod2030/chef-prometheus]]
+- Puppet ::
+  + [[https://forge.puppet.com/puppet/prometheus][puppet/prometheus]]
+- SaltStack ::
+  - [[https://github.com/saltstack-formulas/prometheus-formula][saltstack-formulas/prometheus-formula]]
+
 ** TODO 配置
 ** 查询
 *** 基础（Basic）
