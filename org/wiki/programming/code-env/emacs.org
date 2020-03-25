@@ -493,6 +493,7 @@ spinner 在 =gnu= 中，确保 =package-archives= 中包含 =https://elpa.gnu.or
 - [[https://github.com/gongzhitaao/orgcss][orgcss]]: 范例 [[https://gongzhitaao.org/orgcss/][CSS for Org-exported HTML]]
 - [[https://github.com/fniessen/org-html-themes][org-html-themes]]
 - 我自己网站的 CSS 文件：https://raw.githubusercontent.com/zhangjie2012/site/master/static/site.css
+  参考了 orgcss 的配色
 
 ** 知名的 Emacs 用户有哪些？
 
