@@ -3,24 +3,11 @@
 #+DATE: 2018-06-22 23:24:56
 #+OPTIONS: num:n
 
-* 开始之前
-
-我在大学（2009 年左右）的时候接触 Linux（Ubuntu），选择编辑器时感觉 Vim 入门很难，只是因为好奇就选择了 Emacs。
-大学期间和我的第一份工作主要的开发环境是 Windows，Emacs 虽然在私下里花了很多精力折腾，但正式使用 Emacs 作为开发环境是 2014 年以后，
-之后工作环境主要聚焦在 Mac/CentOS/Ubuntu 上，直到现在，Emacs 都是我的主力编辑器：
-
-- 前端 :: JavaSript/HTML/CSS/LESS, React(jsx)
-- 后端 :: C/C++, Python/Django, Go
-- 日常 :: Shell，YAML，JSON，...
-- 写文章 :: org-mode
-
-从 Emacs 22 到最新的 Emacs 26，Emacs 越来越好用了，常用的插件已经官方集成进去了，生态圈也越来越好了，有像 [[https://github.com/purcell][purcell]] 这样的牛人来领军配置，
-还有 [[https://github.com/syl20bnr/spacemacs][spacemacs]] 这样集大成者开箱即用的配置。以前我写过 [[https://www.zhangjiee.com/blog/emacs-simple-tutorial][Emacs 简易教程]]，那个时候（2014年）还是主要使用 C/C++ 做游戏服务器开发，
-那份教程已经很久没有更新了，后面我将集中经历维护这份文档。
-
-另外，我的配置文件在 [[https://github.com/zhangjie2012/_emacs.d][_emacs.d]]。我的邮箱是 [[mailto:me@zhangjiee.com][me@zhangjiee.com]]，欢迎与我交流 Emacs 使用心得。
-
 [[https://wiki-1252349778.cos.ap-shanghai.myqcloud.com/2019/emacs-hello.png]]
+
+* 目标
+
+高效的编辑和实用是第一要素。不在花里胡哨的插件上浪费时间，能不用插件就不用，抛弃 GUI，全终端操作。
 
 * 基础
 ** 安装 Emacs
@@ -345,6 +332,95 @@ orgmode 中 =_= 和 =^= 会被输出成下标和上标语法，可以在 =+OPTIO
 
 - https://emacs.stackexchange.com/questions/10549/org-mode-how-to-export-underscore-as-underscore-instead-of-highlight-in-html
 
+* 重定义快捷键
+
+#+begin_quote
+Emacs 被人诟病除了复杂的快捷键之外，就是 =Ctrl= 伤小拇指，几乎所有的快捷键都是以 =Ctrl= 或者 =Alt= 开始的。
+于我而言，这倒不是关键（小拇指目前很健康），但是不同键盘的 Ctrl 键位置不同，这就很难受了。
+
+有些使用 [[https://github.com/emacs-evil/evil][evil]] 来达到 Emacs 和 Vim 双修，弥补 Emacs 快捷键操作的缺陷，兼具 Emacs 和 Vim 的优点。目前出名的
+Emacs kit 如 Spacemacs、DoomEmacs 都是这样。然而，我 Vim 用的不溜，没办法一开始就用的是 Emacs，而不是 Vim。
+
+除了 evil 之外，[[https://github.com/xahlee/xah-fly-keys][xah-fly-keys]] 就是专门用来解决这个问题的，我试了，映射方式太变态了，而且文档很少，自定义比较麻烦。
+
+我选择了 [[https://github.com/abo-abo/hydra][hydra]]，hydra 并不是像 xah-fly-keys 一样专项解决键映射问题，但是顺带可以解决了。选择 hydra 还有一点
+是比较信任它的作者 abo-abo，他有几个开源的插件，著名的 swiper、avy、ace-windows 我都用了。
+#+end_quote
+
+hydra 只是以一个快捷键前缀开始重映射快捷键。但是 Emacs 的快捷键太多了，键盘上主功能区域的键基本上都用完了。
+作为 Leader Key，如果再以 =Ctrl= 开始的话，就没有做映射的必要了。
+
+我的目标并不是想做到像 Vim 一样区分模式编辑，而是减少 =Ctrl= 的使用频率，而使用使用更加合理的方式来编排所有
+的快捷键（之前的快捷键编排不合理导致新增快捷键混乱，没有统一的规范）。
+
+快捷键一般都是复合的键，由 Leader 键和操作键组合而成。主键盘区无论使用 =C-c= 作为前缀，还是 =M-;= 作为前缀
+都会影响正常的快捷键使用，而且我并不想重新映射 =M= 开头的快捷键。
+
+所以 Leader 键只能放到了功能键: =<f1> ~ <f12>= ，又因为如果统一使用一个前缀的话，单手复合快捷键操作起来并不
+舒服，比如 =F2-o= 映射为打开文件就很顺手， =F2-w= 映射为保存文件操作起来就有点难受了。
+
+因此，我的映射方法是将键盘按照左手、右手分开。如果操作键是右手区，那么 Leader 键就用左手区的，反之亦然。
+
+这样，所有键盘上的 26 个字母大小写，以及标点符号都可以作为快捷键来使用了。
+
+** 左手 Leader，F2
+
+左手快捷键开始时使用 =F2= 作为 Leader 键，映射如下：
+
+|--------+-------------------------------------+---------------------------------------------------------|
+| 复合键 | 绑定函数                            | 说明                                                    |
+|--------+-------------------------------------+---------------------------------------------------------|
+| =0=    | =delete-window=                     | 关闭当前窗口                                            |
+| =-=    | =shrink-window-horizontally=        | 水平缩小当前窗口大小                                    |
+| ~=~    | =shrink-window=                     | 垂直减小当前窗口大小                                    |
+| =_=    | =enlarge-window-horizontally=       | 水平扩大当前窗口大小                                    |
+| =+=    | =enlarge-window=                    | 垂直扩大当前窗口大小                                    |
+|--------+-------------------------------------+---------------------------------------------------------|
+| =u=    | =undo=                              | 撤销                                                    |
+| =it=   | =insert-current-date-time=          | 插入当前时间，比如 <2020-03-27 21:59:04> 函数是自定义的 |
+| =o=    | =counsel-find-file=                 | 打开文件                                                |
+| =pi=   | =projectile-invalidate-cache=       |                                                         |
+| =pp=   | =counsel-projectile-switch-project= | 切换项目                                                |
+| =pf=   | =counsel-projectile-find-file=      | 项目中查找文件                                          |
+| =[=    | =beginning-of-buffer=               | 到文件首                                                |
+| =]=    | =end-of-buffer=                     | 到文件尾                                                |
+|--------+-------------------------------------+---------------------------------------------------------|
+| =k=    | =kill-buffer=                       |                                                         |
+| =l=    | =display-line-numbers-mode=         |                                                         |
+|--------+-------------------------------------+---------------------------------------------------------|
+| =m=    | =counsel-semantic-or-imenu=         |                                                         |
+|--------+-------------------------------------+---------------------------------------------------------|
+| =<f2>= | nil                                 | 退出 hydra                                              |
+|--------+-------------------------------------+---------------------------------------------------------|
+
+** 右手 Leader，F8
+
+右手快捷键开始时使用 =F8= 作为 Leader 键，映射如下：
+
+|--------+------------------------------+-------------------------|
+| 复合键 | 绑定函数                     | 说明                    |
+|--------+------------------------------+-------------------------|
+| =1=    | =delete-other-windows=       |                         |
+| =2=    | =split-window-below=         |                         |
+| =3=    | =split-window-right=         |                         |
+|--------+------------------------------+-------------------------|
+| =w=    | =save-buffer=                | 保存                    |
+| =r=    | =ivy-resume=                 |                         |
+|--------+------------------------------+-------------------------|
+| =a=    | =mark-whole-buffer=          | 全选                    |
+| =ss=   | =swiper=                     | 本文档搜索              |
+| =sd=   | =counsel-ag=                 | 项目目录中搜索，使用 ag |
+| =dp=   | =show-file-name=             | 显示当前文件路径        |
+|--------+------------------------------+-------------------------|
+| =x=    | =eshell=                     |                         |
+| =c=    | =save-buffers-kill-terminal= | 关闭 Emacs              |
+| =v=    | =scroll-up-command=          | 向下滚动                |
+| =b=    | =ivy-switch-buffer=          | 切换 buffer             |
+|--------+------------------------------+-------------------------|
+| =<f8>= | nil                          | 退出 hydra              |
+|--------+------------------------------+-------------------------|
+
+
 * FAQ
 ** Emacs 启动速度太慢怎么办？
 
@@ -512,6 +588,23 @@ spinner 在 =gnu= 中，确保 =package-archives= 中包含 =https://elpa.gnu.or
 [[http://wenshanren.org/?p=418][Famous Emacs Users (that are not famous for using Emacs)]] 也列举了很多知名的和非知名的 Emacs 用户。
 
 [以上均来自 [[https://www.reddit.com/r/emacs/comments/fdxvuw/which_famous_devs_use_emacs/][reddit]] 的讨论帖。]
+
+* 写在最后
+
+我在大学（2009 年左右）的时候接触 Linux（Ubuntu），选择编辑器时感觉 Vim 入门很难，只是因为好奇就选择了 Emacs。
+大学期间和我的第一份工作主要的开发环境是 Windows，Emacs 虽然在私下里花了很多精力折腾，但正式使用 Emacs 作为开发环境是 2014 年以后，
+之后工作环境主要聚焦在 Mac/CentOS/Ubuntu 上，直到现在，Emacs 都是我的主力编辑器：
+
+- 前端 :: JavaSript/HTML/CSS/LESS, React(jsx)
+- 后端 :: C/C++, Python/Django, Go
+- 日常 :: Shell，YAML，JSON，...
+- 写文章 :: org-mode
+
+从 Emacs 22 到最新的 Emacs 26，Emacs 越来越好用了，常用的插件已经官方集成进去了，生态圈也越来越好了，有像 [[https://github.com/purcell][purcell]] 这样的牛人来领军配置，
+还有 [[https://github.com/syl20bnr/spacemacs][spacemacs]] 这样集大成者开箱即用的配置。以前我写过 [[https://www.zhangjiee.com/blog/emacs-simple-tutorial][Emacs 简易教程]]，那个时候（2014年）还是主要使用 C/C++ 做游戏服务器开发，
+那份教程已经很久没有更新了，后面我将集中经历维护这份文档。
+
+另外，我的配置文件在 [[https://github.com/zhangjie2012/_emacs.d][_emacs.d]]。我的邮箱是 [[mailto:me@zhangjiee.com][me@zhangjiee.com]]，欢迎与我交流 Emacs 使用心得。
 
 * Footnotes
 
