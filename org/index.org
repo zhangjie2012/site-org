@@ -8,7 +8,7 @@
 - [[file:blog/index.org][Blog]] :: 网络日志，偏技术和思考，知识放 Wiki，非技术的都放在了 Youth 里
 - [[file:wiki/index.org][Wiki]] :: 偏向于工具化，比较散的知识点
 - Topic :: 技术专题，比较聚集的知识面
-  + Emacs
+  + [[file:topic/emacs/index.org][Emacs]]
 - [[file:reading/read-books.org][Read]]、[[file:reading/unread-books.org][Unreading]] :: 读过的和打算读的书，包括电子书
 - [[file:reading/links.org][Links]] :: 各种资源链接收集：博客、DevoOps、设计、技术学习，搬运工
 - [[file:other/resume.org][Resume]] :: 简历
