@@ -33,3 +33,4 @@
 - [[file:resource.org][资源]] :: 教程、博客、视频等
 - [[file:users.org][用户]] :: 知名的 Emacs 用户
 - [[file:screen.org][截图]] :: 一些图片
+- [[file:news.org][News]] :: Emacs 圈里最新消息
