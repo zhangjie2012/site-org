@@ -1,0 +1,36 @@
+#+SETUPFILE: ~/site/tpl/wiki-tpl.org
+#+TITLE: Emacs IDE
+#+DATE: 2020-03-28 20:38:14
+
+* TODO 项目管理
+
+* 编程语言
+
+#+begin_quote
+语言的开发环境配置一直很费时间，我记得以前刚配置 C/C++ 的开发环境时，折腾了一个月左右时间才找到一个相对比较
+满意的开发环境（折腾完之后使用起来可真爽啊）： ~xcscope + etags + c++-mode~ 。
+
+写 Python 的时候也折腾了长时间的缩进问题。 Go 就更不用说了···，Go 工具链很完整，但由于 Go 的版本升级很快，工具链根本跟不上， +gocode+ 已经迁移了三次地址了。
+
+后来看到了 [[https://langserver.org/][LSP（Language Server Protocol）]] 项目，感觉这个项目才是终极解法：插件化，C/S 模式。
+目前已经默认支持 Python 和 Go 了，虽然还是有许许多多的 Bug，但比起 2018 年我试的时候已经成熟太多了。有社区的驱动，发展很快。
+#+end_quote
+
+** Go
+
+按照 [[https://golang.org/doc/install][官方说明]] 安装 Go，LSP server 用的是 [[https://github.com/golang/tools/tree/master/gopls][gopls]]。
+
+guru: a tool for answering questions about Go source code.
+
+#+begin_src sh
+go get golang.org/x/tools/cmd/guru
+go get golang.org/x/tools/gopls@latest
+#+end_src
+
+** TODO Python
+** LSP 使用
+
+1. =lsp-workspace-folders-remove= 可以移出之前添加的 workspace，但是如果遇到大的目录变更，一个一个的移出很慢。
+   目前似乎没有提供一次性 remove all 的方法。一个解决办法是删除 lsp 的存储文件（lsp 提供了 =lsp-session-file= 变量来定义文件路径，
+   默认在 =.emacs.d/.lsp-session-*= 路径下，如果没找到也可以在 lsp 源代码中搜索 lsp-session-file）。
+2. 当前 LSP 还不太稳定，遇到各种问题就可以重启是最有效的办法： =lsp-workspace-restart=

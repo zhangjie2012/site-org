@@ -1,0 +1,5 @@
+#+SETUPFILE: ~/site/tpl/wiki-tpl.org
+#+TITLE: Emacs 屏幕截图
+#+DATE: 2020-03-28 20:47:35
+
+[[https://wiki-1252349778.cos.ap-shanghai.myqcloud.com/2019/emacs-hello.png]]

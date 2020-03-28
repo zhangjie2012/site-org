@@ -1,0 +1,127 @@
+#+SETUPFILE: ~/site/tpl/wiki-tpl.org
+#+TITLE: Emacs 常见问题
+#+DATE: 2020-03-28 20:44:09
+
+* FAQ
+** Emacs 启动速度太慢怎么办？
+
+~M-x emacs-init-time~ 可以查看 Emacs 启动耗费时间。
+
+多一个插件都会增加启动成本，不信你 ~emacs -Q~ 试试，所以要尽可能的减少插件。你可以使用 [[https://github.com/dacap/keyfreq][keyfreq]] 来查看你常用的快捷键有哪些。筛选出不常用的插件给干掉，这是解决启动速度慢的根本办法。
+
+如何定位插件耗时？
+
+- 使用 profiler：https://punchagan.muse-amuse.in/blog/how-i-learnt-to-use-emacs-profiler/
+- 使用 esup：https://github.com/jschaf/esup
+- 使用 https://github.com/purcell/emacs.d/blob/master/lisp/init-benchmarking.el
+
+定位之后如何优化？
+
+elisp 比较熟的有自己的办法优化，当然我不熟。我的解决办法是：
+
+- 基本上不用的插件、UI 上炫酷的插件都干掉
+- 使用 [[https://github.com/jwiegley/use-package][use-package]] ，use-package 并不是包管理工具，只是一个宏，用来配置和加载包。
+  你可以设置延迟加载包，以提高第一次打开的速度。还有一个好处是，使用 use-package 组织包更清晰，对于 use-package 我还处于研究阶段，粗暴的使用 ~:init~ 和 ~:config~ 配置，实际上有很多优雅的方法
+
+** 如何将 markdown 转成 org-mode
+
+~.org~ 文件可以很轻松的通过 ~org-md-export-to-markdown~ 生成 =.md= 文件。 =.md= 文件可以借助 Pandoc 生成 =.org=  [fn:md-to-org]。
+
+#+BEGIN_SRC shell
+pandoc -f markdown -t org -o test.org test.md
+#+END_SRC
+
+** Org mode 如何排序，按列表，按标题等
+
+=org-sort*= [fn:sorting-headings-in-an-org-file]
+
+** 使用 GUI 版本还是 Terminal ?
+
+推荐 GUI 的人比 Terminal 的多很多，这个分歧很大，各有优劣势。
+
+对我来说，GUI 中英文等宽等高的问题无法解决，折腾了很多次，最终决定实用终端，不折腾了。
+
+** 如何去掉空白字符
+
++ ~M-\~ ：删除光标周围的空格和 tab
++ ~M-<SPC>~ ：删除光标周围的空格和 tab，但是保留一个
+
+另外，我会给文件保存（~C-x s~）时，添加一个 hook：
+
+#+BEGIN_SRC emacs-lisp
+(setq show-trailing-whitespace t)
+(add-hook 'before-save-hook 'delete-trailing-whitespace)
+#+END_SRC
+
+这样在每次保存文件的时候，会自动删掉每行或者段落后面多于的空白字符和空行。
+
+** 如何显示所有安装的 package
+=C-h v package-activated-list= [fn:package-actived-list]
+** 如何更新所有的依赖包？
+
+1. ~M-x list-package~
+1. ~U~ 标记所有不是最新的包
+1. ~x~ 执行更新
+
+** 如何记忆 Emacs 快捷键？
+
+Emacs 的快捷键非常多，但是除了基本的编辑操作快捷键之外（就是上面描述的内容）并不需要刻意的记忆，只要你掌握了两点：
+
+1) 在 Emacs 中所有的快捷键对应的都是一个 Lisp 函数，快捷键忘了的话，可以使用 ~M-x~ 调用函数来实现相应的功能（如果使用了 helm 或者 ivy，绑定的快捷键会自动显示出来）
+2) 查看当前 mode 的所有快捷键可以使用 ~C-h m~ 寻求帮助，正如第一条所述： ~C-h m~ 对应的函数是 ~describe-mode~
+
+另外，Emacs 有个 [[https://github.com/justbur/emacs-which-key][emacs-which-key]] 的插件，有快捷键提示。比如，在 Markdown 模式下，快捷键前缀都是 ~C-c C-c~ 但是后面你可能忘了，当你按下 ~C-c C-c~ 时，它会这样提示你：
+
+[[https://wiki-1252349778.cos.ap-shanghai.myqcloud.com/2019/emacs-wiki-which-key-0.png]]
+
+** 如何软重启 Emacs？
+
+所谓软重启指的是通过命令重新加载配置文件：
+
+- ~eval-buffer~ 会执行当前 buffer 的 lisp，切换到 ~init.el~ 文件，然后执行 ~eval-buffer~
+- 在 ~*scratch*~ 中输入 ~(load-file user-init-file)~ ，然后选中 ~C-x C-e~
+
+两个的原理差不多， ~C-x C-e~ 是执行选中的内容， ~eval-buffer~ 是执行当前 buffer。
+
+** 我可不可以用 Emacs 完成 XXX 能做的事情？
+
+没有银弹！纵然 Emacs 可能「可以做任何事情」，比如收发邮件、GTD、阅读 pdf、打开图片等等。然而我以为用合适的工具做合适的事情才是重要的.
+
+** 是否要使用 Evil ？
+
+因人而异，如果之前你曾是 Vim 用户，建议你用 Evil。因为我一开始就用的是 Emacs，而不是 Vim，所以我一直用的是 Emacs 的键映射。
+
+** 行逆序排序
+1. ~M-x sort-lines~
+2. ~M-x reverse-region~
+
+** eshell git diff 高亮
+
+在 =.git/config= 文件中添加[fn:3]：
+
+#+begin_src
+[color]
+    ui = always
+#+end_src
+
+因为我用的是 eshell，ansi-term 默认就是一个 ansi color 的 term。但是用惯了 eshell 不想换了。
+
+* Troubleshooting
+** 安装 lsp-mode 报错 spinner-1.7.3 is unavailable？
+
+spinner 在 =gnu= 中，确保 =package-archives= 中包含 =https://elpa.gnu.org/packages/= 。
+
+** lsp go: Suspicious state fromsyntax checker go-vet ?
+
+错误是由 flycheck 报出来的，高于 1.12 的 Go =go vet= 已被废弃，而是使用 =go tool vet= 代替。 flycheck 最新稳定的版本还停留在 =Flycheck 31= 支持到 go1.11 。
+解决办法是要么升级 flycheck，使用 =melpa= 源，不要用 =melpa-stable= 即可 [fn:2]。
+
+* Footnotes
+
+[fn:md-to-org] https://emacs.stackexchange.com/questions/5465/how-to-migrate-markdown-files-to-emacs-org-mode-format
+
+[fn:2] https://github.com/hlissner/doom-emacs/issues/1225
+
+[fn:3] http://mbork.pl/2018-06-10_Git_diff_in_Eshell
+
+[fn:sorting-headings-in-an-org-file] https://emacs.stackexchange.com/questions/30547/sort-list-by-checked-unchecked-state

@@ -1,0 +1,35 @@
+#+SETUPFILE: ~/site/tpl/link-tpl.org
+#+TITLE: Emacs 专题
+#+OPTIONS: toc:nil
+#+OPTIONS: num:nil
+
+我在大学（2009 年左右）的时候接触 Linux（Ubuntu），选择编辑器时感觉 Vim 入门很难，只是因为好奇就选择了 Emacs。
+大学期间和我的第一份工作主要的开发环境是 Windows，Emacs 虽然在私下里花了很多精力折腾，但正式使用 Emacs 作为开发环境是 2014 年以后，
+之后工作环境主要聚焦在 Mac/CentOS/Ubuntu 上，直到现在，Emacs 都是我的主力编辑器：
+
+- 前端 :: JavaSript/HTML/CSS/LESS, React(jsx)
+- 后端 :: C/C++, Python/Django, Go
+- 日常 :: Shell，YAML，JSON，...
+- 写文章 :: org-mode
+
+从 Emacs 22 到最新的 Emacs 26，Emacs 越来越好用了，常用的插件已经官方集成进去了，生态圈也越来越好了，有像 [[https://github.com/purcell][purcell]] 这样的牛人来领军配置，
+还有 [[https://github.com/syl20bnr/spacemacs][spacemacs]] 这样集大成者开箱即用的配置。以前我写过 [[https://www.zhangjiee.com/blog/emacs-simple-tutorial][Emacs 简易教程]]，那个时候（2014年）还是主要使用 C/C++ 做游戏服务器开发，
+那份教程已经很久没有更新了，后面我将集中经历维护这份文档。
+
+另外，我的配置文件在 [[https://github.com/zhangjie2012/_emacs.d][_emacs.d]]。我的邮箱是 [[mailto:me@zhangjiee.com][me@zhangjiee.com]]，欢迎与我交流 Emacs 使用心得。
+
+----------------
+
+对我来讲，使用 Emacs， *高效的编辑和实用是第一要素* 。
+不在花里胡哨的插件上浪费时间，能不用插件就不用，抛弃 GUI，全终端操作。
+
+- [[file:base.org][基础]] :: 安装、键位约定、包安装与管理
+- [[file:package.org][插件]] :: 实用的的插件（包）推荐
+- [[file:shortkey.org][快捷键]] :: 常用快捷键，以及使用 hydra 重新映射快捷键
+- [[file:ide.org][IDE]] :: 多项目管理、编程语言配置、版本管理器，像 IDE 一样使用 Emacs
+- [[file:orgmode.org][orgmode]] :: 最强力的插件，一种标记语言，比 Markdown 丰富，支持内嵌 LaTeX、导出成 HTML、pdf 等
+  我的博客就是用 orgmode 生成的
+- [[file:faq.org][常见问题]] :: 使用过程中常见的问题以及解决方案
+- [[file:resource.org][资源]] :: 教程、博客、视频等
+- [[file:users.org][用户]] :: 知名的 Emacs 用户
+- [[file:screen.org][截图]] :: 一些图片
