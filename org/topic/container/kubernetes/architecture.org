@@ -1,0 +1,23 @@
+#+SETUPFILE: ~/site/tpl/wiki-tpl.org
+#+TITLE: Kubernetes 架构
+#+DATE: 2020-03-29 21:19:31
+
+Kubernetes 遵循客户端服务器的架构。由几个（为了高可用）master 节点来管理集群，实际运行服务的是工作节点（Worker node）。
+Master 节点主要包含 kube-apiserver、etcd 存储、kube-controller-manager 、kube-scheduler 和 services 的 DNS 服务；
+工作节点包含容器运行时（Docker）、kubelet 和 kubeproxy。
+
+架构图:
+
+#+CAPTION: https://phoenixnap.com/kb/understanding-kubernetes-architecture-diagrams
+#+NAME: full-kubernetes-model-architecture.png
+[[https://wiki-1252349778.cos.ap-shanghai.myqcloud.com/2020/full-kubernetes-model-architecture.png]]
+
+* Master Node
+** TODO API server
+** TODO etcd 存储
+** TODO kube-scheduler
+** TODO kube-controller-manager
+* Worker Node
+** TODO 容器运行时
+** TODO kubelet
+** TODO kube-proxy

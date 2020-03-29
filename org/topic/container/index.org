@@ -1,0 +1,34 @@
+#+SETUPFILE: ~/site/tpl/link-tpl.org
+#+TITLE:  容器化技术
+#+OPTIONS: toc:nil
+#+OPTIONS: num:nil
+
+* 容器
+* Docker
+* Kubernetes
+
+Kubernetes 是开源的微服务或者容器化应用的编排工具，是谷歌开发的集群管理工具（前身是谷歌内部运行十几年的集群管理工具 Borg[fn:2]，
+Kubernetes 吸取 Borg 的经验，然后针对社区定制的开源版本[fn:1]），现已捐赠给 CNCF[fn:4]。
+
+Kubernetes 提供了服务发现和负载均衡、自动部署和回滚、弹性伸缩、健康检测和服务自愈等特性。它的主要目标是通过提供一组 REST APIS
+来隐藏管理容器的复杂性[fn:3]。
+
+** 概念（Concepts）
+
+- [[file:kubernetes/architecture.org][架构]]
+
+** kubectl CLI
+
+kubectl 是用来管理 Kubernetes 集群的命令行工具。
+
+- [[file:kubernetes/kubectl-official.org][官方说明]]
+
+* Footnotes
+
+[fn:4] https://zh.wikipedia.org/wiki/Kubernetes
+
+[fn:3] https://wiki.aquasec.com/display/containers/Kubernetes+Architecture+101
+
+[fn:2] [[https://research.google/pubs/pub44843/][Borg, Omega, and Kubernetes]]
+
+[fn:1] [[https://kubernetes.io/blog/2015/04/borg-predecessor-to-kubernetes/][Borg: The Predecessor to Kubernetes]]

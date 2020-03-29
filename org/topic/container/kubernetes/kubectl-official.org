@@ -1,9 +1,10 @@
 #+SETUPFILE: ~/site/tpl/wiki-tpl.org
-#+TITLE: K8s - kubectl
+#+TITLE: kubectl 官方版本
 #+DATE: 2018-08-20 17:38:19
 
-* kubectl 概览
+https://kubernetes.io/docs/reference/kubectl/overview/
 
+* 概览
 
 =kubectl= 是 K8s 集群操作的命令行接口。基本语法： =kubectl [command] [TYPE] [NAME] [flags]= ，
 
@@ -291,8 +292,7 @@
   $ kubectl logs -f <pod-name>
 #+END_EXAMPLE
 
-* kubectl 备忘单（Cheat Sheet）
-
+* 备忘单（Cheat Sheet）
 ** Kubectl 自动补全
 
 *** BASH
