@@ -93,6 +93,8 @@ export http_proxy="http://127.0.0.1:8123" export https_proxy="http://127.0.0.1:8
 - +网易云音乐+ ：经测试 Ubuntu 下的网易云音乐比较吃资源，就不用了
 - SNS
   + Telegram =apt install telegram-desktop=
+- 思维导图
+  + [[https://www.xmind.net/download/][Xmind]]
 - Docker
 
 微信：
