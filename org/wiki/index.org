@@ -71,8 +71,17 @@
 
 ** 监控告警
 
-- TSDB：[[file:devops/prometheus.org][Prometheus]]
+*** Prometheus
+
+- [[file:devops/prometheus-transforming-monitoring-over-years.org][Prometheus-多年来的监控转型]] 翻译自 CoreOS 文章，写于 2018.8.9，介绍了 Prometheus 的历史和未来。
+  简单概括为：Prometheus 在 2012 年 SoundCloud 开发团队受谷歌内部的 Borgmon 项目启发开发的，
+  用于解决微服务架构的监控和告警问题。2016 年捐赠给 CNCF，转由社区开发和维护。
+  现今，Prometheus 已经是云原生体系下的监控标配。而未来将致力于做监控的标准化工作。
+- [[file:devops/prometheus.org][Prometheus 文档（非官方）]] 官方文档笔记
 - [[file:devops/monitor-based-on-prometheus.org][基于 Prometheus 的监控告警]]
+
+*** Grafana
+
 - [[file:devops/grafana.org][Grafana]] 开源的监控平台
 
 ** 日志

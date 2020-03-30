@@ -1,0 +1,39 @@
+#+SETUPFILE: ~/site/tpl/wiki-tpl.org
+#+TITLE: Prometheus - 多年来的监控转型
+#+DATE: 2020-03-30 16:11:50
+
+文章翻译自 CoreOS 博客中的 [[https://coreos.com/blog/prometheus-transforming-monitoring-over-years][Prometheus - transforming monitoring over the years]] 一文。
+该文章于 2018 年 8 月 9 日发布。
+
+---------------
+
+今天，我们感谢创建云监控项目 Prometheus 的团队，并展望一下项目的未来。
+
+Prometheus 是一个已经在云原生业内和 Kubernetes 生态中产生重要影响的开源项目。2012 年，它的开发团队在 SoundCloud
+启动的，旨在对微服务基础架构提供监控和告警。Prometheus 受谷歌内部的监控工具 Borgmon 的启发，类似于 Kubernetes
+受内部编排工具 Borg 的启发一样。
+
+快进到 2016 年，为了云原生社区，项目被被捐赠给 CNCF（云原生计算基金会）。2016 达到 1.0 版本，2017 发布了 2.0 版本。
+
+自 2016 以来，现已经属于 Red Hat 的 CoreOS 团队已对该项目进行投资，今天，我们继续通过专项的开发人员与 Prometheus 合作，
+以使其企业化。你可能还记得 [[https://coreos.com/blog/coreos-and-prometheus-improve-cluster-monitoring.html][多年来，CoreOS 团队一直致力于该项目]] 包括上游开发，在 Tectonic 中启用它，并致力于最新的
+v2 版本。通过 Red Hat OpenShift，我们将继续投资与云原生未来的关键部分。
+
+我们认为 Prometheus 在今天的 Kubernetes 生态中非常有用，并产生了很多的影响。
+
+Star 不是一个完善的指标，但是对于一个开源项目的受欢迎程度，的确是一个很好的粗粒度度量方法。多年来，Prometheus 越来越
+受欢迎，该指标反映了受欢迎的程度。过去两年里，它从 4000 stars 增加到了 18000 stars；尽管这只是受欢迎的指标，但也确实
+表明了（社区）对该项目的浓厚兴趣。
+
+Prometheus 安装非常简单，下载二进制文件，然后一个命令就可以启动。在这么简单情况下，它可以在现在硬件上每秒获取十万个
+样本。Prometheus 非常适合频繁启动和停止的动态环境，而不需要手动重新配置。我们专门重新实现了时间序列数据库（TSDB），
+以适应时间周期短高流失的情况，同时保留并 [[https://coreos.com/blog/prometheus-2.0-released][提升查询延迟和资源使用率]]。
+
+Promethues 降低了监控的门槛，帮助定义监控文化的新时代。Promethues 用户和维护者写了多本书，高度强调了这种可用性的转变，
+甚至新的 [[https://landing.google.com/sre/books/][Goolge SRE Workbook]] 也把 Prometheus 作为它的查询和告警范例。
+
+再往前，Prometheus 准备继续在社区以及 Red Hat 进行广泛的社区开发，希望可以为更多的用户带来更强大的容器监控功能。
+根据 Kubernetes 和 OpenShift 生态，我们相信是监控系统的默认解决方案。向标准化的努力使得 Prometheus 成功，就像通过
+OpenMetrics 项目使指标格式化，强调了该项目在行业中的重要性。
+
+未来，我们认为，对于组织寻求下一代运营工具和文化来说，这种标准化是关键，而大部分可能由 Prometheues 推动。

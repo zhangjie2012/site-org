@@ -15,7 +15,7 @@
 
 - [ ] [[https://prometheus.io/docs/introduction/overview/][官方文档]]
 
-**  TODO Kubernetes 总结：短期学习计划
+** TODO Kubernetes 总结：短期学习计划
    DEADLINE: <2020-03-29 日> SCHEDULED: <2020-03-24 二>
 
 *** KR
@@ -36,7 +36,7 @@ Kubernetes 梳理，把一些零散的知识点汇集起来，偏向于生态圈
 - [ ] 网络
 - [ ] 服务监控
 
-* 阅读 [35%]
+* 阅读 [41%]
 ** TODO Lock Free [0/2]
    - [ ] https://preshing.com/20120612/an-introduction-to-lock-free-programming/
    - [ ] [[https://www.cs.cmu.edu/~410-s05/lectures/L31_LockFree.pdf][Lock-free]]
@@ -62,11 +62,12 @@ Kubernetes 梳理，把一些零散的知识点汇集起来，偏向于生态圈
    CLOSED: [2020-03-17 Tue 16:23]
 ** TODO 命令行 curl 学习
 ** TODO [[https://grafana.com/blog/2016/01/05/logs-and-metrics-and-graphs-oh-my/][Logs and Metrics and Graphs, Oh My!]] :prometheus:
-** TODO [[https://coreos.com/blog/prometheus-transforming-monitoring-over-years][Prometheus - transforming monitoring over the years]] :prometheus:
+** DONE [[https://coreos.com/blog/prometheus-transforming-monitoring-over-years][Prometheus - transforming monitoring over the years]]      :prometheus:
+   CLOSED: [2020-03-30 Mon 16:51]
 ** DONE Go web server
    CLOSED: [2020-03-22 日 22:37]
    [[file:../wiki/programming/go/build-web-server-stack.org][构建 Web 技术栈]]
-* 其它 [100%]
+* 其它 [50%]
 ** DONE [[https://github.com/golang/tools/blob/master/gopls/doc/emacs.md]] :emacs:
    CLOSED: [2020-01-17 Fri 14:04]
 
