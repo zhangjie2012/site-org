@@ -1,6 +1,6 @@
 #+SETUPFILE: ~/site/tpl/wiki-tpl.org
 #+TITLE: Git
-#+DATE: 2014-04-05
+#+DATE: 2014-04-05 00:00
 
 * Git 基础
 ** 环境配置
