@@ -171,6 +171,7 @@
 - gtd
   - [[file:gtd/2019-Q4.org][2019 Q4]]
   - [[file:gtd/2020-Q1.org][2020 Q1]]
+  - [[file:gtd/2020-Q2.org][2020 Q2]]
   - [[file:gtd/index.org][Get Thing Done]]
   - [[file:gtd/personal-management.org][个人管理]]
 - other
@@ -232,6 +233,7 @@
     - [[file:wiki/devops/kubernetes-containers-images.org][Kubernetes 镜像]]
     - [[file:wiki/devops/ps1.org][PS1]]
     - [[file:wiki/devops/prometheus.org][Prometheus]]
+    - [[file:wiki/devops/prometheus-transforming-monitoring-over-years.org][Prometheus - 多年来的监控转型]]
     - [[file:wiki/devops/ssh.org][SSH]]
     - [[file:wiki/devops/awk.org][awk]]
     - [[file:wiki/devops/cron.org][crontab]]
