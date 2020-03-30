@@ -1,6 +1,5 @@
 #+SETUPFILE: ~/site/tpl/wiki-tpl.org
 #+TITLE: pip
-#+OPTIONS: toc:nil
 #+DATE: 2017-12-04 11:34:03
 
 ** MacOS 安装
