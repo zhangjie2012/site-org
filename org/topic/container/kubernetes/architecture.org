@@ -12,11 +12,44 @@ Master 节点主要包含 kube-apiserver、etcd 存储、kube-controller-manager
 #+NAME: full-kubernetes-model-architecture.png
 [[https://wiki-1252349778.cos.ap-shanghai.myqcloud.com/2020/full-kubernetes-model-architecture.png]]
 
+/Master node 通常被视为控制平面（Control plane），而 Workder Node 被视为计算机器。/
+
 * Master Node
-** TODO API server
-** TODO etcd 存储
-** TODO kube-scheduler
-** TODO kube-controller-manager
+** etcd 存储
+
+etcd 是用于分布式系统中最关键数据的的分布式的可靠的 key-value 存储。Kubernetes 用它来存储集群中的数据（比如 pods 的数量和状态，namespace 等）、
+API 对象和服务发现信息的详细信息等。
+
+出于安全的原因，它只允许被 API server 访问。etcd 在 watcher 的帮助下，向集群发出有关配置修改的通知。
+
+它是分布式的系统，可以单独部署，也通常与 master 一起部署，遵从 3、5、7 等奇数个部署。
+
+** API server
+
+API server 充当的是集群的前端。顾名思义，所有与集群的交互都要通过 API server，它接受所有的 REST 请求，所有对 Pods，
+Services、RS/RC 或者其它 api 对象的变更都要通过它。
+
+它也是与 etcd 通信的唯一组件，保证数据存储在 etcd 中，并且与部署的 pods 信息一致。
+
+** kube-controller-manager
+
+controll manager 是一系列的控制器后台进程组成，但是为了部署和管理方便，打包到了一起。比如，副本控制器（replication controller）来控制容器中副本的数量；
+端点控制器（endpoint controller）来控制端点对象类似 services 和 pods。
+
+这些控制器的职责都是保证整个集群的期望状态与集群状态一致。当一个服务的配置变更时，控制器会让集群按照变更的期望状态来工作。
+
+** kube-scheduler
+
+scheduler，调度器，根据调度策略将 pod 调度到符合条件的节点上。
+
+调度会参考请求的资源、整个集群中每个节点的工作负载、软硬件的策略限制、亲和性和反亲和性、负载干扰等对每个节点进行评分，最终选择出一个评分最高的节点。
+
+实际的工作流程大致为：
+
+- scheduler 监听 API server，获取 PodSpec.NodeName 为空的 Pod
+- 根据调度策略（过滤、打分）选出一个最优的节点
+- 通知 API server 将 pod 绑定到该节点上
+
 * Worker Node
 ** TODO 容器运行时
 ** TODO kubelet
