@@ -174,7 +174,6 @@
   - [[file:gtd/index.org][Get Thing Done]]
   - [[file:gtd/personal-management.org][个人管理]]
 - other
-  - [[file:other/emacs-news.org][Emacs News]]
   - [[file:other/resume.org][张杰的简历]]
   - [[file:other/once.org][曾经发表在 ONCE 上的一些话]]
   - [[file:other/duomi.org][音乐回忆]]
@@ -216,7 +215,6 @@
     - [[file:wiki/devops/docker-resource.org][Docker 资源]]
     - [[file:wiki/devops/dockerfile-best-practice.org][Dockerfile 最佳实践]]
     - [[file:wiki/devops/grafana.org][Grafana]]
-    - [[file:wiki/devops/k8s-kubectl.org][K8s - kubectl]]
     - [[file:wiki/devops/k8s-ingress.org][K8s Ingress]]
     - [[file:wiki/devops/k8s-practice.org][K8s 实践]]
     - [[file:wiki/devops/k8s-resource.org][K8s 资源]]
