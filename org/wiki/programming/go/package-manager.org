@@ -54,8 +54,8 @@ The commands are:
   引入一个 package，package 可能还依赖其它的 package，go.mod 只记录根依赖，你可以通过 =go list -m all= 来查看所有的依赖；
   除了 go.mod 之外，还生成了一个 go.sum 文件用来做 hash 校验；
   *go.mod 和 go.sum 都应该放到版本管理工具中*
-- 升级依赖， =go get= 包之后，go.mod 会自动升级到最新版本；
-  + =go list -m -versions= 可以查看包的版本
+- 升级依赖， =go get -u= 包之后，go.mod 会自动升级到最新版本；
+  + =go list -m -u all= 可以查看包的可升级版本
 - 移出不常用的依赖 =go mod tidy=
 - =go mod download= 下载依赖的 module 到本地缓存
 - =go mod why= 查找包的依赖，比如 =go mod why golang.org/x/text/encoding=
