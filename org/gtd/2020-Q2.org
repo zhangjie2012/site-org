@@ -1,0 +1,52 @@
+#+SETUPFILE: ~/site/tpl/gtd-tpl.org
+#+TITLE: 2020 Q2
+
+* 学习计划 [0/2]
+** TODO Promethues：短期学习计划
+   DEADLINE: <2020-06-01 Mon> SCHEDULED: <2020-02-26 Wed>
+
+*** KR [0/5]
+- [ ] 基本使用（概念、数据模型、report/query API）
+- [ ] 与 Docker 和 Kubernetes 结合
+- [ ] 生态 -> grafana
+- [ ] TSDB 理论
+
+*** Action  [0/1]
+
+- [ ] [[https://prometheus.io/docs/introduction/overview/][官方文档]]
+
+** TODO Kubernetes 总结：短期学习计划
+   DEADLINE: <2020-03-29 日> SCHEDULED: <2020-03-24 二>
+
+*** KR
+
+Kubernetes 梳理，把一些零散的知识点汇集起来，偏向于生态圈知识体系的建立，常见的几个环节梳理清楚，然后文字化。
+琐碎的不常用的先放着，主要是为了速成。
+
+*** Action [0/10]
+
+- [ ] 架构
+- [ ] 概念 deployment, statefulset, daemonset, pod, job 等
+- [ ] Pod 的生命周期
+- [ ] 应用的生命周期
+- [ ] 更新策略
+- [ ] 服务暴露 services/ingress
+- [ ] configmap, pv/pvc
+- [ ] 服务发现
+- [ ] 网络
+- [ ] 服务监控
+
+* 阅读
+
+** TODO [[https://blog.docker.com/2019/07/intro-guide-to-dockerfile-best-practices/][Intro Guide to Dockerfile Best Practices]]                     :Docker:
+** TODO Google: [[https://google.github.io/eng-practices/review/reviewer/][How to do a code review]]                          :CodeReview:
+** TODO https://github.com/uber-go/guide/blob/master/style.md            :Go:
+** TODO https://github.com/ryanmcdermott/clean-code-javascript :javascript:
+   出一份 JavaScript 编码规范，与 React 一起写的时候，这玩意挺让人头疼的
+** TODO https://github.com/Q-Angelo/Nodejs-Roadmap            :nodejs:
+** TODO 命令行 curl 学习
+** TODO [[https://grafana.com/blog/2016/01/05/logs-and-metrics-and-graphs-oh-my/][Logs and Metrics and Graphs, Oh My!]] :prometheus:
+
+* 其它
+
+** TODO 正则表达式 Wiki
