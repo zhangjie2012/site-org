@@ -3,9 +3,9 @@
 #+OPTIONS: toc:nil
 #+OPTIONS: num:nil
 
-* 容器
-* Docker
-* Kubernetes
+* TODO 容器
+* TODO Docker
+* TODO Kubernetes
 
 Kubernetes 是开源的微服务或者容器化应用的编排工具，是谷歌开发的集群管理工具（前身是谷歌内部运行十几年的集群管理工具 Borg[fn:2]，
 Kubernetes 吸取 Borg 的经验，然后针对社区定制的开源版本[fn:1]），现已捐赠给 CNCF[fn:4]。
@@ -15,7 +15,7 @@ Kubernetes 提供了服务发现和负载均衡、自动部署和回滚、弹性
 
 ** 概念（Concepts）
 
-- [[file:kubernetes/architecture.org][架构]]
+- [[file:kubernetes/architecture.org][架构]] kubernetes 架构与组件
 
 ** kubectl CLI
 
