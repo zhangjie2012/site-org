@@ -23,18 +23,18 @@
 Kubernetes 梳理，把一些零散的知识点汇集起来，偏向于生态圈知识体系的建立，常见的几个环节梳理清楚，然后文字化。
 琐碎的不常用的先放着，主要是为了速成。
 
-*** Action [0/10]
+*** Action [2/10]
 
-- [ ] 架构
+- [X] 架构
+- [X] Pod 概念以及生命周期
 - [ ] 概念 deployment, statefulset, daemonset, pod, job 等
-- [ ] Pod 的生命周期
 - [ ] 应用的生命周期
 - [ ] 更新策略
 - [ ] 服务暴露 services/ingress
 - [ ] configmap, pv/pvc
 - [ ] 服务发现
 - [ ] 网络
-- [ ] 服务监控
+- [ ] 监控
 
 * 阅读
 
