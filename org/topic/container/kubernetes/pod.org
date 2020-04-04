@@ -186,6 +186,32 @@ kubelet 对已经运行的容器可选的执行下面三种探针：
 - 建议服务都配置可用探针，服务不可用时，临时切掉流量，等恢复了在继续处理请求。
   尤其是服务的更新策略是滚动更新时，更加建议配置可用检测，等新的 pod 真正意义的上 ready 了，然后再删除旧的 pod，
   这样更平滑一些。
-- 启动探针是 =v1.16= 版本之后的新功能，还不是很了解。
+- 启动探针是 =v1.16= 版本之后的新功能， /还不是很了解/ 。
 
-* TODO Pod 的lifetime
+* Pod 的重启策略
+
+Pod 有可以设置重启策略，由 pod 所在容器的 kubelet 来判断容器状态（异常退出、存活检测失败），重启策略由 PodSpec 中的
+=restartPolicy= 字段来控制。
+
+- =Always= 当容器终止退出之后，自动重启，默认策略；
+- =OnFailure= 容器异常退出且退出码不为 0 时重启；
+- =Nerver= 容器退出时，不重启；
+
+在需要重启时，是基于延迟策略的间隔进行重启的（10s、20s、40s），上限是 5 分钟，并且成功执行 10 分钟之后重置。
+
+* Pod 的lifetime
+
+Pod 除非是人工或者控制器删除，否则会一直存在。当 pod 的数量超过配置的阈值时（由 kube-controller-manager 配置的
+=terminated-pod-gc-threshold= 决定），控制面板将清理终止的 pod（phase 值为 "success" 或者 "error"）。
+
+提供三种类型的控制器：
+
+- Job 运行的预期会终止的 pods ，比如批量计算。Job 仅适用于 pod  =restartPolicy= 等于 OnFailure 或者 Never。
+- ReplicationController, Replicaset 或者 Deployment 的 pods 预期不会被终止，比如 web 服务。
+  ReplicationControllers 仅适用于 =restartPolicy= 为 always 的 pod。
+- DaemonSet 运行的 pods 需要在每台机器上都运行一个，因为它们提供了特定于机器的系统服务。
+
+三种类型的控制器都包含 PodTemplate。建议创建合适的控制器（让它们来创建 pods），而不是手动创建 pods。
+因为 pods 本身不能抵御机器故障，但是控制器可以。
+
+如果节点宕掉或者与集群失联，kubernetes 会把所有的 pod phase 设置为 Failed。

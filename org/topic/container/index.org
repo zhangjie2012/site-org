@@ -16,7 +16,7 @@ Kubernetes 提供了服务发现和负载均衡、自动部署和回滚、弹性
 ** 概念（Concepts）
 
 - [[file:kubernetes/architecture.org][架构]]: kubernetes 架构与组件概览
-- [ ] Pod: 概念, 生命周期
+- [X] Pod: 概念, 生命周期
 - [ ] 控制器(controller): ReplicaSet, ReplicationController, Deployments, StatefulSets 等
 - [ ] Services、负载均衡和集群网络: 服务对外暴露
 - [ ] 存储: Volumes, Persistent Volumes, Storage Class 等
