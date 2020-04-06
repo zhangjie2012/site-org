@@ -17,10 +17,19 @@ Kubernetes 提供了服务发现和负载均衡、自动部署和回滚、弹性
 
 - [[file:kubernetes/architecture.org][架构]]: kubernetes 架构与组件概览
 - [[file:kubernetes/pod.org][Pod]]: 概念、为什么需要 Pod、状态标识、健康检查、生命周期等
-- [ ] 控制器(controller): ReplicaSet, ReplicationController, Deployments, StatefulSets 等
-- [ ] Services、负载均衡和集群网络: 服务对外暴露
-- [ ] 存储: Volumes, Persistent Volumes, Storage Class 等
-- [ ] 调度: 调度器和调度策略
+- 控制器(controller):
+  + ReplicaSet
+  + ReplicationController
+  + Deployments
+  + StatefulSets
+  + DaemonSet
+  + Garbage Collection
+  + TTL Controler for Finished Resources
+  + Jobs - Run to Completion
+  + CronJob
+- Services、负载均衡和集群网络: 服务对外暴露
+- 存储: Volumes, Persistent Volumes, Storage Class 等
+- 调度: 调度器和调度策略
 
 ** kubectl CLI
 
