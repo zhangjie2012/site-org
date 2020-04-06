@@ -1,0 +1,5 @@
+#+SETUPFILE: ~/site/tpl/wiki-tpl.org
+#+TITLE: Kubernetes 控制器 - ReplicaSet
+#+DATE: 2020-04-06 11:51:03
+
+ReplicaSet 的目标是稳定的维护 pod 副本的数量，保证给定数量的相同的 pod 的可用性。
