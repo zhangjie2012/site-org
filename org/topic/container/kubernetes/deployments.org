@@ -291,14 +291,25 @@ https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#writing-a-
 
   *注意：* maxUnavaible 和 maxSurge 不可以同时为 0。
 
-** TODO Progress Deadline Seconds
+** Progress Deadline Seconds
 
-** TODO Min Ready Seconds
+=.spec.progressDeadlineSeconds= 可选的字段，用来指定等待部署进度，然后系统报告 Deployment 失败的秒数。
+最终以 ~Type=Progressing~, ~Status=False~ 表达出来，且在资源状态中 ~Reason=ProgressDeadlineExceeded~ 。
+Deployment 控制器将继续重试部署。在未来，等自动回滚实现了，Deployment 在遇到这种情况时会立刻自动回滚。
 
-最小就绪（ready）秒
+如果指定了，该字段的值需要大于 =.spec.minReadySeconds= 的值。
 
-** TODO Rollback To
+** Min Ready Seconds
 
-** TODO Revision History Limit
+最小就绪（ready）秒， =.spec.minReadySeconds= 是一个可选的字段，用来表示新创建的 Pod 在容器不会崩溃的的情况下准备就绪
+所需要的秒数，会视为可用。默认是 0（准备就绪后，该 Pod 既被视为可用）。
 
-** TODO Paused
+** Revision History Limit
+
+=.spec.revisionHistoryLimit= 可选字段，表明要保留的允许回滚的旧的 ReplicaSets 数量。这些旧的 ReplicaSets 会消耗 etcd
+中的资源，在 =kubectl get rs= 中聚合。默认保存 10 个，但其理想值取决于部署频率和稳定性。
+值为 0 表示所有的旧 RS 都会被清除。
+
+** Paused
+
+=.spec.paused= 是一个可选的字段，用于暂停和恢复 Deployment。
