@@ -21,7 +21,7 @@ Kubernetes 提供了服务发现和负载均衡、自动部署和回滚、弹性
   + [[file:kubernetes/controller-replicaset.org][ReplicaSet]]
   + ReplicationController: ReplicaSet 是下一代的 RC（支持新的基于集合的标签选择器），建议使用 RS
   + [[file:kubernetes/controller-deployments.org][Deployments]]
-  + StatefulSets
+  + [[file:kubernetes/controller-statefulsets.org][StatefulSets]]
   + DaemonSet
   + Garbage Collection
   + TTL Controler for Finished Resources
