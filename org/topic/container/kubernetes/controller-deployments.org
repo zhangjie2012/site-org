@@ -1,5 +1,5 @@
 #+SETUPFILE: ~/site/tpl/wiki-tpl.org
-#+TITLE: Kubernetes - Pod
+#+TITLE: Kubernetes - Deployments
 #+DATE: 2020-04-07 11:51:47
 
 /Deployment/ 为 Pods 和 ReplicaSets 提供了声明式的更新。
