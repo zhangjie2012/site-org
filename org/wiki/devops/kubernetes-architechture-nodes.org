@@ -41,7 +41,6 @@
 - =Capacity= 显示节点的资源总量
 - =Allocatable= 显示可提供给 Pod 消耗的资源总量
 
-
 ** 信息（info）
 
 节点的通用信息（System Info），包含：内核版本、系统、容器运行时以及 Kubernetes 版本信息等。
