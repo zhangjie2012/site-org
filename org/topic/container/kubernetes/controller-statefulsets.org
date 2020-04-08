@@ -1,0 +1,3 @@
+#+SETUPFILE: ~/site/tpl/wiki-tpl.org
+#+TITLE: Kubernetes - Pod
+#+DATE: 2020-04-07 11:51:47
