@@ -1,0 +1,30 @@
+#+SETUPFILE: ~/site/tpl/wiki-tpl.org
+#+TITLE: Emacs evil
+#+DATE: 2020-04-09 14:21:12
+
+- [[https://github.com/emacs-evil/evil][evil]]: vi 插件
+- [[https://github.com/cofi/evil-leader][evil-leader]]: 像 Vim 设置 =<leader>=
+
+* evil 默认快捷键
+** normal state
+
+- =$= 到达行尾
+- =y= 复制
+- =A= append line
+- =x= 向后删除一个字符
+- =X= 向前删除一个字符
+- =D= 删除到行尾，等价于 =C-k=
+- =p= paste after
+- =P= paste before
+- =w= 前进一个单词
+- =b= 后退一个单词
+- =[[= 上一个 section 开始
+- =]]= 下一个 secion 开始
+- ={= 上一个段落
+- =}= 下一个段落
+- =C-]= 跳转到 tag(定义)，等价与编辑模式的 =M-.=
+- =g d= go to defination
+- =g g= 跳转到第一行
+- =G= go to line
+- =r= replace
+- =C-d= scroll down
