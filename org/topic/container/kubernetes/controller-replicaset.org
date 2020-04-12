@@ -2,7 +2,7 @@
 #+TITLE: Kubernetes 控制器 - ReplicaSet
 #+DATE: 2020-04-06 11:51:03
 
-ReplicaSet（后面简称 RS） 是为了维护一组 Pod 副本的运行，作用就是保证这些 Pod 在集群中正常运行。
+ReplicaSet（后面简称RS） 是为了维护一组 Pod 副本的运行，作用就是保证这些 Pod 在集群中正常运行。
 
 * 工作原理
 

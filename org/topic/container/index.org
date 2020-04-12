@@ -20,11 +20,11 @@ Kubernetes 提供了服务发现和负载均衡、自动部署和回滚、弹性
 - [[file:kubernetes/architecture.org][架构]]: kubernetes 架构与组件概览
 - [[file:kubernetes/pod.org][Pod]]: 概念、为什么需要 Pod、状态标识、健康检查、生命周期等
 - 控制器(controller):
-  + [[file:kubernetes/controller-replicaset.org][ReplicaSet]]
-  + ReplicationController: ReplicaSet 是下一代的 RC（支持新的基于集合的标签选择器），建议使用 RS
-  + [[file:kubernetes/controller-deployments.org][Deployments]]
-  + [[file:kubernetes/controller-statefulsets.org][StatefulSets]]
-  + DaemonSet
+  + [[file:kubernetes/controller-replicaset.org][ReplicaSet]]: 保证一组 Pod 副本在集群的正常运行
+  + +ReplicationController+: ReplicaSet 是下一代的 RC（支持新的基于集合的标签选择器），建议使用 RS
+  + [[file:kubernetes/controller-deployments.org][Deployments]]: 用于无状态服务部署，在 ReplicaSet 基础上提供了更新策略等
+  + [[file:kubernetes/controller-statefulsets.org][StatefulSets]]: 用于部署无状态应用（ZooKeeper，Kafka，Redis 等）
+  + [[file:kubernetes/controller-daemonset.org][DaemonSet]]: 每个节点上跑一个 Pod，用作类似日志收集、系统监控等功能
   + Garbage Collection
   + TTL Controler for Finished Resources
   + Jobs - Run to Completion
