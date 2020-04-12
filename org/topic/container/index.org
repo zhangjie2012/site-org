@@ -15,6 +15,8 @@ Kubernetes 提供了服务发现和负载均衡、自动部署和回滚、弹性
 
 ** 概念（Concepts）
 
+以下文档大都来自 Kubernetes 官方文档 [[https://kubernetes.io/docs/concepts/][Concepts]]，加上自己的理解。
+
 - [[file:kubernetes/architecture.org][架构]]: kubernetes 架构与组件概览
 - [[file:kubernetes/pod.org][Pod]]: 概念、为什么需要 Pod、状态标识、健康检查、生命周期等
 - 控制器(controller):
