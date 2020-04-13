@@ -2,29 +2,60 @@
 #+TITLE: Emacs evil
 #+DATE: 2020-04-09 14:21:12
 
+/当前文档尚未完成/
+
 - [[https://github.com/emacs-evil/evil][evil]]: vi 插件
 - [[https://github.com/cofi/evil-leader][evil-leader]]: 像 Vim 设置 =<leader>=
 
 * evil 默认快捷键
 ** normal state
 
-- =$= 到达行尾
-- =y= 复制
-- =A= append line
-- =x= 向后删除一个字符
-- =X= 向前删除一个字符
-- =D= 删除到行尾，等价于 =C-k=
-- =p= paste after
-- =P= paste before
+*移动*
+
+- =hjkl= 移动光标
+- =0= 移动到行首
+- =^= 移动到行首（去掉空白部分）
+- =$= 移动到行尾
+- =A= 行尾开始编辑
 - =w= 前进一个单词
 - =b= 后退一个单词
+- =y= 复制
+- =%= 匹配的括号、块首位移动
 - =[[= 上一个 section 开始
 - =]]= 下一个 secion 开始
 - ={= 上一个段落
 - =}= 下一个段落
-- =C-]= 跳转到 tag(定义)，等价与编辑模式的 =M-.=
-- =g d= go to defination
-- =g g= 跳转到第一行
+- =C-]= 跳转到 tag
+- =gd= 跳转到定义，等价与编辑模式的 =M-.=
+- =gg= 跳转到第一行
 - =G= go to line
 - =r= replace
 - =C-d= scroll down
+
+*搜索*
+
+- =*= 向前搜索当前光标所在单词
+- =#= 向后搜索当前光标所在单词
+- =/word= 向前搜索
+- =?word= 向后搜索
+
+*删除*
+
+- =dd= 删除当前行
+- =d$= 删除到行尾，等价与 =D=
+- =dw= 从单词的当前位置删除到最后
+- =daw= 删除一个单词
+- =x= 向后删除一个字符
+- =X= 向前删除一个字符
+
+*复制 & 粘贴*
+
+- =y= 复制
+- =yy= 复制当前行
+- =nyy= 从当前行开始复制 N 行
+- =p= paste after
+- =P= paste before
+
+* 参考
+
+- https://wiki.tankywoo.com/tool/vim.html
