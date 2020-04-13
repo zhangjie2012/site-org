@@ -53,3 +53,4 @@ Kubernetes 梳理，把一些零散的知识点汇集起来，偏向于生态圈
 ** TODO Emacs evil 文档补充
 
 等用一段时间之后再说。
+** TODO Emacs evil 不同模式支持不同输入法
