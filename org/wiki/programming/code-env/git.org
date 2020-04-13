@@ -42,6 +42,7 @@ git config --global alias.st status
     - ~-p~: 显示更多提交记录详情（类似 ~git diff~），~git log -p -2~ 显示最近两次
     - ~--author~ ：仅显示指定作者相关的提交
     - ~--since, --after, --until, --before~ ：仅显示指定时间之后、之前的提交
+- =git shortlog -sn= 提交统计[fn:1]
 
 ** 分支
 
@@ -208,3 +209,7 @@ Git:
 [fn:git-prune] https://stackoverflow.com/questions/5094293/git-remote-branch-deleted-but-still-appears-in-branch-a
 
 [fn:remove-local-untracked-files] https://koukia.ca/how-to-remove-local-untracked-files-from-the-current-git-branch-571c6ce9b6b1
+
+* Footnotes
+
+[fn:1] https://github.blog/2020-04-09-github-protips-tips-tricks-hacks-and-secrets-from-lee-reilly/#9-a-numbers-game
