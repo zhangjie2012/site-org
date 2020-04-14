@@ -17,6 +17,7 @@
 + [[https://planet.emacslife.com/][Planet Emacslife]]：Emacs 百科全书，大杂烩
 + [[https://emacsthemes.com/][Emacs Themes]]：主题集合
 + [[http://oremacs.com/][oremacs]]
++ [[https://protesilaos.com/dotemacs/][dotemacs]] 完善的 Emacs 配置 Wiki
 
 * 文章
 
