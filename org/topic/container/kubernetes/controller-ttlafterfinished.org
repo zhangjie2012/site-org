@@ -1,0 +1,16 @@
+#+SETUPFILE: ~/site/tpl/wiki-tpl.org
+#+TITLE: Kubernetes - TTL Controller for Finished Resources
+#+DATE: 2020-04-14 14:39:44
+
+*特性状态：* =Kubernetes v1.12= /alpha/
+
+TTL 控制器提供了限制已完成执行的资源对象的生命周期的 TTL（time-to-live）机制。目前 TTL 控制器只用来处理 Jobs，
+且可能扩展为处理其它将完成执行的资源，比如说 Pods 和定制的资源。
+
+/此功能为 Alpha 版本，可以通过 kube-apiserver 和 kube-controller-manager 的特性网关 =TTLAfterFinished= 启用。/
+
+* TTL Controller
+
+TTL 控制器目前只支持 Jobs。集群可以用这个功能（通过指定 Job 的 =.spec.ttlSecondsAfterFinished= ）自动清除已完成的
+Jobs（不管是 =Complete= 还是 =Failed= ）。TTL 控制器假定资源有资格在资源完成之后 TTL 秒被清理，也就是说等 TTL 过期时。
+TTL 控制器清除资源时是级联清除的。

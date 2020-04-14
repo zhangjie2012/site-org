@@ -25,8 +25,8 @@ Kubernetes 提供了服务发现和负载均衡、自动部署和回滚、弹性
   + [[file:kubernetes/controller-deployments.org][Deployments]]: 用于无状态服务部署，在 ReplicaSet 基础上提供了更新策略等
   + [[file:kubernetes/controller-statefulsets.org][StatefulSets]]: 用于部署无状态应用（ZooKeeper，Kafka，Redis 等）
   + [[file:kubernetes/controller-daemonset.org][DaemonSet]]: 每个节点上跑一个 Pod，用作类似日志收集、系统监控等功能
-  + [[file:kubernetes/controller-gc.org][Garbage Collection]]: 资源回收
-  + TTL Controler for Finished Resources
+  + [[file:kubernetes/controller-gc.org][Garbage Collection]]: 负责集群资源回收
+  + [[file:kubernetes/controller-ttlafterfinished.org][TTL Controller for Finished Resources]]: 在对象执行完成后 TTL 秒，回收资源（目前仅用于 Job）
   + Jobs - Run to Completion
   + CronJob
 - Services、负载均衡和集群网络: 服务对外暴露
