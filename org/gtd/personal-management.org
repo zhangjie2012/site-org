@@ -89,4 +89,5 @@ KR：通过看美剧或者英剧学习
 
 Action [0/1]:
 - [ ] 亿万
-  + [ ] 第一季: https://v.qq.com/x/cover/njylr2zc6uqi463.html
+  + [X] 第一季: https://v.qq.com/x/cover/njylr2zc6uqi463.html <2020-03-21 - 2020-04-14>
+  + [ ] 第二季：https://v.qq.com/x/cover/v2uqwrjsqaxmzwb.html
