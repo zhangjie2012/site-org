@@ -1,0 +1,84 @@
+#+SETUPFILE: ~/site/tpl/wiki-tpl.org
+#+TITLE: Kubernetes - Garbage Collection
+#+DATE: 2020-04-14 11:04:43
+
+Kubernetes 垃圾回收器的作用是删除曾经有 owner，但是后来没有 owner 的对象。
+
+* Owners 和依赖
+
+Kubernetes 中一些对象是另外一些对象的 owner。比如，ReplicaSet 是一组 Pods 的 owner。被 owner 的对象称作 /依赖于/ owner 对象。
+每个依赖的对象都有一个 =.metadata.ownerReference= 字段指向 owner 对象。
+
+有时，Kubernetes 会自动设置 =.metadata.ownerReference= 。比如，ReplicaSet 的每一个 Pods 都会自动设置 =ownerReference= 。
+在 1.8 之后，由 ReplicationController，ReplicaSet，StatefulSet，DaemonSet，Deployment，Job 和 CronJob 创建或者采用的对象
+都会自动添加 =ownerReference= 值。
+
+你也可以通过手动设置 =ownerReference= 字段来指定 owner 和依赖之间的关系。
+
+Pod 中 owner 显示一般如下：
+
+#+begin_src yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  ...
+  ownerReferences:
+  - apiVersion: apps/v1
+    controller: true
+    blockOwnerDeletion: true
+    kind: ReplicaSet
+    name: my-repset
+    uid: d9607e19-f88f-11e6-a518-42010a800195
+  ...
+#+end_src
+
+#+begin_quote
+*注意：* 设计上不允许跨空间的引用 owner。这意味着：
+1) 只能在同一个空间指定 owner 和依赖，或者集群范围的 owner
+2) 集群范围的依赖只能指定集群范围的 owner，但不是空间范围内
+#+end_quote
+
+* 控制垃圾回收器如何删除依赖项
+
+删除对象的时候，可以指定是否要同时自动删除对象的从属[fn:1]。自动删除依赖称作为 /级联删除/ 。级联删除有两种模式：
+/后台（background）/ 和 /前台（forground）/ [fn:2]。
+
+如果删除一个对象而不删除对象的依赖，依赖项会被称作为 /孤儿（orphaned）/ 。
+
+** 前台级联删除
+
+前台级联删除的情况下，跟对象会进入”正在删除“状态，处于“正在删除”状态，以下情况是正常的：
+
+- 对象仍然可以通过 REST API 看到
+- 对象的 =deletionTimestamp= 被设置
+- 对象的 =metadata.finalizers= 包含 "forgroundDeletetion"
+
+一旦设置未“正在删除”，垃圾回收器会删除对象依赖。当垃圾回收器删除了所有的“blocking”依赖（有 ~ownerReference.blockOwnerDeletion=true~
+标识的对象），然后会删除 owner 对象。
+
+注意，在前台删除的情况下，只有 ~ownerReference.blockOwnerDeletion=true~ 标识的依赖才会阻塞 owner 对象的删除。
+Kubernetes 1.7 版本添加了准入控制器，它控制用户访问权限基于对 owner 对象删除权限将 =blockOwnerDeletion= 设置为 true，
+以便未授权的依赖项无法延迟所有对象的删除。
+
+如果对象的 =ownerReference= 字段被控制器设置（比如 Deployment 或者 ReplicaSet），blockOwnerDeletion 是自动设置的，你不需要
+手动修改此字段。
+
+** 后台级联删除
+
+后台级联删除的情况下，Kubernetes 会理解删除 owner 对象，然后使用垃圾回收期在后台删除依赖项。
+
+** 设置级联删除策略
+
+要控制级联删除策略，在删除对象时 =deleteOptions= 参数上设置 =propagationPolicy= 字段。可选的值有”Orphan“，”Foreground“ 或者
+”Background”。
+
+在 Kubernetes 1.9 之前，许多默认的控制资源的垃圾回收策略都是 =orphan= 。包括 ReplicationController，ReplicaSet，StatefulSet，
+DaemonSet 和 Deployment。
+对于 =extensions/v1beta1=, =apps/v1beta1=, =apps/v1beta2= 中的版本，除非你另外指定，否则依赖的对象默认是 orphaned。
+1.9，所有的 =apps/v1= 版本，依赖对象默认被删除。
+
+* Footnotes
+
+[fn:2] background 和 forground 直译成背景和前景，但是这里似乎前台和后台更好理解一些。
+
+[fn:1] dependents 可以理解成依赖和从属，这里表达的是一个意思，在有些地方读起来更顺畅一些。
