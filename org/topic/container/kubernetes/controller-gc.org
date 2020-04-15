@@ -69,8 +69,8 @@ Kubernetes 1.7 版本添加了准入控制器，它控制用户访问权限基�
 
 ** 设置级联删除策略
 
-要控制级联删除策略，在删除对象时 =deleteOptions= 参数上设置 =propagationPolicy= 字段。可选的值有”Orphan“，”Foreground“ 或者
-”Background”。
+要控制级联删除策略，在删除对象时 =deleteOptions= 参数上设置 =propagationPolicy= 字段。可选的值有“Orphan”，“Foreground” 或者
+“Background”。
 
 在 Kubernetes 1.9 之前，许多默认的控制资源的垃圾回收策略都是 =orphan= 。包括 ReplicationController，ReplicaSet，StatefulSet，
 DaemonSet 和 Deployment。
