@@ -108,3 +108,14 @@ Pod 中的容器可能有多种原因失败，比如说由于进程非 0 码退�
 #+end_quote
 
 * Job 终止和清理
+
+已经结束的 Job 通常不再需要再完成作业。一直包留在系统中会给 API server 带来压力。如果 Job 有上级控制器直接管理，比如说 CronJobs，
+CronJobs 可以基于指定的基于容量的清理策略来清理 Jobs。
+
+** 已完成的 Jobs 实行 TTL 机制
+
+另外一种清理完成 Jobs（ =Complete= 或者 =Failed= ）是使用 TTL 机制来回收完成的资源，通过在 Job 中指定 =.spec.ttlSecondAfterFinished= 字段。
+
+* TODO Job Patterns
+
+* TODO 高级用法
