@@ -50,7 +50,6 @@
   - [[https://www.iterm2.com/][iterm2]]
   - zsh + [[https://github.com/robbyrussell/oh-my-zsh][oh-my-zsh]]
   - [[https://www.netsarang.com/products/xsh_overview.html][XShell]]：可惜只支持 Windows 环境
-  - [[https://gnometerminator.blogspot.com/p/introduction.html][terminator]]：Ubuntu 下优于默认的 terminal
 + Chrome 插件
   - [[https://www.getpostman.com/][Postman]]：也可独立于 Chrome 运行
   - FireShot：网页截图
@@ -63,7 +62,7 @@
   - [[https://semver.org/lang/zh-CN/][semver]]: =<MAJORL>.<MINOR>.<PATCH>= ，大部分软件发布都是用的这种规则
   - [[https://calver.org/][calver]]: =YY.mm.<patch>= ，基于日历的版本发布，适用于对时间敏感的项目，目前使用这种规则的有 Docker、Ubuntu 等
 + 思维导图
-  - [[https://www.xmind.cn/][XMind]]，WPS 也不错
+  - [[https://www.xmind.cn/][XMind]]，WPS 也不错（但是 Linux 下的 WPS 不支持）。
 + UML
   - Mac 平台下的 WPS 支持画图，很好用
   - Windows 下当然是 Visio 啦，各种在线的都感觉不好用
