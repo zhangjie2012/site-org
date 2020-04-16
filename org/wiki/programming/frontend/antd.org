@@ -24,6 +24,17 @@ https://codesandbox.io/s/8x2j898pp2
 1. 列设置固定宽度，比如 =width: 980= ，注意是数值不是字符串
 2. 设置 scroll，比如 =scroll={{ x: 1600 }}= x 的值对应的屏幕的大小，1600 的意思是超过 1600 宽度的屏幕才开始滚动。
    另外 x 可以设置成 =max-content= 来自适应滚动[fn:1]。
+** 表单 required 校验时，提示 "xxx is not string"
+
+如果设置了 =required: true= ，会校验值是否有效，但是默认似乎是 =string= 类型，如果值不是 =string= 类型，需要手动设置值类型 =type= 。
+
+=type= 可选值有：https://github.com/yiminghe/async-validator#type
+
+比如：
+
+#+begin_src js
+rules: [{ require: true, type: 'integer' }]
+#+end_src
 
 * Footnotes
 
