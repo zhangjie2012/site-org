@@ -21,7 +21,8 @@ elisp 比较熟的有自己的办法优化，当然我不熟。我的解决办�
 
 - 基本上不用的插件、UI 上炫酷的插件都干掉
 - 使用 [[https://github.com/jwiegley/use-package][use-package]] ，use-package 并不是包管理工具，只是一个宏，用来配置和加载包。
-  你可以设置延迟加载包，以提高第一次打开的速度。还有一个好处是，使用 use-package 组织包更清晰，对于 use-package 我还处于研究阶段，粗暴的使用 ~:init~ 和 ~:config~ 配置，实际上有很多优雅的方法
+  你可以设置延迟加载包，以提高第一次打开的速度。还有一个好处是，使用 use-package 组织包更清晰，对于 use-package 我还处于研究阶段，
+  粗暴的使用 ~:init~ 和 ~:config~ 配置，实际上有很多优雅的方法
 
 ** 如何将 markdown 转成 org-mode
 
