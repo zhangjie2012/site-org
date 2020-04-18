@@ -28,26 +28,7 @@
 - 短线任务放到季度代办中，如果未完成，下一个季度自动继承
 - 不管是什么类型的任务，超过一个月没有进展自动 Cancel
 
-* 非短期 OKR [0/2]
-** TODO Kubernetes：中线的学习计划
-*** TODO 第一阶段目标：入门
-    SCHEDULED: <2020-02-02 Sat>
-
-*KR*
-
-- 熟悉 Kubernetes 概念、架构、组件
-- 使用 kubectl 可以完成大部分 Kubernetes 资源查询和 debug
-
-*Action* [0/1]
-
-- [-] 通读 Kubenetes 文档一遍 [28%]
-  - [X] 架构与组件
-  - [X] 容器
-  - [ ] Pod 与控制器
-  - [ ] 存储
-  - [ ] 配置
-  - [ ] service 与 Ingress
-  - [ ] 调度与策略
+* 非短期 OKR [0/1]
 ** TODO emacs-lisp：超长线的学习计划
 *** TODO 第一阶段：熟悉语言基本语法
     SCHEDULED: <2020-02-22 Sat>

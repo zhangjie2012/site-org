@@ -17,20 +17,18 @@
 - [ ] [[https://prometheus.io/docs/introduction/overview/][官方文档]]
 
 ** TODO Kubernetes 总结：短期学习计划
-   DEADLINE: <2020-03-29 日> SCHEDULED: <2020-03-24 二>
+   DEADLINE: <2020-05-29> SCHEDULED: <2020-03-24>
 
 *** KR
 
 Kubernetes 梳理，把一些零散的知识点汇集起来，偏向于生态圈知识体系的建立，常见的几个环节梳理清楚，然后文字化。
 琐碎的不常用的先放着，主要是为了速成。
 
-*** Action [2/10]
+*** Action [3/8]
 
 - [X] 架构
 - [X] Pod 概念以及生命周期
-- [ ] 概念 deployment, statefulset, daemonset, pod, job 等
-- [ ] 应用的生命周期
-- [ ] 更新策略
+- [X] Controllers: RS, Deployments 等
 - [ ] 服务暴露 services/ingress
 - [ ] configmap, pv/pvc
 - [ ] 服务发现
