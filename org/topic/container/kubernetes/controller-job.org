@@ -34,7 +34,6 @@ spec:
 
 在标准输出（ =kubectl logs $pods= ）中可以看到运行结果。
 
-
 * 书写 Job 规范
 
 ** Pod Template
@@ -109,13 +108,17 @@ Pod 中的容器可能有多种原因失败，比如说由于进程非 0 码退�
 
 * Job 终止和清理
 
-已经结束的 Job 通常不再需要再完成作业。一直包留在系统中会给 API server 带来压力。如果 Job 有上级控制器直接管理，比如说 CronJobs，
+已经结束的 Job 通常不再需要再完成作业。一直留在系统中会给 API server 带来压力。如果 Job 有上级控制器直接管理，比如说 CronJobs，
 CronJobs 可以基于指定的基于容量的清理策略来清理 Jobs。
 
 ** 已完成的 Jobs 实行 TTL 机制
 
 另外一种清理完成 Jobs（ =Complete= 或者 =Failed= ）是使用 TTL 机制来回收完成的资源，通过在 Job 中指定 =.spec.ttlSecondAfterFinished= 字段。
 
-* TODO Job Patterns
+* Job 模式（Patterns）
 
-* TODO 高级用法
+https://kubernetes.io/docs/concepts/workloads/controllers/jobs-run-to-completion/#job-patterns
+
+* 高级用法
+
+https://kubernetes.io/docs/concepts/workloads/controllers/jobs-run-to-completion/#advanced-usage
