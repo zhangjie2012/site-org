@@ -2,19 +2,19 @@
 #+TITLE: Ubuntu
 #+DATE: 2018-09-10 21:39:56
 
-系统版本： =Xubuntu 18.04=
+系统版本: +Xubuntu 18.04+ Ubuntu 20.04 beta
 
 * 设置国内源
 
-手动设置：
+*自动选择*
+
+软件和更新 -> Ubuntu 软件 -> 下载自 -> 选一个国内的镜像源
+
+*手动设置*
 
 1. [[https://mirror.tuna.tsinghua.edu.cn/help/ubuntu/]]
 2. =apt update=
 3. =apt upgrade=
-
-自动选择：
-
-软件和更新 -> Ubuntu 软件 -> 下载自 -> 选一个国内的镜像源
 
 * 代理
 ** SS
@@ -76,13 +76,14 @@ export http_proxy="http://127.0.0.1:8123" export https_proxy="http://127.0.0.1:8
 3. Chrome 安装 SwitchyOmega 并设置，规则列表网址： =https://raw.githubusercontent.com/gfwlist/gfwlist/master/gfwlist.txt=
 4. 关闭全局代理
 
+*注意* ：electron-ssr 是用 Python 写的，但一些较新的系统默认只安装了 Python3，所以需要手动安装一下，否则将无法正常使用。
+
 * 软件列表
 
-- 搜狗输入法
+- 搜狗输入法 _目前尚不支持 Ubuntu 20.04_
   + 先安装 fcitx =apt install fcitx=
   + 安装 [[https://pinyin.sogou.com/linux/?r=pinyin][搜狗拼音输入法]]
   + 重启电脑即可生效，如果没生效，通过 fctix 配置，添加搜狗输入法
-  + 设置快捷键为 =Ctrl+Space=  切换激活/非激活输入法 改为 =Ctrl+Space= ，启用输入法之间的切换给禁掉。（配置设置挺蠢的，要研究半天）
 - 邮箱客户端：Thunderbird，说他丑，说他重度，可是只有他最稳定啊
 - 截图工具：[[https://github.com/lupoDharkael/flameshot][flameshot]]
   1. =apt install flameshot= 安装
@@ -112,6 +113,10 @@ export http_proxy="http://127.0.0.1:8123" export https_proxy="http://127.0.0.1:8
 <2020-03-08 13:13:22 日>
 
 GNOME 太不稳定了，换到了 Xubuntu，世界顿时清净了。
+
+<2020-04-19 13:32:41>
+
+迫于 Ubuntu 20.04 的诱惑，升级到了 20.04。
 
 * Xfce
 
