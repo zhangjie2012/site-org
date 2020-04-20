@@ -2,6 +2,7 @@
 #+TITLE: Emacs Orgmode
 #+DATE: 2020-03-28 20:40:08
 
+* 介绍
 [[https://orgmode.org/][org-mode]] 是 Emacs 最强力的插件，没有之一。可以用来做 GTD，博客/Wiki工具，写书，写论文等。
 orgmode 是 emacs 自带的 package，但是一般自带的版本比较低。更新到最新版本的办法：
 
@@ -30,13 +31,15 @@ orgmode 是 emacs 自带的 package，但是一般自带的版本比较低。更
 | =C-c C-c=   | 标题上添加 Tag，可以用来分类或者打标签                       |
 |-------------+--------------------------------------------------------------|
 
-扩展：
+* 扩展资料
 
-- [[file:../../../blog/2019/build-site-with-org-mode.org][使用 org-mode 搭建网站]]
-- [[file:../../../blog/2019/emacs-slice.org][Emacs 基于 org-reveal 做幻灯片]]
+- [[file:../../../blog/2019/build-site-with-org-mode.org][使用 org-mode 搭建网站]]   /我写的/
+- [[file:../../../blog/2019/emacs-slice.org][Emacs 基于 org-reveal 做幻灯片]] /我写的/
 - GTD 相关文章：
   - [[https://emacs.cafe/emacs/orgmode/gtd/2017/06/30/orgmode-gtd.html][Orgmode for GTD]]
   - [[http://members.optusnet.com.au/~charles57/GTD/gtd_workflow.html][How I use Emacs and Org-mode to implement GTD]]
+
+* 常见问题
 
 <2020-02-15 10:15:16>
 

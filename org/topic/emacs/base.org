@@ -6,7 +6,7 @@
 
 *源码安装*
 
-+直接使用系统的包管理工具安装的 Emacs 版本都很低+ ，推荐使用源码安装，当前最新的版本是 26.3。
++直接使用系统的包管理工具安装的 Emacs 版本都很低，推荐使用源码安装，当前最新的版本是 26.3。+[fn:2]
 
 下载源码：[[http://mirrors.ustc.edu.cn/gnu/emacs/][http://mirrors.ustc.edu.cn/gnu/emacs/]]
 
@@ -19,8 +19,10 @@ make -j4
 sudo make install
 #+END_SRC
 
-/注意/ ：如果编译提示 =configure: error: The following required libraries were not found: gnutls= 需要安装 =gnutls= 开发包，
+*注意* ：如果编译提示 =configure: error: The following required libraries were not found: gnutls= 需要安装 =gnutls= 开发包，
 使用 =apt-cache search 'libgnutls.*-dev'= 找到对应的包，然后安装 [fn:1]。
+
+/以上是 Ubuntu 下源码状态的流程，其它系统也差不多。/
 
 *Ubuntu 20.04*
 
@@ -87,22 +89,23 @@ Emacs 几乎所有的快捷键都是以 ~C-~ 开始的，也是 Emacs 令人诟�
 
 或者 Emacs 启动时添加 =http_proxy= 。比如 =http_proxy=http://127.0.0.1:1080 emacs= 。
 
-我使用 [[https://github.com/jwiegley/use-package][use-package]] 来简化和规范包的配置，因为源不统一，经常会遇到包依赖问题，比如 [[https://github.com/abo-abo/swiper/issues/2087][issues#2087]]；
-还有时会遇到有的包想用稳定版本，有的包想用最新版本的情况。所以在配置的时候，通过 =(setq use-package-always-pin t)= 规范 use-package，
-强制显式指定源，这样可以满足更多的个性化需求。比如：
+我使用 [[https://github.com/jwiegley/use-package][use-package]] 来简化和规范包的配置，因为源不统一（当然这只是其中的一个小原因，use-package 还提供了更多使用的特性，比如懒加载），
+经常会遇到包依赖问题，比如 [[https://github.com/abo-abo/swiper/issues/2087][issues#2087]]；还有时会遇到有的包想用稳定版本，有的包想用最新版本的情况。所以在配置的时候，通过
+=(setq use-package-always-pin t)= 规范 use-package，强制显式指定源，这样可以满足更多的个性化需求。比如：
 
 #+begin_src emacs-lisp
 (use-package swiper
   :pin melpa
   :ensure t
-  :config
-  (global-set-key (kbd "C-s") 'swiper)
-  (global-set-key (kbd "M-s .") 'swiper-isearch-thing-at-point)
+  :bind (("C-s" . swiper)
+		 ("M-s ." . swiper-isearch-thing-at-point))
   )
 #+end_src
 
 上面的 =pin= 可以设置为 =package-archives= 列表中的值。
 
 * Footnotes
+
+[fn:2] 以前是这样，现在较新版本（系统）安装的软件都比较新了，直接用包管理工具安装即可。除非你想要最新的 Emacs。
 
 [fn:1] https://stackoverflow.com/questions/52722096/build-emacs-and-gnutls-not-found

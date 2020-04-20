@@ -15,8 +15,8 @@ Emacs 有很多的 [[http://melpa.org][插件]]，[[https://github.com/emacs-tw/
 | [[https://www.flycheck.org/en/latest/][Flycheck]]           | 强大的语法检查框架                   | 需要编程语言的 lint 工具配合，比如 eslint、golint。编码必备。        |
 | [[https://github.com/nonsequitur/git-gutter-plus][git-gutter+]]        | 提示当前 buffer 改动部分             | 用 ~+~ 和 ~=~ 等显示出来                                             |
 | [[https://github.com/nschum/highlight-symbol.el][highlight-symbol]]   | 高亮当前单词                         |                                                                      |
-| [[https://github.com/abo-abo/swiper][ivy]]                | 通用完成前端                         | 一般 ido+smex，ivy，[[https://github.com/emacs-helm/helm][helm]] 三者必须选一                                |
-| [[https://github.com/emacs-lsp/lsp-mode][lsp-mode]]           | [[https://langserver.org][LSP]] 的 Emacs 客户端                  | -目前不是特别成熟-                                                   |
+| [[https://github.com/abo-abo/swiper][ivy]]                | 通用完成前端                         | 一般 ido+smex，ivy，[[https://github.com/emacs-helm/helm][helm]] 三者选一用即可，看个人喜好                  |
+| [[https://github.com/emacs-lsp/lsp-mode][lsp-mode]]           | [[https://langserver.org][LSP]] 的 Emacs 客户端                  | +目前不是特别成熟+                                                   |
 | [[https://github.com/magnars/multiple-cursors.el][multiple-cursors]]   | 多鼠标操作                           | [[http://emacsrocks.com/e13.html][Emacs Rocks! Episode 13: multiple-cursors]]                            |
 | [[https://orgmode.org][org-mode]]           | 最牛逼的插件，没有之一               |                                                                      |
 | [[https://github.com/skuro/plantuml-mode][plantuml-mode]]      | [[https://plantuml.com/][PlantUML]] 的 Emacs mode               | 需要安装环境                                                         |
@@ -39,4 +39,4 @@ Emacs 有很多的 [[http://melpa.org][插件]]，[[https://github.com/emacs-tw/
 - [[https://github.com/abo-abo/hydra][hydra]] 快捷键编排，尝试了一段时间，基本上用不到。常用的快捷键，我已经编排的很合理了。
 - [[https://github.com/magit/magit][magit]] 评价非常高的 git package，但是我感觉太慢了，另外是习惯了命令行操作 git，常用的操作用 build-in 的功能足够。
 - [[https://github.com/milkypostman/powerline][powerline]] 用了一段时间，后来用 doom-modeline 替换掉了。
-- [[https://github.com/joaotavora/yasnippet][yasnippet]] 代码片段，以前写 C++ 的时候常用，现在感觉不咋用了。
+- [[https://github.com/joaotavora/yasnippet][yasnippet]] 代码片段，以前写 C++ 的时候常用，现在不咋用了。
