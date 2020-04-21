@@ -3,6 +3,25 @@
 
 内容大部分来自 [[https://planet.emacslife.com/][Planet Emacslife]]，[[https://www.reddit.com/r/emacs/][r/emacs]]，[[https://www.twitter.com/][Twitter]]，[[https://github.com/][Github]]，没啥原创，只是为了好玩。
 
+* 2020-04-21
+
+- [[https://medium.com/better-programming/15-reasons-why-i-use-emacs-with-gifs-5b03c6608b61][15 Reasons Why I Use Emacs]]
+  1. Org mode
+  2. Vim
+  3. org 可被导出到演示文稿和文档
+  4. 内部搜索 swiper
+  5. 编辑器内部的 LaTeX 预览
+  6. gtd
+  7. 集成终端
+  8. 支持 LSP
+  9. org 中可以执行代码块
+  10. org 中可以执行代码符号
+  11. org Tables
+  12. Zen mode
+  13. Magit 更好的 Git CLI 工具
+  14. 多行注释 =M-;=
+- [[https://github.com/fniessen/emacs-leuven-theme][leuven]] 有黑色主题了，然而不支持终端
+
 * 2020-03-30
 
 - [[https://github.com/dangom/org-thesis][使用 org 组织论文]]
