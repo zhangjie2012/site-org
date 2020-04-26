@@ -1,0 +1,7 @@
+#+SETUPFILE: ~/site/tpl/wiki-tpl.org
+#+TITLE: DHCP
+#+DATE: 2020-04-26 10:36:24
+
+#+CAPTION: via Twitter@kamranahmedse
+#+NAME: dhcp
+[[https://wiki-1252349778.cos.ap-shanghai.myqcloud.com/2020/dhcp.jpeg]]

@@ -39,6 +39,8 @@
 - 配置 :: [[file:devops/ps1.org][PS1]]
 - 操作系统 :: [[file:devops/ops-faq.org][运维 FAQ]]
 - 系统管理 :: [[file:devops/systemd.org][systemd]] 和 [[file:devops/journalctl.org][journalctl]]
+- 网络 ::
+  + [[file:devops/network-dhcp.org][DHCP]]
 
 ** 中间件
 
