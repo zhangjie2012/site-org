@@ -1,0 +1,19 @@
+#+SETUPFILE: ~/site/tpl/wiki-tpl.org
+#+TITLE: 并发模型
+#+DATE: 2020-04-24 10:54:41
+
+* 概念
+
+** 并发与并行
+
+- concurrency 并发 :: 强调「同时发生」，多个操作在同一个时间段同时发生。
+  比如说单核 CPU 通过切换时间片来执行多个任务，达到了看起来同时发生的效果。
+- parallel 并行 :: 强调「同时执行」，多个操作在同一个时刻同时执行。
+  多核 CPU 或者多个 CPU，不同的核在同一个时间做不同的认为，达到了同时执行的效果。
+
+单个 CPU（单个线程）是不可能实现并发的。并发和并行并不是一个纬度的东西，并发是程序结构上多任务交换执行，而并行是物理上的同时执行。
+因此，可以说并行是并发的一种模式。
+
+* 资料
+
+- 2016, [[http://jolestar.com/parallel-programming-model-thread-goroutine-actor/][并发之痛 Thread，Goroutine，Actor]]

@@ -55,7 +55,15 @@ while true {
 
 限于篇幅，我只说这么多，以揭示原理性的东西，至于 epoll 的使用细节，请参考 man 和 google，实现细节，请参阅 linux kernel source。
 
-----------
+-------------
 
+其它资料：
+
+- [[https://segmentfault.com/a/1190000003063859][Linux IO模式及 select、poll、epoll详解]]
+
+--------------
 [fn:1] 原文为 ~O(1)~ ，但实际上 ~O(k)~ 更为准确
 [fn:2] 原文所列第二点说法让人产生 ~EPOLLIN/EPOLLOUT~ 等同于「缓冲区非空」和「缓冲区非满」的事件，但并非如此，详细可以 Google 关于 ~epoll~ 的边缘触发和水平触发。
+
+
+https://segmentfault.com/a/1190000003063859#articleHeader9
