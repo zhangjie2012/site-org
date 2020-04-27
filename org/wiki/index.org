@@ -7,7 +7,7 @@
 
 * 操作系统理论
 
-- [[file:os/epoll.org][I/O 多路复用]]
+- [[file:os/linux-net-io.org][Linux IO 模型]]
 - [[file:os/difference-between-multicore-and-multiprocessor.org][多核和多处理器的区别]]: 多核是一个 CPU 有多个处理单元（core），多处理器是多个 CPU。现在计算机支持多个处理器，并且每个处理器有多个核。
 - [[file:os/other.org][其他]]
 
