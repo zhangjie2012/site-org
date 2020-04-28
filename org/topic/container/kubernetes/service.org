@@ -1,0 +1,134 @@
+#+SETUPFILE: ~/site/tpl/wiki-tpl.org
+#+TITLE: Kubernetes - Service
+#+DATE: 2020-04-28 21:18:10
+
+Service 是一组 Pod 上的应用程序服务暴露的抽象方式。在 Kubernetes 中，你无需要修改应用程序即可使用服务发现机制（不入侵应用）。
+Kubernetes 为每一个 Pod 提供单独的 IP 并且为一组 Pod 提供单独的 DNS 名称，并且在 Pod 之间进行负载均衡。
+
+#+begin_quote
+服务发现一般分为几种方式：
+1. 应用程序自己写代码实现服务的注册和发现，比如说启动时写入到 etcd 中，然后 watch 变更
+2. 在框架层面实现，比如 Dubbo
+3. 在平台层面实现，比如 Kubernetes，Service Mesh 等
+前两种都是需要入侵业务的，而且一般很难跨技术栈。
+#+end_quote
+
+* 动机
+
+Kubernetes 的 Pod 不是一个持久的实体。使用 Deployment 运行应用时，它会动态的创建和销毁 Pods。
+
+虽然每一个 Pod 都有自己的 IP 地址，但是 Deployment 中的不同的时间段的 Pod 集合可能不同（有很多原因导致 Pod 重启）。
+所以，前端如何使用集群中的 Pod 集合？并且能都达到均衡的作用呢？
+
+答案是 /Services/ 。
+
+* Service 资源
+
+Service 是一种抽象，定义了 Pod 的逻辑集合和访问策略（有时称之为微服务）。Service 和目标 Pods 的关联通常有选择器来关联。
+
+前端不用关心 Pod 的 IP 地址到底是什么，也不用关心 Pod 是不是之前的 Pod。Service 为它们提供了统一的出口。
+前端只需要关心 Service 的地址就行了，而 Service 的地址是不会变的。
+
+* TODO 定义 Service
+
+Service 和 Pod 一样，是一个 REST 对象，和其它的对象一样，你可以 =POST= 一个 Service 到 API server 来创建一个实例。
+Service 的名字必须是一个有效的 DNS 标签。
+
+假定你有一组 Pods，每个 Pod 监听 9376 的 TCP 端口，并且标签为 ~app=MyApp~ ：
+
+#+begin_src yaml
+  apiVersion: v1
+  kind: Service
+  metadata:
+	name: my-service
+  spec:
+	selector:
+	  app: MyApp
+	ports:
+	  - protocol: TCP
+		port: 80
+		targetPort: 9376
+#+end_src
+
+以上创建了一个叫做 =my-service= 的 service 对象。Kubernetes 为 Service 分配一个 IP 地址（有时称为"集群IP"），该地址为服务代理
+所用（见下面的虚拟 IP 和服务代理）。
+
+Service 控制器负责持续扫描与选择器相匹配的 Pod，然后更新 =my-service= 的 Endpoints 。
+
+#+begin_src
+*注意:* Service 可以把任何 =port= 映射到 =targetPort= 。默认为了方便， =targetPort= 通常和 =port= 相同。
+#+end_src
+
+** 没有选择器的 Services
+
+Service 最常见的是抽象对 Pod 集合的访问，但是他们也可以抽象其它类型的后端，比如：
+
+- 你想要在生产中使用外部的数据库集群，但是在测试环境中，使用自己的数据库。
+- 你想要将 Service 指向其他 Namespace 或者另外一个集群。
+- 你正在将工作负载迁移到 Kubernetes。为了做测试，你在 Kubernetes 中运行一部分后端。
+
+这种情况下，你可以定义一个 Service /不指定/ Pod 选择器，如下：
+
+#+begin_src yaml
+  apiVersion: v1
+  kind: Service
+  metadata:
+	name: my-service
+  spec:
+	ports:
+	  - protocol: TCP
+		port: 80
+		targetPort: 9376
+#+end_src
+
+因为 Service 没有选择器，对应的 Endpoint 对象不会被创建。你可以手动将 Service 映射到其运行所在网络的地址和端口，手动添加
+Endpoint 对象：
+
+#+begin_src yaml
+  apiVersion: v1
+  kind: Endpoints
+  metadata:
+	name: my-service
+  subsets:
+	- addresses:
+		- ip: 192.0.2.42
+	  ports:
+		- port: 9376
+#+end_src
+
+Endpoints 对象必须是一个有效的 DNS 子域名。
+
+#+begin_quote
+*注意：*
+
+Endpoint IPs /不可以/ 为：回环地址（IPv4 的127.0.0.0/8，IPv6 的 ::1/128），或者本地链接（IPv4 的 169.254.0.0/16 和 224.0.0.0/24
+IPv6 的 fe80::/64）。
+
+Endpoint IP 地址不能是 Kubernetes Services 集群 IPs，因为 kube-proxy 不支持虚拟 IPs 作为目标。
+#+end_quote
+
+没有选择器的情况下访问 Service 和有选择器的访问一样。
+
+ExternalName Service 是 Service 的特例，它没有选择器，而是使用 DNS 名称代替。
+
+** TODO EndpointSlices
+
+* TODO 虚拟 IPs 和服务代理
+
+* TODO 多端口 Services
+
+* TODO 选择自己的 IP 地址
+
+* TODO 服务发现
+
+* TODO Headless Services
+
+* TODO Publishing Services (ServiceTypes)
+
+* TODO Shortcomming
+
+* TODO 虚拟 IP 实现
+
+* TODO API 对象
+
+* TODO 支持的协议

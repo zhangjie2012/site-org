@@ -29,7 +29,11 @@ Kubernetes 提供了服务发现和负载均衡、自动部署和回滚、弹性
   + [[file:kubernetes/controller-ttlafterfinished.org][TTL Controller for Finished Resources]]: 在对象执行完成后 TTL 秒，回收资源（目前仅用于 Job）
   + [[file:kubernetes/controller-job.org][Jobs]] 一次性的任务
   + [[file:kubernetes/controller-cronjobs.org][CronJobs]]
-- Services、负载均衡和集群网络: 服务对外暴露
+- Services、负载均衡和集群网络
+  + Service
+  + DNS
+  + Ingress 和 Ingress Controller
+  + 网络策略
 - 存储: Volumes, Persistent Volumes, Storage Class 等
 - 调度: 调度器和调度策略
 
