@@ -6,12 +6,15 @@
 - [[http://dict.cn/concurrency][concurrency]] [kən'kʌrənsɪ] 并行
 - [[http://dict.cn/corresponding][corresponding]] [ˌkɔːrə'spɑːndɪŋ] 对应的，相应的
 - [[http://dict.cn/deprecated][deprecated]] ['deprəkeɪt] 不推荐使用
+- [[http://dict.cn/flexibility][flexibility]] [ˌfleksə'bɪləti] 灵活性，弹性
 - [[http://dict.cn/idempotent][idempotent]] [aɪ'dempətənt] [数] 幂等的
 - [[http://dict.cn/independent][independent]] [ˌɪndɪ'pendənt] 独立的
+- [[http://dict.cn/mechanism][machanism]] ['mekənɪzəm] 机制，机构，原理
 - [[http://dict.cn/orchestration][orchestration]] [ˌɔːkɪ'streɪʃn] 编排
 - [[http://dict.cn/overlap][overlap]] [ˌoʊvər'læp] 重叠
 - [[http://dict.cn/parallel][parallel]] ['pærəlel] 并发
 - scientific computing 科学计算
+- service discovery 服务发现
 - strengths and weaknesses 长处和短处
 - the former ... the latter 前者...后者
 - trade offs 权衡取舍
