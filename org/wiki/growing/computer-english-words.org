@@ -15,6 +15,9 @@
 - [[http://dict.cn/parallel][parallel]] ['pærəlel] 并发
 - scientific computing 科学计算
 - service discovery 服务发现
+- [[http://dict.cn/squirrel][squirrel]] ['skwɜːrəl]
+  + n. 松鼠 /Go 的一个库名/
+  + vt. 存储
 - strengths and weaknesses 长处和短处
 - the former ... the latter 前者...后者
 - trade offs 权衡取舍
