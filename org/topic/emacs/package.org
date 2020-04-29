@@ -2,6 +2,9 @@
 #+TITLE: Emacs 插件
 #+DATE: 2020-03-28 17:14:48
 
+
+* 正在使用的
+
 Emacs 有很多的 [[http://melpa.org][插件]]，[[https://github.com/emacs-tw/awesome-emacs][awesome-emacs]] 是按照分类整理的。下面列一下我正在使用的插件以及一些说明：
 
 |--------------------+--------------------------------------+----------------------------------------------------------------------|
@@ -27,12 +30,14 @@ Emacs 有很多的 [[http://melpa.org][插件]]，[[https://github.com/emacs-tw/
 | [[https://github.com/justbur/emacs-which-key][which-key]]          | 快捷键绑定提示                       |                                                                      |
 |--------------------+--------------------------------------+----------------------------------------------------------------------|
 
+* 使用历史
+
 一些尝试过，但是不再使用的 package：
 
 - [[https://github.com/auto-complete/auto-complete][auto-complete]] 自动完成插件，后来用 company 替换了。
 - [[https://github.com/technomancy/better-defaults][better-defaults]] 几行代码就可以达到相同的效果。
 - [[https://github.com/tumashu/cnfonts][cnfonts]] GUI 中英文混排等宽，等宽是可以了，但是不等高啊.. 中英文的输入跳跃太难受了。
-- [[https://github.com/emacs-dashboard/emacs-dashboard][dashboard]] 启动会显示最近使用过的文件，项目，标签等 华而不实啊。
+- [[https://github.com/emacs-dashboard/emacs-dashboard][dashboard]] 启动会显示最近使用过的文件，项目，标签等 *华而不实* 。
 - [[https://github.com/emacsmirror/diminish][diminish]] 减少一些 mode 在 modeline 上的显示，doom-modeline 显示已经很精简了。
 - [[https://github.com/emacs-evil/evil][evil]] The extensible vi layer for Emacs. 从 Vim 转到 Emacs 的用户可以试一下，我的 Vim 太渣了。
 - [[https://github.com/emacs-helm/helm][helm]] 一个补全框架，用了四五年，后来用 ivy 替换掉了。
