@@ -2,6 +2,8 @@
 #+TITLE: Ubuntu
 #+DATE: 2018-09-10 21:39:56
 
+/2020-05-01 update: 换回 Windows 10 了，不折腾了，Linux 桌面只适合研发，工具链撑不起来，弃了。/
+
 系统版本: +Xubuntu 18.04+ Ubuntu 20.04 beta
 
 * 设置国内源
