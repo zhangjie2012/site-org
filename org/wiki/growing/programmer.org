@@ -32,7 +32,7 @@
 * 编码与环境
 
 + IDE/Editor /我不用 IDE/
-  + [[https://www.gnu.org/software/emacs/][Emacs]]，主力编辑器，[[file:code-env/emacs.org][我的 Wiki]]
+  + [[https://www.gnu.org/software/emacs/][Emacs]]，主力编辑器，[[file:../../topic/emacs/index.org][我的 Wiki]]
   + [[https://www.vim.org/][Vim]]，没办法，服务器只有 Vi/Vim
 + 编码字体
   - +[[https://github.com/tonsky/FiraCode][Fira Code]]，[[https://github.com/adobe-fonts/source-code-pro][Source Code Pro]]+ 现在统一用 Jetbrains Mono 了

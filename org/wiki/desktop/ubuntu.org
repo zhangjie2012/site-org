@@ -2,8 +2,6 @@
 #+TITLE: Ubuntu
 #+DATE: 2018-09-10 21:39:56
 
-/2020-05-01 update: 换回 Windows 10 了，不折腾了，Linux 桌面只适合研发，工具链撑不起来，弃了。/
-
 系统版本: +Xubuntu 18.04+ Ubuntu 20.04 beta
 
 * 设置国内源
@@ -19,15 +17,9 @@
 3. =apt upgrade=
 
 * 代理
-** SS
-*** 客户端
+** Ubuntu Server
 
-1. 命令行：[[https://github.com/shadowsocks/shadowsocks-libev]] =sudo apt install shadowsocks-libev=
-2. GUI：[[https://github.com/shadowsocks/shadowsocks-qt5]]
-
-GUI 版本很不稳定，不如直接使用命令行（ =ss-local= ），配合 =systemd= 设置服务开机启动。
-
-*** ss-local 配置
+安装 shadowsock-libev, =apt install shadowsocks-libev= ，客户端连接只需要 =ss-local= 。
 
 配置文件在 =/etc/shadowsocks-libev= 目录下。文件内容改为：
   #+BEGIN_SRC
@@ -41,15 +33,14 @@ GUI 版本很不稳定，不如直接使用命令行（ =ss-local= ），配合 
   }
   #+END_SRC
 
-systemd unit 名字为： =shadowsock-libev= 直接重启即可。设置开机启动 =systemctl enable shadowsock-libev= 。
+systemd unit 文件是： =shadowsocks-libev-local@.service= ，把其中的配置文件路径修改成实际的配置文件。
 
-*** Chrome 浏览器代理
+- 重启 ss-local =systemctl restart shadowsocks-libev-local@.=
+- 查看服务运行状态 =systemctl status shadowsocks-libev-local@.=
+- 查询运行日志 =journalctl -f -u shadowsocks-libev-local@.=
+- 设置开机启动 =systemctl enable shadowsocks-libev-local@.=
 
-因为鸡生蛋，蛋生鸡的问题，需要手动安装 [[https://github.com/FelisCatus/SwitchyOmega][SwitchyOmega]]，新版本的 Chrome 不允许安装第三方的插件，会报错。一个投机取巧的办法是将 crx 后缀改为 zip，打开开发者模式，然后拖入，经测试可行。
-
-规则列表网址： =https://raw.githubusercontent.com/gfwlist/gfwlist/master/gfwlist.txt=
-
-*** 终端代理
+shadowsocks 是一个 socks5 代理，想用 http 代理需要做一层转换。
 
 Sock5 proxy：[[https://www.irif.fr/~jch/software/polipo/][Polipo]]
 
@@ -57,13 +48,13 @@ Sock5 proxy：[[https://www.irif.fr/~jch/software/polipo/][Polipo]]
 2. 修改配置文件: =/etc/polipo/config= ，添加：
    #+BEGIN_SRC
    proxyAddress = "0.0.0.0"
-
+   proxyPort = 8123
    socksParentProxy = "127.0.0.1:1080"
    socksProxyType = socks5
    #+END_SRC
 3. 重启: =system restart polipo=
 
-设置代理（polipo 的端口是 8123）：
+设置代理（polipo 的端口是 8123，可以换成其他的）：
 
 #+BEGIN_SRC
 export http_proxy="http://127.0.0.1:8123" export https_proxy="http://127.0.0.1:8123"
@@ -119,6 +110,12 @@ GNOME 太不稳定了，换到了 Xubuntu，世界顿时清净了。
 <2020-04-19 13:32:41>
 
 迫于 Ubuntu 20.04 的诱惑，升级到了 20.04。
+
+<2020-05-01>
+
+换回 Windows 10 + 虚拟机了，不折腾了，Linux 桌面只适合研发，工具链撑不起来，弃了。
+
+*本文档只针对 Ubuntu Server。*
 
 * Xfce
 
