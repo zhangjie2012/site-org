@@ -57,7 +57,7 @@ Sock5 proxy：[[https://www.irif.fr/~jch/software/polipo/][Polipo]]
 设置代理（polipo 的端口是 8123，可以换成其他的）：
 
 #+BEGIN_SRC
-export http_proxy="http://127.0.0.1:8123" export https_proxy="http://127.0.0.1:8123"
+export http_proxy="http://127.0.0.1:8123" && export https_proxy="http://127.0.0.1:8123"
 #+END_SRC
 
 测试是否生效: =curl ip.gs=
