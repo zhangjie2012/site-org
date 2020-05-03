@@ -21,6 +21,7 @@
 - [[file:orgmode.org][orgmode]] 最强力的插件，一种标记语言，比 Markdown 丰富，支持内嵌 LaTeX、导出成 HTML、pdf 等
   我的博客就是用 orgmode 生成的
 - [[file:faq.org][常见问题]] 使用过程中常见的问题以及解决方案
+- [[file:with-terminal.org][与终端模拟器]] Emacs 快捷键繁多和他独特的快捷键映射方式，导致和终端模拟器一起工作时，各种快捷键冲突。
 
 * 其它
 

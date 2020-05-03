@@ -1,0 +1,29 @@
+#+SETUPFILE: ~/site/tpl/wiki-tpl.org
+#+TITLE: Emacs with terminal emulators
+#+DATE: 2020-03-28 12:21:11
+
+* [[https://www.netsarang.com/zh/xshell/][Xshell]]
+
+*属性 -> 终端 -> 键盘*
+
+1. 功能键仿真选择 =Xterm=
+2. DELETE 键序列和 BACKSPACE 键序列 都选择 =ASCII 127=
+3. 元（Meta）键仿真 ，打开 =将 左ALT 用作 Meta 键(U)=
+
+
+*工具 -> 选项 -> 按键对应 -> 编辑*
+
+把所有的快捷键都删了，全部自定义。
+
+|--------------+------+------------+----|
+| Ctrl+Insert  | 菜单 | [编辑]复制 |    |
+| Shift+Insert | 菜单 | [编辑]粘贴 |    |
+| Ctrl+1       | 菜单 | 转到标签   | #1 |
+| Ctrl+2       | 菜单 | 转到标签   | #2 |
+| Ctrl+3       | 菜单 | 转到标签   | #3 |
+| Ctrl+4       | 菜单 | 转到标签   | #4 |
+|--------------+------+------------+----|
+
+*其他*
+
+- org mode 下 =<S-left>= 和 =<S-right>= 都不能用，不知道原因。但是可以用 =C-c <left/right>= 代替。
