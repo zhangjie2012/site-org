@@ -72,9 +72,9 @@
 - 养猫还是养狗？33% 养狗；26% 养猫；23% 都养；
 - 周末写代码吗？87% 是的；13% 不；
 
-* TODO Go
+* Go
 
-官方还在开放问卷中，https://blog.golang.org/survey2019 说是 2020 年会统计公布，期待。
+内容比较多，见：https://blog.golang.org/survey2019-results
 
 * JavaScript
 
