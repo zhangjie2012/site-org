@@ -13,6 +13,8 @@
 - [[http://dict.cn/orchestration][orchestration]] [ˌɔːkɪ'streɪʃn] 编排
 - [[http://dict.cn/overlap][overlap]] [ˌoʊvər'læp] 重叠
 - [[http://dict.cn/parallel][parallel]] ['pærəlel] 并发
+- permisson denied 没有权限
+- round-robin 轮询
 - scientific computing 科学计算
 - service discovery 服务发现
 - [[http://dict.cn/squirrel][squirrel]] ['skwɜːrəl]
@@ -21,4 +23,3 @@
 - strengths and weaknesses 长处和短处
 - the former ... the latter 前者...后者
 - trade offs 权衡取舍
-- permisson denied 没有权限
