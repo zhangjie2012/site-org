@@ -6,7 +6,7 @@
 
 *源码安装*
 
-+直接使用系统的包管理工具安装的 Emacs 版本都很低，推荐使用源码安装，当前最新的版本是 26.3。+[fn:2]
+直接使用系统的包管理工具安装的 Emacs 版本都很低，推荐使用源码安装，当前最新稳定版本是 26.3。[fn:2]
 
 下载源码：[[http://mirrors.ustc.edu.cn/gnu/emacs/][http://mirrors.ustc.edu.cn/gnu/emacs/]]
 
@@ -22,7 +22,7 @@ sudo make install
 *注意* ：如果编译提示 =configure: error: The following required libraries were not found: gnutls= 需要安装 =gnutls= 开发包，
 使用 =apt-cache search 'libgnutls.*-dev'= 找到对应的包，然后安装 [fn:1]。
 
-/以上是 Ubuntu 下源码状态的流程，其它系统也差不多。/
+/以上是 Ubuntu 18.04 下源码状态的流程，其它系统也差不多。/
 
 *Ubuntu 20.04*
 
@@ -50,7 +50,7 @@ Emacs 快捷键约定，所有的快捷键基本都是从这些前缀开始的�
 | 前缀  | 说明                                       |
 | ~C-~  | Ctrl 键                                    |
 | ~M-~  | Meta 键（键盘上的 Alt）                    |
-| ~S-~  | Super 键（非 Mac 键盘上的 Win 键），很少用 |
+| ~S-~  | Super 键（非 Mac 键盘上的 Win 键）         |
 | ~s-~  | Shift 键                                   |
 | ~DEL~ | 退格键，而不是实际的 DELETE 键             |
 | ~SPC~ | 空格键                                     |
@@ -58,6 +58,8 @@ Emacs 快捷键约定，所有的快捷键基本都是从这些前缀开始的�
 
 Emacs 几乎所有的快捷键都是以 ~C-~ 开始的，也是 Emacs 令人诟病的一部分（伤小拇指，还好我的小拇指健在）。
 系统默认的绑定键都是 ~C-x~ 开始的，用户自定义的大多是 ~C-c~ 开始的。
+
+另外 Super 键大部分时候都是冲突的，有关 Super 的我都重新映射了。[fn:3]
 
 每个初学者建议先阅读 Emacs 的 ~help-with-tutorial~ （ =C-h t= ）。走一遍，基本上就可以流畅的操作 Emacs 了。
 
@@ -105,6 +107,8 @@ Emacs 几乎所有的快捷键都是以 ~C-~ 开始的，也是 Emacs 令人诟�
 上面的 =pin= 可以设置为 =package-archives= 列表中的值。
 
 * Footnotes
+
+[fn:3] http://ergoemacs.org/emacs/emacs_hyper_super_keys.html
 
 [fn:2] 以前是这样，现在较新版本（系统）安装的软件都比较新了，直接用包管理工具安装即可。除非你想要最新的 Emacs。
 
