@@ -21,3 +21,4 @@
 - strengths and weaknesses 长处和短处
 - the former ... the latter 前者...后者
 - trade offs 权衡取舍
+- permisson denied 没有权限
