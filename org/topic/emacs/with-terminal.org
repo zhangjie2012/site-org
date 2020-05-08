@@ -25,6 +25,13 @@
 | Ctrl + Shift + W | 菜单 | 关闭标签   |
 |------------------+------+------------+
 
+*字体问题*
+
+Windows 下 Xshell 的中文字体非常丑，即便是换成微软雅黑。一个解决办法是：
+
+- 英文使用 Jetbrain Mono
+- 中文使用 [[https://github.com/be5invis/Sarasa-Gothic][更紗黑体]]
+
 *其他*
 
 - org mode 下 =<S-left>= 和 =<S-right>= 都不能用，不知道原因。但是可以用 =C-c <left/right>= 代替。

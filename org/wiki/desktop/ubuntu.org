@@ -2,8 +2,6 @@
 #+TITLE: Ubuntu
 #+DATE: 2018-09-10 21:39:56
 
-系统版本: +Xubuntu 18.04+ Ubuntu 20.04 beta
-
 * 设置国内源
 
 *自动选择*
@@ -133,6 +131,10 @@ http://xahlee.info/linux/linux_xfce_keyboard_shortcuts.html
 如何移动 panel：https://forum.xfce.org/viewtopic.php?id=7310
 
 * FAQ
+** Dell 安装 Ubuntu 找不到硬盘问题
+
+进 BIOS 设置硬盘，将 raid on 改为 ahci。
+
 ** 安装 xfce 之后，卸载不干净怎么办？
 
 - 卸载 =xfce4-*=
