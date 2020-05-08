@@ -35,8 +35,9 @@
   + [[https://www.gnu.org/software/emacs/][Emacs]]，主力编辑器，[[file:../../topic/emacs/index.org][我的 Wiki]]
   + [[https://www.vim.org/][Vim]]，没办法，服务器只有 Vi/Vim
 + 编码字体
-  - +[[https://github.com/tonsky/FiraCode][Fira Code]]，[[https://github.com/adobe-fonts/source-code-pro][Source Code Pro]]+ 现在统一用 Jetbrains Mono 了
-  - [[https://github.com/whorusq/sublime-text-3/blob/master/fonts/Microsoft-Yahei-Mono.ttf][Microsoft-Yahei-Mono]] 真中英文等宽等高字体，文泉驿也是，就是太丑了（目前只有这两个字体）
+  - [[https://github.com/tonsky/FiraCode][Fira Code]]
+  - [[https://github.com/adobe-fonts/source-code-pro][Source Code Pro]]
+  - [[https://github.com/be5invis/Sarasa-Gothic][更纱黑体]] 中英文等宽等高，好评，Microsoft-Yahei-Mono 和 文泉驿也可以，但是太丑
   - [[https://www.jetbrains.com/lp/mono/][Jetbrains Mono]] 官方推荐 13 号字体和 1.20 倍行号
 + 包管理工具
   - [[https://brew.sh/][Homebrew]]：The missing package manager for macOS
