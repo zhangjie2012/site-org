@@ -17,7 +17,13 @@
 * 代理
 ** Ubuntu Server
 
-安装 shadowsock-libev, =apt install shadowsocks-libev= ，客户端连接只需要 =ss-local= 。
+安装 shadowsock-libev, =apt install shadowsocks-libev= ，客户端连接只需要 =ss-local= 。先停掉无关的服务：
+
+#+begin_src shell
+systemctl disable shadowsocks-libev.service
+systemctl stop shadowsocks-libev.service
+#+end_src
+
 
 配置文件在 =/etc/shadowsocks-libev= 目录下。文件内容改为：
   #+BEGIN_SRC
@@ -50,7 +56,7 @@ Sock5 proxy：[[https://www.irif.fr/~jch/software/polipo/][Polipo]]
    socksParentProxy = "127.0.0.1:1080"
    socksProxyType = socks5
    #+END_SRC
-3. 重启: =system restart polipo=
+3. 重启: =systemctl restart polipo=
 
 设置代理（polipo 的端口是 8123，可以换成其他的）：
 
@@ -181,3 +187,7 @@ via: [[https://www.dedoimedo.com/computers/ubuntu-beaver-slow-boot.html]]
 ** 使用 wine 安装微信、企业微信等
 
 deepin-wine 确实可行，但是问题挺多的，体验很差，还是算了。
+
+** 笔记本合屏之后，阻止自动休眠
+
+=/etc/systemd/logind.conf= 中的 =HandleLidSwitch= 打开，并且值修改为 =ignore= 。然后 =service systemd-logind restart= 。
