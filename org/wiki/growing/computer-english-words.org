@@ -2,7 +2,10 @@
 #+TITLE: 计算机常用英语
 #+DATE: 2020-04-16 16:49:49
 
+* 单词
+
 - [[http://dict.cn/approaches][approaches]] [ə'proʊtʃ] 方法
+- [[http://dict.cn/arise][arise]] [ə'raɪz] vi. 出现，发生
 - [[http://dict.cn/concurrency][concurrency]] [kən'kʌrənsɪ] 并行
 - [[http://dict.cn/corresponding][corresponding]] [ˌkɔːrə'spɑːndɪŋ] 对应的，相应的
 - [[http://dict.cn/deprecated][deprecated]] ['deprəkeɪt] 不推荐使用
@@ -10,16 +13,31 @@
 - [[http://dict.cn/idempotent][idempotent]] [aɪ'dempətənt] [数] 幂等的
 - [[http://dict.cn/independent][independent]] [ˌɪndɪ'pendənt] 独立的
 - [[http://dict.cn/mechanism][machanism]] ['mekənɪzəm] 机制，机构，原理
+- [[http://dict.cn/majority][majority]] [mə'dʒɔːrəti] n. 大多数，多数，部分
 - [[http://dict.cn/orchestration][orchestration]] [ˌɔːkɪ'streɪʃn] 编排
 - [[http://dict.cn/overlap][overlap]] [ˌoʊvər'læp] 重叠
 - [[http://dict.cn/parallel][parallel]] ['pærəlel] 并发
+- [[http://dict.cn/robust][robust]] [roʊ'bʌst] adj. 强壮的，强健的，健壮的，健全的
+- [[http://dict.cn/squirrel][squirrel]] ['skwɜːrəl]
+  + n. 松鼠 /Go 的一个库名/
+  + vt. 存储
+- [[http://dict.cn/ultimately][ultimately]] ['ʌltɪmətli] adv. 最终
+
+
+* 短语
+
+- distributed architecture 分布式架构
 - permisson denied 没有权限
 - round-robin 轮询
 - scientific computing 科学计算
 - service discovery 服务发现
-- [[http://dict.cn/squirrel][squirrel]] ['skwɜːrəl]
-  + n. 松鼠 /Go 的一个库名/
-  + vt. 存储
 - strengths and weaknesses 长处和短处
 - the former ... the latter 前者...后者
 - trade offs 权衡取舍
+
+* 说明
+
+都是动词，vt 和 vi 的区别：
+
+- vt 即 transitive verb，及物动词，直接作用于物体，无需介词；
+- vi 即 intransitive verb，不及物动词，不可直接作用于物体，需要介词（at, on, by, to 等）；
