@@ -41,6 +41,12 @@ pandoc -f markdown -t org -o test.org test.md
 
 对我来说，GUI 中英文等宽等高的问题无法解决，折腾了很多次，最终决定使用终端，不折腾了。
 
+<2020-05-09 11:41:12>
+
+终于找到一个绝对的等宽等高中英文混排而且好看的字体，感动到 cry。
+
+更纱黑体：https://github.com/be5invis/Sarasa-Gothic
+
 ** 如何去掉空白字符
 
 + ~M-\~ ：删除光标周围的空格和 tab
