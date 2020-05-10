@@ -34,6 +34,14 @@ sudo make install
 brew install emacs
 #+END_SRC
 
+*Windows 10*
+
+下载 Emacs: https://mirrors.ustc.edu.cn/gnu/emacs/windows/ ，然后 runemacs.exe 运行 emacs。
+
+配置文件位置在： =/c/Users/me/AppData/Roaming= 用户主目录在这里。
+
+/Win10 比以前更好用了一些，我不在 Win10 下写代码，但是会写文档。/
+
 *终端使用*
 
 打开 =.bashrc= 添加两行 alias：
