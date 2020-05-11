@@ -2,6 +2,42 @@
 #+TITLE: 计算机常用英语
 #+DATE: 2020-04-16 16:49:49
 
+
+* 最日常
+
+** TODO 数字
+
+** 星期
+
+| 中文   | 全写      | 发音        | 简写  |
+| 星期日 | Sunday    | ['sʌndeɪ]   | Sun.  |
+| 星期一 | Monday    | ['mʌndeɪ]   | Mon.  |
+| 星期二 | Tuesday   | ['tuːzdeɪ]  | Tues. |
+| 星期三 | Wednesday | ['wenzdeɪ]  | Wed.  |
+| 星期四 | Thursday  | ['θɜːrzdeɪ] | Thu.  |
+| 星期五 | Friday    | ['fraɪdeɪ]  | Fri.  |
+| 星期六 | Saturday  | ['sætərdeɪ] | Sat.  |
+
+** 月份
+
+| 中文   | 全写      | 发音         | 简写 |
+| 一月   | January   | ['dʒænjueri] | Jan. |
+| 二月   | February  | ['februeri]  | Feb. |
+| 三月   | March     | [mɑːrtʃ]     | Mar. |
+| 四月   | April     | ['eɪprəl]    | Apr. |
+| 五月   | May       | [meɪ]        | -    |
+| 六月   | June      | [dʒuːn]      | Jun. |
+| 七月   | July      | [dʒu'laɪ]    | Jul. |
+| 八月   | August    | ['ɔːɡəst]    | Aug. |
+| 九月   | September | [sep'tembər] | Sep. |
+| 十月   | October   | [ɑːk'toʊbər] | Oct. |
+| 十一月 | November  | [noʊ'vembər] | Nov. |
+| 十二月 | December  | [dɪ'sembər]  | Dec. |
+
+** TODO 季节
+
+** TODO 节日
+
 * 单词
 
 - [[http://dict.cn/approaches][approaches]] [ə'proʊtʃ] 方法
@@ -22,7 +58,6 @@
   + n. 松鼠 /Go 的一个库名/
   + vt. 存储
 - [[http://dict.cn/ultimately][ultimately]] ['ʌltɪmətli] adv. 最终
-
 
 * 短语
 
