@@ -7,4 +7,28 @@
 用户场景：
 
 可以为 iOS 和 Android 生成库，基于 HTTP/2 作为传输协议，轻松穿越代理和防火墙。除此之外，是微服务通信的理想选择，
-不仅是因为核心协议搞笑，而且因为该框架具有可插拔的身份验证，负载均衡等等。
+不仅是因为核心协议高效，而且因为该框架具有可插拔的身份验证，负载均衡等等。Google 内部作为微服务的通信协议。
+
+* 指南
+
+gRPC 使用 protobuf 作为接口定义语言（IDL）和通信格式。
+
+#+CAPTION: https://grpc.io/docs/guides/
+https://grpc.io/img/landing-2.svg
+
+** Protocol Buffers
+
+Protocol Buffers: https://developers.google.com/protocol-buffers/docs/overview
+
+是谷歌成熟的开源的序列化结构化数据格式。
+
+安装：
+
+#+begin_src shell
+  apt install protobuf-compiler
+  go get -u github.com/golang/protobuf/protoc-gen-go # for go
+#+end_src
+
+** Protocol buffer versions
+
+使用 proto3。
