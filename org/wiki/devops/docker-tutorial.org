@@ -67,6 +67,11 @@ Registry => Repositories => Tags = Image
 
 重启： ~service docker restart~ ，查看信息： ~docker info~ 。
 
+其他加速器：
+
+- 中科大：https://mirrors.ustc.edu.cn/help/dockerhub.html
+- daocloud: https://www.daocloud.io/mirror
+
 * 镜像操作
 
 + 获取镜像: ~docker pull~
