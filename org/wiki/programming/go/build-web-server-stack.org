@@ -375,6 +375,8 @@ goqu 和 squirrel 是社区比较出名的两个 SQL 构建器。我自己使用
 
 具体用哪个看个人。
 
+<2020-05-13 17:44:38> squirrel 用习惯了真舒服，推荐！
+
 *** MongoDB
 
 建议使用官方提供的库：[[https://github.com/mongodb/mongo-go-driver][mongo-go-driver]]，开发已经一两年了，正式版本发布有六七个月了。
