@@ -85,3 +85,9 @@ gRPC 支持四种类型的服务调用方法：
 
 Metadata 以键值对的列表形式提供有关特定 RPC 调用信息（比如身份验证信息），key 和 value 一般是字符串，但也可以是二进制数据。Metadata 对于 gRPC 本身是不透明的-
 它允许客户端向服务器提供与调用相关的信息，反之亦然。
+
+----------------
+
+*Go gPRC 环境安装*
+
+https://grpc.io/docs/quickstart/go/
