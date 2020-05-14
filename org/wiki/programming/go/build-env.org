@@ -19,10 +19,10 @@ export PATH=$PATH:/usr/local/go/bin
 
 默认的工作目录是 =$HOME/go= ，如果是不同的目录需要 [[https://github.com/golang/go/wiki/SettingGOPATH][设置一下 GOPATH 环境变量]]。
 
-=go get= 安装的二进制包会放到 =$HOME/go/bin= 下面。所以，还要在 bashrc/zshrc 中添加路径：
+=go get= 安装的二进制包会放到 =$HOME/go/bin= 下面。所以，还要在 =.bashrc/.zshrc= 中添加路径：
 
 #+begin_src shell
-export PATH=$PATH:$HOME/go/bin
+export PATH=$PATH:$(go env GOPATH)/bin
 #+end_src
 
 ** 检测是否安装成功
