@@ -75,6 +75,8 @@
   + vt. 存储
 - [[http://dict.cn/ultimately][ultimately]] ['ʌltɪmətli] adv. 最终
 - [[http://dict.cn/pluggable][pluggable]] [plʌgəbəl] adj. 可插拔的
+- [[http://dict.cn/scenario][scenario]] [sə'nærioʊ] n. 场景，情景
+- [[http://dict.cn/considerations][considerations]]  [kənsɪdə'reɪʃnz] n. 注意事项
 
 * 短语
 

@@ -16,7 +16,7 @@ gRPC 使用 protobuf 作为接口定义语言（IDL）和通信格式。
 #+CAPTION: https://grpc.io/docs/guides/
 https://grpc.io/img/landing-2.svg
 
-** Protocol Buffers
+*Protocol Buffers*
 
 Protocol Buffers: https://developers.google.com/protocol-buffers/docs/overview
 
@@ -29,7 +29,7 @@ Protocol Buffers: https://developers.google.com/protocol-buffers/docs/overview
   go get -u github.com/golang/protobuf/protoc-gen-go # for go
 #+end_src
 
-** Protocol buffer versions
+*Protocol buffer versions*
 
 使用 proto3。
 
