@@ -23,6 +23,50 @@ google 类似 C++ 日志版本的 Go 版本，性能较好，使用也比较简�
 
 - 优点：业内评价较高，易用性好，定制化也很强，人性化。
 
+使用范例
+
+#+begin_src go
+  func init() {
+	  // TEXT
+	  logrus.SetFormatter(&logrus.TextFormatter{
+		  ForceColors:     false,
+		  DisableColors:   true,
+		  FullTimestamp:   true,
+		  TimestampFormat: "2006-01-02 15:04:05.000",
+		  CallerPrettyfier: func(frame *runtime.Frame) (function string, file string) {
+			  ss := strings.Split(frame.Function, ".")
+			  function = ss[len(ss)-1]
+			  file = fmt.Sprintf("%s:%d", filepath.Base(frame.File), frame.Line)
+			  return function, file
+		  },
+	  })
+	  // JSON
+	  logrus.SetFormatter(&logrus.JSONFormatter{
+		  TimestampFormat: "2006-01-02 15:04:05.000",
+		  CallerPrettyfier: func(frame *runtime.Frame) (function string, file string) {
+			  ss := strings.Split(frame.Function, ".")
+			  function = ss[len(ss)-1]
+			  file = fmt.Sprintf("%s:%d", filepath.Base(frame.File), frame.Line)
+			  return function, file
+		  },
+		  // FieldMap: logrus.FieldMap{
+		  // 	logrus.FieldKeyTime:  "@timestamp",
+		  // 	logrus.FieldKeyLevel: "@level",
+		  // 	logrus.FieldKeyMsg:   "@message",
+		  // 	logrus.FieldKeyFunc:  "@caller",
+		  // },
+		  PrettyPrint: true,
+	  })
+
+	  // 设置输出流
+	  logrus.SetOutput(os.Stdout)
+	  // include calling method
+	  logrus.SetReportCaller(true)
+	  // 日志级别
+	  logrus.SetLevel(logrus.TraceLevel)
+  }
+#+end_src
+
 ** [[https://github.com/uber-go/zap][uber-go/zap]]
 
 Uber 开源的日志系统。
