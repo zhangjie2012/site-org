@@ -270,3 +270,13 @@ Foo(*MsgA, <ServiceName>_FooServer) error
 效果相同。
 
 因此，如果 =foo.proto= 在 =package foo= 中声明，那么 =foo.pb.go= 生成的文件也会在 Go 的包 =foo= 包中。
+
+----------------
+
+* gPRC-Go
+
+官方 Repo: https://github.com/grpc/grpc-go
+
+- API 文档：https://pkg.go.dev/google.golang.org/grpc
+- 专题文档：https://github.com/grpc/grpc-go/tree/master/Documentation
+- 样例：https://github.com/grpc/grpc-go/tree/master/examples
