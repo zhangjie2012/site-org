@@ -56,9 +56,12 @@
 
 * 单词
 
+- [[http://dict.cn/anonymous][anonymous]] [ə'nɑːnɪməs] adj. 匿名
 - [[http://dict.cn/approaches][approaches]] [ə'proʊtʃ] 方法
+- [[http://dict.cn/appropriate][appropriate]] [ə'proʊpriət] adj. 合适的，适当的
 - [[http://dict.cn/arise][arise]] [ə'raɪz] vi. 出现，发生
 - [[http://dict.cn/concurrency][concurrency]] [kən'kʌrənsɪ] 并行
+- [[http://dict.cn/considerations][considerations]] [kənsɪdə'reɪʃnz] n. 注意事项
 - [[http://dict.cn/corresponding][corresponding]] [ˌkɔːrə'spɑːndɪŋ] 对应的，相应的
 - [[http://dict.cn/deprecated][deprecated]] ['deprəkeɪt] 不推荐使用
 - [[http://dict.cn/flexibility][flexibility]] [ˌfleksə'bɪləti] 灵活性，弹性
@@ -66,29 +69,32 @@
 - [[http://dict.cn/independent][independent]] [ˌɪndɪ'pendənt] 独立的
 - [[http://dict.cn/mechanism][machanism]] ['mekənɪzəm] 机制，机构，原理
 - [[http://dict.cn/majority][majority]] [mə'dʒɔːrəti] n. 大多数，多数，部分
+- [[http://dict.cn/measure][measure]] ['meʒər] v. 测量 eg. measure performance 性能测试
 - [[http://dict.cn/orchestration][orchestration]] [ˌɔːkɪ'streɪʃn] 编排
 - [[http://dict.cn/overlap][overlap]] [ˌoʊvər'læp] 重叠
 - [[http://dict.cn/parallel][parallel]] ['pærəlel] 并发
+- [[http://dict.cn/pluggable][pluggable]] [plʌgəbəl] adj. 可插拔的
 - [[http://dict.cn/robust][robust]] [roʊ'bʌst] adj. 强壮的，强健的，健壮的，健全的
+- [[http://dict.cn/scenario][scenario]] [sə'nærioʊ] n. 场景，情景
 - [[http://dict.cn/squirrel][squirrel]] ['skwɜːrəl]
   + n. 松鼠 /Go 的一个库名/
   + vt. 存储
+- [[http://dict.cn/symmetric][symmetric]]  [sɪ'metrɪk] adj. 对称的 eg. Symmetric encryption 对称加密
 - [[http://dict.cn/ultimately][ultimately]] ['ʌltɪmətli] adv. 最终
-- [[http://dict.cn/pluggable][pluggable]] [plʌgəbəl] adj. 可插拔的
-- [[http://dict.cn/scenario][scenario]] [sə'nærioʊ] n. 场景，情景
-- [[http://dict.cn/considerations][considerations]]  [kənsɪdə'reɪʃnz] n. 注意事项
 
 * 短语
 
+- compression and decompression 压缩和解压缩
 - distributed architecture 分布式架构
 - permisson denied 没有权限
+- reference material 参考资料
 - round-robin 轮询
 - scientific computing 科学计算
+- serialization and deserialization 序列化和反序列化
 - service discovery 服务发现
 - strengths and weaknesses 长处和短处
 - the former ... the latter 前者...后者
 - trade offs 权衡取舍
-- reference material 参考资料
 
 * 说明
 
@@ -96,3 +102,8 @@
 
 - vt 即 transitive verb，及物动词，直接作用于物体，无需介词；
 - vi 即 intransitive verb，不及物动词，不可直接作用于物体，需要介词（at, on, by, to 等）；
+
+其它属性：
+
+- adj. 形容词
+- adv. 副词
