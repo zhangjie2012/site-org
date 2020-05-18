@@ -1,0 +1,33 @@
+#+SETUPFILE: ~/site/tpl/link-tpl.org
+#+TITLE: gRPC
+#+OPTIONS: toc:nil
+#+OPTIONS: num:nil
+
+*Google 开源的基于 HTTP/2 协议的，使用 Protocol Buffers 作为描述语言的 RPC 框架。*
+
+/目前是 CNCF 的孵化项目，估计也将成为云原生的事实上的服务调用标准，前途不可限量。/
+
+* Protocol Buffer
+
+* gRPC
+
+https://grpc.io/about/
+
+应用场景：
+
+- 微服务架构下，高效的连接不同语言的服务 - 微服务通信
+- 移动设备、浏览器客户端与后端通信 - C/S 模式通信
+- 生成高效的客户端库
+
+核心功能：
+
+- 10 种常用语言的客户端库 - 支持大部分常用语言
+- 一个简单的服务定义框架，实现高效的线上通信
+- 基于 http/2 的双向传输流
+- 可插拔的身份验证，追踪，负载均衡和健康检测
+
+* gRPC-go
+
+* 资料
+
+- [[https://cloud.google.com/apis/design/][Google: API 设计指南]] 适用于 REST API 和 gRPC API
