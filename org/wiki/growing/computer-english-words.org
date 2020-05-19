@@ -81,6 +81,7 @@
   + vt. 存储
 - [[http://dict.cn/symmetric][symmetric]]  [sɪ'metrɪk] adj. 对称的 eg. Symmetric encryption 对称加密
 - [[http://dict.cn/ultimately][ultimately]] ['ʌltɪmətli] adv. 最终
+- [[http://dict.cn/evolve][evolve]] [i'vɑːlv] v. 演化，进化
 
 * 短语
 
@@ -97,7 +98,6 @@
 - trade offs 权衡取舍
 - reference material 参考资料
 - benchmarks 基准测试
-
 
 * 说明
 

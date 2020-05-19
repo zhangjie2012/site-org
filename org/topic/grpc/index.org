@@ -9,6 +9,25 @@
 
 * Protocol Buffer
 
+https://developers.google.com/protocol-buffers
+
+Google 开源的语言与平台无关的可扩展的结构化数据序列化，用于通信，存储等，类似 XML，但是更加的小巧、简洁和高效。
+定义构造数据的方式，然后生成各种语言的源代码（不止提供数据结构，还提供了存取和序列化反序列化接口）。
+
+安装编译器（用于将 .proto 文件生成不同语言的源代码）：
+
+#+begin_src sh
+  # macOS
+  brew install protobuf -> protoc 命令
+  # Ubuntu
+  apt install protobuf-compiler
+#+end_src
+
+它的工作流程是，首先书写 .proto 文件，然后使用 protoc 编译器将 .proto 编译成具体语言的源代码，源代码提供了基本的
+存取和序列化序列化接口，然在后在你的工程中引入源代码，开始使用。
+
+- [[file:write-proto-spec.org][书写 .proto 规范]]
+
 * gRPC
 
 https://grpc.io/about/
