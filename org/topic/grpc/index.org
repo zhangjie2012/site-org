@@ -24,9 +24,10 @@ Google 开源的语言与平台无关的可扩展的结构化数据序列化，�
 #+end_src
 
 它的工作流程是，首先书写 .proto 文件，然后使用 protoc 编译器将 .proto 编译成具体语言的源代码，源代码提供了基本的
-存取和序列化序列化接口，然在后在你的工程中引入源代码，开始使用。
+存取和序列化序列化接口，再然后在你的工程中引入源代码，开始使用。
 
 - [[file:write-proto-spec.org][书写 .proto 规范]]
+- [[file:proto-generate-source-code.org][生成源代码]]
 
 * gRPC
 
