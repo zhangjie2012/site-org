@@ -242,14 +242,162 @@ C++ 是 =PackForm()= 和 =UnpackTo()= 方法。
 
 *当前用于 Any 类型的运行时库正在开发中。*
 
-* TODO Oneof
+* Oneof
 
-* TODO Maps
+如果一个消息有很多的字段，但是在同一个时间内只会被设置其中的一个，你可以使用 oneof 特性来实现它，以节省内存。
 
-* TODO Package
+Oneof 除了所有的字段共享一块内存之外的行为和其它的普通字段一样，最多可以同时设置一个字段，设置 oneof 中的任何一个字段会清空其它的成员。
+你可以使用特殊的 =case()= 或者 =WhichOneof()= 方法来判断设置了哪个值，具体依赖于你选择语言的实现。
 
-* TODO 定义服务
+** 使用 Oneof
 
-* TODO JSON 映射
+在 =.proto= 文件中使用 =oneof= 关键字来定义：
 
-* TODO 选项
+#+begin_src
+message SampleMessage {
+  oneof test_oneof {
+    string name = 4;
+    SubMessage sub_message = 9;
+  }
+}
+#+end_src
+
+然后将 oneof 字段添加到定义，但是不可以定义成 =repeated= 字段。
+
+在生成的代码中，oneof 字段具有相同的 getters 和 setters。额外还有一种的特殊的方法来判断哪个字段被设置了。
+具体看语言的 API 参考文档：https://developers.google.com/protocol-buffers/docs/reference/overview。
+
+** Oneof 特性
+
+- 设置一个 oneof 字段会自动清空其它的。多次设置，只有最后一次生效。
+- 如果解析器看到相同 oneof 的多个成员，只有最后一个看到的成员被解析。
+- 不可以使用 =repeated= 。
+- 反射 APIs 对 oneof 字段有效。
+- If you set a oneof field to the default value (such as setting an int32 oneof field to 0), the "case" of that oneof field will be set,
+  and the value will be serialized on the wire.
+- 如果你使用 C++，确保你的代码不会导致内存崩溃。如下代码会导致崩溃，因为 =set_name()= 方法已经删除了 =sub_message= :
+  #+begin_src
+  SampleMessage message;
+  SubMessage* sub_message = message.mutable_sub_message();
+  message.set_name("name");      // Will delete sub_message
+  sub_message->set_...            // Crashes here
+  #+end_src
+- 还是 C++，如果你 =Swap()= 有 oneof 的两个消息，每个消息都会最终以对方为准：下面的例子中 =msg1= 会有一个 =sub_message= 而 =msg2= 会有一个 =name= 。
+  #+begin_src
+  SampleMessage msg1;
+  msg1.set_name("name");
+  SampleMessage msg2;
+  msg2.mutable_sub_message();
+  msg1.swap(&msg2);
+  CHECK(msg1.has_sub_message());
+  CHECK(msg2.has_name());
+  #+end_src
+
+** 向后兼容问题
+
+/这玩意一般用不到，而且我感觉使用的时候问题比带来的好处要多。/
+
+* Maps
+
+如果想要在数据定义中创建关联映射，protobuf 提供了方便的快捷语法：
+
+#+begin_src
+map<key_type, value_type> map_field = N;
+#+end_src
+
+=key_type= 可以使用任何整型和字符串类型（也就是说除了标量类型浮点型和 =bytes= 之外的）。枚举不是一个有效的 =key_type= ， =value_type= 可以是除了 map
+以外的所有类型。
+
+使用注意：
+
+- Map 字段不可以是 =repeated= 。 /字段不可以，不是 value 不可以/
+- Map 的 key 和 value 顺序是不确定的，因为你不可以依赖与 map 中的元素的特定顺序。
+- 当生成 =.proto= 的文本格式时，maps 是按 key 排序，数值类型的 key 是按照数值排序。
+- 编码的时候重复的键会使用最后一个看到的值。解码的时候，出现相同的 keys 会解码失败。
+- 如果提供了一个 key 但是没有值，序列化行为取决于语言。C++，Java，Python 会使用类型的默认值，其它的语言什么都不做。
+
+** 向后兼容
+
+编码的时候 map 语法等价于下面这样，因此 protobuf 实现就算不支持 map 也可以处理你的数据：
+
+#+begin_src
+message MapFieldEntry {
+  key_type key = 1;
+  value_type value = 2;
+}
+
+repeated MapFieldEntry map_field = N;
+#+end_src
+
+* Package
+
+你可以在 =.proto= 文件中添加一个可选的 =package= 指示符用来放置协议消息类型质检的命名冲突。
+
+#+begin_src
+package foo.bar;
+message Open { ... }
+#+end_src
+
+然后你可以在另外的消息定义中使用：
+
+#+begin_src
+message Foo {
+  ...
+  foo.bar.Open open = 1;
+  ...
+}
+#+end_src
+
+package 不同的语言生成的代码不同：
+
+- *C++* 等价于 namespace。
+- *Python* 会被路忽略，因为 Python 的模块是根据它在文件系统中的位置进行组织的。
+- *Go* 当做 Go 的 package 名称，除非你显式的提供了 =option go_package= 。
+
+* 定义服务(Defining Services)
+
+如果你要与 RPC 系统一起使用你的消息类型，你可以在 =.proto= 文件中定义一个 RPC 服务接口，protobuf 编译器会根据你选择的语言自动生成服务接口代码和存根。
+
+如下，一个 RPC 服务请求是 =SearchRequest= 消息，返回是 =SearchResponse= 消息，你可以这样定义：
+
+#+begin_src
+service SearchService {
+  rpc Search (SearchRequest) returns (SearchResponse);
+}
+#+end_src
+
+与 protobuf 一起使用的直接使用 RPC 系统是 gRPC：谷歌开发的一个语言和平台无关的开源的 RPC 系统。gRPC 和 protobuf 是最佳搭档，
+使用特殊的编译插件可以直接生成相关的 RPC 代码。
+
+在 [[https://github.com/protocolbuffers/protobuf/blob/master/docs/third_party.md][这里]] 列出了很多第三方的 protobuf 插件。
+
+* JSON 映射
+
+Proto3 支持 JSON 编码规范，这使得在系统之间共享数据更加容易。
+
+https://developers.google.com/protocol-buffers/docs/proto3#json
+
+* 选项(Options)
+
+=.proto= 文件中的各种声明可以使用许多的 /options/ 来注释。Options 不会改变声明的整体定义，但可能会影响在特定上下文中处理声明的方式。
+可用的 Options 的完整定义在 =google/protobuf/descriptor.proto= 中。
+
+- 一些 options 是在文件级别定义，这意味着它们在顶层范围定义，而不是在任何的消息、枚举或者服务定义中。
+- 一些 options 是在消息级别定义，意味着它们应该写在消息内部定义中。
+- 一些 options 是字段级别的选项，它们应该写在字段定义上。
+
+Options 可以写在枚举类型、枚举值、oneof 字段，服务类型和服务方法；但是目前没有有用的 options 给它们用。
+
+下面是常用的选项：
+
+- =java_package=
+- =java_multiple_files=
+- =java_outer_classname=
+- =optimize_for=
+- =cc_enable_arenas=
+- =objc_class_prefix=
+- =deprecated= 字段选项，如果设置为 =true= ，表示该字段的已经不推荐使用，不应该在新的代码中使用。在大多数语言中，都不会有实际的效果。
+  Java 中，会添加 =@Deprecated= 注解。如果一个字段没被用过，但是不想新用户使用它，可以使用 reserved 声明，而不是 deprecated。
+  #+begin_src
+  int32 old_field = 6 [deprecated = true];
+  #+end_src
