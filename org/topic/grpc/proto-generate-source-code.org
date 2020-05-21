@@ -20,6 +20,15 @@ protobuf 编译器运行一个 =.proto= 文件，会编译生成具体语言的�
 
 * 命令行
 
+安装编译器（用于将 .proto 文件生成不同语言的源代码）：
+
+#+begin_src sh
+  # macOS
+  brew install protobuf -> protoc 命令
+  # Ubuntu
+  apt install protobuf-compiler
+#+end_src
+
 #+begin_src sh
   protoc --proto_path=IMPORT_PATH \
 		 --cpp_out=DST_DIR --java_out=DST_DIR \
