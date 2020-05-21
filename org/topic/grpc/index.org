@@ -3,7 +3,7 @@
 #+OPTIONS: toc:nil
 #+OPTIONS: num:nil
 
-*Google 开源的基于 HTTP/2 协议的，使用 Protocol Buffers 作为描述语言的 RPC 框架。*
+*Google 开源的基于 HTTP/2 协议的，使用 Protocol Buffers 作为接口定义语言（IDL）和通信格式的 RPC 框架。*
 
 /目前是 CNCF 的孵化项目，估计也将成为云原生的事实上的服务调用标准，前途不可限量。/
 
@@ -26,11 +26,14 @@ Google 开源的语言与平台无关的可扩展的结构化数据序列化，�
 
 https://grpc.io/about/
 
+#+CAPTION: https://grpc.io/docs/guides/
+https://grpc.io/img/landing-2.svg
+
 应用场景：
 
 - 微服务架构下，高效的连接不同语言的服务 - 微服务通信
 - 移动设备、浏览器客户端与后端通信 - C/S 模式通信
-- 生成高效的客户端库
+- 生成高效的客户端库（iOS, Android）
 
 核心功能：
 
@@ -39,7 +42,24 @@ https://grpc.io/about/
 - 基于 http/2 的双向传输流
 - 可插拔的身份验证，追踪，负载均衡和健康检测
 
-* gRPC-go
+文档：
+
+- [[file:grpc-concepts.org][gRPC 概念]] /如何定义服务，工作流，RPC 生命周期等/
+- [[file:generate-go-code-reference.org][生成 Go 代码参考文档]]
+
+* gRPC for go
+
+官方 Repo: https://github.com/grpc/grpc-go
+
+- API 文档：https://pkg.go.dev/google.golang.org/grpc
+- 专题文档：https://github.com/grpc/grpc-go/tree/master/Documentation
+- 样例：https://github.com/grpc/grpc-go/tree/master/examples
+
+工作流程：
+
+- 在 =.proto= 文件中定义服务
+- 使用 protobuf 编译器生成服务器和客户端代码
+- 使用 Go RPC API 写客户端和服务器
 
 * 资料
 

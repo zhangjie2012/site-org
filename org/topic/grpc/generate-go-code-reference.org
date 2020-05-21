@@ -1,106 +1,20 @@
 #+SETUPFILE: ~/site/tpl/site-tpl.org
-#+TITLE: gRPC 学习笔记
-#+DATE: 2020-05-12 21:40:41
-
-官方文档：https://grpc.io/docs/
-
-用户场景：
-
-可以为 iOS 和 Android 生成库，基于 HTTP/2 作为传输协议，轻松穿越代理和防火墙。除此之外，是微服务通信的理想选择，
-不仅是因为核心协议高效，而且因为该框架具有可插拔的身份验证，负载均衡等等。Google 内部作为微服务的通信协议。
-
-----------------
-
-gRPC 使用 protobuf 作为接口定义语言（IDL）和通信格式。
-
-#+CAPTION: https://grpc.io/docs/guides/
-https://grpc.io/img/landing-2.svg
-
-*Protocol Buffers*
-
-Protocol Buffers: https://developers.google.com/protocol-buffers/docs/overview
-
-是谷歌成熟的开源的序列化结构化数据格式。
-
-安装：
-
-#+begin_src shell
-  apt install protobuf-compiler
-  go get -u github.com/golang/protobuf/protoc-gen-go # for go
-#+end_src
-
-*Protocol buffer versions*
-
-使用 proto3。
-
-----------------
-
-gRPC 概念：https://grpc.io/docs/guides/concepts/
-
-#+begin_src
-service HelloService {
-  rpc SayHello (HelloRequest) returns (HelloResponse);
-}
-
-message HelloRequest {
-  string greeting = 1;
-}
-
-message HelloResponse {
-  string reply = 1;
-}
-#+end_src
-
-gRPC 支持四种类型的服务调用方法：
-
-- 一元 RPCs：客户端向服务器发送单个请求，并获得响应。跟函数调用一样。
-  #+begin_src
-  rpc SayHello(HelloRequest) returns (HelloResponse);
-  #+end_src
-- 服务器流 RPCs：客户端向服务器发送请求，服务器返回一系列的消息。客户端从返回的流中读取消息，直到没有更多的消息为止。gRPC 保证单个 RPC 调用中的消息顺序是一致的。
-  #+begin_src
-  rpc LotsOfReplies(HelloRequest) returns (stream HelloResponse);
-  #+end_src
-- 客户端流 RPCs：客户端向服务器发送一系列的消息，客户端写完消息之后，等待服务器读取消息并返回响应。同样，gRPC 保证消息的顺序。
-  #+begin_src
-  rpc LotsOfGreetings(stream HelloRequest) returns (HelloResponse);
-  #+end_src
-- 双向流 RPCs：双方都使用读写流发送一系列消息。两个流独立运行，因此客户端和服务器可以按照自己喜欢的顺序读写：比如，服务器可以在写入响应之前等待接收所有的客户端消息，
-  或者交替的读取一条消息然后编写一条消息，或者其它的读写组合。每个流中的消息顺序都会被保留。
-  #+begin_src
-  rpc BidiHello(stream HelloRequest) returns (stream HelloResponse);
-  #+end_src
-
-*使用 API*
-
-1. 在 =.proto= 文件中定义服务（service）
-2. gRPC 提供 protobuf 编译工具生成客户端和服务端的代码
-3. 通常在客户端调用 API，然后在服务端做出响应
-   - 服务端：实现服务声明的方法，运行 gRPC 服务器处理客户端调用。gRPC 基础设施对请求解码，执行服务代码，然后编码服务回包；
-   - 客户端：按照协议约定的调用参数发起调用，gRPC 在请求发送到服务器后返回；
-
-*RPC 生命周期*
-
-*Metadata*
-
-Metadata 以键值对的列表形式提供有关特定 RPC 调用信息（比如身份验证信息），key 和 value 一般是字符串，但也可以是二进制数据。Metadata 对于 gRPC 本身是不透明的-
-它允许客户端向服务器提供与调用相关的信息，反之亦然。
-
-----------------
-
-*Go gPRC 环境安装*
-
-https://grpc.io/docs/quickstart/go/
-
-----------------
-
-* Go 生成代码参考
+#+TITLE: gPPC 生成 Go 代码参考文档
+#+DATE: 2020-05-21 15:05:55
 
 https://grpc.io/docs/reference/go/generated-code/
 
 生成 Go 的 protobuf package 文件需要在使用 protoc 编译 =.proto= 文件时使用 =protoc-gen-go= 插件。
 
-** 服务器接口生成的方法
+* 命令行
+
+使用 protobuf 编译器：
+
+#+begin_src sh
+  protoc -I=libproto --go_out=plugins=grpc:libproto libproto/xxx.proto
+#+end_src
+
+* 服务器接口生成的方法
 
 在 Server 端， =.proto= 文件中的每一个 =service Bar= 都会生成如下的函数：
 
@@ -110,7 +24,7 @@ https://grpc.io/docs/reference/go/generated-code/
 
 在服务器启动之前，应用程序要自己实现一个 =BarServer= 接口的具体实现，然后把它注册到 =grpc.Server= 实例中。
 
-*** 一元方法(Unary methods)
+** 一元方法(Unary methods)
 
 这些方法在生成服务接口的时候有如下的签名：
 
@@ -120,7 +34,7 @@ Foo(context.Context, *MsgA) (*MsgB, error)
 
 =MsgA= 是客户端请求的 protobuf 消息， =MsgB= 是从服务器返回的 protobuf 消息。
 
-*** 服务器流方法(Server-streaming methods)
+** 服务器流方法(Server-streaming methods)
 
 这些方法在生成服务接口的时候有如下的签名：
 
@@ -141,7 +55,7 @@ Foo(*MsgA, <ServiceName>_FooServer) error
 
 服务端的处理器通过 =Send= 方法向客户端不断的发送 protobuf 消息，流的结束以处理器的 =handler= 方法为准。
 
-*** 客户端流方法(Client-streaming methods)
+** 客户端流方法(Client-streaming methods)
 
 这些方法在生成服务接口的时候有如下的签名：
 
@@ -164,7 +78,7 @@ Foo(*MsgA, <ServiceName>_FooServer) error
 服务端可以重复的调用 =Recv= 来获取从客户端发送过来的全部消息。 =Recv= 一旦返回 =(nil, io.EOF)= 说明流结束了。
 服务端回复消息通过调用 =SendAndClose= 方法。注意 =SendAndClose= 只能被调用一次。
 
-*** 双向流（Bidi-streaming methods）
+** 双向流（Bidi-streaming methods）
 
 这些方法在生成服务接口的时候有如下的签名：
 
@@ -186,12 +100,12 @@ Foo(*MsgA, <ServiceName>_FooServer) error
 服务器端的处理程序可以重复调用 =Recv= 获取从客户端发来的消息流。 =Recv= 返回 =(nil, io.EOF)= 表示客户端流结束了。
 回复的流通过重复调用 =Send= 方法来实现， =return= 表示发送结束。
 
-** 客户端接口生成的方法
+* 客户端接口生成的方法
 
 在客户端测， =proto= 文件中的每一个 =service Bar= 也都会生成一个函数: =func BarClient(cc *grpc.ClientConn) BarClient= ，
 它会返回 =BarClient= 接口的具体实现（此接口实现也会存在于生成的 =.pb.go= 文件中）。
 
-*** 一元方法(Unary Methods)
+** 一元方法(Unary Methods)
 
 这些方法生成的客户端存根具有以下签名：
 
@@ -201,7 +115,7 @@ Foo(*MsgA, <ServiceName>_FooServer) error
 
 =MsgA= 是客户端的请求， =MsgB= 是服务器的回包。
 
-*** 服务端流方法(Server-Streaming methods)
+** 服务端流方法(Server-Streaming methods)
 
 这些方法生成的客户端存根具有以下签名：
 
@@ -220,7 +134,7 @@ Foo(*MsgA, <ServiceName>_FooServer) error
 
 客户端重复调用 =Recv= 方法来返回服务器回复的消息。当 =Recv= 接受到 =(nil, io.EOF)= 表示流结束。
 
-*** 客户端流方法(Client-Streaming methods)
+** 客户端流方法(Client-Streaming methods)
 
 这些方法生成的客户端存根具有以下签名：
 
@@ -242,7 +156,7 @@ Foo(*MsgA, <ServiceName>_FooServer) error
 
 客户端可以重复调用 =Send= 方法想服务器发送消息，最后调用 =CloseAndRecv()= 结束发送等待服务器回包。
 
-*** 双向流方法(Bidi-Streaming methods)
+** 双向流方法(Bidi-Streaming methods)
 
 这些方法生成的客户端存根具有以下签名：
 
@@ -264,19 +178,9 @@ Foo(*MsgA, <ServiceName>_FooServer) error
 
 服务器到客户端的流通过返回 =(nil, io.EOF)= 终结，客户端到服务器的流通过客户端调用 =CloseSend= 来结束。
 
-** 包和命名空间
+* 包和命名空间
 
 当 =protoc= 编译器调用 ~-go_out=plugins=grpc:~  时， =proto package= 会被转换成 Go 的包，跟 =protoc-gen-go= 插件不加 =grpc=
 效果相同。
 
 因此，如果 =foo.proto= 在 =package foo= 中声明，那么 =foo.pb.go= 生成的文件也会在 Go 的包 =foo= 包中。
-
-----------------
-
-* gPRC-Go
-
-官方 Repo: https://github.com/grpc/grpc-go
-
-- API 文档：https://pkg.go.dev/google.golang.org/grpc
-- 专题文档：https://github.com/grpc/grpc-go/tree/master/Documentation
-- 样例：https://github.com/grpc/grpc-go/tree/master/examples

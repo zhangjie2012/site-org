@@ -1,0 +1,65 @@
+#+SETUPFILE: ~/site/tpl/site-tpl.org
+#+TITLE: gPPC 概念
+#+DATE: 2020-05-21 14:41:05
+
+https://grpc.io/docs/guides/concepts/
+
+* 总览
+
+** 服务定义
+
+使用 protobuf 作为 IDL 来描述服务接口和 payload 消息。
+
+#+begin_src
+service HelloService {
+  rpc SayHello (HelloRequest) returns (HelloResponse);
+}
+
+message HelloRequest {
+  string greeting = 1;
+}
+
+message HelloResponse {
+  string reply = 1;
+}
+#+end_src
+
+
+gRPC 支持四种类型的服务调用方法：
+
+- 一元 RPCs：客户端向服务器发送单个请求，并获得响应。跟函数调用一样。
+  #+begin_src
+  rpc SayHello(HelloRequest) returns (HelloResponse);
+  #+end_src
+- 服务器流 RPCs：客户端向服务器发送请求，服务器返回一系列的消息。客户端从返回的流中读取消息，直到没有更多的消息为止。gRPC 保证单个 RPC 调用中的消息顺序是一致的。
+  #+begin_src
+  rpc LotsOfReplies(HelloRequest) returns (stream HelloResponse);
+  #+end_src
+- 客户端流 RPCs：客户端向服务器发送一系列的消息，客户端写完消息之后，等待服务器读取消息并返回响应。同样，gRPC 保证消息的顺序。
+  #+begin_src
+  rpc LotsOfGreetings(stream HelloRequest) returns (HelloResponse);
+  #+end_src
+- 双向流 RPCs：双方都使用读写流发送一系列消息。两个流独立运行，因此客户端和服务器可以按照自己喜欢的顺序读写：比如，服务器可以在写入响应之前等待接收所有的客户端消息，
+  或者交替的读取一条消息然后编写一条消息，或者其它的读写组合。每个流中的消息顺序都会被保留。
+  #+begin_src
+  rpc BidiHello(stream HelloRequest) returns (stream HelloResponse);
+  #+end_src
+
+** 使用 API
+
+1. 在 =.proto= 文件中定义服务（service）
+2. gRPC 提供 protobuf 编译工具生成客户端和服务端的代码
+3. 通常在客户端调用 API，然后在服务端做出响应
+   - 服务端：实现服务声明的方法，运行 gRPC 服务器处理客户端调用。gRPC 基础设施对请求解码，执行服务代码，然后编码服务回包；
+   - 客户端：按照协议约定的调用参数发起调用，gRPC 在请求发送到服务器后返回；
+
+* RPC 生命周期
+
+https://grpc.io/docs/guides/concepts/#rpc-life-cycle
+
+/很好理解，文档冗余的有点多。/
+
+** Metadata
+
+Metadata 是特定 RPC 调用的标识（比如说认证详情），格式是 key-value 的列表，key 和 value 一般是字符串，但也可以是二进制数据。
+Metadata 对于 gRPC 本身是不透明的 - 它允许客户端向服务器提供与调用相关的信息，反之亦然。
