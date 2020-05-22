@@ -1,5 +1,5 @@
 #+SETUPFILE: ~/site/tpl/link-tpl.org
-#+TITLE: JerryZhang
+#+TITLE: QWERTY
 #+OPTIONS: toc:nil
 #+OPTIONS: num:nil
 
@@ -15,19 +15,13 @@
 - [[file:reading/links.org][Links]] :: 各种资源链接收集：博客、DevoOps、设计、技术学习，搬运工
 - [[file:other/resume.org][Resume]] :: 简历
 
-* Remember
-
-- [[file:youth/index.org][Youth]] :: 永远年轻，永远热泪盈眶；从大学开始到现在的人生经历和感悟
-- [[file:other/duomi.org][音乐回忆]] :: 2014-06 之前在多米上听的歌，写脚本抓的
-- [[file:other/once.org][曾经发表在 ONCE 上的一些话]] :: 以前做的一个网站，后来关了
-
 * Social Links
 
 - [[https://github.com/zhangjie2012][Github]]
 - [[https://www.zhihu.com/people/zhang-jie-86-68/activities][知乎]]
 - [[https://weibo.com/engineerzhangjie][微博]]
 - [[https://twitter.com/duzhuoyizui][Twitter]]
-
+- [[mailto:me@zhangjie.com][邮箱]]
 ---------------
 
-[[file:gtd/index.org][GTD]] | [[file:weekly/index.org][碎碎念]] | [[file:blog/2011/about-blog.org][关于博客]] | [[file:other/emacs-news.org][Emacs News]] | [[mailto:me@zhangjie.com][邮箱]] | [[file:sitemap.org][sitemap]]
+[[file:sitemap.org][sitemap]]

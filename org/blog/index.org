@@ -3,6 +3,8 @@
 #+OPTIONS: toc:nil
 #+OPTIONS: num:nil
 
+/博客不打算更新了，技术相关的都在 [[file:../org/wiki/index.org][wiki]] 和 topic 里。/
+
 * 2020
 
 - 01-01: [[file:2020/hello-2020.org][你好，2020]]

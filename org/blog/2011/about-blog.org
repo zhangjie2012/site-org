@@ -6,6 +6,10 @@
 #+CAPTION: Photo by Aaron Burden on Unsplash
 [[http://blog-1252349778.picbj.myqcloud.com/2018/about_blog.jpg]]
 
+* 2020-05-22
+
+删掉了几乎所有的与技术无关的文章，和曾经用过的 ID 等，We're being watched。
+
 * 2019-09-27
 
 全面使用 org-mode，blog/wiki/weekly/link/resume/gtd 等大一统。
@@ -128,7 +132,7 @@ OK，就说这么多吧。最近比较颓废，该做点事情了。
 
 1. 换了一个主题，我一直在寻找一个单栏的白色主题，终于让我找到了（就是现在这个），我非常喜欢。
 2. 把之前的广告（推荐书籍）改到另外一个页面了，这样可以放的推荐书籍容量更大。
-3. 博客名字改成"KS.ORG"意指 "keep simple" ，我意识到 "独酌逸醉"
+3. 博客名字改成"KS.ORG"意指 "keep simple" ，我意识到 "****"
    是我的ID，不该是博客名，加上和域名也无法挂钩。
 
 做了一个决定，一定要对得起这个域名，随时保持简洁，保持我的风格。
