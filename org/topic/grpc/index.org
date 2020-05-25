@@ -39,7 +39,7 @@ https://grpc.io/img/landing-2.svg
 
 - 10 种常用语言的客户端库 - 支持大部分常用语言
 - 一个简单的服务定义框架，实现高效的线上通信
-- 基于 http/2 的双向传输流
+- 基于 [[https://zh.wikipedia.org/wiki/HTTP/2][HTTP/2]] 的双向传输流
 - 可插拔的身份验证，追踪，负载均衡和健康检测
 
 文档：
@@ -63,4 +63,10 @@ https://grpc.io/img/landing-2.svg
 
 * 资料
 
+- [[https://developers.google.com/web/fundamentals/performance/http2?hl=zh-cn][HTTP/2 简介]]：HTTP/2 的前身是 Google 开发的实验性协议 SPDY，第一个 HTTP/2 草案也是基于 SPDY 的，
+  HTTP/2 并不是为了取代 HTTP/1 而是作为扩展。HTTP 2 相比与 HTTP 1 优势：
+  + 二进制传输，在 HTTP 2.0 和 TCP/UDP 中间，添加一个二进制分帧层（首部封装为 Header 帧，Body 封装成 Data 帧）
+  + 多路复用：多个请求复用同一个 TCP 连接
+  + 支持双向通信，服务器可以向客户端推送消息
 - [[https://cloud.google.com/apis/design/][Google: API 设计指南]] 适用于 REST API 和 gRPC API
+- [[https://www.cncf.io/blog/2018/08/31/grpc-on-http-2-engineering-a-robust-high-performance-protocol/][gRPC On HTTP/2: Engineering A Robust, High Performance Protocol]]
