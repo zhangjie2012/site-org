@@ -60,6 +60,7 @@ https://grpc.io/img/landing-2.svg
 - 在 =.proto= 文件中定义服务
 - 使用 protobuf 编译器生成服务器和客户端代码
 - 使用 Go RPC API 写客户端和服务器
+- [[file:grpc-debug-tools.org][调试]]
 
 * 资料
 
