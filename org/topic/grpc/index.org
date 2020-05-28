@@ -62,6 +62,14 @@ https://grpc.io/img/landing-2.svg
 - 使用 Go RPC API 写客户端和服务器
 - [[file:grpc-debug-tools.org][调试]]
 
+* gRPC 生态
+
+投入生产使用，只有协议本身是不够的，还要有与服务治理相关的周边才行。
+
+- [[file:grpc-health-check.org][健康检测]]
+- 负载均衡
+- 服务监控
+
 * 资料
 
 - [[https://grpc.io/blog/principles/][Motivation]] gPRC 的前身是谷歌内部用了十多年的微服务通信协议 Stubby，Stubby 有很多的优良特性，但是它的设计不遵循外面的协议标准，

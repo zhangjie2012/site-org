@@ -1,0 +1,85 @@
+#+SETUPFILE: ~/site/tpl/site-tpl.org
+#+TITLE: gRPC 健康检测
+#+DATE: 2020-05-28 10:00:08
+
+* 什么是健康检测
+
+服务的健康检测一般是指的是检测服务是否正常运行：
+
+1. 是否存在，因为程序逻辑错误或者 OOM 等进程不存在；
+2. 存在是否可以正常的响应请求，尽管进程存在但可能因为请求量过大或者程序逻辑错误，导致服务 hang 住，无法正常对外请求。
+
+在 Kubernetes 中支持三种方式的检测探针（定时执行），
+
+1. 端口检测，判断服务端口是否存在；
+2. API，发出 API 请求，查看是否正常回应（一般看是否超市）；
+3. 执行命令，写自定义命令判断服务是否正常运行。
+
+平台层面的健康检测其实无非就这么几种，端口检测就是判断进程是否存在，API 检测一般是看是否可以正常响应请求，执行命令就是完全自定义了，可以自己实现。
+
+* gRPC 中的健康检测
+
+见：https://github.com/grpc/grpc/blob/master/doc/health-checking.md
+
+1. GRPC 作为 RPC 服务，跟普通的 RPC 服务类似，一个 health check API 来检测是否可以正常返回。类似: =ping => pong= ；
+2. 它可以做的更丰富，比如检测每个服务（rpc service）的健康状态；
+3. 作为 GRPC 服务，它可以重用现有的账单计费，配合等基础架构等。因为服务器可以完全控制运行状态以及检测服务的访问；
+
+** 服务定义
+
+服务器应导出以下协议定义的服务：
+
+#+begin_src
+syntax = "proto3";
+
+package grpc.health.v1;
+
+message HealthCheckRequest {
+  string service = 1;
+}
+
+message HealthCheckResponse {
+  enum ServingStatus {
+    UNKNOWN = 0;
+    SERVING = 1;
+    NOT_SERVING = 2;
+  }
+  ServingStatus status = 1;
+}
+
+service Health {
+  rpc Check(HealthCheckRequest) returns (HealthCheckResponse);
+
+  rpc Watch(HealthCheckRequest) returns (stream HealthCheckResponse);
+}
+#+end_src
+
+客户端应该调用 =Check= 服务来判断服务是否正常运行，并且设置 deadline。客户端可以设置需要查询的服务名称，来返回对应的服务是否正常。
+
+服务器应手动注册所有的服务并单个设置状态，包括空服务名称及其状态。对于收到的每一个请求，从注册表中查询服务的状态并返回。如果未找到，返回 =NOT_FOUND= 状态。
+服务器也可以根据实际的业务逻辑提供更为复杂的状态返回（比如：调用量判断，计费需求等）。
+
+客户端还可以调用 =Watch= 方法执行流的健康检测，服务器会不断的返回服务的健康状态。
+
+/上面的说明，侧重于的都是应用层面的，但实际上面对的需求可能是平台层面的。但据我接触到 =C/S= 或者 =B/S= 架构下，
+很少在客户端层判断服务是否健康，只要请求无响应，直接提示用户即可，不需要很多复杂的逻辑。/
+
+/关注健康检测的更多是平台和运维层，比如负载均衡器需要知道上游的（upstream）的 endpoints 是否健康，如果不健康则暂时移出；再比如发现服务进程不存在应该及时
+重启服务，并发出告警等。/
+
+/综合来看，只有上面提到的云平台可能会跟基建集成做一些计费统计相关的业务，可能会有用。/
+
+* Golang
+
+gRPC-go 提供了健康检测库：https://pkg.go.dev/google.golang.org/grpc/health?tab=doc 把上面的文档接口化了。
+
+对接只需要两行代码：
+
+#+begin_src go
+  healthcheck := health.NewServer()
+  healthpb.RegisterHealthServer(s, healthcheck)
+#+end_src
+
+然后可以手动调用 =SetServingStatus= 来设置具体的 service 的状态。
+
+完整的范例代码在：https://github.com/grpc/grpc-go/tree/v1.29.1/examples/features/health
