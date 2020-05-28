@@ -89,13 +89,10 @@ go get github.com/golang/protobuf/protoc-gen-go
 option go_package = "github.com/zhangjie2012/xxxx/libproto"
 #+end_src
 
-默认情况下，输出文件会放在 go 包导入的目录中的 =github.com/zhangjiee2020/xxx/libproto/= 下面。上面的例子中会相对于 =.proto= 目录。
+如果这只了 =go_package= ，输出文件会放在 go 当前目录中的的 =github.com/zhangjiee2020/xxx/libproto/= 下面。上面的例子中会相对于 =.proto= 目录。
 
-如果给 =protoc= 指定了 ~--go_opt=paths=source_relative~ 参数，输出文件和输出文件为止在相同的相对目录中。比如， =protos/foo.proto= 的结果会放在
-=protos/foo.pb.go=
+如果想改变输出目录可以设置项目目录，给 =protoc= 指定了 ~--go_opt=paths=source_relative~ 参数，输出文件和输出文件为止在相同的相对目录中。
 
 #+begin_src sh
 protoc --proto_path=. --go_out=. --go_opt=paths=source_relative user.proto
 #+end_src
-
-/这块还不太确定，需要实际项目试试，再补充。/
