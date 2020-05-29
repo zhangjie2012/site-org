@@ -15,13 +15,6 @@
 - [[file:reading/links.org][Links]] :: 各种资源链接收集：博客、DevoOps、设计、技术学习，搬运工
 - [[file:other/resume.org][Resume]] :: 简历
 
-* Social Links
+----------------
 
-- [[https://github.com/zhangjie2012][Github]]
-- [[https://www.zhihu.com/people/zhang-jie-86-68/activities][知乎]]
-- [[https://weibo.com/engineerzhangjie][微博]]
-- [[https://twitter.com/duzhuoyizui][Twitter]]
-- [[mailto:me@zhangjie.com][邮箱]]
----------------
-
-[[file:sitemap.org][sitemap]]
+[[https://github.com/zhangjie2012][Github]] | [[file:sitemap.org][sitemap]]
