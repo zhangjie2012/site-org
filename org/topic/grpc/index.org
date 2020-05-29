@@ -66,9 +66,12 @@ https://grpc.io/img/landing-2.svg
 
 投入生产使用，只有协议本身是不够的，还要有与服务治理相关的周边才行。
 
+- [[file:grpc-interceptor.org][拦截器]]
 - [[file:grpc-health-check.org][健康检测]]
 - [[file:grpc-load-balance.org][负载均衡]]
-- 服务监控
+- 服务监控：[[https://github.com/grpc-ecosystem/go-grpc-prometheus][go-grpc-promethues]]，开箱即用。但有了拦截器之后，自己对接一下 promethues 也是很简单的
+
+[[https://github.com/grpc-ecosystem][gRPC Ecosystem]] 这个组织补充一些 gRPC 生态中所需要的组件，官方的。
 
 * 资料
 

@@ -1,0 +1,39 @@
+#+SETUPFILE: ~/site/tpl/site-tpl.org
+#+TITLE: gRPC 拦截器
+#+DATE: 2020-05-29 15:52:54
+
+* 拦截器
+
+一个生产化的后端服务是少不了中间件的，做一些认证、tracing、度量指标统计等操作。gRPC 提供了 interceptor 特性，可以用来实现服务中间件。
+
+根据 gRPC 支持的四种 RPC 调用方式（一元、客户端流、服务端流、双向流），gRPC 提供了两种拦截器（事实上是客户端和服务器分别两种，但都差不多，这里只说服务端）：
+
+- =UnaryServerInterceptor=
+  #+begin_src go
+  func(ctx context.Context, req interface{}, info *UnaryServerInfo, handler UnaryHandler) (resp interface{}, err error)
+  #+end_src
+- =StreamServerInterceptor=
+  #+begin_src go
+  func(srv interface{}, ss ServerStream, info *StreamServerInfo, handler StreamHandler) error
+  #+end_src
+
+说明：
+
+- =UnaryServerInfo= 包含两个字段， =FullMethod= 表示 RPC method 全路径名称，另外一个 =Server= 是 register 时的参数，是自己定义的
+- =handler= 是下游要执行的处理器，需要手动调用
+
+可以注册多个拦截器，具体见：https://github.com/grpc/grpc-go/tree/master/examples/features/interceptor
+
+* Session 与认证
+
+拦截器配合 [[https://pkg.go.dev/google.golang.org/grpc@v1.29.1/metadata?tab=doc][metadata]] 做认证。
+
+1. =FromIncomingContext= 获取 token 信息，判断 token 是否有效
+2. token 兑换成用户相关信息， =NewIncomingContext= 携带用户信息，然后传递给 handler
+3. handler 从 metadata 用获取用户信息
+
+* [[https://github.com/grpc-ecosystem/go-grpc-middleware][go-grpc-middleware]]
+
+官方封装了一些常用的 middlware：auth、log、monitor、recovery，可以开箱即用。
+
+/但仔细看的话，发现这些自己实现也是比较简单的，甚至不建议用。/
