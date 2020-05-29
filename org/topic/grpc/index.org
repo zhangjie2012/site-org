@@ -67,7 +67,7 @@ https://grpc.io/img/landing-2.svg
 投入生产使用，只有协议本身是不够的，还要有与服务治理相关的周边才行。
 
 - [[file:grpc-health-check.org][健康检测]]
-- 负载均衡
+- [[file:grpc-load-balance.org][负载均衡]]
 - 服务监控
 
 * 资料
