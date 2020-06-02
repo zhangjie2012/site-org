@@ -11,19 +11,30 @@
 
 这块的资料并不多，找了半天也还是稀里糊涂的，所以只能看源代码了：
 
-通过报错，反推出来，执行 SQL 时的函数调用顺序：
+通过报错，反推的执行 SQL 时的函数调用顺序：
 
-1. database/sql/sql.go:1490 =Exec(query string, args ...interface{})=
-2. database/sql/sql.go:1473 =ExecContext(ctx context.Context, query string, args ...interface{}=
-3. database/sql/sql.go:1494 =exec(ctx context.Context, query string, args []interface{}, strategy connReuseStrategy)=
-   1. database/sql/sql.go:1494 =conn(ctx context.Context, strategy connReuseStrategy)=
-   2. database/sql/sql.go:1502 =execDC(ctx context.Context, dc *driverConn, release func(error), query string, args []interface{})=
-4. database/sql/ctxutil.go:29 =ctxDriverExec(ctx context.Context, execerCtx driver.ExecerContext, execer driver.Execer, query string, nvdargs []driver.NamedValue)=
-5. go-sql-driver/mysql@v1.5.0/connection.go:574 =ExecContext(ctx context.Context, args []driver.NamedValue)=
-6. go-sql-driver/mysql@v1.5.0/statement.go:46 =Exec(args []driver.Value)=
-7. go-sql-driver/mysql@v1.5.0/packets.go:908 =writeExecutePacket(args []driver.Value)=
-8. go-sql-driver/mysql@v1.5.0/packets.go:92 =writePacket(data []byte)=
-9. go-sql-driver/mysql@v1.5.0/packets.go:122 =errLog.Print("closing bad idle connection: ", err) return ErrBadConn=
+1. database/sql/sql.go:1490
+   =Exec(query string, args ...interface{})=
+2. database/sql/sql.go:1473
+   =ExecContext(ctx context.Context, query string, args ...interface{}=
+3. database/sql/sql.go:1494
+   =exec(ctx context.Context, query string, args []interface{}, strategy connReuseStrategy)=
+   1. database/sql/sql.go:1494
+	  =conn(ctx context.Context, strategy connReuseStrategy)=
+   2. database/sql/sql.go:1502
+	  =execDC(ctx context.Context, dc *driverConn, release func(error), query string, args []interface{})=
+4. database/sql/ctxutil.go:29
+   =ctxDriverExec(ctx context.Context, execerCtx driver.ExecerContext, execer driver.Execer, query string, nvdargs []driver.NamedValue)=
+5. go-sql-driver/mysql@v1.5.0/connection.go:574
+   =ExecContext(ctx context.Context, args []driver.NamedValue)=
+6. go-sql-driver/mysql@v1.5.0/statement.go:46
+   =Exec(args []driver.Value)=
+7. go-sql-driver/mysql@v1.5.0/packets.go:908
+   =writeExecutePacket(args []driver.Value)=
+8. go-sql-driver/mysql@v1.5.0/packets.go:92
+   =writePacket(data []byte)=
+9. go-sql-driver/mysql@v1.5.0/packets.go:122
+   =errLog.Print("closing bad idle connection: ", err) return ErrBadConn=
 
 其中，第 2 步中 ExecContext 的源代码如下：
 
@@ -52,10 +63,10 @@
 =strategy= 控制的是获取连接的策略，如果是 =cachedOrNewConn= 且还有空闲的连接时，从空闲的连接池中选择一个。
 如果是 =alwaysNewConn= 会直接创建一个新的连接，然后添加到连接池中。
 
-报错是在执行 SQL 的时候，并不是在获取的时候，尽管在获取连接的时候也可能会报错 ErrBadConn。在执行 SQL 报错 ErrBadConn 的根源在于：
+报错是在执行 SQL 的时候，并不是在获取连接的时候，尽管在获取连接的时候也可能会报错 ErrBadConn。在执行 SQL 报错 ErrBadConn 的根源在于：
 *从连接池中选择了一个空闲的连接，但是该连接已经被 MySQL Server 主动断开了* ，用一个断开的连接执行 SQL 报错 ErrBadConn。
 
-所以，如何避免这个问题呢： *在 MySQL Server 主动断开连接之前，MySQL Client 的连接池中的连接被关闭掉* ，这样才能保证在选择 conn 的时候，
+如何避免这个问题呢： *在 MySQL Server 主动断开连接之前，MySQL Client 的连接池中的连接被关闭掉* ，这样才能保证在选择 conn 的时候，
 不会选择一个无效的连接。
 
 在源代码中可以看到，对于连接有效时长的控制，最直接的变量是： =maxLifetime= ，它可以用 =SetConnMaxLifetime= 设置连接的有效时长。
@@ -109,7 +120,7 @@ mysql.SetLogger(logrus.StandardLogger())
 
 *补充 3：*
 
-MySQL server 默认与客户端的连接交互时间是 =28800s= ，8 个小时。我出现这个问题是因为我们的后端 MySQL 加了一层 proxy 控制交互实践最大值为 10 分钟。
+MySQL server 默认与客户端的连接交互时间是 =28800s= ，8 个小时。我出现这个问题是因为我们的后端 MySQL 加了一层 proxy 控制交互时间最大值为 10 分钟。
 
 * Footnotes
 
