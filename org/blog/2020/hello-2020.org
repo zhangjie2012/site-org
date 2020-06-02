@@ -1,5 +1,0 @@
-#+SETUPFILE: ~/site/tpl/site-tpl.org
-#+TITLE: 你好，2020
-#+DATE: 2020-01-01 11:42:35
-
-啥都不干，只是占位，期待第一篇 blog。

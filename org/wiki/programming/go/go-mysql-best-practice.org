@@ -1,0 +1,116 @@
+#+SETUPFILE: ~/site/tpl/site-tpl.org
+#+TITLE: Go MySQL
+#+DATE: 2020-06-01 18:07:52
+
+最近在使用 Go 的 MySQL，发现与后端 SQL 的连接空闲一段时间总是会报错：
+
+#+begin_src
+[mysql] 2020/06/01 14:24:09 packets.go:122: closing bad idle connection: EOF
+[mysql] 2020/06/01 14:24:09 connection.go:158: driver: bad connection
+#+end_src
+
+这块的资料并不多，找了半天也还是稀里糊涂的，所以只能看源代码了：
+
+通过报错，反推出来，执行 SQL 时的函数调用顺序：
+
+1. database/sql/sql.go:1490 =Exec(query string, args ...interface{})=
+2. database/sql/sql.go:1473 =ExecContext(ctx context.Context, query string, args ...interface{}=
+3. database/sql/sql.go:1494 =exec(ctx context.Context, query string, args []interface{}, strategy connReuseStrategy)=
+   1. database/sql/sql.go:1494 =conn(ctx context.Context, strategy connReuseStrategy)=
+   2. database/sql/sql.go:1502 =execDC(ctx context.Context, dc *driverConn, release func(error), query string, args []interface{})=
+4. database/sql/ctxutil.go:29 =ctxDriverExec(ctx context.Context, execerCtx driver.ExecerContext, execer driver.Execer, query string, nvdargs []driver.NamedValue)=
+5. go-sql-driver/mysql@v1.5.0/connection.go:574 =ExecContext(ctx context.Context, args []driver.NamedValue)=
+6. go-sql-driver/mysql@v1.5.0/statement.go:46 =Exec(args []driver.Value)=
+7. go-sql-driver/mysql@v1.5.0/packets.go:908 =writeExecutePacket(args []driver.Value)=
+8. go-sql-driver/mysql@v1.5.0/packets.go:92 =writePacket(data []byte)=
+9. go-sql-driver/mysql@v1.5.0/packets.go:122 =errLog.Print("closing bad idle connection: ", err) return ErrBadConn=
+
+其中，第 2 步中 ExecContext 的源代码如下：
+
+#+begin_src go
+  // ExecContext executes a query without returning any rows.
+  // The args are for any placeholder parameters in the query.
+  func (db *DB) ExecContext(ctx context.Context, query string, args ...interface{}) (Result, error) {
+	  var res Result
+	  var err error
+	  for i := 0; i < maxBadConnRetries; i++ {
+		  res, err = db.exec(ctx, query, args, cachedOrNewConn)
+		  if err != driver.ErrBadConn {
+			  break
+		  }
+	  }
+	  if err == driver.ErrBadConn {
+		  return db.exec(ctx, query, args, alwaysNewConn)
+	  }
+	  return res, err
+  }
+#+end_src
+
+可以看到，当返回的错误是 =ErrBadConn= 即 =driver: bad connection= ，会重试 =maxBadConnRetries= 次，它的值是 2，也就是重试两次。
+两次之后依然是错误的，调用 =exec= 的第 4 个参数 =strategy= 从 =cachedOrNewConn= 换成了 =alwaysNewConn= 。
+
+=strategy= 控制的是获取连接的策略，如果是 =cachedOrNewConn= 且还有空闲的连接时，从空闲的连接池中选择一个。
+如果是 =alwaysNewConn= 会直接创建一个新的连接，然后添加到连接池中。
+
+报错是在执行 SQL 的时候，并不是在获取的时候，尽管在获取连接的时候也可能会报错 ErrBadConn。在执行 SQL 报错 ErrBadConn 的根源在于：
+*从连接池中选择了一个空闲的连接，但是该连接已经被 MySQL Server 主动断开了* ，用一个断开的连接执行 SQL 报错 ErrBadConn。
+
+所以，如何避免这个问题呢： *在 MySQL Server 主动断开连接之前，MySQL Client 的连接池中的连接被关闭掉* ，这样才能保证在选择 conn 的时候，
+不会选择一个无效的连接。
+
+在源代码中可以看到，对于连接有效时长的控制，最直接的变量是： =maxLifetime= ，它可以用 =SetConnMaxLifetime= 设置连接的有效时长。
+
+#+begin_src go
+  // SetConnMaxLifetime sets the maximum amount of time a connection may be reused.
+  //
+  // Expired connections may be closed lazily before reuse.
+  //
+  // If d <= 0, connections are reused forever.
+  func (db *DB) SetConnMaxLifetime(d time.Duration) {
+	  if d < 0 {
+		  d = 0
+	  }
+	  db.mu.Lock()
+	  // wake cleaner up when lifetime is shortened.
+	  if d > 0 && d < db.maxLifetime && db.cleanerCh != nil {
+		  select {
+		  case db.cleanerCh <- struct{}{}:
+		  default:
+		  }
+	  }
+	  db.maxLifetime = d
+	  db.startCleanerLocked()
+	  db.mu.Unlock()
+  }
+#+end_src
+
+当 ~<= 0~ 时，连接永久保存，默认值时 0 。如果设置了 =maxLifetime= 会开启连接自动清理，清理的代码在 =connectionCleaner= 中，
+它开启一个定时器，定时检查空闲连接池中的连接，超期的关闭连接。
+
+所以说，你总是应该在初始化 SQL 成功之后，设置单个连接的最大时长，具体的设置的时长需要咨询一下 DBA，MySQL Server 单个连接的 timeout 时间时多少。
+你需要比这个值小即可。因为对于这块的疑惑，我提了一个 issue [fn:1] ，作者的建议是不大于 5 分钟。
+
+----------------
+
+*补充 1：*
+
+还有两个函数可以控制连接池中的连接数量：
+
+- [[https://golang.org/pkg/database/sql/#DB.SetMaxIdleConns][SetMaxIdleConns]] 设置打开的最大空闲的连接数，默认是 2，不限制； ~0 <= MaxIdleConns <= MaxOpenConns~
+- [[https://golang.org/pkg/database/sql/#DB.SetMaxOpenConns][SetMaxOpenConns]] 设置最大打开连接数，0 值或者负值，不限制
+
+*补充 2：*
+
+一个让 MySQL 库用的是日志库打印的办法是：[[https://pkg.go.dev/github.com/go-sql-driver/mysql?tab=doc#SetLogger][SetLogger]]，以 logrus 为例：
+
+#+begin_src go
+mysql.SetLogger(logrus.StandardLogger())
+#+end_src
+
+*补充 3：*
+
+MySQL server 默认与客户端的连接交互时间是 =28800s= ，8 个小时。我出现这个问题是因为我们的后端 MySQL 加了一层 proxy 控制交互实践最大值为 10 分钟。
+
+* Footnotes
+
+[fn:1] https://github.com/go-sql-driver/mysql/issues/1120
