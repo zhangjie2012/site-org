@@ -1,0 +1,61 @@
+#+SETUPFILE: ~/site/tpl/wiki-tpl.org
+#+TITLE: 正则表达式
+#+DATE: 2020-06-02 17:33:42
+
+来自：https://github.com/google/re2/wiki/Syntax
+
+除了 =*+?()|= 几个元字符之外，字符只匹配自己本身，匹配元字符需要使用 =\= 转义。
+
+=*+?= 是重复匹配，
+
+- =*= 0 个或者多个字符串
+- =+= 1 个或者多个字符串
+- =?= 0 个或 1 个
+
+| 单个字符匹配                   | 范例                 |
+|--------------------------------+----------------------|
+| 任何字符，包括换行             | =.=                  |
+| 字符类（包含其中的一个即匹配） | =[xyz]=              |
+| 否定字符类                     | =[^xyz]=             |
+| 数字                           | =\d= 等价于 =[0-9]=  |
+| 非数字                         | =\D= 等价于 =[^0-9]= |
+
+|           | 复合         |
+|-----------+--------------|
+| =xy=      | x 后面紧跟 y |
+| x \vert y | x 或者 y     |
+
+|          | 重复次数           |
+|----------+--------------------|
+| =x*=     | 0 个或者多个 =x=   |
+| =x+=     | 1 个或者多个 =x=   |
+| =x?=     | 0 个或者多个 =x=   |
+| =x{n,m}= | n 到 m 个 =x=      |
+| =x{n,}=  | n 个或者更多个 =x= |
+| =x{n}=   | n 个 =x=           |
+
+|                | 分组                                          |
+|----------------+-----------------------------------------------|
+| =(re)=         | 编号分组（子匹配项）                          |
+| =(?P<name>re)= | 命名的 & 编号分组（子匹配项目）               |
+| =(?:re)=       | non-capturing group                           |
+| =(?flags)=     | set flags within current group; non-capturing |
+| =(?flags:re)=  | set flags during re; non-capturing            |
+
+|      | Empty strings                                                          |
+|------+------------------------------------------------------------------------|
+| =^=  | at beginning of text or line (m=true)                                  |
+| =$=  | at end of text (like \z not \Z) or line (m=true)                       |
+| =\A= | at beginning of text                                                   |
+| =\b= | at ASCII word boundary (\w on one side and \W, \A, or \z on the other) |
+| =\B= | not at ASCII word boundary                                             |
+| =\z= | at end of text                                                         |
+
+|      | Perl character classes (all ASCII-only) |
+|------+-----------------------------------------|
+| =\d= | digits (≡ [0-9])                        |
+| =\D= | not digits (≡ [^0-9])                   |
+| =\s= | whitespace (≡ [\t\n\f\r ])              |
+| =\S= | not whitespace (≡ [^\t\n\f\r ])         |
+| =\w= | word characters (≡ [0-9A-Za-z_])        |
+| =\W= | not word characters (≡ [^0-9A-Za-z_])   |
