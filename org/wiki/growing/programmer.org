@@ -47,6 +47,7 @@
   - [[https://github.com/ggreer/the_silver_searcher][ag]]
   - [[https://github.com/wting/autojump][autojump]]：目录快捷跳转
   - [[https://github.com/tmux/tmux][tmux]]：终端复用
+  - [[https://github.com/junegunn/fzf][fzf]]：命令行模糊查找，zsh [[https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/fzf][设置]]
 + SSH 连接工具 & 终端模拟器
   - [[https://www.iterm2.com/][iterm2]]
   - zsh + [[https://github.com/robbyrussell/oh-my-zsh][oh-my-zsh]]
