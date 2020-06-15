@@ -1,0 +1,22 @@
+#+SETUPFILE: ~/site/tpl/wiki-tpl.org
+#+TITLE: DevOps - 日志收集 Grafana/Loki
+#+DATE: 2020-06-15 10:42:50
+
+日志收集这一块 [[file:elk.org][ELK]] 几乎是行业标准了，也很成熟，不同体量的有很多 DIY 的方法可以满足需求。但是整个 ELK 技术栈比较复杂，而且上手门槛比较高，链路较长，
+工具不聚集，对于新手如何选择实在是个难题。
+
+[[https://github.com/grafana/loki][grafana/loki]] 是一个类似 prometheus 的，但是是用来专门做日志存储的数据库。设计思路跟 ES 完全不同，label 会自动建索引，不是全文索引的。
+Grafana 内置支持其日志的查看和检索。其技术栈包含三部分：
+
+- =promtail= 日志收集代理，类似 ELK 中的 beats
+- =loki=
+- =grafana= 查询和展示 UI
+
+技术栈比较聚集，而且好理解（因为可选的不像 ELK 那么多）。
+
+/注意：2019.11.20 发布的第一个正式版，目前尚不成熟，周边生态也没那么完善。Grafana 只是支持日志检索和查看，自定义仪表盘等功能还不支持，
+而且因为他的设计思路是 TSDB 风格的，所以仪表盘的功能也不会那么好做的。/
+
+* Loki
+
+- [[https://grafana.com/docs/grafana/latest/features/datasources/loki/][Using Loki in Grafana]]

@@ -86,7 +86,8 @@
 
 ** 日志
 
-- [[file:devops/log.org][日志收集]]
+- [[file:devops/elk.org][ELK 技术栈]]
+- [[file:devops/grafana-loki.org][Loki 技术栈]]
 
 * 程序设计
 ** 前端

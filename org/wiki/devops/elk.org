@@ -1,5 +1,5 @@
 #+SETUPFILE: ~/site/tpl/wiki-tpl.org
-#+TITLE: DevOps - 日志收集
+#+TITLE: DevOps - 日志收集 ELK
 #+DATE: 2019-04-11 15:48
 
 * 一个简易的日志收集方案
@@ -8,8 +8,8 @@
 
 [[https://blog-1252349778.cos.ap-beijing.myqcloud.com/2019/log.png]]
 
-1. 主机使用 filebeat 上报日志到 Redis (=list=, =channel= 等)
-2. 起一个服务「订阅」Redis =list= 或者 =channel= 中的日志，然后：
+1. 主机使用 filebeat 上报日志到 Redis (=list= 等)
+2. 起一个服务「订阅」Redis =list= 中的日志，然后：
    - 按照文件名称保存到本地
    - 根据日志中的日志级别进行告警通知
    - 按需求将只是保存到 MySQL 或者 MongoDB 中（分表分库）
