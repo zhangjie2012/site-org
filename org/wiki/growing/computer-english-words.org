@@ -56,6 +56,7 @@
 
 * 单词
 
+- analogous [əˈnaləgəs] adj. 类似的
 - [[http://dict.cn/anonymous][anonymous]] [ə'nɑːnɪməs] adj. 匿名
 - [[http://dict.cn/approaches][approaches]] [ə'proʊtʃ] 方法
 - [[http://dict.cn/appropriate][appropriate]] [ə'proʊpriət] adj. 合适的，适当的
@@ -66,6 +67,7 @@
 - [[http://dict.cn/collaboration][collaboration]]  [kəˌlæbə'reɪʃn] n. 合作
 - [[http://dict.cn/deprecated][deprecated]] ['deprəkeɪt] 不推荐使用
 - [[http://dict.cn/deliver][deliver]] [dɪ'lɪvər] 交付
+- embedded 嵌入式的
 - [[http://dict.cn/flexibility][flexibility]] [ˌfleksə'bɪləti] 灵活性，弹性 flexible adj. 灵活的
 - [[http://dict.cn/fundamental][fundamental]] [ˌfʌndə'mentl] adj. 基本的
 - [[http://dict.cn/sophisticated][sophisticated]]  [sə'fɪstɪkeɪtɪd] adj. 复杂的
@@ -80,6 +82,7 @@
 - [[http://dict.cn/parallel][parallel]] ['pærəlel] 并发
 - [[http://dict.cn/pluggable][pluggable]] [plʌgəbəl] adj. 可插拔的
 - [[http://dict.cn/robust][robust]] [roʊ'bʌst] adj. 强壮的，强健的，健壮的，健全的
+- redundancy [riˈdəndənsē] n. 冗余 eg. data redundancy 数据冗余
 - [[http://dict.cn/scenario][scenario]] [sə'nærioʊ] n. 场景，情景
 - [[http://dict.cn/squirrel][squirrel]] ['skwɜːrəl]
   + n. 松鼠 /Go 的一个库名/
@@ -106,6 +109,7 @@
 - reference material 参考资料
 - benchmarks 基准测试
 - design philosophy 设计理念
+- in particular 特别是
 
 * 说明
 
