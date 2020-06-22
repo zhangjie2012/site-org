@@ -45,6 +45,15 @@ MongoDB 中常使用 =mongodump= 来备份数据，使用 =mongorestore= 来恢�
 
 *注意*: 这两个命令特别坑的地方在于，如果不指定路径会自动选择当前目录下文件，一般命令不加任何参数会自动提示 =help= ，而这两个命令不会。所以备份和恢复两个命令一定不能搞混了，有一次我备份数据的时候使用了 mongorestore 导致旧的数据恢复了。
 
+mongorestore 报错：
+
+#+begin_src
+error connecting to host: could not connect to server: connection() : auth error: sasl conversation error:
+ unable to authenticate using mechanism "SCRAM-SHA-1": (AuthenticationFailed) Authentication failed.=
+#+end_src
+
+加上 ~--authenticationDatabase=admin~ 就可以了，具体原因还未知。
+
 * FAQ
 
 ** Q: 如何查询嵌套内容？

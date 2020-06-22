@@ -1,0 +1,5 @@
+#+SETUPFILE: ~/site/tpl/wiki-tpl.org
+#+TITLE: nodejs
+#+DATE: 2020-06-17 20:17:44
+
+- https://stackoverflow.com/questions/31472755/sudo-npm-command-not-found
