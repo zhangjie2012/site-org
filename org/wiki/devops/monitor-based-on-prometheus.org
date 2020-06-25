@@ -111,6 +111,17 @@ scrape_configs:
 
 访问 =http://127.0.0.1:9090/targets= 可以看到 =local-node= target 表示添加成功。
 
+CentOS 二进制安装：
+
+https://copr.fedorainfracloud.org/coprs/ibotty/prometheus-exporters/
+
+#+begin_src
+curl -Lo /etc/yum.repos.d/_copr_ibotty-prometheus-exporters.repo https://copr.fedorainfracloud.org/coprs/ibotty/prometheus-exporters/repo/epel-7/ibotty-prometheus-exporters-epel-7.repo
+yum install node_exporter
+#+end_src
+
+
+
 *** Grafana
 
 使用 Docker 部署， 下载镜像： =sudo docker pull grafana/grafana:6.6.2=

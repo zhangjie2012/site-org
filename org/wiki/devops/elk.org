@@ -61,3 +61,16 @@ ELK 技术栈现在也有很多人称为 EFK。
 - ELK 中最核心的组件其实是 ES，不然如何架构 ES 几乎都是绕不开的，自研的成本有点高了...
 - Kakfa 的解耦往往用在从主机上收集的日志，不仅仅给日志平台用，业务方也无需要使用，这种情况下要么自己订阅消息，
   要么用调用 ES API 来实现
+
+* 组件
+
+** Journalbeat
+
+https://www.elastic.co/guide/en/beats/journalbeat/master/index.html
+
+安装：
+
+#+begin_src
+curl -L -O https://artifacts.elastic.co/downloads/beats/journalbeat/journalbeat-7.8.0-x86_64.rpm
+sudo rpm -vi journalbeat-7.8.0-x86_64.rpm
+#+end_src
