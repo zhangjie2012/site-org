@@ -102,6 +102,10 @@ Go 的 =net/http= 库比较丰富，借助 [[https://github.com/gorilla/mux][mux
 /本文档的示例用的都是 gin，其实区别不大的。/
 
 ** 最佳实践
+*** 服务名称
+
+一个服务应该有一个唯一标识：应用ID 或者应用名等，它在组织内部应该是唯一的，这种做法对于基建是很友好的（大部分公司也是这么做的）。
+
 *** 流程流转
 
 1. =main= 统一流转
@@ -213,7 +217,11 @@ Go 的 =net/http= 库比较丰富，借助 [[https://github.com/gorilla/mux][mux
 
 分组最直接的好处是业务模块多了之后，API 会变的很清晰，对于 gin，你还可以针对不同的分组，使用不同的中间件。
 
-*** 使用 prometheus_client 暴露 API metrics
+*** 日志
+
+根据云原生倡导，日志统一打印到标准输出。 日志收集和查看是基建需要做的事情，程序应与此解耦。
+
+*** 监控：使用 prometheus_client 暴露 API metrics
 
 对接 promethues 之后可以很方便的监控 API 调用情况，调用耗时、状态码等等。因为 Prometheus 是 pull 的模式，所以服务很好解耦，
 不会依赖 promethues server。
@@ -267,6 +275,7 @@ Go 的 =net/http= 库比较丰富，借助 [[https://github.com/gorilla/mux][mux
 #+begin_src go
 r.GET("/metrics", gin.WrapH(promhttp.Handler()))
 #+end_src
+
 
 ** 常用库选型
 
@@ -454,3 +463,32 @@ WantedBy=multi-user.target
 ** 部署到容器环境下
 
 在有容器运行时的情况下，建议使用容器部署。
+
+** 版本号
+
+如果使用 Docker 部署时，版本号通常放到 docker tag 中。如果使用二进制文件直接部署的话，把版本号放在二进制名称上是一种办法，
+但是很不优雅，这样每次发布都需要修改 systemd unit 的内容。最好的办法就是把版本信息打到二进制包中，通过执行某个参数时自动打印。
+
+Go build =-ldflags= 支持注入变量，比如：
+
+=go build -ldflags -X main.Version=1.0.0 -X main.BuildTime=2020-06-29 15:29:45=
+
+将在模块 =main= 中寻找变量 =Version= 和 =BuildTime= ，然后动态赋值。可以这样写 makefile：
+
+#+begin_src
+VERSION=`git rev-parse HEAD`
+BUILD_TIME=`date +'%Y-%m-%d %H:%M:%S'`
+LDFLAGS=-ldflags "-X 'main.Version=${VERSION}' -X 'main.BuildTime=${BUILD_TIME}'"
+
+build:
+    go build ${LDFLAGS} -o xxx *.go
+#+end_src
+
+然后在 =main= 中声明变量:
+
+#+begin_src
+    Version   string = ""
+    BuildTime string = ""
+#+end_src
+
+程序开始打印变量即可。

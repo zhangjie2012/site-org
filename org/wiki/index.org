@@ -116,8 +116,8 @@
 - [[file:programming/go/package-manager.org][包管理工具]]
 - [[file:programming/go/project-layout.org][项目结构]]：摘自 [[https://github.com/golang-standards/project-layout][project-layout]]，go 工程的项目结构
 - [[file:programming/go/date-format.org][时间格式化与解析]]
-- [[file:programming/go/build-web-server-stack.org][构建 Go Web 服务技术栈]] /持续更新/
-- [[file:programming/go/go-project-best-practices.org][构建 Go 项目最佳实践]] 心得体会
+- [[file:programming/go/build-web-server-stack.org][构建 Go Web 服务技术栈]] 侧重技术 /持续更新/
+- [[file:programming/go/go-project-best-practices.org][构建 Go 项目最佳实践]] 侧重心得体会 /持续更新/
 - [[file:programming/go/write-go-testing.org][Go 测试用例]]
 - [[file:programming/go/go-mongo-driver.org][Go Mongo Driver]] 使用技巧
 - [[file:programming/go/resource.org][资源]]：一些资源链接
