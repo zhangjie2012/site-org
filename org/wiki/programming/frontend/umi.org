@@ -115,6 +115,19 @@ Pro =0.x= 版本和 =1.x= 版本 =npm run start= 进度卡到 =91%= 问题，可
 
 React 全家桶（react，react-router，redux 等）了解之后，使用官方的的 create-react-app 来创建应用，UI 库自己选型即可。这样的好处是遇到了问题
 网上都有足够的资料帮你解决，社区也很好。坦白说，阿里开源的 antd 系列，社区都不怎么好。
+
+** 如何评价 Umi 3.x
+
+时隔半年之后，它又升级了，升级到了 3.x，怎么想的，我也不知道。 3.x 把 2.x 的更多内容全部插件化了（包括但不仅限于 antd，dva，request 等）。
+默认东西很少，需要自己手动开启，而且初始化时不在支持 TS/JS 选择，默认全部 TS（但是你又可以直接写 JS），这一点令人费解。
+
+用 Umi3 写了一个小项目，不说设计上的，直观感受：
+
+1. 构建生成的文件很大
+2. 修改 less 文件之后，编译非常慢
+
+/待完善。/
+
 * FAQ
 ** 部署时，文件名添加 hash 值
 
@@ -185,3 +198,10 @@ export default {
      try_files $uri $uri/ /index.html;
    }
    #+END_SRC
+
+** Umi3 打包 OOM
+
+设置 =NODE_OPTIONS= ，如 ~export NODE_OPTIONS=--max_old_space_size=4096~
+
+- https://umijs.org/zh-CN/guide/boost-compile-speed#%E8%B0%83%E6%95%B4-sourcemap-%E7%94%9F%E6%88%90%E6%96%B9%E5%BC%8F
+- https://stackoverflow.com/questions/53230823/fatal-error-ineffective-mark-compacts-near-heap-limit-allocation-failed-javas
