@@ -64,13 +64,45 @@ ELK 技术栈现在也有很多人称为 EFK。
 
 * 组件
 
+beats 的 目录结构，以及默认的配置。
+
+https://www.elastic.co/guide/en/beats/journalbeat/current/directory-layout.html
+
 ** Journalbeat
 
 https://www.elastic.co/guide/en/beats/journalbeat/master/index.html
 
-安装：
+*安装：*
 
 #+begin_src
 curl -L -O https://artifacts.elastic.co/downloads/beats/journalbeat/journalbeat-7.8.0-x86_64.rpm
 sudo rpm -vi journalbeat-7.8.0-x86_64.rpm
 #+end_src
+
+*配置：*
+
+配置文件路径： =/etc/journalbeat/= ，一些重要的选项：
+
+=journalbeat.inputs= 控制日志输入。
+
+=seek= 选项控制 Journalbeat 开始读取日志的位置，有三个可选值，默认是 cursor：
+
+- =head= 每次都从头开始读，重启之后还是从头开始读；
+- =tail= 跟 tail 指令一样，每次都从最后开始读，重启之后也是从最后开始读，可能会导致日志重复。
+- =cursor= 首次读取从文件开头开始读取，但是重启之后还是从最后一次读取的位置继续开始。
+
+=include_matches= 选项用于过滤收集的日志（否则所有的 journalctl 的日志都会被收集）。格式是 ~field=value~ 的列表。不支持正则表达式。
+引用字段，支持两种方式：
+
+- systemd journal 使用的字段名，比如： ~CONTAINER_TAG=redis~
+- Journalbeat 翻译后的字段，比如： ~container.image.tag=redis~
+
+字段的对应关系（支持的过滤关键字）：https://www.elastic.co/guide/en/beats/journalbeat/current/configuration-journalbeat-options.html#translated-fields
+
+比较常用的几个字段：
+
+- =_SYSTEMD_UNIT= systemd unit
+
+输出：journalbeat 支持多种输出, Elasticsearch, LogStash, Kafka, Redis, File, Console, Elastic Cloud 等。
+
+https://www.elastic.co/guide/en/beats/journalbeat/current/configuring-output.html
