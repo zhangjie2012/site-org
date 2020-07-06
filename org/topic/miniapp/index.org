@@ -1,0 +1,18 @@
+#+SETUPFILE: ~/site/tpl/link-tpl.org
+#+TITLE: 微信小程序开发专题
+#+OPTIONS: toc:nil
+#+OPTIONS: num:nil
+
+* UI
+
+** 颜色
+
+微信主色调颜色： =#09BB07=
+
+** 组件库
+
+- 有赞开源的 UI 组件库，[[https://youzan.github.io/vant-weapp][vant weapp]]
+
+** 素材
+
+- icon 素材：https://www.flaticon.com/
