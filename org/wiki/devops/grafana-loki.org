@@ -20,3 +20,9 @@ Grafana 内置支持其日志的查看和检索。其技术栈包含三部分：
 * Loki
 
 - [[https://grafana.com/docs/grafana/latest/features/datasources/loki/][Using Loki in Grafana]]
+- [[https://github.com/grafana/loki/blob/master/docs/logql.md][LogQL]] 查询语言
+- [[https://github.com/grafana/loki/blob/master/docs/best-practices/current-best-practices.md][最佳实践]]
+  + 建议静态 label，慎用动态 label
+  + 配置缓存
+  + 上报日志必须是按照时间序列的（相同 label 情况下） *这个很重要*
+- [[https://github.com/grafana/loki/blob/master/docs/api.md][HTTP API]]
