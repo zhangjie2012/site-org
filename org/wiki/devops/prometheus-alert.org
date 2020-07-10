@@ -1,0 +1,41 @@
+#+SETUPFILE: ~/site/tpl/wiki-tpl.org
+#+TITLE: Prometheus alert
+#+DATE: 2020-07-09 11:09:08
+
+告警和 Prometheus 是两部分：
+
+1. Prometheus server 发送告警到 Alertmanager；
+2. AlertManager 管理告警，告警策略包括静默，抑制，聚合，然后发送通知（通过邮件、on-call 通知系统、聊天平台等）；
+
+主要流程：
+
+1. 安装和配置 Alertmanager
+2. 配置 Prometheus 向 Alertmanager 通知
+3. 配置 Prometheus 告警规则
+
+* AlertManager
+
+https://github.com/prometheus/alertmanager
+
+Alertmanager 负责处理由客户端发送过来的告警。它负责将重复数据杉树，分组和路由到正确的接收者；它还负责静默和禁止告警。
+核心概念：
+
+** Grouping 分组
+
+分组将类似的告警分类为单个通知，这在有较大的事故中比较有用（许多系统同时发出告警）。
+
+作为用户，在这种情况下只希望看到一个页面，仍然可以准确的查看受影响的服务实例。
+
+** Inhibition 抑制
+
+如果某些其它的警告已经触发，则抑制某些警告的通知。
+
+比如：一个集群不可用的告警触发了，那么集群内部的告警将收到抑制，这可以防止与实际问题无关的成百上千的告警。
+
+** Silences 静默
+
+静默是指在一段时间内不接收通知。
+
+** Client behavior 客户端行为
+
+** Hign Availability 高可用
