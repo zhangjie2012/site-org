@@ -38,6 +38,11 @@ https://codesandbox.io/s/8x2j898pp2
 rules: [{ require: true, type: 'integer' }]
 #+end_src
 
+
+* 资源
+
+- 定制主题：https://ant.design/docs/react/customize-theme-cn
+
 * Footnotes
 
 [fn:1] https://github.com/ant-design/ant-design/issues/10189
