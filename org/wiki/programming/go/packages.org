@@ -1,6 +1,7 @@
 #+SETUPFILE: ~/site/tpl/wiki-tpl.org
 #+TITLE: Go 包选择与对比
 #+DATE: 2019-03-14 17:50:00
+
 * 日志
 可能是 Go 尚年轻，行业对 Go 的应用领域还比较宽泛，也可能是开源的缘故，Go package 普遍造轮子的现象比较明显。
 
@@ -94,6 +95,7 @@ redis go clients: https://redis.io/clients#go
 
 1. 轻度依赖缓存，量也不是很大的情况下，推荐使用 redigo，感觉上比 go-redis 要方便一些
 2. 重度依赖缓存，量很大，使用 go-redis，特性支持的好，主要对 Cluster 方便容量扩展
+
 * Mongo
 
 MongoDB 官方在 2018 年的 2 月 14 日发布了 MongoDB Go Driver Alpha 版本，四天前发布了第一个正式版本，算是很晚了。

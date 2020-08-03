@@ -2,7 +2,7 @@
 #+TITLE: Go 包管理工具
 #+DATE: 2019-01-18 11:07
 
-* govender
+* [deprecated] govender
 
 govendor: <https://github.com/kardianos/govendor>，安装： ~go get -u github.com/kardianos/govendor~ 。
 
@@ -91,3 +91,14 @@ Go modules 的设计之初是想完全放弃 vendor 目录的，但是社区的 
 3. =go get -u -v -insecure git.zhangjiee.com/group/project= 非 https 在 go get 时需要加上 =-insecure=
 
 然后在 =$GOPATH/pkg/mod= 中就会出现 =git.zhangjiee.com/group/project@vx.y.z= 目录了，并且添加到了 go.mod 和 go.sum 文件中。
+
+** go get proxy
+
+由于众所周知的原因， =go get= 速度非常慢，经常 timeout。一种解决办法是自己有 VPN 设置 http.https 代理，另外一种办法是使用公共的代理。
+比如：七牛提供的 https://goproxy.cn/。
+
+#+begin_src shell
+echo "export GO111MODULE=on" >> ~/.profile
+echo "export GOPROXY=https://goproxy.cn" >> ~/.profile
+source ~/.profile
+#+end_src
