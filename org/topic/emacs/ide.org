@@ -45,7 +45,10 @@ leading 键我映射成了 =C-c p= 和 =<f8>= 。比较常用的有：
 | =<f9> f r= | 查找所有引用            |
 |------------+-------------------------|
 
-** TODO Web 开发
+** Web 开发
+
+安装 eslint =npm install -g eslint= 。如果没启动可通过 =flycheck-verify-setup= 和 =flycheck-verify-checker= 两个指令进行调试。
+
 ** Go
 
 按照 [[https://golang.org/doc/install][官方说明]] 安装 Go，LSP server 用的是 [[https://github.com/golang/tools/tree/master/gopls][gopls]]。
