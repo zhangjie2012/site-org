@@ -1,0 +1,10 @@
+#+SETUPFILE: ~/site/tpl/wiki-tpl.org
+#+TITLE: iterm2
+#+DATE: 2020-08-17 09:58:27
+
+
+* FAQ
+
+** Failed to load preferences from custom directory. Failing Back to local copy
+
+https://gitlab.com/gnachman/iterm2/-/issues/6826

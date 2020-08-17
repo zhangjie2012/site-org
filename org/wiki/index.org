@@ -127,11 +127,12 @@
 
 - [[file:programming/elisp/basic.org][elisp 基础]]
 
-** 编码工具
+** 编码环境
 
 - [[file:../topic/emacs/index.org][Emacs]]：神之编辑器
 - [[file:programming/code-env/git.org][git]] | [[file:programming/code-env/svn.org][svn]]：版本管理器
 - [[file:programming/code-env/pip.org][pip]]：Python 的包管理器
+- [[file:programming/code-env/iterm2.org][iterm2]]
 
 ** 其它
 
