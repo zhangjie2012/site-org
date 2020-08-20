@@ -70,6 +70,7 @@ https://grpc.io/img/landing-2.svg
 - [[file:grpc-health-check.org][健康检测]]
 - [[file:grpc-load-balance.org][负载均衡]]
 - 服务监控：[[https://github.com/grpc-ecosystem/go-grpc-prometheus][go-grpc-promethues]]，开箱即用。但有了拦截器之后，自己对接一下 promethues 也是很简单的
+- [[file:grpc-to-restful-json-api.org][gRPC 转 RESTful + JSON HTTP server]]
 
 [[https://github.com/grpc-ecosystem][gRPC Ecosystem]] 这个组织补充一些 gRPC 生态中所需要的组件，官方的。
 
