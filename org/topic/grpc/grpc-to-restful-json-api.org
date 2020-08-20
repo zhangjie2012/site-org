@@ -1,0 +1,124 @@
+#+SETUPFILE: ~/site/tpl/site-tpl.org
+#+TITLE: gRPC 转 RESTful JSON API
+#+DATE: 2020-08-19 14:50:25
+
+gRPC 很诱人，它兼具了易用性和高效，同时支持多重编程语言。但是老的业务还是要兼容到传统的 RESTful JSON API。
+
+[[https://github.com/grpc-ecosystem/grpc-gateway][grpc-gateway]] 的出现是为了解决这个问题（gRPC 服务可以提供 HTTP + JSON 的接口），在 service 中附加少量的 HTTP 语义，生成反向代理。
+
+本文档偏向于实操和最佳实践，而且假定读者了解了 protobuf、gRPC、gRPC-go 相关的知识（如果不知道可以查看 [[file:index.org][gRPC 专题]]）。
+
+* 安装
+
+#+begin_src shell
+go get -u github.com/grpc-ecosystem/grpc-gateway/protoc-gen-grpc-gateway
+#+end_src
+
+在已有的 service proto 上附加 http 转换规则，规范在这里：https://github.com/googleapis/googleapis/blob/master/google/api/http.proto#L46
+
+* 书写规则
+
+#+begin_src
+service Messaging {
+  rpc GetMessage(GetMessageRequest) returns (Message) {
+	option (google.api.http) = {
+      get: "/v1/{name=messages/*}"
+	};
+  }
+}
+message GetMessageRequest {
+  string name = 1; // Mapped to URL path.
+}
+message Message {
+  string text = 1; // The resource content.
+}
+#+end_src
+
+这样会将 HTTP API =GET /v1/messages/123456= 转换为 gRPC 的 =GetMessage(name: "messages/123456")= 请求。
+
+- 如果没有 HTTP 请求 body，query params 会自动转换为 gRPC req
+- 使用 =additional_bindings= option 可以将多个请求可以转发到同一个 gRPC
+
+还有很多规则，文档里说的比较清楚。
+
+gateway 依赖于 [[https://github.com/googleapis/googleapis/blob/master/google/api/annotations.proto][google.api.annotations.proto]]，需要在 proto 头部引入，才可以使用 http option：
+
+#+begin_src
+import "google/api/annotations.proto";
+#+end_src
+
+也就是说依赖于 googleapi，你需要把 googleapi 置于项目中。
+
+#+begin_src sh
+git clone https://github.com/googleapis/googleapis.git
+#+end_src
+
+* 生成 stub
+
+以上全部操作完毕之后，生成 gRPC 和 gateway stub，比如：
+
+#+begin_src
+protoc -I=libproto -I=googleapis --go_out=plugins=grpc:libproto --go_opt=paths=source_relative libproto/*.proto
+protoc -I=libproto -I=googleapis --grpc-gateway_out=logtostderr=true,paths=source_relative:gwproto libproto/*.proto
+#+end_src
+
+注意额外链接了 googleapis。
+
+* http 服务
+
+需要另外起一个 http：
+
+#+begin_src go
+import (
+    "context"
+    "log"
+    "net/http"
+
+    "github.com/grpc-ecosystem/grpc-gateway/runtime"
+    "google.golang.org/grpc"
+
+    gw "/gateway/code/path"
+)
+
+func main() {
+    ctx := context.Background()
+    ctx, cancel := context.WithCancel(ctx)
+    defer cancel()
+
+    mux := runtime.NewServeMux()
+    opts := []grpc.DialOption{grpc.WithInsecure()}
+    err := gw.RegisterStaffRPCHandlerFromEndpoint(ctx, mux, "localhost:50051", opts)
+    if err != nil {
+        log.Fatal(err)
+    }
+
+    http.ListenAndServe(":8080", mux)
+}
+#+end_src
+
+* 和 gRPC 服务整合
+
+上面的方法虽然可行，但部署的时候是两个进程，一个 gateway 服务进程，一个 rpc 服务进程。这样在生产化部署时，会有一定的部署成本（容器化之后，一个容器只能有一起服务在前台运行）。
+
+所以，要一个进程同时起 rpc 服务和 gateway 服务。解决办法是起一个 http/2 的服务，然后根据协议的不同分发给不同的服务，类似：
+
+https://github.com/grpc/grpc-go/blob/master/server.go#L871
+
+#+begin_src go
+  if r.ProtoMajor == 2 && strings.HasPrefix(
+	r.Header.Get("Content-Type"), "application/grpc") {
+	grpcServer.ServeHTTP(w, r)
+  } else {
+	yourMux.ServeHTTP(w, r)
+  }
+
+#+end_src
+
+范例：https://github.com/ntons/libra/blob/master/librad/main.go
+
+* 关联的资料汇总
+
+- grcp-gateway https://github.com/grpc-ecosystem/grpc-gateway
+- metadata https://github.com/grpc/grpc-go/blob/master/Documentation/grpc-metadata.md
+- customizing your gateway https://grpc-ecosystem.github.io/grpc-gateway/docs/customizingyourgateway.html
+- gRPC Transcoding https://github.com/googleapis/googleapis/blob/master/google/api/http.proto#L44 service option 规则
