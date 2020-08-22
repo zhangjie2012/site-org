@@ -111,7 +111,6 @@ https://github.com/grpc/grpc-go/blob/master/server.go#L871
   } else {
 	yourMux.ServeHTTP(w, r)
   }
-
 #+end_src
 
 范例：https://github.com/ntons/libra/blob/master/librad/main.go
@@ -122,3 +121,13 @@ https://github.com/grpc/grpc-go/blob/master/server.go#L871
 - metadata https://github.com/grpc/grpc-go/blob/master/Documentation/grpc-metadata.md
 - customizing your gateway https://grpc-ecosystem.github.io/grpc-gateway/docs/customizingyourgateway.html
 - gRPC Transcoding https://github.com/googleapis/googleapis/blob/master/google/api/http.proto#L44 service option 规则
+
+* 踩坑指南
+
+** 编译报错 =cannot use myFilter (type func(context.Context, http.ResponseWriter, protoreflect.ProtoMessage) error) as type func(context.Context, http.ResponseWriter, protoiface.MessageV1) error in argument to "github.com/grpc-ecosystem/grpc-gateway/runtime".WithForwardResponseOption=
+
+因为 gateway 用的是 =github.com/golang/protobuf/proto= ，而 proto 一般默认引入的是 =google.golang.org/protobuf/proto= .
+
+两个需要统一一下。
+
+https://github.com/grpc-ecosystem/grpc-gateway/issues/1607
