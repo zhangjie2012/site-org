@@ -131,3 +131,85 @@ https://github.com/grpc/grpc-go/blob/master/server.go#L871
 两个需要统一一下。
 
 https://github.com/grpc-ecosystem/grpc-gateway/issues/1607
+
+** 自定义返回 body 格式
+
+gRPC gateway 默认情况下返回的是 Resp Struct 对应的 JSON，出错时返回 =code,error,message= 三个字段。如果想要统一返回值，则需要自定义返回 body。
+
+=runtime.WithProtoErrorHandler= 可以修改错误返回时的返回格式。但是正常情况下的返回值并没有一个直接修改的地方。
+
+=runtime.WithForwardResponseOption= 会在正常返回时回，它可以修改 resp body，但是他只是正常返回的一部分，你可以成追加，而非覆写。
+比如在 =WithForwardResponseOption= 中调用 =w.Write= 会导致返回两份数据。按照官方的设计，这个回调似乎是来追加 Header 的，并不是修改 resp body。
+
+但是我发现一个现象，WithProtoErrorHandler 只要出错就会被调用，即便是在 =WithForwardResponseOption= 中返回错误也是一样的。
+既然这样，就有一种 hack 办法来解决这个问题：正常的返回抛出错误，然后统一在 =WithProtoErrorHandler= 中区分处理，也就是说把 WithProtoErrorHandler 作为一个 proxy。
+
+代码如下：
+
+#+begin_src go
+  type StandardResp struct {
+	  Code  int         `json:"code"`
+	  Data  interface{} `json:"data"`
+	  Error string      `json:"error"`
+  }
+
+  const (
+	  proxyFlag = "__succ__"
+  )
+
+  func HttpSuccHandler(ctx context.Context, w http.ResponseWriter, p proto.Message) error {
+	  resp := StandardResp{
+		  Code:  0,
+		  Data:  p,
+		  Error: "",
+	  }
+	  bs, _ := json.Marshal(&resp)
+	  return errors.New(proxyFlag + string(bs))
+  }
+
+  func HttpErrorHandler(ctx context.Context, mux *runtime.ServeMux, m runtime.Marshaler, w http.ResponseWriter, r *http.Request, err error) {
+	  w.Header().Set("Content-Type", "application/json")
+
+	  // success proxy
+	  raw := err.Error()
+	  if strings.HasPrefix(raw, proxyFlag) {
+		  raw = raw[len(proxyFlag):]
+		  w.Write([]byte(raw))
+		  return
+	  }
+
+	  // normal error
+	  s, ok := status.FromError(err)
+	  if !ok {
+		  s = status.New(codes.Unknown, err.Error())
+	  }
+	  resp := StandardResp{
+		  Code:  1,
+		  Data:  nil,
+		  Error: s.Message(),
+	  }
+	  bs, _ := json.Marshal(&resp)
+	  w.Write(bs)
+  }
+#+end_src
+
+Mux 代码：
+
+#+begin_src go
+  gwMux := runtime.NewServeMux(
+	  runtime.WithForwardResponseOption(HttpSuccHandler),
+	  runtime.WithProtoErrorHandler(HttpErrorHandler),
+  )
+#+end_src
+
+按照这个思路验证是可行的，那么会不会有什么副作用呢？比如说改变了 WithForwardResponseOption 的行为。
+
+在 gateway 中 =ForwardResponseMessage= 是转换 gRPC 到 REST 的处理函数。WithForwardResponseOption 也是在这个函数中调用的，当出错时会调用 =HTTPError=
+httpError 也就是 =WithProtoErrorHandler= 。看源码可以知道，大部分行为是在 WithForwardResponseOption 之前执行完了的，除了 =handleForwardResponseTrailer= 。
+而且在如果有多个 =WithForwardResponseOption= 时，其中的一个报错，其他的将不会被执行。
+
+总结下来这种方法可行，但是你要充分了解这么做带来的副作用，以免行为不符合预期。
+
+按说 grpc-gateway 这应该是一个很常规的需求，不知道为什么没有预留出 hook 供开发者自定义回包。我提了 issue，看后面会不会有更加优雅的就解决办法：
+
+https://github.com/grpc-ecosystem/grpc-gateway/issues/1610
