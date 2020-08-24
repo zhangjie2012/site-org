@@ -122,8 +122,7 @@ https://github.com/grpc/grpc-go/blob/master/server.go#L871
 - customizing your gateway https://grpc-ecosystem.github.io/grpc-gateway/docs/customizingyourgateway.html
 - gRPC Transcoding https://github.com/googleapis/googleapis/blob/master/google/api/http.proto#L44 service option 规则
 
-* 踩坑指南
-
+* FAQ
 ** 编译报错 =cannot use myFilter (type func(context.Context, http.ResponseWriter, protoreflect.ProtoMessage) error) as type func(context.Context, http.ResponseWriter, protoiface.MessageV1) error in argument to "github.com/grpc-ecosystem/grpc-gateway/runtime".WithForwardResponseOption=
 
 因为 gateway 用的是 =github.com/golang/protobuf/proto= ，而 proto 一般默认引入的是 =google.golang.org/protobuf/proto= .
@@ -213,3 +212,13 @@ httpError 也就是 =WithProtoErrorHandler= 。看源码可以知道，大部分
 按说 grpc-gateway 这应该是一个很常规的需求，不知道为什么没有预留出 hook 供开发者自定义回包。我提了 issue，看后面会不会有更加优雅的就解决办法：
 
 https://github.com/grpc-ecosystem/grpc-gateway/issues/1610
+
+** 跨域问题
+
+gateway 的 server 本质上还是标准的 =http.Server= ，在 =ServeHTTP= 之前加一个跨域头即可：
+
+#+begin_src go
+  w.Header().Set("Access-Control-Allow-Origin", "*")
+  w.Header().Set("Access-Control-Request-Method", "GET, POST, PUT, OPTIONS")
+  w.Header().Set("Access-Control-Allow-Headers", "Accept, Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization")
+#+end_src
