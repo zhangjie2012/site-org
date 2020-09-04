@@ -34,3 +34,4 @@ Failed to list services: server does not support the reflection API
 - 调用方法: =grpcurl -plaintext -d '{json_body}' 127.0.0.1:50051 <rpc-interface>=
   比如: =grpcurl -plaintext -d '{"type": "1"}' 127.0.0.1:50051 libproto.EventRPC.ListEvents=
   =-d= 后面加上 =@= 支持从标准输入中读取流参数。
+- 添加 metadata =-H 'key:value'=

@@ -222,3 +222,25 @@ gateway 的 server 本质上还是标准的 =http.Server= ，在 =ServeHTTP= 之
   w.Header().Set("Access-Control-Request-Method", "GET, POST, PUT, OPTIONS")
   w.Header().Set("Access-Control-Allow-Headers", "Accept, Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization")
 #+end_src
+
+** 解决返回数据时空字段不返回的问题
+
+protobuf 生成的 pb.go 中 struct 字段都是用 =json:",omitempty"= 修饰，这会导致在 gateway 转发返回时 json marshal 空的字段（初始值，0，空 slice 等）不返回。
+
+解决的办法是使用 [[https://github.com/golang/protobuf/tree/master/jsonpb][jsonpb]] marshal，jsonpb 提供了 =EmitDefaults= 选项来控制是否解析 =omitempty= 字段。具体如下：
+
+#+begin_src go
+  func sendProtoMessage(resp proto.Message, w http.ResponseWriter) {
+	  w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	  m := jsonpb.Marshaler{EmitDefaults: true}
+	  m.Marshal(w, resp) // You should check for errors here
+  }
+#+end_src
+
+如果使用 gateway 的 =WithMarshalerOption= 会更简单一些：
+
+#+begin_src go
+  gwmux := runtime.NewServeMux(runtime.WithMarshalerOption(runtime.MIMEWildcard, &runtime.JSONPb{OrigName: true, EmitDefaults: true}))
+#+end_src
+
+来自：https://stackoverflow.com/questions/34716238/golang-protobuf-remove-omitempty-tag-from-generated-json-tags
