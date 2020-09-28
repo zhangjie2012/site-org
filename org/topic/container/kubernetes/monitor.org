@@ -1,0 +1,8 @@
+#+SETUPFILE: ~/site/tpl/wiki-tpl.org
+#+TITLE: Kubernetes - 监控
+#+DATE: 2020-09-28 16:21:42
+
+暴露的 Kubernetes metric:
+
++ [[https://github.com/kubernetes/kube-state-metrics/tree/master/docs][kube-state-metrics]]：集群、节点、空间，Pod 等
++ [[https://github.com/google/cadvisor/blob/master/docs/storage/prometheus.md][cAdvisor export metric]]：容器暴露的 metric name、类型、描述、单位等

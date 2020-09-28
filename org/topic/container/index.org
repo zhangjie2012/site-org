@@ -37,6 +37,10 @@ Kubernetes 提供了服务发现和负载均衡、自动部署和回滚、弹性
 - 存储: Volumes, Persistent Volumes, Storage Class 等
 - 调度: 调度器和调度策略
 
+** 监控告警
+
+- [[file:kubernetes/monitor.org][监控]]: 通过 kube-state-metrics 和 cAdvisor 暴露指标
+
 ** kubectl CLI
 
 kubectl 是用来管理 Kubernetes 集群的命令行工具。
