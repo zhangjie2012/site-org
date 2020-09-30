@@ -84,6 +84,11 @@
 
 - [[file:devops/grafana.org][Grafana]] 开源的监控平台
 
+*** 开源的监控告警平台
+
+- [[https://n9e.didiyun.com/][Nightingale]]: 夜莺，滴滴开源
+- [[https://github.com/Qihoo360/doraemon][Doraemon]]: 哆啦A梦，360 开源
+
 ** 日志
 
 - [[file:devops/elk.org][ELK 技术栈]]
