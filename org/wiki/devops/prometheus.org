@@ -525,8 +525,8 @@ Prometheus 的规划，更全面的了解可以参考相关组件的 issue，比
 ** 专有名词表（Glossary）
 
 - 告警（alert） ::
-  告警是 Prometheus 的告警规则运行触发的结果，告警从 Prometheus 发送到 AlertManager。
-- 告警管理器（AlertManager） ::
+  告警是 Prometheus 的告警规则运行触发的结果，告警从 Prometheus 发送到 Alertmanager。
+- 告警管理器（Alertmanager） ::
   告警管理器接口告警，然后进行分组、重复数据聚合，通知收敛、静默，最后将告警发送到邮件、SNS 等。
 - Bridge ::
   Bridge 是从客户端库中获取样本然后暴露给非 Prometheus 监控系统的组件。比如，Python、Go、Java 客户端也可以将指标导出到 Graphite。

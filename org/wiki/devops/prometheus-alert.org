@@ -7,7 +7,7 @@
   告警和 Prometheus 是两部分：
 
   1. Prometheus server 发送告警到 Alertmanager；
-  2. AlertManager 管理告警，告警策略包括静默，抑制，聚合，然后发送通知（通过邮件、on-call 通知系统、聊天平台等）；
+  2. Alertmanager 管理告警，告警策略包括静默，抑制，聚合，然后发送通知（通过邮件、on-call 通知系统、聊天平台等）；
 
   主要流程：
 
@@ -15,7 +15,7 @@
   2. 配置 Prometheus 向 Alertmanager 通知
   3. 配置 Prometheus 告警规则
 
-* AlertManager
+* Alertmanager
 
   https://github.com/prometheus/alertmanager
 
@@ -29,7 +29,7 @@
    分组将类似的告警分类为单个通知，这在有较大的事故中比较有用（许多系统同时发出告警）。
 
    比如：发生网络分区时，集群中正在运行数十个或数百个服务实例。有一半的服务实例访问不到数据库。Prometheus 的告警规则配置是每个服务实例无法与数据库通信时为其发送告警。
-   结果就是数百个告警被发送到 AlertManager。
+   结果就是数百个告警被发送到 Alertmanager。
 
    作为用户，在这种情况下只希望看到一个页面，仍然可以准确的查看受影响的服务实例。因此，可以将 Alertmanager 设置为按集群和名字为告警分组，以便它可以发送一个紧凑的通知。
 
@@ -54,3 +54,232 @@
    Alertmanager 支持配置以创建一个集群为了高可用，可以使用 [[https://github.com/prometheus/alertmanager#high-availability][--cluster-*]] 参数。
 
    很重要的一点是：不要在 Prometheus 和 Alertmanagers 之间做流量的负载均衡，而是将 Prometheus 指向所有的 Alertmanagers 列表。
+
+* 配置
+
+  Alertmanager 通过命令行和配置文件进行配置。命令行配置不变的系统参数。配置文件配置抑制规则，通知路由和通知接收人。
+
+  [[https://www.prometheus.io/webtools/alerting/routing-tree-editor/][虚拟编辑器]] 可以帮助你构建路由树。
+
+  运行 =alertmanager -h= 查看所有的命令行参数。Alertmanager 支持在运行时加载配置，如果配置格式有误将不会被应用。
+  配置通过发送 SIGHUP 信号给进程或者请求 =/-reload= 。
+
+** 配置
+
+   使用 =--config.file= 来指定配置文件。
+
+   #+begin_src sh
+	 ./alertmanager --config.file=alertmanager.yml
+   #+end_src
+
+   文件是 YAML 格式的，由以下描述的 scheme 来定义。方括号表示是可选的。对于非列表参数，该值设置为指定的默认值。
+
+   通用的占位数定义如下：
+
+   - =<duration>= 正则表达式表示的持续时间 =[0-9]+(ms|[smhdwy])=
+   - =<labelname>= 正则表达式表示的字符串 =[a-zA-Z_][a-zA-Z0-9_]*=
+   - =<labelvalue>= unicode 字符串
+   - =<filepath>= 工作目录下的有效路径
+   - =<boolean>= 布尔值, =true= =false=
+   - =<string>= 字符串
+   - =<secret>= 机密的字符串，比如密码
+   - =<tmpl_string>= 模板字符串
+   - =<tmpl_secret>= 机密的模板字符串
+   - =<int>= 整型值
+
+   [[https://github.com/prometheus/alertmanager/blob/master/doc/examples/simple.yml][有效的示例]] 文件显示了使用上下文。
+
+** =<route>=
+
+   路由块定义了路由树中的节点以及子节点。如果没有设置，则其可选的配置参是从父节点中继承。
+
+   每个告警都从他的顶级路由处进入路由树，它会遍历所有的告警。然后，遍历子节点。如果 =continue= 设置为 =false= ，
+   它会在第一个匹配的子项之后停止。如果 =continue= 为 =true= ，告警将继续与后续同级匹配。如果告警与任何节点都不匹配。
+   则根据当前节点的配置参数处理。
+
+** =<inhibit_rule>=
+
+   当存在与另外一组匹配器匹配的告警（源）时，抑制规则将匹配一组匹配器的告警抑制。目标告警和源告警需要有相等的签名。
+
+   从语义上来说，缺少 lable 和具有空 label 值是相同的。因此，如果源告警和目标告警都缺少 =equal= 的标签名，抑制规则将适用。
+
+   To prevent an alert from inhibiting itself, an alert that matches both the target and the source side of a rule cannot
+   be inhibited by alerts for which the same is true (including itself). However, we recommend to choose target and source
+   matchers in a way that alerts never match both sides. It is much easier to reason about and does not trigger this special case.
+
+   #+begin_quote
+   抑制通过 =target= 和 =source= 来控制，两个概念比较绕。发送的告警通知匹配策略是 =target= ，当新的告警规则满足 =source=
+   中的规则，并且发送的告警和新产生的告警中的 equal 标签完全相同时，则启动抑制机制，新的告警不会被发生。
+
+   也就是说 source 的是用来定义同源的。比如说主机宕机和主机上的服务异常两个告警，服务异常的 target 是服务异常，
+   source 应该包含主机宕机的标签。这样的话，当服务异常时，如果包含主机宕机的标签，那么这条告警会被静默。
+   因为主机宕机了，服务自然时异常状态。
+   #+end_quote>
+
+** =<http_config>=
+
+   =http_config= 允许配置 HTTP 客户端：接受者用来与基于 HTTP 的 API 服务来进行通信。
+
+   #+begin_src yaml
+	 # Note that `basic_auth`, `bearer_token` and `bearer_token_file` options are
+	 # mutually exclusive.
+
+	 # Sets the `Authorization` header with the configured username and password.
+	 # password and password_file are mutually exclusive.
+	 basic_auth:
+	   [ username: <string> ]
+	   [ password: <secret> ]
+	   [ password_file: <string> ]
+
+	 # Sets the `Authorization` header with the configured bearer token.
+	 [ bearer_token: <secret> ]
+
+	 # Sets the `Authorization` header with the bearer token read from the configured file.
+	 [ bearer_token_file: <filepath> ]
+
+	 # Configures the TLS settings.
+	 tls_config:
+	   [ <tls_config> ]
+
+	 # Optional proxy URL.
+	 [ proxy_url: <string> ]
+   #+end_src
+
+** =<tls_config>=
+
+   =tls_config= 允许配置 TLS 连接。
+
+   #+begin_src yaml
+	 # CA certificate to validate the server certificate with.
+	 [ ca_file: <filepath> ]
+
+	 # Certificate and key files for client cert authentication to the server.
+	 [ cert_file: <filepath> ]
+	 [ key_file: <filepath> ]
+
+	 # ServerName extension to indicate the name of the server.
+	 # http://tools.ietf.org/html/rfc4366#section-3.1
+	 [ server_name: <string> ]
+
+	 # Disable validation of the server certificate.
+	 [ insecure_skip_verify: <boolean> | default = false]
+   #+end_src
+
+** =<receiver>=
+
+   接收器用来配置一个或者多个通知集成。
+
+   **我们不会一直添加新的接收器，我们建议你通过 webhook 来实现自定义的通知集成。**
+
+   #+begin_src yaml
+	 # The unique name of the receiver.
+	 name: <string>
+
+	 # Configurations for several notification integrations.
+	 email_configs:
+	   [ - <email_config>, ... ]
+	 pagerduty_configs:
+	   [ - <pagerduty_config>, ... ]
+	 pushover_configs:
+	   [ - <pushover_config>, ... ]
+	 slack_configs:
+	   [ - <slack_config>, ... ]
+	 opsgenie_configs:
+	   [ - <opsgenie_config>, ... ]
+	 webhook_configs:
+	   [ - <webhook_config>, ... ]
+	 victorops_configs:
+	   [ - <victorops_config>, ... ]
+	 wechat_configs:
+	   [ - <wechat_config>, ... ]
+   #+end_src
+
+** =<webhook_config>=
+
+   Webhook 接收器允许配置通用接收器。
+
+   #+begin_src yaml
+	 # Whether or not to notify about resolved alerts.
+	 [ send_resolved: <boolean> | default = true ]
+
+	 # The endpoint to send HTTP POST requests to.
+	 url: <string>
+
+	 # The HTTP client's configuration.
+	 [ http_config: <http_config> | default = global.http_config ]
+
+	 # The maximum number of alerts to include in a single webhook message. Alerts
+	 # above this threshold are truncated. When leaving this at its default value of
+	 # 0, all alerts are included.
+	 [ max_alerts: <int> | default = 0 ]
+   #+end_src
+
+   Alertmanager 会发送一个 HTTP 如下 JSON 格式的 POST 请求：
+
+   #+begin_src js
+	 {
+	   "version": "4",
+	   "groupKey": <string>,              // key identifying the group of alerts (e.g. to deduplicate)
+	   "truncatedAlerts": <int>,          // how many alerts have been truncated due to "max_alerts"
+	   "status": "<resolved|firing>",
+	   "receiver": <string>,
+	   "groupLabels": <object>,
+	   "commonLabels": <object>,
+	   "commonAnnotations": <object>,
+	   "externalURL": <string>,           // backlink to the Alertmanager.
+	   "alerts": [
+		 {
+		   "status": "<resolved|firing>",
+		   "labels": <object>,
+		   "annotations": <object>,
+		   "startsAt": "<rfc3339>",
+		   "endsAt": "<rfc3339>",
+		   "generatorURL": <string>       // identifies the entity that caused the alert
+		 },
+		 ...
+	   ]
+	 }
+   #+end_src
+
+* 客户端
+
+  **免责声明：Prometheus 自动处理发送通过配置的[[https://prometheus.io/docs/prometheus/latest/configuration/alerting_rules/][告警规则]]生成的告警。强烈建议你根据时间序列数据在 Prometheus
+  中配置告警告警规则，而不是实现一个客户端。**
+
+  Alertmanager 有两种 API, v1 和 v2，都监听告警。v1 在下面的代码中进行描述。v2 遵循 OpenAPI 规范，
+  可以在 Alertmanager [[https://github.com/prometheus/alertmanager/blob/master/api/v2/openapi.yaml][存储库]] 中找到该规范。
+
+  只要是客户端仍然处于活动状态，他们就可以不断的发送告警（通常是 30s 到 3 分钟之间）。客户端可以通过 POST
+  请求可以推送列表到 Alertmanager 中。
+
+  每个告警的标签用于标识是相同告警，并进行重复数据删除。注解（annotations）始终魏为最新收到的，且不能标识告警。
+
+  =startAt= 和 =endAt= 的时间戳是可选的。如果 =startAt= 省略掉了，Alertmanager 会设置成当前时间，仅在告警结束之后
+  才设置 =endAt= 。否则会被设置为上一次告警开始到现在的时间。
+
+  =generatorURL= 是唯一的反向链接，用来标识客户端中此告警的产生实体。
+
+  #+begin_src js
+	[
+	  {
+		"labels": {
+		  "alertname": "<requiredAlertName>",
+		  "<labelname>": "<labelvalue>",
+		  ...
+		},
+		"annotations": {
+		  "<labelname>": "<labelvalue>",
+		},
+		"startsAt": "<rfc3339>",
+		"endsAt": "<rfc3339>",
+		"generatorURL": "<generator_url>"
+	  },
+	  ...
+	]
+  #+end_src
+
+* TODO 通知模板参考
+
+* TODO 通知模板范例
+
+* TODO 管理端 API
