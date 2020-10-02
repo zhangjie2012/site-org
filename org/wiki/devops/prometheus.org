@@ -1378,5 +1378,8 @@ $ curl http://localhost:9090/api/v1/label/job/values
 * TODO Instrumenting
 * TODO Operating
 * TODO 告警（Alerting）
+
+告警相对独立，见 [[file:prometheus-alert.org][Prometheus Alert]]。
+
 * TODO 最佳实践
 * TODO 指南（GUIDES）

@@ -2,40 +2,55 @@
 #+TITLE: Prometheus alert
 #+DATE: 2020-07-09 11:09:08
 
-告警和 Prometheus 是两部分：
+* 概览
 
-1. Prometheus server 发送告警到 Alertmanager；
-2. AlertManager 管理告警，告警策略包括静默，抑制，聚合，然后发送通知（通过邮件、on-call 通知系统、聊天平台等）；
+  告警和 Prometheus 是两部分：
 
-主要流程：
+  1. Prometheus server 发送告警到 Alertmanager；
+  2. AlertManager 管理告警，告警策略包括静默，抑制，聚合，然后发送通知（通过邮件、on-call 通知系统、聊天平台等）；
 
-1. 安装和配置 Alertmanager
-2. 配置 Prometheus 向 Alertmanager 通知
-3. 配置 Prometheus 告警规则
+  主要流程：
+
+  1. 安装和配置 Alertmanager
+  2. 配置 Prometheus 向 Alertmanager 通知
+  3. 配置 Prometheus 告警规则
 
 * AlertManager
 
-https://github.com/prometheus/alertmanager
+  https://github.com/prometheus/alertmanager
 
-Alertmanager 负责处理由客户端发送过来的告警。它负责将重复数据杉树，分组和路由到正确的接收者；它还负责静默和禁止告警。
-核心概念：
+  Alertmanager 负责处理由客户端发送过来的告警（比如 Prometheus 服务）。它负责将重复数据删除，分组和路由到正确的接收者（使用电子邮件、PageDuty 或者 OpsGenie 等）；
+  它还负责静默和禁止告警。
+
+  **以下是告警相关的核心概念：**
 
 ** Grouping 分组
 
-分组将类似的告警分类为单个通知，这在有较大的事故中比较有用（许多系统同时发出告警）。
+   分组将类似的告警分类为单个通知，这在有较大的事故中比较有用（许多系统同时发出告警）。
 
-作为用户，在这种情况下只希望看到一个页面，仍然可以准确的查看受影响的服务实例。
+   比如：发生网络分区时，集群中正在运行数十个或数百个服务实例。有一半的服务实例访问不到数据库。Prometheus 的告警规则配置是每个服务实例无法与数据库通信时为其发送告警。
+   结果就是数百个告警被发送到 AlertManager。
+
+   作为用户，在这种情况下只希望看到一个页面，仍然可以准确的查看受影响的服务实例。因此，可以将 Alertmanager 设置为按集群和名字为告警分组，以便它可以发送一个紧凑的通知。
+
+   告警的分组，分组通知的时间和通知的接受者都是由配置文件中的路由树配置。
 
 ** Inhibition 抑制
 
-如果某些其它的警告已经触发，则抑制某些警告的通知。
+   抑制指的是：如果某些其它的警告已经触发，则抑制某些警告的通知。
 
-比如：一个集群不可用的告警触发了，那么集群内部的告警将收到抑制，这可以防止与实际问题无关的成百上千的告警。
+   比如：一个集群不可用的告警触发了，那么集群内部的告警将收到抑制，这可以防止与实际问题无关的成百上千的告警。
 
 ** Silences 静默
 
-静默是指在一段时间内不接收通知。
+   静默是指在一段时间内不接收通知。
 
 ** Client behavior 客户端行为
 
-** Hign Availability 高可用
+   Alertmanager 对于它的客户端有 [[https://prometheus.io/docs/alerting/latest/clients/][特殊要求]]，这些仅与不使用 Prometheus 发送告警的高级用例有关。
+
+** High Availability 高可用
+
+   Alertmanager 支持配置以创建一个集群为了高可用，可以使用 [[https://github.com/prometheus/alertmanager#high-availability][--cluster-*]] 参数。
+
+   很重要的一点是：不要在 Prometheus 和 Alertmanagers 之间做流量的负载均衡，而是将 Prometheus 指向所有的 Alertmanagers 列表。
