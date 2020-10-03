@@ -278,8 +278,36 @@
 	]
   #+end_src
 
-* TODO 通知模板参考
+* 通知模板参考
 
-* TODO 通知模板范例
+  https://prometheus.io/docs/alerting/latest/notifications/
+
+* 通知模板范例
+
+  https://prometheus.io/docs/alerting/latest/notification_examples/
 
 * TODO 管理端 API
+
+** 健康检测
+
+   #+begin_src
+   GET /-/healthy
+   #+end_src
+
+   检查是否返回 200.
+
+** 可用（readiness）检测
+
+   #+begin_src
+   GET /-/ready
+   #+end_src
+
+   正常接收请求时，返回 200.
+
+** 重新加载（reload）
+
+   #+begin_src
+   POST /-/reload
+   #+end_src
+
+   触发 Alertmanager 配置文件重新加载。还有一种办法是发送 =SIGHUP= 到 Alertmanager 进程。
