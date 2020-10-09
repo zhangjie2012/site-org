@@ -1,0 +1,6 @@
+#+SETUPFILE: ~/site/tpl/wiki-tpl.org
+#+TITLE: Go 设计模式
+#+DATE: 2020-10-04 08:48:18
+
+- 单例模式 https://github.com/tmrts/go-patterns/blob/master/creational/singleton.md 使用 [[https://golang.org/pkg/sync/#Once.Do][Once.Do]] 实现。
+- Functional Options [[https://github.com/tmrts/go-patterns/blob/master/idiom/functional-options.md][https://github.com/tmrts/go-patterns/blob/master/idiom/functional-options.md]] WithOption 依赖注入

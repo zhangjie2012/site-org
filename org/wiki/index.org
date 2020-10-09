@@ -3,149 +3,150 @@
 
 * 桌面系统
 
-- [[file:desktop/ubuntu.org][Ubuntu]]
+  - [[file:desktop/ubuntu.org][Ubuntu]]
 
 * 操作系统理论
 
-- [[file:os/linux-net-io.org][Linux IO 模型]]
-- [[file:os/difference-between-multicore-and-multiprocessor.org][多核和多处理器的区别]]: 多核是一个 CPU 有多个处理单元（core），多处理器是多个 CPU。现在计算机支持多个处理器，并且每个处理器有多个核。
-- [[file:os/other.org][其他]]
+  - [[file:os/linux-net-io.org][Linux IO 模型]]
+  - [[file:os/difference-between-multicore-and-multiprocessor.org][多核和多处理器的区别]]: 多核是一个 CPU 有多个处理单元（core），多处理器是多个 CPU。现在计算机支持多个处理器，并且每个处理器有多个核。
+  - [[file:os/other.org][其他]]
 
 * 数据结构和算法
 
-- hash
-  + [[file:../blog/2018/consistent-hashing.org][一致性 hash 指南]]：翻译的一篇文章，虽然核心是一致性 hash，但对 hash 基础也有介绍
-  + [[file:../blog/2018/redis-cluster-hash.org][Redis 集群中的 hash 算法]]
-  + [[file:data-structure-and-algorithm/hash.org][一些资料]]
+  - hash
+	+ [[file:../blog/2018/consistent-hashing.org][一致性 hash 指南]]：翻译的一篇文章，虽然核心是一致性 hash，但对 hash 基础也有介绍
+	+ [[file:../blog/2018/redis-cluster-hash.org][Redis 集群中的 hash 算法]]
+	+ [[file:data-structure-and-algorithm/hash.org][一些资料]]
 
 * 数据库
 ** 关系型数据库
 
-- [[file:database/mysql.org][MySQL]]
+   - [[file:database/mysql.org][MySQL]]
 
 ** 面向文档的数据库（Document-oriented databases）
 
-- [[file:database/mongodb.org][MongoDB]]
+   - [[file:database/mongodb.org][MongoDB]]
 
 ** NoSQL
 
-- [[file:database/redis.org][Redis]]
+   - [[file:database/redis.org][Redis]]
 
 * DevOps
 ** 系统运维
 
-- 基础命令 :: [[file:devops/awk.org][awk]]，[[file:devops/sed.org][sed]]，[[file:devops/tar.org][tar]]，[[file:devops/rsync.org][rsync]]，[[file:devops/cron.org][crontab]]，[[file:devops/find.org][find]]，[[file:devops/process-mgr.org][进程管理]]，[[file:devops/ssh.org][SSH]]
-- 终端复用 :: [[file:devops/tmux.org][tmux]]
-- 配置 :: [[file:devops/ps1.org][PS1]]
-- 操作系统 :: [[file:devops/ops-faq.org][运维 FAQ]]
-- 系统管理 :: [[file:devops/systemd.org][systemd]] 和 [[file:devops/journalctl.org][journalctl]]
-- 网络 ::
-  + [[file:devops/network-dhcp.org][DHCP]]
+   - 基础命令 :: [[file:devops/awk.org][awk]]，[[file:devops/sed.org][sed]]，[[file:devops/tar.org][tar]]，[[file:devops/rsync.org][rsync]]，[[file:devops/cron.org][crontab]]，[[file:devops/find.org][find]]，[[file:devops/process-mgr.org][进程管理]]，[[file:devops/ssh.org][SSH]]
+   - 终端复用 :: [[file:devops/tmux.org][tmux]]
+   - 配置 :: [[file:devops/ps1.org][PS1]]
+   - 操作系统 :: [[file:devops/ops-faq.org][运维 FAQ]]
+   - 系统管理 :: [[file:devops/systemd.org][systemd]] 和 [[file:devops/journalctl.org][journalctl]]
+   - 网络 ::
+	 + [[file:devops/network-dhcp.org][DHCP]]
 
 ** 中间件
 
-- [[file:devops/nginx.org][nginx]]
+   - [[file:devops/nginx.org][nginx]]
 
 ** 容器化
 *** Docker
 
-- [[file:devops/docker-tutorial.org][学习笔记]]
-- [[file:devops/docker-tutorial2.org][官方文档翻译]]
-- [[file:devops/dockerfile-best-practice.org][Dockerfile 最佳实践]]
-- 博客:
-  + [[file:../blog/2018/different-from-docker-and-vm.org][{译} Docker 和 VM 的区别]]
+	- [[file:devops/docker-tutorial.org][学习笔记]]
+	- [[file:devops/docker-tutorial2.org][官方文档翻译]]
+	- [[file:devops/dockerfile-best-practice.org][Dockerfile 最佳实践]]
+	- 博客:
+	  + [[file:../blog/2018/different-from-docker-and-vm.org][{译} Docker 和 VM 的区别]]
 
 *** Kubernetes
 
-- 官方文档
-  + 概述：[[file:devops/kubernetes-overview-objects.org][对象]]
-  + 架构：[[file:devops/kubernetes-architechture-nodes.org][节点]]、[[file:devops/kubernetes-architecture-master-node-communication.org][Master-Node 通信]]
-  + 容器：[[file:devops/kubernetes-containers-images.org][镜像]]、[[file:devops/kubernetes-containers-container-environment-variables.org][容器环境变量]]、[[file:devops/kubernetes-containers-runtime-class.org][运行时类]]、[[file:devops/kubernetes-containers-container-lifecycle-hooks.org][生命周期 Hooks]]
-  + [[file:devops/k8s-ingress.org][Ingress]] 服务暴露
-- 实践
-  + [[file:devops/k8s-deployment-strategies.org][部署策略]] 几种常见的部署策略
-  + [[file:devops/k8s-practice.org][实践]]
-- 书 & 文章
-  + [[https://github.com/mvallim/kubernetes-under-the-hood][kubernetes-under-the-hood]] 侧重运维部署层面，涉及整体技术架构、网络、DNS 等；如果仅是关注 Kubernetes 本身，不推荐看
-- [[file:devops/k8s-resource.org][资源]]：各种帅帅的图，以及 Kubernetes 的资源连接
+	- 官方文档
+	  + 概述：[[file:devops/kubernetes-overview-objects.org][对象]]
+	  + 架构：[[file:devops/kubernetes-architechture-nodes.org][节点]]、[[file:devops/kubernetes-architecture-master-node-communication.org][Master-Node 通信]]
+	  + 容器：[[file:devops/kubernetes-containers-images.org][镜像]]、[[file:devops/kubernetes-containers-container-environment-variables.org][容器环境变量]]、[[file:devops/kubernetes-containers-runtime-class.org][运行时类]]、[[file:devops/kubernetes-containers-container-lifecycle-hooks.org][生命周期 Hooks]]
+	  + [[file:devops/k8s-ingress.org][Ingress]] 服务暴露
+	- 实践
+	  + [[file:devops/k8s-deployment-strategies.org][部署策略]] 几种常见的部署策略
+	  + [[file:devops/k8s-practice.org][实践]]
+	- 书 & 文章
+	  + [[https://github.com/mvallim/kubernetes-under-the-hood][kubernetes-under-the-hood]] 侧重运维部署层面，涉及整体技术架构、网络、DNS 等；如果仅是关注 Kubernetes 本身，不推荐看
+	- [[file:devops/k8s-resource.org][资源]]：各种帅帅的图，以及 Kubernetes 的资源连接
 
 ** 监控告警
 
 *** Prometheus
 
-- [[file:devops/prometheus-transforming-monitoring-over-years.org][Prometheus-多年来的监控转型]] 翻译自 CoreOS 文章，写于 2018.8.9，介绍了 Prometheus 的历史和未来。
-  简单概括为：Prometheus 在 2012 年 SoundCloud 开发团队受谷歌内部的 Borgmon 项目启发开发的，
-  用于解决微服务架构的监控和告警问题。2016 年捐赠给 CNCF，转由社区开发和维护。
-  现今，Prometheus 已经是云原生体系下的监控标配。而未来将致力于做监控的标准化工作。
-- [[file:devops/prometheus.org][Prometheus 文档（非官方）]] 官方文档笔记
-- [[file:devops/monitor-based-on-prometheus.org][基于 Prometheus 的监控告警]]
+	- [[file:devops/prometheus-transforming-monitoring-over-years.org][Prometheus-多年来的监控转型]] 翻译自 CoreOS 文章，写于 2018.8.9，介绍了 Prometheus 的历史和未来。
+	  简单概括为：Prometheus 在 2012 年 SoundCloud 开发团队受谷歌内部的 Borgmon 项目启发开发的，
+	  用于解决微服务架构的监控和告警问题。2016 年捐赠给 CNCF，转由社区开发和维护。
+	  现今，Prometheus 已经是云原生体系下的监控标配。而未来将致力于做监控的标准化工作。
+	- [[file:devops/prometheus.org][Prometheus 文档（非官方）]] 官方文档笔记
+	- [[file:devops/monitor-based-on-prometheus.org][基于 Prometheus 的监控告警]]
 
 *** Grafana
 
-- [[file:devops/grafana.org][Grafana]] 开源的监控平台
+	- [[file:devops/grafana.org][Grafana]] 开源的监控平台
 
 *** 开源的监控告警平台
 
-- [[https://n9e.didiyun.com/][Nightingale]]: 夜莺，滴滴开源
-- [[https://github.com/Qihoo360/doraemon][Doraemon]]: 哆啦A梦，360 开源
+	- [[https://n9e.didiyun.com/][Nightingale]]: 夜莺，滴滴开源
+	- [[https://github.com/Qihoo360/doraemon][Doraemon]]: 哆啦A梦，360 开源
 
 ** 日志
 
-- [[file:devops/elk.org][ELK 技术栈]]
-- [[file:devops/grafana-loki.org][Loki 技术栈]]
+   - [[file:devops/elk.org][ELK 技术栈]]
+   - [[file:devops/grafana-loki.org][Loki 技术栈]]
 
 * 程序设计
 ** 前端
 
-- 样式：[[file:programming/frontend/css.org][CSS]]，[[file:programming/frontend/less.org][less]]
-- 打包：[[file:programming/frontend/webpack.org][Webpack]]
-- 脚手架：[[file:programming/frontend/umi.org][umi]]
-- UI 组件：[[file:programming/frontend/antd.org][antd]]
-- React 全家桶：
-  + [[file:programming/frontend/react.org][React]]
-  + [[file:programming/frontend/react-router.org][React-Router]]
-- [[file:programming/frontend/nodejs.org][nodejs]]
+   - 样式：[[file:programming/frontend/css.org][CSS]]，[[file:programming/frontend/less.org][less]]
+   - 打包：[[file:programming/frontend/webpack.org][Webpack]]
+   - 脚手架：[[file:programming/frontend/umi.org][umi]]
+   - UI 组件：[[file:programming/frontend/antd.org][antd]]
+   - React 全家桶：
+	 + [[file:programming/frontend/react.org][React]]
+	 + [[file:programming/frontend/react-router.org][React-Router]]
+   - [[file:programming/frontend/nodejs.org][nodejs]]
 
 ** C++
 
-- [[file:programming/cpp/autotools.org][AutoTools]]：编译工具
-- [[file:programming/cpp/gcc.org][gcc]]：编译器
-- [[file:programming/cpp/makefile.org][Makefile]]
-- [[file:programming/cpp/perf.org][Perf]]：性能剖析工具，其实只要记得 ~perf top -p~ 一个指令就行了
-- [[file:programming/cpp/valgrind.org][Valgrind]]：Linux 下动态（指令框架）分析工具，主要用来做内存泄露检测。其他的工具还有 VLC，Nvwa 等
+   - [[file:programming/cpp/autotools.org][AutoTools]]：编译工具
+   - [[file:programming/cpp/gcc.org][gcc]]：编译器
+   - [[file:programming/cpp/makefile.org][Makefile]]
+   - [[file:programming/cpp/perf.org][Perf]]：性能剖析工具，其实只要记得 ~perf top -p~ 一个指令就行了
+   - [[file:programming/cpp/valgrind.org][Valgrind]]：Linux 下动态（指令框架）分析工具，主要用来做内存泄露检测。其他的工具还有 VLC，Nvwa 等
 
 ** Go
 
-- [[file:programming/go/build-env.org][构建环境]]：安装、环境配置、工具链等说明
-- [[file:programming/go/packages.org][packages]]：各种库的对比和选型
-- [[file:programming/go/go-package-release.org][Package 发布]]：一个 Go 的 Github 项目如何发布
-- [[file:programming/go/package-manager.org][包管理工具]]
-- [[file:programming/go/project-layout.org][项目结构]]：摘自 [[https://github.com/golang-standards/project-layout][project-layout]]，go 工程的项目结构
-- [[file:programming/go/date-format.org][时间格式化与解析]]
-- [[file:programming/go/build-web-server-stack.org][构建 Go Web 服务技术栈]] 侧重技术 /持续更新/
-- [[file:programming/go/go-project-best-practices.org][构建 Go 项目最佳实践]] 侧重心得体会 /持续更新/
-- [[file:programming/go/write-go-testing.org][Go 测试用例]]
-- [[file:programming/go/go-mongo-driver.org][Go Mongo Driver]] 使用技巧
-- [[file:programming/go/resource.org][资源]]：一些资源链接
+   - [[file:programming/go/build-env.org][构建环境]]：安装、环境配置、工具链等说明
+   - [[file:programming/go/packages.org][packages]]：各种库的对比和选型
+   - [[file:programming/go/go-package-release.org][Package 发布]]：一个 Go 的 Github 项目如何发布
+   - [[file:programming/go/package-manager.org][包管理工具]]
+   - [[file:programming/go/project-layout.org][项目结构]]：摘自 [[https://github.com/golang-standards/project-layout][project-layout]]，go 工程的项目结构
+   - [[file:programming/go/date-format.org][时间格式化与解析]]
+   - [[file:programming/go/build-web-server-stack.org][构建 Go Web 服务技术栈]] 侧重技术 /持续更新/
+   - [[file:programming/go/go-project-best-practices.org][构建 Go 项目最佳实践]] 侧重心得体会 /持续更新/
+   - [[file:programming/go/write-go-testing.org][Go 测试用例]]
+   - [[file:programming/go/go-mongo-driver.org][Go Mongo Driver]] 使用技巧
+   - [[file:programming/go/go-language-faq.org][Go 语言 FAQ]] 一些常见的语言使用和设计问题
+   - [[file:programming/go/resource.org][资源]]：一些资源链接
 
 ** Emacs Lisp
 
-- [[file:programming/elisp/basic.org][elisp 基础]]
+   - [[file:programming/elisp/basic.org][elisp 基础]]
 
 ** 编码环境
 
-- [[file:../topic/emacs/index.org][Emacs]]：神之编辑器
-- [[file:programming/code-env/git.org][git]] | [[file:programming/code-env/svn.org][svn]]：版本管理器
-- [[file:programming/code-env/pip.org][pip]]：Python 的包管理器
-- [[file:programming/code-env/iterm2.org][iterm2]]
+   - [[file:../topic/emacs/index.org][Emacs]]：神之编辑器
+   - [[file:programming/code-env/git.org][git]] | [[file:programming/code-env/svn.org][svn]]：版本管理器
+   - [[file:programming/code-env/pip.org][pip]]：Python 的包管理器
+   - [[file:programming/code-env/iterm2.org][iterm2]]
 
 ** 其它
 
-- [[file:programming/regular-expression.org][正则表达式]]
+   - [[file:programming/regular-expression.org][正则表达式]]
 
 * 微服务
 * 成长
 
-- [[file:growing/programmer.org][技术人]]：一些常用的办公设备和软件记录
-- [[file:growing/online-course.org][在线课程]]
-- [[file:growing/computer-english-words.org][计算机常用英语单词]]：英语才是最重要的编程语言
+  - [[file:growing/programmer.org][技术人]]：一些常用的办公设备和软件记录
+  - [[file:growing/online-course.org][在线课程]]
+  - [[file:growing/computer-english-words.org][计算机常用英语单词]]：英语才是最重要的编程语言

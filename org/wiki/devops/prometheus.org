@@ -10,987 +10,988 @@
 ** 概览
 *** 什么是 Prometheus?
 
-Prometheus 是一个开源的监控告警系统，最初由 [[https://soundcloud.com/][SoundCloud]] 构建。2012 年成立以来，许多公司和组织都开始使用 Prometheus，拥有非常活跃的开发人员和用户社区。
-目前作为一个单独的开源项目，独立于任何公司进行维护。为了达到这一目标，2016 年加入了 [[https://www.cncf.io/][CNCF]]，是继 Kubernetes 之后第二个入驻的项目。
+	Prometheus 是一个开源的监控告警系统，最初由 [[https://soundcloud.com/][SoundCloud]] 构建。2012 年成立以来，许多公司和组织都开始使用 Prometheus，拥有非常活跃的开发人员和用户社区。
+	目前作为一个单独的开源项目，独立于任何公司进行维护。为了达到这一目标，2016 年加入了 [[https://www.cncf.io/][CNCF]]，是继 Kubernetes 之后第二个入驻的项目。
 
 *** 特性
 
-Prometheus 的主要特性：
+	Prometheus 的主要特性：
 
-- 多维的数据模型，由 metric 名称和键值对标识的时间序列数据
-- PromQL，灵活的查询语言
-- 不依赖分布式存储；单服务节点自治
-- 时间序列收集以 HTTP pull 的模型进行
-- 通过中间网关支持推送时间序列
-- 目标通过服务发现或者静态配置的方式被发现
-- 支持多种模式的图形和仪表盘
+	- 多维的数据模型，由 metric 名称和键值对标识的时间序列数据
+	- PromQL，灵活的查询语言
+	- 不依赖分布式存储；单服务节点自治
+	- 时间序列收集以 HTTP pull 的模型进行
+	- 通过中间网关支持推送时间序列
+	- 目标通过服务发现或者静态配置的方式被发现
+	- 支持多种模式的图形和仪表盘
 
 *** 组件
 
-Prometheus 生态由多个组件组成，其中许多都是可选的：
+	Prometheus 生态由多个组件组成，其中许多都是可选的：
 
-- 主要的 _Prometheus 服务_ 用来收集和存储时间序列数据
-- _客户端库_ 用来检测应用程序代码
-- _推送网关_ 用来支持短期工作
-- 具有特殊目标的 _exporter_ 用来专门为 HAProxy、StatsD、Graphite 等服务
-- _alertmanager_ 用来处理告警
-- 各种支持工具
+	- 主要的 _Prometheus 服务_ 用来收集和存储时间序列数据
+	- _客户端库_ 用来检测应用程序代码
+	- _推送网关_ 用来支持短期工作
+	- 具有特殊目标的 _exporter_ 用来专门为 HAProxy、StatsD、Graphite 等服务
+	- _alertmanager_ 用来处理告警
+	- 各种支持工具
 
-大多数组件都是用 Go 写的，很容易构建和部署（作为二进制包）。
+	大多数组件都是用 Go 写的，很容易构建和部署（作为二进制包）。
 
 *** 架构
 
-下面这张图说明了 Prometheus 的体系结构以及一些生态组件：
+	下面这张图说明了 Prometheus 的体系结构以及一些生态组件：
 
-https://prometheus.io/assets/architecture.png
+	https://prometheus.io/assets/architecture.png
 
-1. Prometheus 从一些 job 中获取指标数据，直接的或者间接的（推送网关）
-2. 存储所有的样本数据到本地
-3. 对这些数据运行规则，汇总，然后记录现有数据中的时间序列或者生成告警
-4. Grafana 或者其它的 API 使用者可用来可视化
+	1. Prometheus 从一些 job 中获取指标数据，直接的或者间接的（推送网关）
+	2. 存储所有的样本数据到本地
+	3. 对这些数据运行规则，汇总，然后记录现有数据中的时间序列或者生成告警
+	4. Grafana 或者其它的 API 使用者可用来可视化
 
 *** 什么时候比较适合使用 Prometheus？
 
-Prometheus 比较适合记录任何纯数值的时间序列。它既适合以机器为中心的监控，也适合高度动态的面向服务的架构体系的监控。
-在微服务的世界中，它对多维数据收集和查询的支持很占优势。
+	Prometheus 比较适合记录任何纯数值的时间序列。它既适合以机器为中心的监控，也适合高度动态的面向服务的架构体系的监控。
+	在微服务的世界中，它对多维数据收集和查询的支持很占优势。
 
-每一个 Prometheus 服务器都是独立的，不依赖于网络存储或者其它远程服务。当基础架构被破坏时，你可以依靠它，并且无需其它的基础即可使用。
+	每一个 Prometheus 服务器都是独立的，不依赖于网络存储或者其它远程服务。当基础架构被破坏时，你可以依靠它，并且无需其它的基础即可使用。
 
 *** 什么时候不适合使用 Prometheus？
 
-Prometheus 很重视可靠性，即使在有故障的时候，始终可以看到有关系统的可用统计信息。
-如果你需要 100% 的准确性（例如按请求计费），这种情况下，就不是一个好的选择了，收集的数据可能不够详细和完整。
-/简单来讲，Promethues 就是做监控来用的，不要专门作为业务存储。
+	Prometheus 很重视可靠性，即使在有故障的时候，始终可以看到有关系统的可用统计信息。
+	如果你需要 100% 的准确性（例如按请求计费），这种情况下，就不是一个好的选择了，收集的数据可能不够详细和完整。
+	/简单来讲，Promethues 就是做监控来用的，不要专门作为业务存储。
 
 ** 第一步
 
-Prometheus 是一个监控平台，它从监控目标通过 HTTP 获取度量指标。
-Prometheus 的第一个监控目标是 Prometheus 自己，它提供了各种各样的宿主级别的指标，包括内存利用率，垃圾回收等等。
+   Prometheus 是一个监控平台，它从监控目标通过 HTTP 获取度量指标。
+   Prometheus 的第一个监控目标是 Prometheus 自己，它提供了各种各样的宿主级别的指标，包括内存利用率，垃圾回收等等。
 
 *** 下载
 
-在 [[https://prometheus.io/download/][下载]] 页面下载对应平台的二进制包，然后解压即可使用。
+	在 [[https://prometheus.io/download/][下载]] 页面下载对应平台的二进制包，然后解压即可使用。
 
-#+begin_src shell
-> wget https://github.com/prometheus/prometheus/releases/download/v2.16.0/prometheus-2.16.0.linux-amd64.tar.gz
-> tar zxvf prometheus-2.16.0.linux-amd64.tar.gz
-> ls
-console_libraries  consoles  LICENSE  NOTICE  prometheus  prometheus.yml  promtool  tsdb
-#+end_src
+	#+begin_src shell
+	  > wget https://github.com/prometheus/prometheus/releases/download/v2.16.0/prometheus-2.16.0.linux-amd64.tar.gz
+	  > tar zxvf prometheus-2.16.0.linux-amd64.tar.gz
+	  > ls
+	  console_libraries  consoles  LICENSE  NOTICE  prometheus  prometheus.yml  promtool  tsdb
+	#+end_src
 
 *** 配置
 
-Prometheus 配置是 [[https://yaml.org/start.html][YAML]] 格式的，下载之后会提供了一个配置样本文件 =prometheus.yml= 。
+	Prometheus 配置是 [[https://yaml.org/start.html][YAML]] 格式的，下载之后会提供了一个配置样本文件 =prometheus.yml= 。
 
-我们删掉了原文件中的一些注释，使得文件变的更加简介。
+	我们删掉了原文件中的一些注释，使得文件变的更加简介。
 
-#+begin_src yaml
-	global:
-		scrape_interval:     15s
-		evaluation_interval: 15s
+	#+begin_src yaml
+		global:
+		  scrape_interval:     15s
+		  evaluation_interval: 15s
 
-	rule_files:
-		# - "first_rules.yml"
-		# - "second_rules.yml"
+		  rule_files:
+			# - "first_rules.yml"
+			# - "second_rules.yml"
 
-	scrape_configs:
-		- job_name: 'prometheus'
-			static_configs:
-			- targets: ['localhost:9090']
-#+end_src
+			scrape_configs:
+			  - job_name: 'prometheus'
+				static_configs:
+				  - targets: ['localhost:9090']
+	#+end_src
 
-样例中的配置主要包含三块：
+	样例中的配置主要包含三块：
 
-- =global= 控制 Prometheus 全局配置
-	+ =scrape_interval= 控制向目标获取指标的间隔，你可以在目标配置中覆盖此配置
-	+ =evaluation_interval= 控制多久执行规则，Prometheus 通过这些规则来控制时间新的时间序列和生成告警
-- =rule_files= 指定 Prometheus 加载的规则的位置
-- =scape_configs= 控制 Prometheus 监控那些资源，因为 Promethues 服务通过 HTTP 暴露了自己的监控数据，
-  所以我们可以配置一个叫做 =prometheus= 的任务（job），用来抓取 Prometheus 暴露的时间序列数据。
-	它包含一个简单的、静态的配置，目标是： =localhost:9090= 。
-	默认情况下，Prometheus 是向 =http://localhost:9090/metrics= 请求数据的。
+	- =global= 控制 Prometheus 全局配置
+	  + =scrape_interval= 控制向目标获取指标的间隔，你可以在目标配置中覆盖此配置
+	  + =evaluation_interval= 控制多久执行规则，Prometheus 通过这些规则来控制时间新的时间序列和生成告警
+	- =rule_files= 指定 Prometheus 加载的规则的位置
+	- =scape_configs= 控制 Prometheus 监控那些资源，因为 Promethues 服务通过 HTTP 暴露了自己的监控数据，
+	  所以我们可以配置一个叫做 =prometheus= 的任务（job），用来抓取 Prometheus 暴露的时间序列数据。
+	  它包含一个简单的、静态的配置，目标是： =localhost:9090= 。
+	  默认情况下，Prometheus 是向 =http://localhost:9090/metrics= 请求数据的。
 
 *** 启动 Prometheus
 
-使用我们新创建的配置文件 Prometheus，切换到 Prometheus 二进制文件的目录并执行：
+	使用我们新创建的配置文件 Prometheus，切换到 Prometheus 二进制文件的目录并执行：
 
-#+begin_src sh
-./prometheus --config.file=prometheus.yml
-#+end_src
+	#+begin_src sh
+	  ./prometheus --config.file=prometheus.yml
+	#+end_src
 
-启动之后，你应该可以在浏览器访问 http://localhost:9090， 大约 30 秒时间之后，就可以看到它收集到的自身的度量指标。
+	启动之后，你应该可以在浏览器访问 http://localhost:9090， 大约 30 秒时间之后，就可以看到它收集到的自身的度量指标。
 
-你也可以通过 http://localhost:9090/metrics 访问暴露的度量数据，来验证 Prometheus 是否正在运行。
+	你也可以通过 http://localhost:9090/metrics 访问暴露的度量数据，来验证 Prometheus 是否正在运行。
 
 *** 在浏览器上使用表达式
 
- 访问 http://localhost:9090/graph ，"Graph" 菜单，然后可以看到 "Graph" 和 "Console" 两个页签。
+	访问 http://localhost:9090/graph ，"Graph" 菜单，然后可以看到 "Graph" 和 "Console" 两个页签。
 
- Prometheus 输出了一个叫做 =promhttp_metric_handler_requests_total= 的指标，用来表示 Prometheus 已经处理的
- =/metrics= 请求总数。在表达式执行框输入：
+	Prometheus 输出了一个叫做 =promhttp_metric_handler_requests_total= 的指标，用来表示 Prometheus 已经处理的
+	=/metrics= 请求总数。在表达式执行框输入：
 
- #+begin_src
+	#+begin_src
  promhttp_metric_handler_requests_total
- #+end_src
+	#+end_src
 
- 应该会返回多个不同的时间序列（以及每个时间序列记录的最新值），所有的度量名称都是 =promhttp_metric_handler_requests_total=
- 但标签不同。这些标签表示不同的请求状态。
+	应该会返回多个不同的时间序列（以及每个时间序列记录的最新值），所有的度量名称都是 =promhttp_metric_handler_requests_total=
+	但标签不同。这些标签表示不同的请求状态。
 
- 如果你只想关注 HTTP 返回码为 =200= 的请求，你可以添加筛选条件：
+	如果你只想关注 HTTP 返回码为 =200= 的请求，你可以添加筛选条件：
 
- #+begin_src
+	#+begin_src
  promhttp_metric_handler_requests_total{code="200"}
- #+end_src
+	#+end_src
 
- 要查看返回的时间序列总数，你可以：
+	要查看返回的时间序列总数，你可以：
 
- #+begin_src
+	#+begin_src
  count(promhttp_metric_handler_requests_total)
- #+end_src
+	#+end_src
 
 *** 使用图形界面
 
-切换到 "Graph" 页签，可以查看表达式执行结果的图形。
+	切换到 "Graph" 页签，可以查看表达式执行结果的图形。
 
-比如，下面的表达式绘制了每秒请求 =/metrics= 返回码为 =200= 的速率：
+	比如，下面的表达式绘制了每秒请求 =/metrics= 返回码为 =200= 的速率：
 
-#+begin_src
+	#+begin_src
 rate(promhttp_metric_handler_requests_total{code="200"}[1m])
-#+end_src
+	#+end_src
 
 *** 监控其它目标
 
-仅从 Prometheus 的指标不能很好的说明 Promethues 的功能，为了更好的了解 Prometheus 可以做什么，
-我们建议你浏览其它 exporter 的文档。[[https://prometheus.io/docs/guides/node-exporter/][使用 Node Exporter 监控 Linux 或者 macOS]] 文档可能是一个更好的起点。
+	仅从 Prometheus 的指标不能很好的说明 Promethues 的功能，为了更好的了解 Prometheus 可以做什么，
+	我们建议你浏览其它 exporter 的文档。[[https://prometheus.io/docs/guides/node-exporter/][使用 Node Exporter 监控 Linux 或者 macOS]] 文档可能是一个更好的起点。
 
 ** 与替代品的比较 [5/5]
 *** DONE Prometheus vs. Graphite
-		CLOSED: [2020-03-15 日 16:36]
+	CLOSED: [2020-03-15 日 16:36]
 **** 范围（Scope）
 
-[[https://graphite.readthedocs.io/en/latest/][Graphite]] 致力于成为具有查询语言和图形特性的被动的（passtive）时间序列数据库。其它的任何问题都可以通过外部组件解决。
+	 [[https://graphite.readthedocs.io/en/latest/][Graphite]] 致力于成为具有查询语言和图形特性的被动的（passtive）时间序列数据库。其它的任何问题都可以通过外部组件解决。
 
-Prometheus 是一个完整的监控和趋势分析系统，包括内置的主动抓取，存储，查询，查询，绘图的基于时间序列数据库的告警。
-它有自己的世界观（哪些 endpoints 应该存在，什么时间序列模式意味着有问题等等），并且尝试积极的寻找错误。
+	 Prometheus 是一个完整的监控和趋势分析系统，包括内置的主动抓取，存储，查询，查询，绘图的基于时间序列数据库的告警。
+	 它有自己的世界观（哪些 endpoints 应该存在，什么时间序列模式意味着有问题等等），并且尝试积极的寻找错误。
 
 **** 数据模型
 
-Graphite 存储具名的时间序列的数值样本，跟 Prometheus 很像。然而，Prometheus 的元数据模型更加的丰富：
-Graphite 的指标名称由点分隔的部分组成，隐式的表达多维度。Prometheus 通过键值对的标签来显示的表达，
-然后附加到指标名称上。这样查询语言可以通过这些标签轻松的进行过滤、分组和匹配。
+	 Graphite 存储具名的时间序列的数值样本，跟 Prometheus 很像。然而，Prometheus 的元数据模型更加的丰富：
+	 Graphite 的指标名称由点分隔的部分组成，隐式的表达多维度。Prometheus 通过键值对的标签来显示的表达，
+	 然后附加到指标名称上。这样查询语言可以通过这些标签轻松的进行过滤、分组和匹配。
 
-进一步，尤其是 Graphite 和 [[https://github.com/statsd/statsd][Statsd]] 一起工作时，通常在所有监控的实例上仅存储聚合数据，而不是将实例作为一个维度，
-然后深入分析单个有问题的实例。
+	 进一步，尤其是 Graphite 和 [[https://github.com/statsd/statsd][Statsd]] 一起工作时，通常在所有监控的实例上仅存储聚合数据，而不是将实例作为一个维度，
+	 然后深入分析单个有问题的实例。
 
-比如，存储 API server 的 HTTP 请求的返回码为 =500= 并且方法为 =POST= 到 =/tracks= 的到达点通常在 Graphite/StatsD
-这样表示：
+	 比如，存储 API server 的 HTTP 请求的返回码为 =500= 并且方法为 =POST= 到 =/tracks= 的到达点通常在 Graphite/StatsD
+	 这样表示：
 
-#+begin_src
+	 #+begin_src
 stats.api-server.tracks.post.500 -> 93
-#+end_src
+	 #+end_src
 
-在 Prometheus 中样本数据编码是这样（假定是三个 api-server 实例）：
+	 在 Prometheus 中样本数据编码是这样（假定是三个 api-server 实例）：
 
-#+begin_src
+	 #+begin_src
 api_server_http_requests_total{method="POST",handler="/tracks",status="500",instance="<sample1>"} -> 34
 api_server_http_requests_total{method="POST",handler="/tracks",status="500",instance="<sample2>"} -> 28
 api_server_http_requests_total{method="POST",handler="/tracks",status="500",instance="<sample3>"} -> 31
-#+end_src
+	 #+end_src
 
 **** 存储
 
-Graphite 使用 [[https://graphite.readthedocs.org/en/latest/whisper.html][Whisper]] 存储时间序列数据在本地，是一个 RRD 风格的数据库，它希望样本以固定时间间隔到达。
-每个时间序列都被存储在分隔的文件中，一段时间后，新样本会覆盖旧样本。
+	 Graphite 使用 [[https://graphite.readthedocs.org/en/latest/whisper.html][Whisper]] 存储时间序列数据在本地，是一个 RRD 风格的数据库，它希望样本以固定时间间隔到达。
+	 每个时间序列都被存储在分隔的文件中，一段时间后，新样本会覆盖旧样本。
 
-Prometheus 也是每个时间序列单独的文件，但是允许在获取数据或者与运算规则时以任意时间间隔存储样本。
-由于仅增加了新的样本，所以老的数据可以被任意保留。Promethues 对于很多短暂的经常变化的时间序列可以运作良好。
+	 Prometheus 也是每个时间序列单独的文件，但是允许在获取数据或者与运算规则时以任意时间间隔存储样本。
+	 由于仅增加了新的样本，所以老的数据可以被任意保留。Promethues 对于很多短暂的经常变化的时间序列可以运作良好。
 
 **** 总结
 
-Prometheus 除了更容易运行和集成到你的环境之外，还提供了丰富的数据模型和查询语言。
-如果你想要一个长期保留历史数据的集群方案，Graphite 可能是一个更好的选择。
+	 Prometheus 除了更容易运行和集成到你的环境之外，还提供了丰富的数据模型和查询语言。
+	 如果你想要一个长期保留历史数据的集群方案，Graphite 可能是一个更好的选择。
 
 *** DONE Prometheus vs. InfluxDB
-		CLOSED: [2020-03-15 日 20:53]
+	CLOSED: [2020-03-15 日 20:53]
 
-[[https://influxdata.com/][InfluxDB]] 是一个开源的时间序列数据库，商业版本支持水平扩展和集群。Prometheus 开始开发近一年后，InfluxDB 项目才发布的，
-因为当时我们无法把它作为替代方案。尽管如此，两者之间仍然存在着明显的差异，并且两个系统面向不同的用户。
+	[[https://influxdata.com/][InfluxDB]] 是一个开源的时间序列数据库，商业版本支持水平扩展和集群。Prometheus 开始开发近一年后，InfluxDB 项目才发布的，
+	因为当时我们无法把它作为替代方案。尽管如此，两者之间仍然存在着明显的差异，并且两个系统面向不同的用户。
 
 **** 范围（Scope）
 
-为了公平的比较，我们还比如把 [[https://github.com/influxdata/kapacitor][Kapacitor]] 和 InfluxDB 放一起考虑，它们结合一起来，可以解决 Prometheus 和
-Alertmanager 相同的问题。
+	 为了公平的比较，我们还比如把 [[https://github.com/influxdata/kapacitor][Kapacitor]] 和 InfluxDB 放一起考虑，它们结合一起来，可以解决 Prometheus 和
+	 Alertmanager 相同的问题。
 
-The same scope differences as in the case of Graphite apply here for InfluxDB itself。
-此外，InfluxDB 还提供了连续查询，等价于 Prometheus 的记录规则（recording rules）。
+	 The same scope differences as in the case of Graphite apply here for InfluxDB itself。
+	 此外，InfluxDB 还提供了连续查询，等价于 Prometheus 的记录规则（recording rules）。
 
-Kapacitor 的范围是 Prometheus 记录规则，告警规则和 Alertmanager 的通知功能的组合。
-Prometheus 提供了[[https://www.robustperception.io/translating-between-monitoring-languages][更加强大的查询语言来进行图形显示和告警]]。Prometheus 告警管理器还提供了告警分组、去重和静默等功能。
+	 Kapacitor 的范围是 Prometheus 记录规则，告警规则和 Alertmanager 的通知功能的组合。
+	 Prometheus 提供了[[https://www.robustperception.io/translating-between-monitoring-languages][更加强大的查询语言来进行图形显示和告警]]。Prometheus 告警管理器还提供了告警分组、去重和静默等功能。
 
 **** 数据模型/存储
 
-和 Prometheus 一样，InfluxDB 数据模型有有键值对作为标签（label），名字叫做标签（tags）。
-此外，InfluxDB 还有二级标签，称之为字段（fields），但适用范围有限。
-InfluxDB 支持纳秒精度的时间戳，float64，int64，bool 和字符串数据类型。相比而言，Prometheus 支持 float64 的数据类型，
-但对字符串和毫秒的精度支持有限。
+	 和 Prometheus 一样，InfluxDB 数据模型有有键值对作为标签（label），名字叫做标签（tags）。
+	 此外，InfluxDB 还有二级标签，称之为字段（fields），但适用范围有限。
+	 InfluxDB 支持纳秒精度的时间戳，float64，int64，bool 和字符串数据类型。相比而言，Prometheus 支持 float64 的数据类型，
+	 但对字符串和毫秒的精度支持有限。
 
-InfluxDB 使用 [[https://docs.influxdata.com/influxdb/v1.7/concepts/storage_engine/][日志结构合并树的变种来存储带有时间分片的预写日志的存储]]。与 Prometheus 每个时间序列仅附加文件的方法相比，
-此方法更适合记录事件。
+	 InfluxDB 使用 [[https://docs.influxdata.com/influxdb/v1.7/concepts/storage_engine/][日志结构合并树的变种来存储带有时间分片的预写日志的存储]]。与 Prometheus 每个时间序列仅附加文件的方法相比，
+	 此方法更适合记录事件。
 
-[[https://grafana.com/blog/2016/01/05/logs-and-metrics-and-graphs-oh-my/][日志、指标和图形，我的天]] 描述了事件日志和指标记录的不同。
+	 [[https://grafana.com/blog/2016/01/05/logs-and-metrics-and-graphs-oh-my/][日志、指标和图形，我的天]] 描述了事件日志和指标记录的不同。
 
 **** 架构
 
-Prometheus 服务器彼此独立运行，仅依靠本地存储来实现核心功能：抓取、规则处理和告警。开源的 InfluxDB 版本类似。
+	 Prometheus 服务器彼此独立运行，仅依靠本地存储来实现核心功能：抓取、规则处理和告警。开源的 InfluxDB 版本类似。
 
-设计上，商业版本的 InfluxDB 产品是一个分布式的存储集群，存储和查询由多个节点一次处理。
+	 设计上，商业版本的 InfluxDB 产品是一个分布式的存储集群，存储和查询由多个节点一次处理。
 
-这意味着商业的 InfluxDB 将更易于水平扩展，而且意味着你必须从一开始就要管理分布式系统的复杂性。
-Prometheus 运行起来更简单，但是有些时候你需要根据产品、服务和数据中心等类似的边界明确的分片。
-独立服务器（可以并行冗余运行）也可以为您提供更好的可靠性和故障隔离。
+	 这意味着商业的 InfluxDB 将更易于水平扩展，而且意味着你必须从一开始就要管理分布式系统的复杂性。
+	 Prometheus 运行起来更简单，但是有些时候你需要根据产品、服务和数据中心等类似的边界明确的分片。
+	 独立服务器（可以并行冗余运行）也可以为您提供更好的可靠性和故障隔离。
 
-Kapacitor 的开源版本没有规则、告警或者通知的内置分布式/冗余选项，可以由用户通过手动分片来扩展，跟 Promethues 像似。
-Influx 提供了 [[https://docs.influxdata.com/enterprise_kapacitor/v1.5/][企业级的 Kapacitor]]，支持高可用/冗余的告警系统。
+	 Kapacitor 的开源版本没有规则、告警或者通知的内置分布式/冗余选项，可以由用户通过手动分片来扩展，跟 Promethues 像似。
+	 Influx 提供了 [[https://docs.influxdata.com/enterprise_kapacitor/v1.5/][企业级的 Kapacitor]]，支持高可用/冗余的告警系统。
 
-相比之下，Prometheus 和 Alertmanager 通过运行多余的 Prometheus 副本，然后使用告警管理器的高可用性模式提供了完全开源冗余选项。
+	 相比之下，Prometheus 和 Alertmanager 通过运行多余的 Prometheus 副本，然后使用告警管理器的高可用性模式提供了完全开源冗余选项。
 
 **** 总结
 
-两个系统有很大的相似性。都有标签（一个叫 label，一个叫 tag）来高效的支持多维指标。都有基本相同的数据压缩算法。
-两个都有广泛的集成，包括彼此之间的集成。都有 hooks 允许你来进一步扩展它们，例如使用统计工具分析数据或者执行自动化操作。
+	 两个系统有很大的相似性。都有标签（一个叫 label，一个叫 tag）来高效的支持多维指标。都有基本相同的数据压缩算法。
+	 两个都有广泛的集成，包括彼此之间的集成。都有 hooks 允许你来进一步扩展它们，例如使用统计工具分析数据或者执行自动化操作。
 
-InfluxDB 更好的地方：
+	 InfluxDB 更好的地方：
 
-- 当你需要进行事件记录的时候。
-- 商业选项提供了 influxDB 集群选项，这对于长期数据存储会更好。
-- 最终在副本之间保持一直的数据视图。
+	 - 当你需要进行事件记录的时候。
+	 - 商业选项提供了 influxDB 集群选项，这对于长期数据存储会更好。
+	 - 最终在副本之间保持一直的数据视图。
 
-Prometheus 更好的地方：
+	 Prometheus 更好的地方：
 
-- 当你的主要面对的是指标的时候。
-- 更强劲的查询语言、告警和通知功能。
-- 图形和告警的可用性和正常运行时间（uptime）更好。
+	 - 当你的主要面对的是指标的时候。
+	 - 更强劲的查询语言、告警和通知功能。
+	 - 图形和告警的可用性和正常运行时间（uptime）更好。
 
-InfluxDB 由一家商业公司按照开放核心（open-core）模型进行维护，提供了像闭源集群，托管和支持的高级功能。
-Prometheus 是一个完全开源的独立项目，由许多公司和个人维护，其中一些还提供商业服务和支持。
+	 InfluxDB 由一家商业公司按照开放核心（open-core）模型进行维护，提供了像闭源集群，托管和支持的高级功能。
+	 Prometheus 是一个完全开源的独立项目，由许多公司和个人维护，其中一些还提供商业服务和支持。
 
 *** DONE Prometheus vs. OpenTSDB
-		CLOSED: [2020-03-15 日 21:49]
+	CLOSED: [2020-03-15 日 21:49]
 
-[[http://opentsdb.net/][OpenTSDB]] 是一个基于 [[https://hadoop.apache.org/][Hadoop]] 和 [[https://hbase.apache.org/][HBase]] 的分布式的时间序列数据库。
+	[[http://opentsdb.net/][OpenTSDB]] 是一个基于 [[https://hadoop.apache.org/][Hadoop]] 和 [[https://hbase.apache.org/][HBase]] 的分布式的时间序列数据库。
 
 **** 范围
 
-这里的适用范围和 Graphite 应用相同。
+	 这里的适用范围和 Graphite 应用相同。
 
 **** 数据模型
 
-OpenTSDB 的数据模型几乎和 Prometheus 相同：时间序列由一组任意的键值对标识（OpenTSDB 的 tags 是 Prometheus 的 labels）。所有的指标数据是 [[http://opentsdb.net/docs/build/html/user_guide/writing/index.html#time-series-cardinality][存储在一起的]]，限制指标的基数。
-虽然有一些细微的差异：Prometheus 允许标签值中包含任务的字符，OpenTSDB 做了更多的限制。OpenTSDB 也缺乏完整的查询语言，只允许简单的聚合和数学运算。
+	 OpenTSDB 的数据模型几乎和 Prometheus 相同：时间序列由一组任意的键值对标识（OpenTSDB 的 tags 是 Prometheus 的 labels）。所有的指标数据是 [[http://opentsdb.net/docs/build/html/user_guide/writing/index.html#time-series-cardinality][存储在一起的]]，限制指标的基数。
+	 虽然有一些细微的差异：Prometheus 允许标签值中包含任务的字符，OpenTSDB 做了更多的限制。OpenTSDB 也缺乏完整的查询语言，只允许简单的聚合和数学运算。
 
 **** 存储
 
-OpenTSDB 是在 Hadoop 和 HBase 之上实现的，这意味着水平扩展比较简单，但是你一开始就要接受运行 Hadoop/HBase 集群的总体复杂性。
+	 OpenTSDB 是在 Hadoop 和 HBase 之上实现的，这意味着水平扩展比较简单，但是你一开始就要接受运行 Hadoop/HBase 集群的总体复杂性。
 
-Prometheus 最初运行起来会很简单，但是一旦超出单个节点的容量，就需要明确的分片。
+	 Prometheus 最初运行起来会很简单，但是一旦超出单个节点的容量，就需要明确的分片。
 
 **** 总结
 
-Prometheus 提供了更丰富的查询语言，可以处理更高的基数指标，并且是构建完整监控系统的一部分。如果你已经在运行 Hadoop 并重视长期存储的优势，那么 OpenTSDB 是一个不错的选择。
+	 Prometheus 提供了更丰富的查询语言，可以处理更高的基数指标，并且是构建完整监控系统的一部分。如果你已经在运行 Hadoop 并重视长期存储的优势，那么 OpenTSDB 是一个不错的选择。
 
 *** DONE Prometheus vs. Nagios
-		CLOSED: [2020-03-15 日 22:03]
+	CLOSED: [2020-03-15 日 22:03]
 
-[[https://www.nagios.org/][Nagios]] 是一个始于 20 世纪 90 年代（1990s）的 NetSaint 监控系统。
+	[[https://www.nagios.org/][Nagios]] 是一个始于 20 世纪 90 年代（1990s）的 NetSaint 监控系统。
 
 **** 范围
 
-Nagios 主要基于脚本退出码进行告警。它们被称为 "checks"。单个告警支持静默，但是不会进行分组，路由或者重复数据删除。
+	 Nagios 主要基于脚本退出码进行告警。它们被称为 "checks"。单个告警支持静默，但是不会进行分组，路由或者重复数据删除。
 
-有各种各样的插件。比如，通过管道传输几千字节的 perfData 插件，可以返回时间序列数据库（比如 Graphite）或者使用
-NRPE 在远程机器上运行检查。
+	 有各种各样的插件。比如，通过管道传输几千字节的 perfData 插件，可以返回时间序列数据库（比如 Graphite）或者使用
+	 NRPE 在远程机器上运行检查。
 
 **** 数据模型
 
-Nagios 是基于主机的。每个主机可以有有一个或者多个服务，并且每个服务执行一项检查。
+	 Nagios 是基于主机的。每个主机可以有有一个或者多个服务，并且每个服务执行一项检查。
 
-没有标签或者查询语言的概念。
+	 没有标签或者查询语言的概念。
 
 **** 存储
 
-除了检查状态之外，Nagios 本身没有存储空间。有些插件可以存储诸如可视化的数据。
+	 除了检查状态之外，Nagios 本身没有存储空间。有些插件可以存储诸如可视化的数据。
 
 **** 架构
 
-Nagios 服务器是独立的，所有的检查配置均通过文件进行。
+	 Nagios 服务器是独立的，所有的检查配置均通过文件进行。
 
 **** 总结
 
- Nagios 适用于黑盒（blackbox）探测足够小型或者静态的系统的基本监控。
+	 Nagios 适用于黑盒（blackbox）探测足够小型或者静态的系统的基本监控。
 
- 如果你想要白盒监控，或者动态的或者基于云环境的，那么 Promethesu 是不错的选择。
+	 如果你想要白盒监控，或者动态的或者基于云环境的，那么 Promethesu 是不错的选择。
 
 *** DONE Prometheus vs. Sensu
-		CLOSED: [2020-03-15 日 22:13]
+	CLOSED: [2020-03-15 日 22:13]
 
-[[https://sensu.io/][Sensu]] 是一个组合的监控管道，允许复用现有的 Nagios 检查。
+	[[https://sensu.io/][Sensu]] 是一个组合的监控管道，允许复用现有的 Nagios 检查。
 
 **** 范围
 
-The same general scope differences as in the case of Nagios apply here.
+	 The same general scope differences as in the case of Nagios apply here.
 
-还有一个 [[https://docs.sensu.io/sensu-core/latest/reference/clients/#what-is-the-sensu-client-socket][套接字客户端]]，允许将临时检查结果推送到 Sensu 中。
+	 还有一个 [[https://docs.sensu.io/sensu-core/latest/reference/clients/#what-is-the-sensu-client-socket][套接字客户端]]，允许将临时检查结果推送到 Sensu 中。
 
 **** 数据模型
 
-Sensu 和 Nagios 有相同粗糙的数据模型。
+	 Sensu 和 Nagios 有相同粗糙的数据模型。
 
 **** 存储
 
-Sensu 使用 Redis 来存储监控数据，包括 Sensu 客户端注册表，检查结果，检查执行记录，和当前事件数据。
+	 Sensu 使用 Redis 来存储监控数据，包括 Sensu 客户端注册表，检查结果，检查执行记录，和当前事件数据。
 
 **** 架构
 
-Sensu 有许多组件。它使用 RabbitMQ 传送，Redis 存储当前状态，并使用单独的服务器进行处理和 API 访问。
+	 Sensu 有许多组件。它使用 RabbitMQ 传送，Redis 存储当前状态，并使用单独的服务器进行处理和 API 访问。
 
-可以将 Sensu 部署的所有组件（RabbitMQ，Redis 和 Sensu Server/API）集群化，以实现高可用和冗余配置。
+	 可以将 Sensu 部署的所有组件（RabbitMQ，Redis 和 Sensu Server/API）集群化，以实现高可用和冗余配置。
 
 **** 总结
 
-如果你已经有 Nagios 安装并且希望水平扩展，或者想利用 Sensu 的自动注册功能，那么 Sensu 是一个不错的选择。
+	 如果你已经有 Nagios 安装并且希望水平扩展，或者想利用 Sensu 的自动注册功能，那么 Sensu 是一个不错的选择。
 
-如果你想要做白盒监控，或者动态的或者基于云环境的，那么 Prometheus 是一个不错的选择。
+	 如果你想要做白盒监控，或者动态的或者基于云环境的，那么 Prometheus 是一个不错的选择。
 
 ** FAQ
 
-经常被问到的一些问题。
+   经常被问到的一些问题。
 
 *** 一般问题
 **** 什么是 Prometheus？
-Prometheus 是具有活跃的生态的开源系统监控和告警工具包。
+	 Prometheus 是具有活跃的生态的开源系统监控和告警工具包。
 **** 与其他系统监控相比如何？
-见上一小结。
+	 见上一小结。
 **** 它依赖什么？
 
-Prometheus 主服务器独立运行，没有外部依赖。
+	 Prometheus 主服务器独立运行，没有外部依赖。
 
 **** 可以高可用吗？
 
-是的，在两台或者多台独立的计算机中运行相同的 Prometheus 服务即可。相同的告警将被 [[https://github.com/prometheus/alertmanager][Alertmanager]] 删除。
+	 是的，在两台或者多台独立的计算机中运行相同的 Prometheus 服务即可。相同的告警将被 [[https://github.com/prometheus/alertmanager][Alertmanager]] 删除。
 
-为了 [[https://github.com/prometheus/alertmanager#high-availability][Alertmanager]] 的高可用，你可以在 mesh 集群中运行多个实例，并配置 Prometheus 服务向每个实例发送通知。
+	 为了 [[https://github.com/prometheus/alertmanager#high-availability][Alertmanager]] 的高可用，你可以在 mesh 集群中运行多个实例，并配置 Prometheus 服务向每个实例发送通知。
 
 **** 有人跟我说 Prometheus 「不可被扩展」？
 
-实际上有多种扩展方式来联邦（federate）Prometheus。阅读 Robust Perception 的 [[https://www.robustperception.io/scaling-and-federating-prometheus][Scaling and Federating Prometheus]] 获取更多信息。
+	 实际上有多种扩展方式来联邦（federate）Prometheus。阅读 Robust Perception 的 [[https://www.robustperception.io/scaling-and-federating-prometheus][Scaling and Federating Prometheus]] 获取更多信息。
 
 **** Prometheus 用什么语言写的？
 
-大部分组件都是由 Go 写的。还有些是用 Java、Python 和 Ruby。
+	 大部分组件都是由 Go 写的。还有些是用 Java、Python 和 Ruby。
 
 **** Prometheus 特性、存储格式和 APIs 的稳定性如何？
 
-Github 上的所有仓库都已到达 1.0.0 版本，都符合 [[http://semver.org/][语义版本]]。重大更改或者主要版本都是用增量表示。
-实验性的组件可能会出现例外，但是例外情况会被提前声明。
+	 Github 上的所有仓库都已到达 1.0.0 版本，都符合 [[http://semver.org/][语义版本]]。重大更改或者主要版本都是用增量表示。
+	 实验性的组件可能会出现例外，但是例外情况会被提前声明。
 
-即使没有到达 1.0.0 的仓库，通常也是相当稳定的。我们的目标是为每个仓库都制定合适的发布流程最终发布 1.0.0。
-无论如何，发行说明中都会指出重大更改（由 =CHANGE= 来标注）或者针对尚未正式发布的组件进行明确的沟通。
+	 即使没有到达 1.0.0 的仓库，通常也是相当稳定的。我们的目标是为每个仓库都制定合适的发布流程最终发布 1.0.0。
+	 无论如何，发行说明中都会指出重大更改（由 =CHANGE= 来标注）或者针对尚未正式发布的组件进行明确的沟通。
 
 **** 为什么使用 pull 而不是 push？
 
-使用拉取（pulling）有很多的优点：
+	 使用拉取（pulling）有很多的优点：
 
-- 开发更改时，可以在笔记本电脑上运行监控；
-- 可以更加轻松的判断目标（target）是否挂了（down）；
-- 你可以手动在 web 浏览器上访问观察运行情况；
+	 - 开发更改时，可以在笔记本电脑上运行监控；
+	 - 可以更加轻松的判断目标（target）是否挂了（down）；
+	 - 你可以手动在 web 浏览器上访问观察运行情况；
 
-总而言之，我们认为 pulling 比 push 要略好，但是在选型监控系统时，这些不是重点。
+	 总而言之，我们认为 pulling 比 push 要略好，但是在选型监控系统时，这些不是重点。
 
-对于有必须要 push 的情况，我们提供了 [[https://prometheus.io/docs/instrumenting/pushing/][Pushgateway]]。
+	 对于有必须要 push 的情况，我们提供了 [[https://prometheus.io/docs/instrumenting/pushing/][Pushgateway]]。
 
 **** 如何将日志输入到 Prometheus？
 
-精简的答案：别这么干！使用类似 [[https://www.elastic.co/products][ELK]] 技术栈来替代它。
+	 精简的答案：别这么干！使用类似 [[https://www.elastic.co/products][ELK]] 技术栈来替代它。
 
-略长的答案：Prometheus 是一个收集和处理指标的系统，而不是一个事件日志系统。
-Raintank 的博客文章：[[https://blog.raintank.io/logs-and-metrics-and-graphs-oh-my/][Logs and Metrics and Graphs, Oh My!]] 提供了有关日志和指标差异的更多信息。
+	 略长的答案：Prometheus 是一个收集和处理指标的系统，而不是一个事件日志系统。
+	 Raintank 的博客文章：[[https://blog.raintank.io/logs-and-metrics-and-graphs-oh-my/][Logs and Metrics and Graphs, Oh My!]] 提供了有关日志和指标差异的更多信息。
 
-如果你想从系统日志中提取 Prometheus 指标，Google 的 [[https://github.com/google/mtail][mtail]] 可能会帮到你。
+	 如果你想从系统日志中提取 Prometheus 指标，Google 的 [[https://github.com/google/mtail][mtail]] 可能会帮到你。
 
 **** 谁写的 Prometheus？
 
-最初是由 [[http://www.matttproud.com/][Matt T. Proud]] 和 [[http://juliusv.com/][Julius Volz]] 私下写的。大部分最初开发都是 [[https://soundcloud.com/][SoundCloud]] 赞助的。
+	 最初是由 [[http://www.matttproud.com/][Matt T. Proud]] 和 [[http://juliusv.com/][Julius Volz]] 私下写的。大部分最初开发都是 [[https://soundcloud.com/][SoundCloud]] 赞助的。
 
-现在是由很多公司和个人来共同维护和扩展的。
+	 现在是由很多公司和个人来共同维护和扩展的。
 
 **** Prometheus 使用什么许可证？
 
-[[https://github.com/prometheus/prometheus/blob/master/LICENSE][Apache License 2.0]]
+	 [[https://github.com/prometheus/prometheus/blob/master/LICENSE][Apache License 2.0]]
 
 **** Prometheus 的复数是什么？
 
-经过[[https://youtu.be/B_CDeYrqxjQ][广泛的研究]]，现在确定 'Prometheus' 的正确复数是 'Prometheis'。
+	 经过[[https://youtu.be/B_CDeYrqxjQ][广泛的研究]]，现在确定 'Prometheus' 的正确复数是 'Prometheis'。
 
 **** 我可以重新载入 Prometheus 的配置吗？
 
-是的，发送 =SIGHUP= 到 Promtheus 进程或者 HTTP POST 服务的 =/-/reload= 地址会重新加载配置文件。各种组件会尝试妥善处理失败的更改。
+	 是的，发送 =SIGHUP= 到 Promtheus 进程或者 HTTP POST 服务的 =/-/reload= 地址会重新加载配置文件。各种组件会尝试妥善处理失败的更改。
 
 **** 我可以发送告警吗？
 
-是的，使用 [[https://github.com/prometheus/alertmanager][Alertmanager]]。当前支持以下外部系统：
+	 是的，使用 [[https://github.com/prometheus/alertmanager][Alertmanager]]。当前支持以下外部系统：
 
-- 邮件
-- 通用的 Webhook
-- [[https://www.atlassian.com/partnerships/slack][HipChat]]
-- [[https://www.opsgenie.com/][OpsGenie]]
-- [[https://www.pagerduty.com/][PagerDuty]]
-- [[https://pushover.net/][Pushover]]
-- [[https://slack.com/][Slack]]
+	 - 邮件
+	 - 通用的 Webhook
+	 - [[https://www.atlassian.com/partnerships/slack][HipChat]]
+	 - [[https://www.opsgenie.com/][OpsGenie]]
+	 - [[https://www.pagerduty.com/][PagerDuty]]
+	 - [[https://pushover.net/][Pushover]]
+	 - [[https://slack.com/][Slack]]
 
 **** 我可以创建 dashboard 吗？
 
-是的，生产环境推荐使用 [[https://prometheus.io/docs/visualization/grafana/][Grafana]]。也有 [[https://prometheus.io/docs/visualization/consoles/][控制台模板]]。
+	 是的，生产环境推荐使用 [[https://prometheus.io/docs/visualization/grafana/][Grafana]]。也有 [[https://prometheus.io/docs/visualization/consoles/][控制台模板]]。
 
 **** 我可以修改时区吗？所有的内容都才用 UTC？
 
-为了避免时区混乱，尤其是在涉及到所谓的夏时制，我们决定在内部使用 Unix 时间和 UTC 用于所有组件中的显示。
-在引入 UI 的时候再选择时区。有关此工作的当前状态，请查看 [[https://github.com/prometheus/prometheus/issues/500][issue #500]]。
+	 为了避免时区混乱，尤其是在涉及到所谓的夏时制，我们决定在内部使用 Unix 时间和 UTC 用于所有组件中的显示。
+	 在引入 UI 的时候再选择时区。有关此工作的当前状态，请查看 [[https://github.com/prometheus/prometheus/issues/500][issue #500]]。
 
 *** Instrumentation
 **** 哪些语言有 instrumentation 库？
 
-请查看 [[https://prometheus.io/docs/instrumenting/clientlibs/][Client Libraries]]，支持很多语言。
+	 请查看 [[https://prometheus.io/docs/instrumenting/clientlibs/][Client Libraries]]，支持很多语言。
 
-如果你有兴趣为新的语言提供客户库，请查看 [[https://prometheus.io/docs/instrumenting/exposition_formats/][暴露格式]]。
+	 如果你有兴趣为新的语言提供客户库，请查看 [[https://prometheus.io/docs/instrumenting/exposition_formats/][暴露格式]]。
 
 **** 我可以监控机器吗？
 
-是的，[[https://github.com/prometheus/node_exporter][Node Exporter]] 提供了在 Linux 和其他 Unix 系统上暴露一些通用的系统级别指标比如 CPU 使用率，内存、磁盘利用率，
-文件系统完整性和网络带宽。
+	 是的，[[https://github.com/prometheus/node_exporter][Node Exporter]] 提供了在 Linux 和其他 Unix 系统上暴露一些通用的系统级别指标比如 CPU 使用率，内存、磁盘利用率，
+	 文件系统完整性和网络带宽。
 
 **** 我可以监控网络设备吗？
 
-是的，[[https://github.com/prometheus/snmp_exporter][SNMP Exporter]] 允许监控支持 SNMP 的设备。
+	 是的，[[https://github.com/prometheus/snmp_exporter][SNMP Exporter]] 允许监控支持 SNMP 的设备。
 
 **** 我可以监控批处理作业吗？
 
-是的，使用 [[https://prometheus.io/docs/instrumenting/pushing/][Pushgateway]]。也可以查看批处理作业监控的 [[https://prometheus.io/docs/practices/instrumentation/#batch-jobs][最佳实践]]。
+	 是的，使用 [[https://prometheus.io/docs/instrumenting/pushing/][Pushgateway]]。也可以查看批处理作业监控的 [[https://prometheus.io/docs/practices/instrumentation/#batch-jobs][最佳实践]]。
 
 **** Prometheus 可以直接监视哪些应用程序？
 
-查看 [[https://prometheus.io/docs/instrumenting/exporters/][Exporter 和集合]]。
+	 查看 [[https://prometheus.io/docs/instrumenting/exporters/][Exporter 和集合]]。
 
 **** 我可以通过 JMX 监控 JVM 应用程序吗？
 
-是的，对于无法直接使用 Java 客户端监控的应用程序，你可以使用 [[https://github.com/prometheus/jmx_exporter][JMX Exporter]] ，可以独立使用或者作为 Java 代理来用。
+	 是的，对于无法直接使用 Java 客户端监控的应用程序，你可以使用 [[https://github.com/prometheus/jmx_exporter][JMX Exporter]] ，可以独立使用或者作为 Java 代理来用。
 
 **** What is the performance impact of instrumentation?
 
-不同的语言的客户端库可能不同。对 Java 而言，基准测试表示添加 Counter/gauge 会增加 12-17ns。
-除了一些延迟要求非常高的代码之外，其它的可以忽略不计。
+	 不同的语言的客户端库可能不同。对 Java 而言，基准测试表示添加 Counter/gauge 会增加 12-17ns。
+	 除了一些延迟要求非常高的代码之外，其它的可以忽略不计。
 
 *** TODO 故障排除
 *** 实现
 **** 为什么所有的采样都使用 64 位浮点型，我想使用整型？
 
-我们限制使用 64-bit 浮点型是为了简化设计。[[https://en.wikipedia.org/wiki/Double-precision_floating-point_format][IEEE 754 双精度二进制浮点格式]] 支持最大为 =2^53= 的整数精度。
+	 我们限制使用 64-bit 浮点型是为了简化设计。[[https://en.wikipedia.org/wiki/Double-precision_floating-point_format][IEEE 754 双精度二进制浮点格式]] 支持最大为 =2^53= 的整数精度。
 
-Supporting native 64 bit integers would (only) help if you need integer precision above =2^53= but below =2^63=.
-In principle, support for different sample value types (including some kind of big integer, supporting even more than 64 bit)
-could be implemented, but it is not a priority right now.
- A counter, even if incremented one million times per second, will only run into precision issues after over 285 years.
+	 Supporting native 64 bit integers would (only) help if you need integer precision above =2^53= but below =2^63=.
+	 In principle, support for different sample value types (including some kind of big integer, supporting even more than 64 bit)
+	 could be implemented, but it is not a priority right now.
+	 A counter, even if incremented one million times per second, will only run into precision issues after over 285 years.
 
 **** 为什么 Prometheus 服务组件不支持 TLS 或身份验证，我可以添加这些吗？
 
-注意：Prometheus 团队在 2018 年 8 月 11 日的开发峰会上改变其立场，该项目的 [[https://prometheus.io/docs/introduction/roadmap/#tls-and-authentication-in-http-serving-endpoints][roadmap]] 现在已经支持 TLS 和身份验证。
-更改代码后将更新此文档。
+	 注意：Prometheus 团队在 2018 年 8 月 11 日的开发峰会上改变其立场，该项目的 [[https://prometheus.io/docs/introduction/roadmap/#tls-and-authentication-in-http-serving-endpoints][roadmap]] 现在已经支持 TLS 和身份验证。
+	 更改代码后将更新此文档。
 
-尽管 TLS 和身份验证是经常需要的功能，但是我们故意没有在 Prometheus 的任何服务组件中实现他们。这两个都是很很多不同的选项和参数（仅 TLS
-就 10+ 个选项），我们的决定是专注于构建最佳的监控系统，而不是在每个服务组件中都完整的支持 TLS 和身份认证的最佳方案。
+	 尽管 TLS 和身份验证是经常需要的功能，但是我们故意没有在 Prometheus 的任何服务组件中实现他们。这两个都是很很多不同的选项和参数（仅 TLS
+	 就 10+ 个选项），我们的决定是专注于构建最佳的监控系统，而不是在每个服务组件中都完整的支持 TLS 和身份认证的最佳方案。
 
-如果你需要 TLS 或者身份认证，我们建议在 Prometheus 前面放一个反向代理。比如：[[https://www.robustperception.io/adding-basic-auth-to-prometheus-with-nginx/][使用 Nginx 向 Prometheus 添加基本的身份验证]]。
+	 如果你需要 TLS 或者身份认证，我们建议在 Prometheus 前面放一个反向代理。比如：[[https://www.robustperception.io/adding-basic-auth-to-prometheus-with-nginx/][使用 Nginx 向 Prometheus 添加基本的身份验证]]。
 
 ** ROADMAP
 
-Prometheus 的规划，更全面的了解可以参考相关组件的 issue，比如 [[https://github.com/prometheus/prometheus/issues][prometheus issues]]。
+   Prometheus 的规划，更全面的了解可以参考相关组件的 issue，比如 [[https://github.com/prometheus/prometheus/issues][prometheus issues]]。
 
-见：https://prometheus.io/docs/introduction/roadmap/
+   见：https://prometheus.io/docs/introduction/roadmap/
 
 ** Media
 
-有个 [[https://www.reddit.com/r/PrometheusMonitoring/][subreddit]] 收集了网上所有与 Prometheus 相关的资源。
+   有个 [[https://www.reddit.com/r/PrometheusMonitoring/][subreddit]] 收集了网上所有与 Prometheus 相关的资源。
 
-资源列表看官方文档吧：https://prometheus.io/docs/introduction/media/
+   资源列表看官方文档吧：https://prometheus.io/docs/introduction/media/
 
 ** 专有名词表（Glossary）
 
-- 告警（alert） ::
-  告警是 Prometheus 的告警规则运行触发的结果，告警从 Prometheus 发送到 Alertmanager。
-- 告警管理器（Alertmanager） ::
-  告警管理器接口告警，然后进行分组、重复数据聚合，通知收敛、静默，最后将告警发送到邮件、SNS 等。
-- Bridge ::
-  Bridge 是从客户端库中获取样本然后暴露给非 Prometheus 监控系统的组件。比如，Python、Go、Java 客户端也可以将指标导出到 Graphite。
-- 客户端库（Client Libary） ::
-  一些语言的客户端库（比如：Go、Java、Python、Ruby 等）使你写监测代码更加容易，编写自定义的收集器从其他系统中提取指标，
-  然后将指标暴露给 Prometheus。
-- Collector ::
-  Collector 是一组度量标准的 exporter 的一部分。 It may be a single metric if it is part of direct instrumentation,
-  or many metrics if it is pulling metrics from another system.
-- Endpoint ::
-  可被收集 metric 的源头，通常对应与单个进程。
-- Exporter ::
-  Exporter 是与要获取 metric 的应用程序一起的二进制文件。一般是将非 Prometheus metric 格式转换成 Prometheus 支持的格式，然后暴露出来。
-  比如说 node_exporter 是系统指标 exporter，本身 CPU、内存、网络这些值就是有的，node_exporter 是将这些指标汇集，然后对外暴露。
-- Instance ::
-  instance 是唯一识别 job 中目标的标签。
-- Job ::
-  具有相同目标的集合，比如说同一个应用有多个运行副本，则应用称为 job，而没个副本称之为 instance。
-- Prometheus ::
-  通常指的是 Prometheus 的核心二进制文件，也可能是整个 Prometheus 监控系统。
-- PromQL ::
-  Prometheus 的查询语言。允许多种操作，包括聚合、切片、切块、预测和连接（JOIN）等。
-- 推送网关（Pushgateway） ::
-  The Pushgateway persists the most recent push of metrics from batch jobs.
-  This allows Prometheus to scrape their metrics after they have terminated.
-- 样本（sample） ::
-  样本是时间序列中某个时间点的单个值。
-  在 Prometheus 中每个样本值都包含一个 float64 的值和毫秒精度的时间戳.
-- Target ::
-  要收集目标的定义。比如，应用到什么标签，连接鉴权，以及如何收集等其他信息。
+   - 告警（alert） ::
+	 告警是 Prometheus 的告警规则运行触发的结果，告警从 Prometheus 发送到 Alertmanager。
+   - 告警管理器（Alertmanager） ::
+	 告警管理器接口告警，然后进行分组、重复数据聚合，通知收敛、静默，最后将告警发送到邮件、SNS 等。
+   - Bridge ::
+	 Bridge 是从客户端库中获取样本然后暴露给非 Prometheus 监控系统的组件。比如，Python、Go、Java 客户端也可以将指标导出到 Graphite。
+   - 客户端库（Client Libary） ::
+	 一些语言的客户端库（比如：Go、Java、Python、Ruby 等）使你写监测代码更加容易，编写自定义的收集器从其他系统中提取指标，
+	 然后将指标暴露给 Prometheus。
+   - Collector ::
+	 Collector 是一组度量标准的 exporter 的一部分。 It may be a single metric if it is part of direct instrumentation,
+	 or many metrics if it is pulling metrics from another system.
+   - Endpoint ::
+	 可被收集 metric 的源头，通常对应与单个进程。
+   - Exporter ::
+	 Exporter 是与要获取 metric 的应用程序一起的二进制文件。一般是将非 Prometheus metric 格式转换成 Prometheus 支持的格式，然后暴露出来。
+	 比如说 node_exporter 是系统指标 exporter，本身 CPU、内存、网络这些值就是有的，node_exporter 是将这些指标汇集，然后对外暴露。
+   - Instance ::
+	 instance 是唯一识别 job 中目标的标签。
+   - Job ::
+	 具有相同目标的集合，比如说同一个应用有多个运行副本，则应用称为 job，而没个副本称之为 instance。
+   - Prometheus ::
+	 通常指的是 Prometheus 的核心二进制文件，也可能是整个 Prometheus 监控系统。
+   - PromQL ::
+	 Prometheus 的查询语言。允许多种操作，包括聚合、切片、切块、预测和连接（JOIN）等。
+   - 推送网关（Pushgateway） ::
+	 The Pushgateway persists the most recent push of metrics from batch jobs.
+	 This allows Prometheus to scrape their metrics after they have terminated.
+   - 样本（sample） ::
+	 样本是时间序列中某个时间点的单个值。
+	 在 Prometheus 中每个样本值都包含一个 float64 的值和毫秒精度的时间戳.
+   - Target ::
+	 要收集目标的定义。比如，应用到什么标签，连接鉴权，以及如何收集等其他信息。
 
 * 概念
 ** 数据模型
 *** Metric 名字和标签（labels）
 
-每一个时间序列都是一个唯一标识，标识由它的 /metric 名字/ 和可选的 key-value 对称之为 /标签(labels)/ 组成。
+	每一个时间序列都是一个唯一标识，标识由它的 /metric 名字/ 和可选的 key-value 对称之为 /标签(labels)/ 组成。
 
-/metric 名字/ 一般表达要被测量的系统的一些特性（比如： =http_requests_total= 表示收到的 http 请求数量）。
-命名格式为：ASCII 字母和数字，以及下划线和冒号。必须符合正则表达式 =[a-zA-Z_:][a-zA-Z0-9_:]*=
+	/metric 名字/ 一般表达要被测量的系统的一些特性（比如： =http_requests_total= 表示收到的 http 请求数量）。
+	命名格式为：ASCII 字母和数字，以及下划线和冒号。必须符合正则表达式 =[a-zA-Z_:][a-zA-Z0-9_:]*=
 
-注意：冒号是给用户定义的规则预留的。在 exporters 或者 direct instrumentation 中不应该使用它。
+	注意：冒号是给用户定义的规则预留的。在 exporters 或者 direct instrumentation 中不应该使用它。
 
-labels 用作同一种 metric 的多纬统计（比如：在所有的 HTTP 请求中方法为 =POST= 的 =/api/tracks= 有哪些）。查询语言允许基于这些纬度进行过滤和聚合。
-修改任何 label 值，添加或者移出 label 都会创建一个新的时间序列。
+	labels 用作同一种 metric 的多纬统计（比如：在所有的 HTTP 请求中方法为 =POST= 的 =/api/tracks= 有哪些）。查询语言允许基于这些纬度进行过滤和聚合。
+	修改任何 label 值，添加或者移出 label 都会创建一个新的时间序列。
 
-label 名字由 ASCII 字母，数字和下划线组成，比如符合正则表达式 =[a-zA-Z_][a-zA-Z0-9_]*= ，双下划线 =__= 开头的保留内内部使用。
+	label 名字由 ASCII 字母，数字和下划线组成，比如符合正则表达式 =[a-zA-Z_][a-zA-Z0-9_]*= ，双下划线 =__= 开头的保留内内部使用。
 
-label 的值可以是任意的 Unicode 字符。值如果是空的，被认为 label 不存在。
+	label 的值可以是任意的 Unicode 字符。值如果是空的，被认为 label 不存在。
 
 *** 样本
 
-样本构成了实际的时间序列数据。每个样本包括：
+	样本构成了实际的时间序列数据。每个样本包括：
 
-- 一个 float64 的值
-- 毫秒精度的时间戳
+	- 一个 float64 的值
+	- 毫秒精度的时间戳
 
 *** 表达式（Notation）
 
-由一个 metric 名字和一组标签组成，通常使用一下符号来标识时间序列：
+	由一个 metric 名字和一组标签组成，通常使用一下符号来标识时间序列：
 
-#+begin_src
+	#+begin_src
 <metric name>{<label name>=<label value>, ...}
-#+end_src
+	#+end_src
 
-举例，metric 名字为 =api_http_request_total= ，有两个 labels ~method="POST"~ 和 ~handler="/messages"~ ，可以被写为：
+	举例，metric 名字为 =api_http_request_total= ，有两个 labels ~method="POST"~ 和 ~handler="/messages"~ ，可以被写为：
 
-#+begin_src
+	#+begin_src
 api_http_requests_total{method="POST", handler="/messages"}
-#+end_src
+	#+end_src
 
 ** Metric 类型
 
-Prometheus 客户端库提供了四种核心的 Metric 类型。
+   Prometheus 客户端库提供了四种核心的 Metric 类型。
 
-|-------------+------------------------------------------------------+--------------------------------------|
-| Metric 类型 | 说明                                                 | 举例                                 |
-|-------------+------------------------------------------------------+--------------------------------------|
-| Counter     | 单调递增的计数器，其值只能一直递增或者重启时重置为 0 | 请求总数，可能完成任务或者错误的数量 |
-| Gauge       | 表示可以增加或者减少的值。                           | 当前温度、内存、并发请求数           |
-| Histogram   | 对观察值采样，分组和统计                             | 请求时长、回包大小等                 |
-| Summary     | 类似 Histogram，提供了按百分比跟踪结果的方法         |                                      |
-|-------------+------------------------------------------------------+--------------------------------------|
+   |-------------+------------------------------------------------------+--------------------------------------|
+   | Metric 类型 | 说明                                                 | 举例                                 |
+   |-------------+------------------------------------------------------+--------------------------------------|
+   | Counter     | 单调递增的计数器，其值只能一直递增或者重启时重置为 0 | 请求总数，可能完成任务或者错误的数量 |
+   | Gauge       | 表示可以增加或者减少的值。                           | 当前温度、内存、并发请求数           |
+   | Histogram   | 对观察值采样，分组和统计                             | 请求时长、回包大小等                 |
+   | Summary     | 类似 Histogram，提供了按百分比跟踪结果的方法         |                                      |
+   |-------------+------------------------------------------------------+--------------------------------------|
 
-补充说明：
+   补充说明：
 
-- Counter 不要用计数器来表示可能会减小的值。例如，不要对当前运行的进程数量使用计数器，而应该使用 gauge。
-- Histogram 会暴露出多个采样的时间序列，假如说名称为 =<basename>=
-  + 观察桶的累积计数器，暴露为 ~<basename>_bucket{le="<upper inclusive bound>"}~
-  + 所有观测值的总和，暴露为 ~<basename>_sum~
-  + 观察到的事件数量，暴露为 ~<basename>_count~ （等价于 ~<basename>_bucket{le="+Inf"}~ ）
-  使用 =histogram_quantile()= 函数计算出 histogram 的分位数
-- Summary 会暴露出多个采样的时间序列，假如说名称为 =<basename>=
-  + 流观测时间 φ-quantiles （0 ≤ φ ≤ 1），暴露为 ~<basename>{quantile="<φ>"}~
-  + 所有观测值的总和，暴露为 ~<basename>_sum~
-  + 观察到的事件数量，暴露为 ~<basename>_count~
+   - Counter 不要用计数器来表示可能会减小的值。例如，不要对当前运行的进程数量使用计数器，而应该使用 gauge。
+   - Histogram 会暴露出多个采样的时间序列，假如说名称为 =<basename>=
+	 + 观察桶的累积计数器，暴露为 ~<basename>_bucket{le="<upper inclusive bound>"}~
+	 + 所有观测值的总和，暴露为 ~<basename>_sum~
+	 + 观察到的事件数量，暴露为 ~<basename>_count~ （等价于 ~<basename>_bucket{le="+Inf"}~ ）
+	 使用 =histogram_quantile()= 函数计算出 histogram 的分位数
+   - Summary 会暴露出多个采样的时间序列，假如说名称为 =<basename>=
+	 + 流观测时间 φ-quantiles （0 ≤ φ ≤ 1），暴露为 ~<basename>{quantile="<φ>"}~
+	 + 所有观测值的总和，暴露为 ~<basename>_sum~
+	 + 观察到的事件数量，暴露为 ~<basename>_count~
 
-官方提供了几种常见编程语言的 SDK 库：
+   官方提供了几种常见编程语言的 SDK 库：
 
-- [[https://pkg.go.dev/github.com/prometheus/client_golang/prometheus][Go]]
-- [[https://github.com/prometheus/client_java][Java]]
-- [[https://github.com/prometheus/client_python][Python]]
-- [[https://github.com/prometheus/client_ruby][Ruby]]
+   - [[https://pkg.go.dev/github.com/prometheus/client_golang/prometheus][Go]]
+   - [[https://github.com/prometheus/client_java][Java]]
+   - [[https://github.com/prometheus/client_python][Python]]
+   - [[https://github.com/prometheus/client_ruby][Ruby]]
 
 ** Jobs 和 instances
-在 Prometheus 术语中，获取 metric 的端点（endpoint）叫做 /instance（实例）/ ，通常对应一个单独的进程。
-具有相同 instance 目的的集合，比如进程的水平扩展多个实例，叫做 /job/ 。
 
-比如说，一个 API job 有四个实例并行：
+   在 Prometheus 术语中，获取 metric 的端点（endpoint）叫做 /instance（实例）/ ，通常对应一个单独的进程。
+   具有相同 instance 目的的集合，比如进程的水平扩展多个实例，叫做 /job/ 。
 
-- job =api-server=
-  - instance 1 =1.2.3.4:5670=
-  - instance 2 =1.2.3.4:5671=
-  - instance 3 =5.6.7.8:5670=
-  - instance 4 =5.6.7.8:5671=
+   比如说，一个 API job 有四个实例并行：
+
+   - job =api-server=
+	 - instance 1 =1.2.3.4:5670=
+	 - instance 2 =1.2.3.4:5671=
+	 - instance 3 =5.6.7.8:5670=
+	 - instance 4 =5.6.7.8:5671=
 
 *** 自动生成 labels 和时间序列
 
-当 Prometheus 从目标获取数据时，会自动将一些 labels 添加到获取的时间序列上，用来区别获取目标：
+	当 Prometheus 从目标获取数据时，会自动将一些 labels 添加到获取的时间序列上，用来区别获取目标：
 
-- =job= 目标集合所属的 job 名称
-- =instance= =<host>:<port>= 被获取目标的 URL 的一部分
+	- =job= 目标集合所属的 job 名称
+	- =instance= =<host>:<port>= 被获取目标的 URL 的一部分
 
-如果这些 label 已经存在，产生的行为依赖于 =honor_labels= 的配置选项。
+	如果这些 label 已经存在，产生的行为依赖于 =honor_labels= 的配置选项。
 
-对于每一个抓取的实例，Prometheus 都会存储如下的时间序列样本：
+	对于每一个抓取的实例，Prometheus 都会存储如下的时间序列样本：
 
-- ~up{job="<job-name>", instance="<instance-id>"}~ =1= 表示健康， =0= 表示抓取失败
-- ~scrape_duration_seconds{job="<job-name>", instance="<instance-id>"}~ 抓取的持续时间
-- ~scrape_samples_post_metric_relabeling{job="<job-name>", instance="<instance-id>"}~
-- ~scrape_samples_scraped{job="<job-name>", instance="<instance-id>"}~ 目标暴露的样本数
-- ~scrape_series_added{job="<job-name>", instance="<instance-id>"}~
+	- ~up{job="<job-name>", instance="<instance-id>"}~ =1= 表示健康， =0= 表示抓取失败
+	- ~scrape_duration_seconds{job="<job-name>", instance="<instance-id>"}~ 抓取的持续时间
+	- ~scrape_samples_post_metric_relabeling{job="<job-name>", instance="<instance-id>"}~
+	- ~scrape_samples_scraped{job="<job-name>", instance="<instance-id>"}~ 目标暴露的样本数
+	- ~scrape_series_added{job="<job-name>", instance="<instance-id>"}~
 
-=up= 时间序列对于实例可用性检测很有用。
+	=up= 时间序列对于实例可用性检测很有用。
 
 * TODO Prometheus [0/4]
 ** 开始
 
-这是一个 "Hello World" 风格的教程，已简单的方式展示了如何安装、配置和使用 Prometheus。
-你将在本地下载并运行 Prometheus，对其进行配置以抓取自身和示例应用程序，然后用收集来的时间序列数据库查询，
-设置规则和绘图。
+   这是一个 "Hello World" 风格的教程，已简单的方式展示了如何安装、配置和使用 Prometheus。
+   你将在本地下载并运行 Prometheus，对其进行配置以抓取自身和示例应用程序，然后用收集来的时间序列数据库查询，
+   设置规则和绘图。
 
 *** 下载和运行
 
-到 [[https://prometheus.io/download/][下载]] 页面找到你平台的 Prometheus 包，然后解压和运行。
+	到 [[https://prometheus.io/download/][下载]] 页面找到你平台的 Prometheus 包，然后解压和运行。
 
-#+begin_src
+	#+begin_src
 tar xvfz prometheus-*.tar.gz
 cd prometheus-*
-#+end_src
+	#+end_src
 
-在启动之前，我们要先配置它。
+	在启动之前，我们要先配置它。
 
 *** 配置 Prometheus 然后监控它自己
 
-Prometheus 从 HTTP 到达点收集指标数据，Prometheus 自己的服务也以相同的方式暴露了数据，它可以抓取自己数据
-监控自己的健康情况。
+	Prometheus 从 HTTP 到达点收集指标数据，Prometheus 自己的服务也以相同的方式暴露了数据，它可以抓取自己数据
+	监控自己的健康情况。
 
-虽然仅收集 Prometheus 服务自身的数据，在实际情况下并不是很有用，但的确是一个很好的开始范例。
-保存下面的 Prometheus 配置并命名为 =prometheus.yml= 文件。
+	虽然仅收集 Prometheus 服务自身的数据，在实际情况下并不是很有用，但的确是一个很好的开始范例。
+	保存下面的 Prometheus 配置并命名为 =prometheus.yml= 文件。
 
-#+begin_src yaml
-  global:
-	scrape_interval:     15s # By default, scrape targets every 15 seconds.
+	#+begin_src yaml
+		global:
+		  scrape_interval:     15s # By default, scrape targets every 15 seconds.
 
-	# Attach these labels to any time series or alerts when communicating with
-	# external systems (federation, remote storage, Alertmanager).
-	external_labels:
-	  monitor: 'codelab-monitor'
+		  # Attach these labels to any time series or alerts when communicating with
+		  # external systems (federation, remote storage, Alertmanager).
+		  external_labels:
+			monitor: 'codelab-monitor'
 
-  # A scrape configuration containing exactly one endpoint to scrape:
-  # Here it's Prometheus itself.
-  scrape_configs:
-	# The job name is added as a label `job=<job_name>` to any timeseries scraped from this config.
-	- job_name: 'prometheus'
+			# A scrape configuration containing exactly one endpoint to scrape:
+			# Here it's Prometheus itself.
+			scrape_configs:
+			  # The job name is added as a label `job=<job_name>` to any timeseries scraped from this config.
+			  - job_name: 'prometheus'
 
-	  # Override the global default and scrape targets from this job every 5 seconds.
-	  scrape_interval: 5s
+				# Override the global default and scrape targets from this job every 5 seconds.
+				scrape_interval: 5s
 
-	  static_configs:
-		- targets: ['localhost:9090']
-#+end_src
+				static_configs:
+				  - targets: ['localhost:9090']
+	#+end_src
 
 *** 启动 Prometheus
 
-切换到包含 Prometheus 二进制文件的目录然后运行：
+	切换到包含 Prometheus 二进制文件的目录然后运行：
 
-#+begin_src sh
-# Start Prometheus.
-# By default, Prometheus stores its database in ./data (flag --storage.tsdb.path).
-./prometheus --config.file=prometheus.yml
-#+end_src
+	#+begin_src sh
+	  # Start Prometheus.
+	  # By default, Prometheus stores its database in ./data (flag --storage.tsdb.path).
+	  ./prometheus --config.file=prometheus.yml
+	#+end_src
 
-Prometheus 启动之后，您就可以在 localhost:9090 浏览到有关其自身的状态页。等几秒中的时候，应该就可以看到收集的数据了。
+	Prometheus 启动之后，您就可以在 localhost:9090 浏览到有关其自身的状态页。等几秒中的时候，应该就可以看到收集的数据了。
 
-你也可以访问 localhost:9090/metrics 来查看 Prometheus 服务暴露的指标数据。
+	你也可以访问 localhost:9090/metrics 来查看 Prometheus 服务暴露的指标数据。
 
 *** 在浏览器使用表达式
 
-打开 http://localhost:9090/graph 然后选择 Console 查看 Graph 页签。
+	打开 http://localhost:9090/graph 然后选择 Console 查看 Graph 页签。
 
-Prometheus 暴露了一个 =prometheus_target_interval_length_seconds= 度量指标（目标收集之间实际的时间间隔）。
-在表达式控制台中输入：
+	Prometheus 暴露了一个 =prometheus_target_interval_length_seconds= 度量指标（目标收集之间实际的时间间隔）。
+	在表达式控制台中输入：
 
-#+begin_src
+	#+begin_src
 prometheus_target_interval_length_seconds
-#+end_src
+	#+end_src
 
-这应该会返回多个不同的时间序列（以及每个时间序列记录的最新值），所有的度量指标名称都是 =prometheus_target_interval_length_seconds=
-只不过标签不同，标签表示不同的延迟百分比和目标组间隔。
+	这应该会返回多个不同的时间序列（以及每个时间序列记录的最新值），所有的度量指标名称都是 =prometheus_target_interval_length_seconds=
+	只不过标签不同，标签表示不同的延迟百分比和目标组间隔。
 
-如果我们只对 99% 的延迟感兴趣，可以用以下查询来检索：
+	如果我们只对 99% 的延迟感兴趣，可以用以下查询来检索：
 
-#+begin_src
+	#+begin_src
 prometheus_target_interval_length_seconds{quantile="0.99"}
-#+end_src
+	#+end_src
 
-要返回时间序列的总数，可以：
+	要返回时间序列的总数，可以：
 
-#+begin_src
+	#+begin_src
 count(prometheus_target_interval_length_seconds)
-#+end_src
+	#+end_src
 
 *** 使用图形界面
 
-选择 Graph 页签。下面的表达式表示每秒创建 chunks 的速率：
+	选择 Graph 页签。下面的表达式表示每秒创建 chunks 的速率：
 
-#+begin_src
+	#+begin_src
 rate(prometheus_tsdb_head_chunks_created_total[1m])
-#+end_src
+	#+end_src
 
 *** 启用一些样本目标
 
-Go 的客户端库有一个例子，道出了具有不同的延迟分布的虚拟 RPC 延迟。
+	Go 的客户端库有一个例子，道出了具有不同的延迟分布的虚拟 RPC 延迟。
 
-确保你已经安装了 Go 编译器，并且设置了可以正常运行的 Go 构建环境。
+	确保你已经安装了 Go 编译器，并且设置了可以正常运行的 Go 构建环境。
 
-下载 Prometheus 的 Go 客户端库，然后启动三个示例进程：
+	下载 Prometheus 的 Go 客户端库，然后启动三个示例进程：
 
-#+begin_src sh
-# Fetch the client library code and compile example.
-git clone https://github.com/prometheus/client_golang.git
-cd client_golang/examples/random
-go get -d
-go build
+	#+begin_src sh
+	  # Fetch the client library code and compile example.
+	  git clone https://github.com/prometheus/client_golang.git
+	  cd client_golang/examples/random
+	  go get -d
+	  go build
 
-# Start 3 example targets in separate terminals:
-./random -listen-address=:8080
-./random -listen-address=:8081
-./random -listen-address=:8082
-#+end_src
+	  # Start 3 example targets in separate terminals:
+	  ./random -listen-address=:8080
+	  ./random -listen-address=:8081
+	  ./random -listen-address=:8082
+	#+end_src
 
-现在，
-http://localhost:8080/metrics，
-http://localhost:8081/metrics，
-http://localhost:8088/metrics
-就可以看到三个样本目标了。
+	现在，
+	http://localhost:8080/metrics，
+	http://localhost:8081/metrics，
+	http://localhost:8088/metrics
+	就可以看到三个样本目标了。
 
 *** 配置 Prometheus 监控样本目标
 
-这三个到达点（endpoint）统称为 =example-random= 的作业。假设，其中的两个 endpoints 是生产的目标，
-第三个是表示金丝雀示例。为了达到这一目的，我们要对目标（targets）进行分组，生产的一组，金丝雀的一组。
+	这三个到达点（endpoint）统称为 =example-random= 的作业。假设，其中的两个 endpoints 是生产的目标，
+	第三个是表示金丝雀示例。为了达到这一目的，我们要对目标（targets）进行分组，生产的一组，金丝雀的一组。
 
-如下，添加到你的配置文件，然后重启 prometheus：
+	如下，添加到你的配置文件，然后重启 prometheus：
 
-#+begin_src yaml
-scrape_configs:
-	- job_name:       'example-random'
+	#+begin_src yaml
+		scrape_configs:
+		  - job_name:       'example-random'
 
-	  # Override the global default and scrape targets from this job every 5 seconds.
-	  scrape_interval: 5s
+			# Override the global default and scrape targets from this job every 5 seconds.
+			scrape_interval: 5s
 
-	  static_configs:
-		- targets: ['localhost:8080', 'localhost:8081']
-		  labels:
-			group: 'production'
+			static_configs:
+			  - targets: ['localhost:8080', 'localhost:8081']
+				labels:
+				  group: 'production'
 
-		- targets: ['localhost:8082']
-		  labels:
-			group: 'canary'
-#+end_src
+				  - targets: ['localhost:8082']
+					labels:
+					  group: 'canary'
+	#+end_src
 
-然后你可以在浏览器验证，比如说输入 =rpc_durations_seconds= 指标。
+	然后你可以在浏览器验证，比如说输入 =rpc_durations_seconds= 指标。
 
 *** 配置规则将抓取的数据汇总到新的时间序列
 
-尽管在这个例子中不存在问题，但是在临时计算时，汇总数千个时间序列的查询可能会变慢。为了提高效率，Prometheus 允许
-你通过配置记录规则将表达式提前记录到新的时间序列中。
-假设我们比较在意示例 5 分钟窗口内中所测得所有实例的（但保留作业和服务维度） RPC 平均每秒的速率，我可能会这样写：
+	尽管在这个例子中不存在问题，但是在临时计算时，汇总数千个时间序列的查询可能会变慢。为了提高效率，Prometheus 允许
+	你通过配置记录规则将表达式提前记录到新的时间序列中。
+	假设我们比较在意示例 5 分钟窗口内中所测得所有实例的（但保留作业和服务维度） RPC 平均每秒的速率，我可能会这样写：
 
-#+begin_src
+	#+begin_src
 avg(rate(rpc_durations_seconds_count[5m])) by (job, service)
-#+end_src
+	#+end_src
 
-尝试运行这个表达式。
+	尝试运行这个表达式。
 
-我们将这个表达式产生的时间序列记录到称为 =job_service:rpc_durations_seconds_count:avg_rate5m= 中，
-将下面的内容写到一个新建的文件 =prometheus.rules.yml= 中：
+	我们将这个表达式产生的时间序列记录到称为 =job_service:rpc_durations_seconds_count:avg_rate5m= 中，
+	将下面的内容写到一个新建的文件 =prometheus.rules.yml= 中：
 
-#+begin_src yaml
-groups:
-- name: example
-  rules:
-  - record: job_service:rpc_durations_seconds_count:avg_rate5m
-    expr: avg(rate(rpc_durations_seconds_count[5m])) by (job, service)
-#+end_src
+	#+begin_src yaml
+		groups:
+		  - name: example
+			rules:
+			  - record: job_service:rpc_durations_seconds_count:avg_rate5m
+				expr: avg(rate(rpc_durations_seconds_count[5m])) by (job, service)
+	#+end_src
 
-然后让 Prometheus 选择这个新的规则，添加 =rule_files= 声明到你的 =prometheus.yml= 文件中。现在，配置应如下：
+	然后让 Prometheus 选择这个新的规则，添加 =rule_files= 声明到你的 =prometheus.yml= 文件中。现在，配置应如下：
 
-#+begin_src yaml
-global:
-  scrape_interval:     15s # By default, scrape targets every 15 seconds.
-  evaluation_interval: 15s # Evaluate rules every 15 seconds.
+	#+begin_src yaml
+		global:
+		  scrape_interval:     15s # By default, scrape targets every 15 seconds.
+		  evaluation_interval: 15s # Evaluate rules every 15 seconds.
 
-  # Attach these extra labels to all timeseries collected by this Prometheus instance.
-  external_labels:
-    monitor: 'codelab-monitor'
+		  # Attach these extra labels to all timeseries collected by this Prometheus instance.
+		  external_labels:
+			monitor: 'codelab-monitor'
 
-rule_files:
-  - 'prometheus.rules.yml'
+			rule_files:
+			  - 'prometheus.rules.yml'
 
-scrape_configs:
-  - job_name: 'prometheus'
+			  scrape_configs:
+				- job_name: 'prometheus'
 
-    # Override the global default and scrape targets from this job every 5 seconds.
-    scrape_interval: 5s
+				  # Override the global default and scrape targets from this job every 5 seconds.
+				  scrape_interval: 5s
 
-    static_configs:
-      - targets: ['localhost:9090']
+				  static_configs:
+					- targets: ['localhost:9090']
 
-  - job_name:       'example-random'
+					  - job_name:       'example-random'
 
-    # Override the global default and scrape targets from this job every 5 seconds.
-    scrape_interval: 5s
+						# Override the global default and scrape targets from this job every 5 seconds.
+						scrape_interval: 5s
 
-    static_configs:
-      - targets: ['localhost:8080', 'localhost:8081']
-        labels:
-          group: 'production'
+						static_configs:
+						  - targets: ['localhost:8080', 'localhost:8081']
+							labels:
+							  group: 'production'
 
-      - targets: ['localhost:8082']
-        labels:
-          group: 'canary'
-#+end_src
+							  - targets: ['localhost:8082']
+								labels:
+								  group: 'canary'
+	#+end_src
 
-使用新的配置文件，重启 Prometheus 服务，然后验证新的时间序列指标名为 =job_service:rpc_durations_seconds_count:avg_rate5m=
-已经可用。
+	使用新的配置文件，重启 Prometheus 服务，然后验证新的时间序列指标名为 =job_service:rpc_durations_seconds_count:avg_rate5m=
+	已经可用。
 
 ** 安装
 
 *** 使用预编译的二进制包
 
-我们为大多数官方的 Prometheus 组件提供了预编译二进制文件。查看 [[https://prometheus.io/download/][下载链接]]。
+	我们为大多数官方的 Prometheus 组件提供了预编译二进制文件。查看 [[https://prometheus.io/download/][下载链接]]。
 
 *** 通过源代码
 
-用源代码编译 Prometheus 组件，查看各自仓库中的 =Makefile= 。
+	用源代码编译 Prometheus 组件，查看各自仓库中的 =Makefile= 。
 
 *** 使用 Docker
 
-所有的 Prometheus 组件服务镜像都在 [[https://quay.io/repository/prometheus/prometheus][quay.io]] 或者 [[https://hub.docker.com/r/prom/prometheus/][Docker Hub]]。
+	所有的 Prometheus 组件服务镜像都在 [[https://quay.io/repository/prometheus/prometheus][quay.io]] 或者 [[https://hub.docker.com/r/prom/prometheus/][Docker Hub]]。
 
-最简单的方式使用 Docker 启动 Prometheus： =docker run -p 9090:9090 prom/prometheus= 。
+	最简单的方式使用 Docker 启动 Prometheus： =docker run -p 9090:9090 prom/prometheus= 。
 
-Prometheus 镜像以卷的方式存储实际的指标。生产环境部署强烈建议使用 [[https://docs.docker.com/storage/volumes/][容器数据卷]] 的方式来简化升级中的管理数据。
+	Prometheus 镜像以卷的方式存储实际的指标。生产环境部署强烈建议使用 [[https://docs.docker.com/storage/volumes/][容器数据卷]] 的方式来简化升级中的管理数据。
 
-有几种使用配置的选择，下面是两个例子：
+	有几种使用配置的选择，下面是两个例子：
 
 **** 卷 & 绑定挂载
 
-把你的 =prometheus.yml= 从宿主机挂载到容器中：
+	 把你的 =prometheus.yml= 从宿主机挂载到容器中：
 
-#+begin_src sh
-  docker run \
-		 -p 9090:9090 \
-		 -v /tmp/prometheus.yml:/etc/prometheus/prometheus.yml \
-		 prom/prometheus
-#+end_src
+	 #+begin_src sh
+	   docker run \
+			  -p 9090:9090 \
+			  -v /tmp/prometheus.yml:/etc/prometheus/prometheus.yml \
+			  prom/prometheus
+	 #+end_src
 
-或者添加额外的卷到配置中：
+	 或者添加额外的卷到配置中：
 
-#+begin_src sh
-  docker run \
-		 -p 9090:9090 \
-		 -v /path/to/config:/etc/prometheus \
-		 prom/prometheus
-#+end_src
+	 #+begin_src sh
+	   docker run \
+			  -p 9090:9090 \
+			  -v /path/to/config:/etc/prometheus \
+			  prom/prometheus
+	 #+end_src
 
 **** 自定义镜像
 
-为了避免在外部管理配置文件，配置可以添加到镜像中。如果配置文件是静态的，并且在所有的环境中都是相同的，这种方法很不错。
+	 为了避免在外部管理配置文件，配置可以添加到镜像中。如果配置文件是静态的，并且在所有的环境中都是相同的，这种方法很不错。
 
-为此，创建一个有 Prometheus 配置和 Dockerfile 的新目录，如下：
+	 为此，创建一个有 Prometheus 配置和 Dockerfile 的新目录，如下：
 
-#+begin_src dockerfile
-  FROM prom/prometheus
-  ADD prometheus.yml /etc/prometheus/
-#+end_src
+	 #+begin_src dockerfile
+		   FROM prom/prometheus
+		   ADD prometheus.yml /etc/prometheus/
+	 #+end_src
 
-然后构建和运行：
+	 然后构建和运行：
 
-#+begin_src sh
-  docker build -t my-prometheus .
-  docker run -p 9090:9090 my-prometheus
-#+end_src
+	 #+begin_src sh
+	   docker build -t my-prometheus .
+	   docker run -p 9090:9090 my-prometheus
+	 #+end_src
 
-一个更高级的做法时，使用工具在开始时动态生成配置，甚至可以使用守护程序定期更新。
+	 一个更高级的做法时，使用工具在开始时动态生成配置，甚至可以使用守护程序定期更新。
 
 **** 使用配置管理系统
 
-一些第三方的配置管理系统：
+	 一些第三方的配置管理系统：
 
-- Ansible ::
-  + [[https://github.com/cloudalchemy/ansible-prometheus][Cloud Alchemy/ansible-prometheus]]
-- Chef ::
-  + [[https://github.com/rayrod2030/chef-prometheus][rayrod2030/chef-prometheus]]
-- Puppet ::
-  + [[https://forge.puppet.com/puppet/prometheus][puppet/prometheus]]
-- SaltStack ::
-  - [[https://github.com/saltstack-formulas/prometheus-formula][saltstack-formulas/prometheus-formula]]
+	 - Ansible ::
+	   + [[https://github.com/cloudalchemy/ansible-prometheus][Cloud Alchemy/ansible-prometheus]]
+	 - Chef ::
+	   + [[https://github.com/rayrod2030/chef-prometheus][rayrod2030/chef-prometheus]]
+	 - Puppet ::
+	   + [[https://forge.puppet.com/puppet/prometheus][puppet/prometheus]]
+	 - SaltStack ::
+	   - [[https://github.com/saltstack-formulas/prometheus-formula][saltstack-formulas/prometheus-formula]]
 
 ** TODO 配置
 ** 查询
 *** 基础（Basic）
 
-Prometheus 提供了叫做 PromQL 的查询语言，允许用户来选择和汇总时间序列数据。
-表达式的执行结果数据以表格的方式显示，在浏览器上显示图形；或者外部系统通过 HTTP API 来调用。
+	Prometheus 提供了叫做 PromQL 的查询语言，允许用户来选择和汇总时间序列数据。
+	表达式的执行结果数据以表格的方式显示，在浏览器上显示图形；或者外部系统通过 HTTP API 来调用。
 
 **** 表达语言的数据类型
 
-Prometheus 表达语言中，一个表达式或者子表达式可以计算为以下四中类型之一：
+	 Prometheus 表达语言中，一个表达式或者子表达式可以计算为以下四中类型之一：
 
-- *瞬时向量* 一组时间序列，每个时间序列包含一个样本，所有的样本有相同的时间戳；
-- *范围向量* 一组时间序列，每个时间序列包含多个时间序列样本；
-- *标量（Scalar）* 一个简单的浮点型值；
-- *字符串（String）* 一个字符串值，当前未使用；
+	 - *瞬时向量* 一组时间序列，每个时间序列包含一个样本，所有的样本有相同的时间戳；
+	 - *范围向量* 一组时间序列，每个时间序列包含多个时间序列样本；
+	 - *标量（Scalar）* 一个简单的浮点型值；
+	 - *字符串（String）* 一个字符串值，当前未使用；
 
-返回值类型是由查询表达式决定的，比如瞬时向量是可以直接被绘制成图形的。
+	 返回值类型是由查询表达式决定的，比如瞬时向量是可以直接被绘制成图形的。
 
 **** 字面（Literals）
 ***** 字符串字面（String literals）
 
-可以在单引号、双引号、反引号中包含的字符串为字符串字面值。
+	  可以在单引号、双引号、反引号中包含的字符串为字符串字面值。
 
-PromQL 可以像 Go 一样进行 [[https://golang.org/ref/spec#String_literals][规则转义]]。单引号或者双引号可以使用 =\= 进行转义。反引号内不会字符不会进行任何转义。
-与 Go 不同 Prometheus 不会在反引号内丢弃换行符。比如：
+	  PromQL 可以像 Go 一样进行 [[https://golang.org/ref/spec#String_literals][规则转义]]。单引号或者双引号可以使用 =\= 进行转义。反引号内不会字符不会进行任何转义。
+	  与 Go 不同 Prometheus 不会在反引号内丢弃换行符。比如：
 
-#+begin_src
+	  #+begin_src
 "this is a string"
 'these are unescaped: \n \\ \t'
 `these are not unescaped: \n ' " \t`
-#+end_src
+	  #+end_src
 
 ***** 浮点字面（Float literals）
 
-标量的浮点值可以被写为以下形式的数字： =[-](digits)[.(digits)]= 。
+	  标量的浮点值可以被写为以下形式的数字： =[-](digits)[.(digits)]= 。
 
-#+begin_src
+	  #+begin_src
 -2.43
-#+end_src
+	  #+end_src
 
 **** TODO 时间序列选择器
 ***** 瞬时向量选择器
-瞬时向量允许在给定的时间戳下选择一组时间序列和每个样本的样本值：在最简单的形式中，仅制定度量名称。
-这会产生一个瞬时向量，和包含该度量名称（metric name）的所有时间序列元素。
+	  瞬时向量允许在给定的时间戳下选择一组时间序列和每个样本的样本值：在最简单的形式中，仅制定度量名称。
+	  这会产生一个瞬时向量，和包含该度量名称（metric name）的所有时间序列元素。
 **** TODO 子查询
 **** TODO 函数
 **** TODO 注释
@@ -998,31 +999,31 @@ PromQL 可以像 Go 一样进行 [[https://golang.org/ref/spec#String_literals][
 *** 函数（Functions）
 **** irate 与 rate
 
-=irate(v range-vector)= 计算范围内时间序列的 _每秒_ 瞬时增加率，是 _基于最后两个点_ 计算的。数值中断（比如机器重启，计数器重置）会自动调整。
+	 =irate(v range-vector)= 计算范围内时间序列的 _每秒_ 瞬时增加率，是 _基于最后两个点_ 计算的。数值中断（比如机器重启，计数器重置）会自动调整。
 
-=rate(v range-vector)= 计算范围内事件序列的 _平均每秒_ 的增长率，是 _基于所有数据点的_ 。
+	 =rate(v range-vector)= 计算范围内事件序列的 _平均每秒_ 的增长率，是 _基于所有数据点的_ 。
 
-irate 和 rate 都只能和计数器（Counter）一起使用。因为两个计算的算法不同，所以使用场景略微不同：
+	 irate 和 rate 都只能和计数器（Counter）一起使用。因为两个计算的算法不同，所以使用场景略微不同：
 
-- irate 适用于快速变化计数器
-- rate 适用于告警以及计数器缓慢变化的计数场景下的图形展示
+	 - irate 适用于快速变化计数器
+	 - rate 适用于告警以及计数器缓慢变化的计数场景下的图形展示
 
-不管是 irate 还是 rate 最终的结果是速率，不是增长的值，这一点很重要。有如下样本数据：
+	 不管是 irate 还是 rate 最终的结果是速率，不是增长的值，这一点很重要。有如下样本数据：
 
-#+BEGIN_SRC
+	 #+BEGIN_SRC
 2201 @1570868068.053
 2204 @1570868083.053
 2205 @1570868098.053
 2216 @1570868113.053
-#+END_SRC
+	 #+END_SRC
 
-irate 的计算方法为：
+	 irate 的计算方法为：
 
      #+BEGIN_SRC
 (2216-2205)/(1570868113.053-1570868098.053) = 0.7333333333333333
      #+END_SRC
 
-rate 的计算方法为：
+	 rate 的计算方法为：
 
      #+BEGIN_SRC
 (2216-2205)/(1570868113.053-1570868098.053) = 0.7333333333333333
@@ -1031,100 +1032,100 @@ rate 的计算方法为：
 (0.7333333333333333 + 0.06666666666666667 + 0.2) / 3 = 0.3333333333333333
      #+END_SRC
 
-/一开始对 TSDB 不是很了解的情况下，不自己算一下还是不是很好理解的。/
+	 /一开始对 TSDB 不是很了解的情况下，不自己算一下还是不是很好理解的。/
 
-根据上面的计算方法也可以看出：
+	 根据上面的计算方法也可以看出：
 
-- 对于 irate 时间段的选择 =[1m]= 还是 =[5m]= ，只要有数据，就没区别； 而 rate 的区别就很大，时间越长越平滑；
-- rate 不会把数值中的毛刺直接暴露出来，通过平均值计算潜在的问题就是会有 _长尾问题_ 。
+	 - 对于 irate 时间段的选择 =[1m]= 还是 =[5m]= ，只要有数据，就没区别； 而 rate 的区别就很大，时间越长越平滑；
+	 - rate 不会把数值中的毛刺直接暴露出来，通过平均值计算潜在的问题就是会有 _长尾问题_ 。
 
-选择 irate 还是 rate 视业务场景而定。
+	 选择 irate 还是 rate 视业务场景而定。
 *** HTTP API
 
-稳定的 API 都在 =/api/v1= 路径下。
+	稳定的 API 都在 =/api/v1= 路径下。
 **** 格式
 
-回包格式是 JSON，每个成功的 API 状态码都是 =2xx= 。
+	 回包格式是 JSON，每个成功的 API 状态码都是 =2xx= 。
 
-无效的 API 请求会返回 JSON 错误对象和 HTTP 响应码之一：
+	 无效的 API 请求会返回 JSON 错误对象和 HTTP 响应码之一：
 
-- =400 Bad Request= 参数不存在或者错误
-- =422 Unprocessable Entity= 表达式不可被执行
-- =503 Service Unavailabl= 请求超时或者中断
+	 - =400 Bad Request= 参数不存在或者错误
+	 - =422 Unprocessable Entity= 表达式不可被执行
+	 - =503 Service Unavailabl= 请求超时或者中断
 
-对于没有到达 API 端点（endpoint）之前的错误，返回其它的非 2xx 的代码。
+	 对于没有到达 API 端点（endpoint）之前的错误，返回其它的非 2xx 的代码。
 
-如果存在不会影响正常执行的错误，则会返回一系列的警告。成功执行的数据会返回在 data 字段。
+	 如果存在不会影响正常执行的错误，则会返回一系列的警告。成功执行的数据会返回在 data 字段。
 
-回包的 JSON 格式如下：
+	 回包的 JSON 格式如下：
 
-#+begin_src js
-  {
-      "status": "success" | "error",
-      "data": <data>,
+	 #+begin_src js
+	   {
+		   "status": "success" | "error",
+		   "data": <data>,
 
-      // Only set if status is "error". The data field may still hold
-      // additional data.
-      "errorType": "<string>",
-      "error": "<string>",
+		   // Only set if status is "error". The data field may still hold
+		   // additional data.
+		   "errorType": "<string>",
+		   "error": "<string>",
 
-      // Only if there were warnings while executing the request.
-      // There will still be data in the data field.
-      "warnings": ["<string>"]
-  }
-#+end_src
+		   // Only if there were warnings while executing the request.
+		   // There will still be data in the data field.
+		   "warnings": ["<string>"]
+	   }
+	 #+end_src
 
-输入的时间格式可以是：
+	 输入的时间格式可以是：
 
-- [[https://www.ietf.org/rfc/rfc3339.txt][RFC3339]] 格式
-- Unix 秒级别的时间戳，可以带小数位
+	 - [[https://www.ietf.org/rfc/rfc3339.txt][RFC3339]] 格式
+	 - Unix 秒级别的时间戳，可以带小数位
 
-输出的时间格式一般是 Unix 秒级别的时间戳。
+	 输出的时间格式一般是 Unix 秒级别的时间戳。
 
-名字中重复的参数以 =[]= 方式展现。
+	 名字中重复的参数以 =[]= 方式展现。
 
-=<series_selector>= 是类似 =http_requests_total= 和 =http_requests_total{method=~"(GET|POST)"}= 这种格式的时间序列选择器的占位符，
-而且需要 URL-encoded。
+	 =<series_selector>= 是类似 =http_requests_total= 和 =http_requests_total{method=~"(GET|POST)"}= 这种格式的时间序列选择器的占位符，
+	 而且需要 URL-encoded。
 
-=<duration>=  是 =[0-9]+[smhdwy]= 格式的字符串的占位符，比如说 =5m= 表示持续 5 分钟。
+	 =<duration>=  是 =[0-9]+[smhdwy]= 格式的字符串的占位符，比如说 =5m= 表示持续 5 分钟。
 
-=<bool>= 是布尔值 =true= =false= 字符串的占位符。
+	 =<bool>= 是布尔值 =true= =false= 字符串的占位符。
 
 **** 表达式查询
-查询语言表达式可以在单个瞬间或者一段时间内求值。
+	 查询语言表达式可以在单个瞬间或者一段时间内求值。
 
 ***** 瞬时查询
 
-下面两个 API 查询单个时间点的值：
+	  下面两个 API 查询单个时间点的值：
 
-#+begin_src
+	  #+begin_src
 GET /api/v1/query
 POST /api/v1/query
-#+end_src
+	  #+end_src
 
-查询参数：
+	  查询参数：
 
-- ~query=<string>~ Prometheus 查询字符串
-- ~time=<rfc3339 | unix_timestamp>~ 时间戳，可选的。默认是当前时间戳
-- ~timeout=<duration>~ 超时时间，可选的。默认值是 =-query.timeout= 标识的值
+	  - ~query=<string>~ Prometheus 查询字符串
+	  - ~time=<rfc3339 | unix_timestamp>~ 时间戳，可选的。默认是当前时间戳
+	  - ~timeout=<duration>~ 超时时间，可选的。默认值是 =-query.timeout= 标识的值
 
-你可以使用 =POST= 方法配合 =Content-Type: application/x-www-form-urlencoded= 头实现请求 body 的 URL-encoded
-（当查询条件超过 URL 字符限制时很有用）。
+	  你可以使用 =POST= 方法配合 =Content-Type: application/x-www-form-urlencoded= 头实现请求 body 的 URL-encoded
+	  （当查询条件超过 URL 字符限制时很有用）。
 
-返回值中 =data= 有如下格式：
+	  返回值中 =data= 有如下格式：
 
-#+begin_src js
-{
-  "resultType": "matrix" | "vector" | "scalar" | "string",
-  "result": <value>
-}
-#+end_src
+	  #+begin_src js
+		{
+			"resultType": "matrix" | "vector" | "scalar" | "string",
+			"result": <value>
+		}
+	  #+end_src
 
-=<value>= 是查询数据，不同的 =resultType= 有不同的格式。 /下面的表达式查询结果格式中有详细说明。/
+	  =<value>= 是查询数据，不同的 =resultType= 有不同的格式。 /下面的表达式查询结果格式中有详细说明。/
 
-下面的例子执行了 =up= 表达式在 =2015-07-01T20:10:51.781Z= ：
+	  下面的例子执行了 =up= 表达式在 =2015-07-01T20:10:51.781Z= ：
 
-#+begin_src
+	  #+begin_src
 $ curl 'http://localhost:9090/api/v1/query?query=up&time=2015-07-01T20:10:51.781Z'
 {
    "status" : "success",
@@ -1150,30 +1151,30 @@ $ curl 'http://localhost:9090/api/v1/query?query=up&time=2015-07-01T20:10:51.781
       ]
    }
 }
-#+end_src
+	  #+end_src
 
 ***** 范围查询
 
-以下 API 查询一段时间内的范围数据：
+	  以下 API 查询一段时间内的范围数据：
 
-#+begin_src
+	  #+begin_src
 GET /api/v1/query_range
 POST /api/v1/query_range
-#+end_src
+	  #+end_src
 
-查询参数：
+	  查询参数：
 
-- ~query=<string>~ 查询表达式
-- ~start=<rfc3339 | unix_timestamp>~ 开始时间戳
-- ~end=<rfc3339 | unix_timestamp>~ 结束时间戳
-- ~step=<duration | float>~ 查询步长： =duration= 格式或者浮点数的秒
-- ~timeout=<duration>~ 超时时间，默认为 =-query.timeout= 的值
+	  - ~query=<string>~ 查询表达式
+	  - ~start=<rfc3339 | unix_timestamp>~ 开始时间戳
+	  - ~end=<rfc3339 | unix_timestamp>~ 结束时间戳
+	  - ~step=<duration | float>~ 查询步长： =duration= 格式或者浮点数的秒
+	  - ~timeout=<duration>~ 超时时间，默认为 =-query.timeout= 的值
 
-请求方式和返回值格式与瞬时请求的相同，不再赘述。
+	  请求方式和返回值格式与瞬时请求的相同，不再赘述。
 
-下面的例子查询了表达式 =up= 超过 30s 范围并且 15s 的步长的值：
+	  下面的例子查询了表达式 =up= 超过 30s 范围并且 15s 的步长的值：
 
-#+begin_src
+	  #+begin_src
 $ curl 'http://localhost:9090/api/v1/query_range?query=up&start=2015-07-01T20:10:30.781Z&end=2015-07-01T20:11:00.781Z&step=15s'
 {
    "status" : "success",
@@ -1207,29 +1208,29 @@ $ curl 'http://localhost:9090/api/v1/query_range?query=up&start=2015-07-01T20:10
       ]
    }
 }
-#+end_src
+	  #+end_src
 
 **** 查询元数据（metadata）
 ***** 通过 label 匹配找到时间序列
 
-下面的 API 通过 label 找到匹配的时间序列列表：
+	  下面的 API 通过 label 找到匹配的时间序列列表：
 
-#+begin_src
+	  #+begin_src
 GET /api/v1/series
 POST /api/v1/series
-#+end_src
+	  #+end_src
 
-URL 查询参数：
+	  URL 查询参数：
 
-- ~match[]=<series_selector>~ 重复的序列选择器列表，作为筛选条件。至少需要提供一个参数
-- ~start=<rfc3339 | unix_timestamp>~ 起始时间
-- ~end=<rfc3339 | unix_timestamp>~ 结束时间
+	  - ~match[]=<series_selector>~ 重复的序列选择器列表，作为筛选条件。至少需要提供一个参数
+	  - ~start=<rfc3339 | unix_timestamp>~ 起始时间
+	  - ~end=<rfc3339 | unix_timestamp>~ 结束时间
 
-查询结果 =data= 由每个时间序列的 名称-值 对的目标组成。
+	  查询结果 =data= 由每个时间序列的 名称-值 对的目标组成。
 
-下面的例子返回所有匹配选择器 =up= 或者 ~process_start_time_seconds{job="prometheus"}~ 匹配的序列：
+	  下面的例子返回所有匹配选择器 =up= 或者 ~process_start_time_seconds{job="prometheus"}~ 匹配的序列：
 
-#+begin_src
+	  #+begin_src
 $ curl -g 'http://localhost:9090/api/v1/series?' --data-urlencode 'match[]=up' --data-urlencode 'match[]=process_start_time_seconds{job="prometheus"}'
 {
    "status" : "success",
@@ -1251,19 +1252,19 @@ $ curl -g 'http://localhost:9090/api/v1/series?' --data-urlencode 'match[]=up' -
       }
    ]
 }
-#+end_src
+	  #+end_src
 
 ***** 获取 label 名称
-下面 API 获取所有的 label 名称：
+	  下面 API 获取所有的 label 名称：
 
-#+begin_src
+	  #+begin_src
 GET /api/v1/labels
 POST /api/v1/labels
-#+end_src
+	  #+end_src
 
-返回值 =data= 字段是一个字符串的 label 名称列表。下面是一个例子：
+	  返回值 =data= 字段是一个字符串的 label 名称列表。下面是一个例子：
 
-#+begin_src
+	  #+begin_src
 $ curl 'localhost:9090/api/v1/labels'
 {
     "status": "success",
@@ -1291,19 +1292,19 @@ $ curl 'localhost:9090/api/v1/labels'
         "version"
     ]
 }
-#+end_src
+	  #+end_src
 
 ***** 查询 label 值
 
-下面的 API 通过 =label_name= 返回所有的值列表：
+	  下面的 API 通过 =label_name= 返回所有的值列表：
 
-#+begin_src
+	  #+begin_src
 GET /api/v1/label/<label_name>/values
-#+end_src
+	  #+end_src
 
-下面的例子查询所有的 =job= label 的值：
+	  下面的例子查询所有的 =job= label 的值：
 
-#+begin_src
+	  #+begin_src
 $ curl http://localhost:9090/api/v1/label/job/values
 {
    "status" : "success",
@@ -1312,56 +1313,56 @@ $ curl http://localhost:9090/api/v1/label/job/values
       "prometheus"
    ]
 }
-#+end_src
+	  #+end_src
 
 **** 表达式查询结果格式
 
-表达式查询结果在 =data= 中的 =result= 属性中。JSON 不支持特殊的浮点值，比如 =NaN= =Inf= =-Inf= 等，
-所以会被转换成 JSON 字符串，而不是原数字。
+	 表达式查询结果在 =data= 中的 =result= 属性中。JSON 不支持特殊的浮点值，比如 =NaN= =Inf= =-Inf= 等，
+	 所以会被转换成 JSON 字符串，而不是原数字。
 
 ***** 范围向量（Range vectors）
 
-=matrix= 类型表示范围向量， =result= 属性格式如下：
+	  =matrix= 类型表示范围向量， =result= 属性格式如下：
 
-#+begin_src js
-[
-  {
-    "metric": { "<label_name>": "<label_value>", ... },
-    "values": [ [ <unix_time>, "<sample_value>" ], ... ]
-  },
-  ...
-]
-#+end_src
+	  #+begin_src js
+		[
+			{
+				"metric": { "<label_name>": "<label_value>", ... },
+				"values": [ [ <unix_time>, "<sample_value>" ], ... ]
+			},
+			...
+		]
+	  #+end_src
 
 ***** 瞬间向量（Instant vectors）
 
-=vector= 类型表示瞬间向量， =result= 属性格式如下：
+	  =vector= 类型表示瞬间向量， =result= 属性格式如下：
 
-#+begin_src js
-[
-  {
-    "metric": { "<label_name>": "<label_value>", ... },
-    "value": [ <unix_time>, "<sample_value>" ]
-  },
-  ...
-]
-#+end_src
+	  #+begin_src js
+		[
+			{
+				"metric": { "<label_name>": "<label_value>", ... },
+				"value": [ <unix_time>, "<sample_value>" ]
+			},
+			...
+		]
+	  #+end_src
 
 ***** 标量（Scalars）
 
-=scalar= 类型表示标量， =result= 属性格式如下：
+	  =scalar= 类型表示标量， =result= 属性格式如下：
 
-#+begin_src js
-[ <unix_time>, "<scalar_value>" ]
-#+end_src
+	  #+begin_src js
+		[ <unix_time>, "<scalar_value>" ]
+	  #+end_src
 
 ***** 字符串（Strings）
 
-=string= 类型表示字符串， =result= 属性格式如下：
+	  =string= 类型表示字符串， =result= 属性格式如下：
 
-#+begin_src js
-[ <unix_time>, "<string_value>" ]
-#+end_src
+	  #+begin_src js
+		[ <unix_time>, "<string_value>" ]
+	  #+end_src
 
 **** TODO 目标（targets）
 **** TODO 规则（Rules）
@@ -1379,7 +1380,7 @@ $ curl http://localhost:9090/api/v1/label/job/values
 * TODO Operating
 * TODO 告警（Alerting）
 
-告警相对独立，见 [[file:prometheus-alert.org][Prometheus Alert]]。
+  告警相对独立，见 [[file:prometheus-alert.org][Prometheus Alert]]。
 
 * TODO 最佳实践
 * TODO 指南（GUIDES）

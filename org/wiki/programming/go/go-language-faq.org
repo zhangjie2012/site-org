@@ -1,0 +1,40 @@
+#+SETUPFILE: ~/site/tpl/wiki-tpl.org
+#+TITLE: Go 语言 FAQ
+#+DATE: 2020-10-06 16:21:47
+
+* map
+
+** Key
+
+   map 中的 key 必须是可以判定相等的类型。不建议把浮点数作为 key，最坏的情况下 NaN 和任何浮点数都不同。
+
+** 值还是引用？
+
+   map 是个引用类型（hash 表）。因此使用 map 必须初始化（否则值默认为 nil）。
+
+** 迭代
+
+   map 迭代顺序是不确定的。
+
+** map 中删除元素是否安全？
+
+  安全[fn:1]。
+
+  #+begin_src go
+	for key := range m {
+		if key.expired() {
+			delete(m, key)
+		}
+	}
+  #+end_src
+
+  1. Go map 是使用 hash 表实现的，并不是 tree
+  2. delete 并没有实际的删除一个元素，只是设置一个标记，也就是说，delete 并不会减少 map 空间的大小[fn:2]。
+	 并且允许删除一个不存在的 key。
+  3. 只有 =map=nil= 才会释放空间
+
+* Footnotes
+
+[fn:2] https://github.com/golang/go/blob/master/src/runtime/map.go#L685
+
+[fn:1] https://stackoverflow.com/questions/23229975/is-it-safe-to-remove-selected-keys-from-map-within-a-range-loop
