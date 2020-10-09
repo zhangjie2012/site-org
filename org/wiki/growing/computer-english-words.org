@@ -92,7 +92,7 @@
   - [[http://dict.cn/evolve][evolve]] [i'vɑːlv] v. 演化，进化
   - [[http://dict.cn/elegant][elegant]] ['elɪɡənt] adj. 优雅的 eg. elegant code 优雅的代码
   - [[http://dict.cn/downside][downside]] ['daʊnsaɪd]  n. 缺点
-  - [[immutable][immutable]] [ɪ'mjuːtəbl] adj. 不可变的, 一成不变的
+  - [[http://dict.cn/immutable][immutable]] [ɪ'mjuːtəbl] adj. 不可变的, 一成不变的
 
 * 短语
 
