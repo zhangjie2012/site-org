@@ -6,59 +6,67 @@
 
 * interface{} decode to bson.M
 
-业务场景是这样的：在插入 MongoDB 时，会插入一个前端给的 JSON，而后端对 JSON 的具体格式并不确定，希望怎么插入就怎么输出。
-所以，后端（Go）就声明成了一个 =interface{}= ，insert 之后没有任何问题，在 MongoDB 中存储的也达到了期望。
+  业务场景是这样的：在插入 MongoDB 时，会插入一个前端给的 JSON，而后端对 JSON 的具体格式并不确定，希望怎么插入就怎么输出。
+  所以，后端（Go）就声明成了一个 =interface{}= ，insert 之后没有任何问题，在 MongoDB 中存储的也达到了期望。
 
-但是在查询时，发现返回的值并不是插入的 JSON，而被拆解成了 ={"Key": "xxx", "Value": "yyy"}= 这种方式，而实际上的格式是：
-={"xxx": "yyy"}= 。
+  但是在查询时，发现返回的值并不是插入的 JSON，而被拆解成了 ={"Key": "xxx", "Value": "yyy"}= 这种方式，而实际上的格式是：
+  ={"xxx": "yyy"}= 。
 
-有人给 MongoDB 提过 issue， https://jira.mongodb.org/browse/GODRIVER-988 ，问题是相同的。解决办法是：在初始连接 MongoDB 的时候设置解析方式，
+  有人给 MongoDB 提过 issue， https://jira.mongodb.org/browse/GODRIVER-988 ，问题是相同的。解决办法是：在初始连接 MongoDB 的时候设置解析方式，
 
-#+begin_src go
-  tM := reflect.TypeOf(bson.M{})
-  reg := bson.NewRegistryBuilder().RegisterTypeMapEntry(bsontype.EmbeddedDocument, tM).Build()
-  client, err := mongo.Connect(ctx, options.Client().ApplyURI(uri).SetRegistry(reg))
-#+end_src
+  #+begin_src go
+	tM := reflect.TypeOf(bson.M{})
+	reg := bson.NewRegistryBuilder().RegisterTypeMapEntry(bsontype.EmbeddedDocument, tM).Build()
+	client, err := mongo.Connect(ctx, options.Client().ApplyURI(uri).SetRegistry(reg))
+  #+end_src
 
-查看 =RegisterTypeMapEntry= 的定义，发现在它已经在注释中说明了解析逻辑：
+  查看 =RegisterTypeMapEntry= 的定义，发现在它已经在注释中说明了解析逻辑：
 
-#+begin_src go
-  // RegisterTypeMapEntry will register the provided type to the BSON type. The primary usage for this
-  // mapping is decoding situations where an empty interface is used and a default type needs to be
-  // created and decoded into.
-  //
-  // By default, BSON documents will decode into interface{} values as bson.D. To change the default type for BSON
-  // documents, a type map entry for bsontype.EmbeddedDocument should be registered. For example, to force BSON documents
-  // to decode to bson.Raw, use the following code:
-  //  rb.RegisterTypeMapEntry(bsontype.EmbeddedDocument, reflect.TypeOf(bson.Raw{}))
-  func (rb *RegistryBuilder) RegisterTypeMapEntry(bt bsontype.Type, rt reflect.Type) *RegistryBuilder {
-	  rb.typeMap[bt] = rt
-	  return rb
-  }
-#+end_src
+  #+begin_src go
+	// RegisterTypeMapEntry will register the provided type to the BSON type. The primary usage for this
+	// mapping is decoding situations where an empty interface is used and a default type needs to be
+	// created and decoded into.
+	//
+	// By default, BSON documents will decode into interface{} values as bson.D. To change the default type for BSON
+	// documents, a type map entry for bsontype.EmbeddedDocument should be registered. For example, to force BSON documents
+	// to decode to bson.Raw, use the following code:
+	//  rb.RegisterTypeMapEntry(bsontype.EmbeddedDocument, reflect.TypeOf(bson.Raw{}))
+	func (rb *RegistryBuilder) RegisterTypeMapEntry(bt bsontype.Type, rt reflect.Type) *RegistryBuilder {
+		rb.typeMap[bt] = rt
+		return rb
+	}
+  #+end_src
 
-默认情况下，BSON 文档的 =interface{}= 值是 =bson.D= ，即 =bson.D{{"foo", "bar"}, {"hello", "world"}, {"pi", 3.14159}}= 这种一对一对的形式。
-而我们期望的是 =bson.M= ，格式是 =bson.M{"foo": "bar", "hello": "world", "pi": 3.14159}= 。所以改成 bson.M 就可以了。
+  默认情况下，BSON 文档的 =interface{}= 值是 =bson.D= ，即 =bson.D{{"foo", "bar"}, {"hello", "world"}, {"pi", 3.14159}}= 这种一对一对的形式。
+  而我们期望的是 =bson.M= ，格式是 =bson.M{"foo": "bar", "hello": "world", "pi": 3.14159}= 。所以改成 bson.M 就可以了。
 
-如果希望是字节流的话，可以改成 =bson.Raw{}= 。
+  如果希望是字节流的话，可以改成 =bson.Raw{}= 。
 
 * 分页、排序
 
-MongoDB 在查询时的选项都是有 =FindOptions= 控制的。分页通过 =FindOptions= 的 =Skip= 和 =Limit= 来实现：
+  MongoDB 在查询时的选项都是有 =FindOptions= 控制的。分页通过 =FindOptions= 的 =Skip= 和 =Limit= 来实现：
 
-- =Limit= 表示当前页的大小
-- =Skip= 表示跳过多少个元素
+  - =Limit= 表示当前页的大小
+  - =Skip= 表示跳过多少个元素
 
-排序通过 =Sort= 来实现。整体如下：
+  排序通过 =Sort= 来实现。整体如下：
 
-#+begin_src
+  #+begin_src
 options.Find().SetSkip(skip).SetLimit(limit).SetSort(bson.M{"create_timestamp": -1})
-#+end_src
+  #+end_src
 
 * 只取 Document 中的一部分
 
-很多时候，把 Document 中的所有的字段全部取出来性能是很低下的，而且真实的业务场景也是需要其中的部分字段。
+  很多时候，把 Document 中的所有的字段全部取出来性能是很低下的，而且真实的业务场景也是需要其中的部分字段。
 
-=FindOptions= 中的 =Projection= 是用来限制查询返回的字段的，默认值为 nil，即全部。 =true= 表示字段显示，反之 =false= 表示不显示。
+  =FindOptions= 中的 =Projection= 是用来限制查询返回的字段的，默认值为 nil，即全部。 =true= 表示字段显示，反之 =false= 表示不显示。
 
-如： =options.Find().SetProjection(bson.M{"timestamp": true})= 表示只显示返回 timestamp 字段（返回的结构依然是存储的结构，只不过其它的字段全部为 nil）。
+  如： =options.Find().SetProjection(bson.M{"timestamp": true})= 表示只显示返回 timestamp 字段（返回的结构依然是存储的结构，只不过其它的字段全部为 nil）。
+
+* 存储时间时区问题
+
+  MongoDB 在存储的时候本地时间会自动转换成 [[https://time.is/zh/UTC][UTC]] 时间。在 Mongo cli 查询需要 =ISODate= 加上本地时区做转换。
+  比如 =ISODate("2020-10-10T11:43:06.027+-8:00")= ，在 Go 代码中 insert 和 query 要保持一致的 locale。
+
+  有个地方要注意 =time.Now()= 是本地 locale，但是 =time.Parse= 并不是，它的结果是 UTC 时间，
+  使用 =time.ParseInLocation= 替代即可。
