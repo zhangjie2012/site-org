@@ -5,55 +5,54 @@
 
 * System
 
-- [[https://book.douban.com/subject/25809330/][Linux/Unix 系统编程手册]]
-- [[https://book.douban.com/subject/5333562/][深入理解计算机系统]]
-- [[https://book.douban.com/subject/5064311/][操作系统-精髓与设计原理]]
-- [[https://book.douban.com/subject/26586598/][性能之巅]]
-- [[https://book.douban.com/subject/3923575/][数据库系统基础教程]]
-- [[https://book.douban.com/subject/30333919/][架构整洁之道]]
-- [[https://book.douban.com/subject/33425123/][微服务架构设计模式]]
+  - [[https://book.douban.com/subject/25809330/][Linux/Unix 系统编程手册]]
+  - [[https://book.douban.com/subject/5333562/][深入理解计算机系统]]
+  - [[https://book.douban.com/subject/5064311/][操作系统-精髓与设计原理]]
+  - [[https://book.douban.com/subject/26586598/][性能之巅]]
+  - [[https://book.douban.com/subject/3923575/][数据库系统基础教程]]
+  - [[https://book.douban.com/subject/30333919/][架构整洁之道]]
+  - [[https://book.douban.com/subject/33425123/][微服务架构设计模式]]
 
 * Databases
 
-- [[https://book.douban.com/subject/23008813/][高性能 MySQL]]
-- [[https://book.douban.com/subject/5373022/][MySQL 技术内幕]]
+  - [[https://book.douban.com/subject/23008813/][高性能 MySQL]]
+  - [[https://book.douban.com/subject/5373022/][MySQL 技术内幕]]
 
 * Programming
 
-- [[https://book.douban.com/subject/2308234/][CSS 权威指南]]
-- [[https://book.douban.com/subject/26869212/][Python 网络编程]]
-- [[https://book.douban.com/subject/27064848/][Python 高性能编程]]
-- [[https://book.douban.com/subject/24316255/][Go Web 编程]]
-- [[https://book.douban.com/subject/27015617/][Go 语言实战]]
-- [[https://book.douban.com/subject/27072230/][深入理解 ES6]]
-- [[https://book.douban.com/subject/35006892/][程序员修炼之道（第2版）]]
+  - [[https://book.douban.com/subject/2308234/][CSS 权威指南]]
+  - [[https://book.douban.com/subject/26869212/][Python 网络编程]]
+  - [[https://book.douban.com/subject/27064848/][Python 高性能编程]]
+  - [[https://book.douban.com/subject/24316255/][Go Web 编程]]
+  - [[https://book.douban.com/subject/27015617/][Go 语言实战]]
+  - [[https://book.douban.com/subject/27072230/][深入理解 ES6]]
 
 * DevOps
 
-- [[https://book.douban.com/subject/26902196/][The DevOps Handbook]]
-- [[https://clouddamcdnprodep.azureedge.net/gdc/gdckTlBtc/original][Kubernetes Up & Running: Dive into the Future of Infrastructure]]
-- [[https://landing.google.com/sre/workbook/toc/][The Site Reliability Workbook]]
+  - [[https://book.douban.com/subject/26902196/][The DevOps Handbook]]
+  - [[https://clouddamcdnprodep.azureedge.net/gdc/gdckTlBtc/original][Kubernetes Up & Running: Dive into the Future of Infrastructure]]
+  - [[https://landing.google.com/sre/workbook/toc/][The Site Reliability Workbook]]
 
 * Project Management
 
-- [[https://book.douban.com/subject/10484712/][驱动力]]
-- [[https://book.douban.com/subject/4235591/][团队协作的五大障碍]]
+  - [[https://book.douban.com/subject/10484712/][驱动力]]
+  - [[https://book.douban.com/subject/4235591/][团队协作的五大障碍]]
 
 * Technology && Internet
 
-- [[https://book.douban.com/subject/26652329/][失控：全人类的最终命运和结局]]
-- [[https://book.douban.com/subject/4075835/][从优秀到卓越]]
-- [[https://book.douban.com/subject/1022936/][基业长青]]
-- [[https://book.douban.com/subject/1919072/][长尾理论]]
+  - [[https://book.douban.com/subject/26652329/][失控：全人类的最终命运和结局]]
+  - [[https://book.douban.com/subject/4075835/][从优秀到卓越]]
+  - [[https://book.douban.com/subject/1022936/][基业长青]]
+  - [[https://book.douban.com/subject/1919072/][长尾理论]]
 
 * 设计与产品
 
-- [[https://book.douban.com/subject/3323633/][写给大家看的设计书]]
-- [[https://book.douban.com/subject/6523997/][用户体验要素]]
-- [[https://book.douban.com/subject/5394309/][简约至上]]
-- [[https://book.douban.com/subject/3886044/][瞬间之美]]
+  - [[https://book.douban.com/subject/3323633/][写给大家看的设计书]]
+  - [[https://book.douban.com/subject/6523997/][用户体验要素]]
+  - [[https://book.douban.com/subject/5394309/][简约至上]]
+  - [[https://book.douban.com/subject/3886044/][瞬间之美]]
 
 * 历史
 
-- 人类简史：从动物到上帝
-- https://www.douban.com/doulist/458012/
+  - 人类简史：从动物到上帝
+  - https://www.douban.com/doulist/458012/
