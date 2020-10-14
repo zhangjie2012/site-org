@@ -19,6 +19,7 @@
 	+ [[file:data-structure-and-algorithm/hash.org][一些资料]]
 
 * 数据库
+
 ** 关系型数据库
 
    - [[file:database/mysql.org][MySQL]]
@@ -31,7 +32,12 @@
 
    - [[file:database/redis.org][Redis]]
 
+** 全文检索
+
+   - [[file:database/es.org][ElasticSearch]]
+
 * DevOps
+
 ** 系统运维
 
    - 基础命令 :: [[file:devops/awk.org][awk]]，[[file:devops/sed.org][sed]]，[[file:devops/tar.org][tar]]，[[file:devops/rsync.org][rsync]]，[[file:devops/cron.org][crontab]]，[[file:devops/find.org][find]]，[[file:devops/process-mgr.org][进程管理]]，[[file:devops/ssh.org][SSH]]

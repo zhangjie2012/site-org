@@ -1,0 +1,15 @@
+#+SETUPFILE: ~/site/tpl/wiki-tpl.org
+#+TITLE: ElasticSearch
+#+DATE: 2020-10-14 11:51:14
+
+
+* FAQ
+
+** 插入数据之后立即查询，查询不到数据
+
+   ES 插入和查询通常不在同一个分片，不同的分片之间有同步延迟。可以通过 =refresh= [fn:1]参数控制强制同步数据。
+   但是一般不建议这么做，会影响性能，如果要使用，建议评估影响。
+
+* Footnotes
+
+[fn:1] https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-refresh.html
