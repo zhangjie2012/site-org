@@ -3,29 +3,29 @@
 #+OPTIONS: toc:nil
 #+OPTIONS: num:nil
 
-目标：
+* 目标
 
-- *快速* package 使用 [[https://github.com/jwiegley/use-package][use-package]] 声明，全部 lazy-load，启动速度小于 1 秒
-- *实用* 不用华而不实的 package，贴近原生 /一些想要的功能，Emacs 已经实现了只不过你不知道/
-- *稳定* 使用稳定为第一要务，不追求新 /配置文件永不更新才是最好的/
-- *高效* 合理的编排快捷键，减少按键且易于记忆
+  - *快速* package 使用 [[https://github.com/jwiegley/use-package][use-package]] 声明，全部 lazy-load，启动速度小于 1 秒
+  - *实用* 不用华而不实的 package，贴近原生 /一些想要的功能，Emacs 已经实现了只不过你不知道/
+  - *稳定* 使用稳定为第一要务，不追求新 /配置文件永不更新才是最好的/
+  - *高效* 合理的编排快捷键，减少按键且易于记忆
 
-配置文件： [[https://github.com/zhangjie2012/_emacs.d][https://github.com/zhangjie2012/_emacs.d]]
+  配置文件： [[https://github.com/zhangjie2012/_emacs.d][https://github.com/zhangjie2012/_emacs.d]]
 
 * 核心
 
-- [[file:base.org][基础]] 安装、键位约定、包安装与管理
-- [[file:package.org][插件]] 实用的的插件（包）推荐
-- [[file:shortkey.org][快捷键]] 常用快捷键
-- [[file:ide.org][IDE]] 多项目管理、编程语言配置、版本管理器，像 IDE 一样使用 Emacs
-- [[file:orgmode.org][orgmode]] 最强力的插件，一种标记语言，比 Markdown 丰富，支持内嵌 LaTeX、导出成 HTML、pdf 等
-  我的博客就是用 orgmode 生成的
-- [[file:faq.org][常见问题]] 使用过程中常见的问题以及解决方案
-- [[file:with-terminal.org][与终端模拟器]] Emacs 快捷键繁多和他独特的快捷键映射方式，导致和终端模拟器一起工作时，各种快捷键冲突。
+  - [[file:base.org][基础]] 安装、键位约定、包安装与管理
+  - [[file:package.org][插件]] 实用的的插件（包）推荐
+  - [[file:shortkey.org][快捷键]] 常用快捷键
+  - [[file:ide.org][IDE]] 多项目管理、编程语言配置、版本管理器，像 IDE 一样使用 Emacs
+  - [[file:orgmode.org][orgmode]] 最强力的插件，一种标记语言，比 Markdown 丰富，支持内嵌 LaTeX、导出成 HTML、pdf 等
+	我的博客就是用 orgmode 生成的
+  - [[file:faq.org][常见问题]] 使用过程中常见的问题以及解决方案
+  - [[file:with-terminal.org][与终端模拟器]] Emacs 快捷键繁多和他独特的快捷键映射方式，导致和终端模拟器一起工作时，各种快捷键冲突。
 
 * 其它
 
-- [[file:resource.org][资源]] 教程、博客、视频等
-- [[file:users.org][用户]] 知名的 Emacs 用户
-- [[file:screen.org][截图]] 一些图片
-- [[file:news.org][News]] Emacs 圈里最新消息
+  - [[file:resource.org][资源]] 教程、博客、视频等
+  - [[file:users.org][用户]] 知名的 Emacs 用户
+  - [[file:screen.org][截图]] 一些图片
+  - [[file:news.org][News]] Emacs 圈里最新消息
