@@ -4,33 +4,32 @@
 
 * [deprecated] govender
 
-govendor: <https://github.com/kardianos/govendor>，安装： ~go get -u github.com/kardianos/govendor~ 。
+  govendor: <https://github.com/kardianos/govendor>，安装： ~go get -u github.com/kardianos/govendor~ 。
 
 ** 创建项目
 
-+ 项目初始化： ~govendor init~
-+ 查看文件状态： ~govendor list~
-+ 添加 package 到 vendor： ~govendor add +external~
+   + 项目初始化： ~govendor init~
+   + 查看文件状态： ~govendor list~
+   + 添加 package 到 vendor： ~govendor add +external~
 
 ** 常规使用
 
-+ git pull 下来项目后，本地同步安装 package： ~govendor sync -v~
-+ 查看 package 被哪里引用： ~govendor list -v package~
-+ govendor 其实并不那么好用（不然 go 的 package 管理也不会这么混乱了），升级和删除 package 等，暴力解法是：删掉 vendor 目录，重新走一遍初始化
+   + git pull 下来项目后，本地同步安装 package： ~govendor sync -v~
+   + 查看 package 被哪里引用： ~govendor list -v package~
+   + govendor 其实并不那么好用（不然 go 的 package 管理也不会这么混乱了），升级和删除 package 等，暴力解法是：删掉 vendor 目录，重新走一遍初始化
+
 * Go module
 
-*2020-01-17 14:14:44 Fri update*
+  官方的几篇介绍文章：
 
-官方的几篇介绍文章：
+  1. [[https://blog.golang.org/using-go-modules][Using Go Modules]]
+  2. [[https://blog.golang.org/migrating-to-go-modules][Migrating to Go Modules]]
+  3. [[https://blog.golang.org/publishing-go-modules][Publishing Go Modules]]
+  4. [[https://blog.golang.org/v2-go-modules][Go Modules: v2 and Beyond]]
 
-1. [[https://blog.golang.org/using-go-modules][Using Go Modules]]
-2. [[https://blog.golang.org/migrating-to-go-modules][Migrating to Go Modules]]
-3. [[https://blog.golang.org/publishing-go-modules][Publishing Go Modules]]
-4. [[https://blog.golang.org/v2-go-modules][Go Modules: v2 and Beyond]]
+  Go 1.11 之后官方支持包管理工具 =go mod= 。
 
-Go 1.11 之后官方支持包管理工具 =go mod= 。
-
-#+BEGIN_SRC
+  #+BEGIN_SRC
 Usage:
 
 	go mod <command> [arguments]
@@ -45,60 +44,65 @@ The commands are:
 	vendor      make vendored copy of dependencies
 	verify      verify dependencies have expected content
 	why         explain why packages or modules are needed
-#+END_SRC
+  #+END_SRC
 
 ** 常见场景
 
-- 初始化： =go mod init= 会生成 go.mod 文件；如果在 =GOPATH= 之外的项目， =go mod init= 需要指定仓库名称
-- 添加依赖：如果 Go 发现有新的 package 引入，在执行 =go build= 或者 =go test= 会自动 finding->downloading->extracting，然后将 package 名称和版本写入到 go.mod 文件中。
-  引入一个 package，package 可能还依赖其它的 package，go.mod 只记录根依赖，你可以通过 =go list -m all= 来查看所有的依赖；
-  除了 go.mod 之外，还生成了一个 go.sum 文件用来做 hash 校验；
-  *go.mod 和 go.sum 都应该放到版本管理工具中*
-- 升级依赖， =go get -u= 包之后，go.mod 会自动升级到最新版本；
-  + =go list -m -u all= 可以查看包的可升级版本
-- 移出不常用的依赖 =go mod tidy=
-- =go mod download= 下载依赖的 module 到本地缓存
-- =go mod why= 查找包的依赖，比如 =go mod why golang.org/x/text/encoding=
+   - 初始化： =go mod init= 会生成 go.mod 文件；如果在 =GOPATH= 之外的项目， =go mod init= 需要指定仓库名称
+   - 添加依赖：如果 Go 发现有新的 package 引入，在执行 =go build= 或者 =go test= 会自动 finding->downloading->extracting，然后将 package 名称和版本写入到 go.mod 文件中。
+	 引入一个 package，package 可能还依赖其它的 package，go.mod 只记录根依赖，你可以通过 =go list -m all= 来查看所有的依赖；
+	 除了 go.mod 之外，还生成了一个 go.sum 文件用来做 hash 校验；
+	 *go.mod 和 go.sum 都应该放到版本管理工具中*
+   - 升级依赖， =go get -u= 包之后，go.mod 会自动升级到最新版本；
+	 + =go list -m -u all= 可以查看包的可升级版本
+   - 移出不常用的依赖 =go mod tidy=
+   - =go mod download= 下载依赖的 module 到本地缓存
+   - =go mod why= 查找包的依赖，比如 =go mod why golang.org/x/text/encoding=
+   - =go clean -modcache= 删除所有的 mod 目录下的文件，注意是所有的，并不是本项目的[fn:1]
 
 ** vendor 目录说明
 
-从上面的几篇文章可以看到基本上没有再提 vendor 目录的事，虽然 go mod 命令确实有支持。
-官方 wiki 里有说明： [[https://github.com/golang/go/wiki/Modules#how-do-i-use-vendoring-with-modules-is-vendoring-going-away][How do I use vendoring with modules? Is vendoring going away?]]
+   从上面的几篇文章可以看到基本上没有再提 vendor 目录的事，虽然 go mod 命令确实有支持。
+   官方 wiki 里有说明： [[https://github.com/golang/go/wiki/Modules#how-do-i-use-vendoring-with-modules-is-vendoring-going-away][How do I use vendoring with modules? Is vendoring going away?]]
 
-Go modules 的设计之初是想完全放弃 vendor 目录的，但是社区的 [[https://groups.google.com/forum/#!msg/golang-dev/FTMScX1fsYk/uEUSjBAHAwAJ][反馈]] 导致保留了对 vendor 的支持。
+   Go modules 的设计之初是想完全放弃 vendor 目录的，但是社区的 [[https://groups.google.com/forum/#!msg/golang-dev/FTMScX1fsYk/uEUSjBAHAwAJ][反馈]] 导致保留了对 vendor 的支持。
 
-简单来讲，如果要支持的话，可以这样：
+   简单来讲，如果要支持的话，可以这样：
 
-- =go mod vendor= 会根据 go.mod 中的文件重置 vendor 目录，将依赖的包拷贝入内
-- 默认情况下， =go build= 会忽略 =vendor= 中的内容
-- 指定了 =-mod=vendor= 情况下才会从根目录下的 vendor 目录找包依赖，这种情况下会忽略 go.mod 的内容。
-  注意，只会从项目的顶级目录下找，其它目录下的会被忽略。
-- 如果希望全局支持的话，可以设置 ~GOFLAGS=-mod=vendor~ 环境变量。
+   - =go mod vendor= 会根据 go.mod 中的文件重置 vendor 目录，将依赖的包拷贝入内
+   - 默认情况下， =go build= 会忽略 =vendor= 中的内容
+   - 指定了 =-mod=vendor= 情况下才会从根目录下的 vendor 目录找包依赖，这种情况下会忽略 go.mod 的内容。
+	 注意，只会从项目的顶级目录下找，其它目录下的会被忽略。
+   - 如果希望全局支持的话，可以设置 ~GOFLAGS=-mod=vendor~ 环境变量。
 
-/所以，对于用户来讲，是不是可以考虑不再关心 vendor 目录了？/
+   /所以，对于用户来讲，是不是可以考虑不再关心 vendor 目录了？/
 
 ** go mod 使用私有库
 
-不使用 go mod 私有库直接手动拷贝到 =$GOPATH/src= 下面就可以用了，使用 go mod 之后，依赖库的位置放在了 =$GOPATH/pkg/mod= 下面，并且还有 go.sum 校验，
-所以直接拷贝的方式不可用了，可以用下面的方法来解决。假设 git 仓库的地址为： =git.zhangjiee.com= 。
+   不使用 go mod 私有库直接手动拷贝到 =$GOPATH/src= 下面就可以用了，使用 go mod 之后，依赖库的位置放在了 =$GOPATH/pkg/mod= 下面，并且还有 go.sum 校验，
+   所以直接拷贝的方式不可用了，可以用下面的方法来解决。假设 git 仓库的地址为： =git.zhangjiee.com= 。
 
-1. =go env -w GOPRIVATE=git.zhangjiee.com=
-2. =.gitconfig= 中添加：
-   #+BEGIN_SRC
-   [url "ssh://git@git.zhangjiee.com/"]
-       insteadOf = http://git.zhangjiee.com/
-   #+END_SRC
-3. =go get -u -v -insecure git.zhangjiee.com/group/project= 非 https 在 go get 时需要加上 =-insecure=
+   1. =go env -w GOPRIVATE=git.zhangjiee.com=
+   2. =.gitconfig= 中添加：
+	  #+BEGIN_SRC
+	  [url "ssh://git@git.zhangjiee.com/"]
+		  insteadOf = http://git.zhangjiee.com/
+	  #+END_SRC
+   3. =go get -u -v -insecure git.zhangjiee.com/group/project= 非 https 在 go get 时需要加上 =-insecure=
 
-然后在 =$GOPATH/pkg/mod= 中就会出现 =git.zhangjiee.com/group/project@vx.y.z= 目录了，并且添加到了 go.mod 和 go.sum 文件中。
+   然后在 =$GOPATH/pkg/mod= 中就会出现 =git.zhangjiee.com/group/project@vx.y.z= 目录了，并且添加到了 go.mod 和 go.sum 文件中。
 
 ** go get proxy
 
-由于众所周知的原因， =go get= 速度非常慢，经常 timeout。一种解决办法是自己有 VPN 设置 http.https 代理，另外一种办法是使用公共的代理。
-比如：七牛提供的 https://goproxy.cn/。
+   由于众所周知的原因， =go get= 速度非常慢，经常 timeout。一种解决办法是自己有 VPN 设置 http.https 代理，另外一种办法是使用公共的代理。
+   比如：七牛提供的 https://goproxy.cn/。
 
-#+begin_src shell
-echo "export GO111MODULE=on" >> ~/.profile
-echo "export GOPROXY=https://goproxy.cn" >> ~/.profile
-source ~/.profile
-#+end_src
+   #+begin_src shell
+	 echo "export GO111MODULE=on" >> ~/.profile
+	 echo "export GOPROXY=https://goproxy.cn" >> ~/.profile
+	 source ~/.profile
+   #+end_src
+
+* Footnotes
+
+[fn:1] https://groups.google.com/g/golang-nuts/c/8FXS-VEYiQI

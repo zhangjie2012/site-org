@@ -18,20 +18,20 @@
 
 ** map 中删除元素是否安全？
 
-  安全[fn:1]。
+   安全[fn:1]。
 
-  #+begin_src go
-	for key := range m {
-		if key.expired() {
-			delete(m, key)
-		}
-	}
-  #+end_src
+   #+begin_src go
+	 for key := range m {
+		 if key.expired() {
+			 delete(m, key)
+		 }
+	 }
+   #+end_src
 
-  1. Go map 是使用 hash 表实现的，并不是 tree
-  2. delete 并没有实际的删除一个元素，只是设置一个标记，也就是说，delete 并不会减少 map 空间的大小[fn:2]。
-	 并且允许删除一个不存在的 key。
-  3. 只有 =map=nil= 才会释放空间
+   1. Go map 是使用 hash 表实现的，并不是 tree
+   2. delete 并没有实际的删除一个元素，只是设置一个标记，也就是说，delete 并不会减少 map 空间的大小[fn:2]。
+	  并且允许删除一个不存在的 key。
+   3. 只有 =map=nil= 才会释放空间
 
 * Footnotes
 
