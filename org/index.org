@@ -1,5 +1,5 @@
 #+SETUPFILE: ~/site/tpl/link-tpl.org
-#+TITLE: QWERTY
+#+TITLE: JerryZhang's Blog
 #+OPTIONS: toc:nil
 #+OPTIONS: num:nil
 
