@@ -1,0 +1,16 @@
+#+SETUPFILE: ~/site/tpl/wiki-tpl.org
+#+TITLE: curl
+#+DATE: 2020-11-09 11:32:51
+
+* 常用参数
+
+- =-A= 添加 User-Agent
+- =-H= 设置 header，可以指定多次 =-H 'a:b' -H 'c:d'=
+- =-b= 发送 cookie， ~-b 'foo1=bar;foo2=bar2'~
+- =-d= POST 请求 body 体
+- =-F= 上传二进制文件 =curl -F 'file=@photo.png' https://google.com/profile=
+- =-G= 构造 url querystring
+- =-u= 设置服务器认证的用户名和密码
+- =-v= 输出通信过程，用于调试
+- =-x= 指定请求代理
+- =-X= 指定请求方法， =-X POST/GET/PUT/PACTH/...=
