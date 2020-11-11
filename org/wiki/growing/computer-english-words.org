@@ -95,6 +95,7 @@
   - [[http://dict.cn/immutable][immutable]] [ɪ'mjuːtəbl] adj. 不可变的, 一成不变的
   - [[http://dict.cn/semaphore][semaphore]] ['seməfɔːr] n. 信号
   - [[http://dict.cn/strategy][strategy]] ['strætədʒi] n. 策略
+  - [[https://www.youdao.com/w/eng/optimize][optimize]] [ˈɑːptɪmaɪz] vi. 优化 eg. optimize DB 优化数据库
 
 * 短语
 
