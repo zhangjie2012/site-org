@@ -8,7 +8,6 @@
 
 这里的专题，不与小程序官方文档重叠，多与实战相关。
 
-
 * 审核
 
 - 一些类别需要《非经营性互联网信息服务备案核准》，这个东西其实就是 ICP 备案的在工信部网站上的截图。
@@ -30,3 +29,15 @@
 ** 素材
 
 - icon 素材：https://www.flaticon.com/
+
+* FAQ
+
+** 加载网络字体
+
+   使用 =wx.loadFontFace= 可以加载网络字体，[[https://developers.weixin.qq.com/miniprogram/dev/api/ui/font/wx.loadFontFace.html][官方]]有说明，但是说的不清楚。这里的同源指的是需要跟 =servicewechat.com=
+   同源，这是微信自己的域名，我们是不可能跟他们同源的。
+
+   解决的办法是用自己的服务器，放静态资源，然后开启 cors，即设置 header 即可。而且，要求是 https。
+
+   建议使用云存储，访问链接自带 https，同时需要设置 cors，没设置也是不行的。设置方法：安全管理->跨域访问CORS设置->添加规则，
+   按照引导填写即可。
