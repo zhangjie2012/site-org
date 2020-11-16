@@ -24,112 +24,182 @@ Github 的 [[https://github.com/wojtekmaj/react-lifecycle-methods-diagram][react
   5. =componentDidUpdate()=: 常用
 - 卸载
   1. =componentWillUnmount()=: 常用
-** 初始化
 
-使用 =constructor(props)= 构造函数初始化，如果是通过继承 =React.Component= 子类来创建 React 组件的话，首先应该调用 =super(props)= 初始化父类。
+* 初始化
 
-在构造函数中，你初始化 state 和设置函数的 this bind。初始化 state，直接赋值初始化即可，不要使用 =setState()= 函数，因为 =setState= 会触发渲染，而此时组件还未初始化。
-强行使用 =setState= ，React 会报错。bind 操作类似，
+  使用 =constructor(props)= 构造函数初始化，如果是通过继承 =React.Component= 子类来创建 React 组件的话，首先应该调用 =super(props)= 初始化父类。
 
-#+BEGIN_EXAMPLE
-  this.handleClick = this.handleClick.bind(this)
-#+END_EXAMPLE
+  在构造函数中，你初始化 state 和设置函数的 this bind。初始化 state，直接赋值初始化即可，不要使用 =setState()= 函数，因为 =setState= 会触发渲染，而此时组件还未初始化。
+  强行使用 =setState= ，React 会报错。bind 操作类似，
 
-ES6 提供了箭头函数可自动绑定 this，所以一般不需要在构造函数中手动绑定。
+  #+BEGIN_SRC js
+	this.handleClick = this.handleClick.bind(this)
+  #+END_SRC
 
-** 装载
-*** getDerivedStateFromProps
+  ES6 提供了箭头函数可自动绑定 this，所以一般不需要在构造函数中手动绑定。
 
-=static getDerivedStateFromProps(nextProps, prevState)= ，static 的函数意味着没有 =this= 可以访问。那怎么使用 =setState= 函数来改变状态呢？
-事实上，你不需要 =setState= ，只需要把待更新的 data 数据返回即可，如果没有数据需要更新则返回 =null= 。
+* 装载
 
-但有的时候你需要在更新数据之后触发 =props= 的更新（异步调用），这种情况下，请使用 =componentDidUpdate= 来代替。
+** getDerivedStateFromProps
 
-也就是说，原来的 =componentWillReceiveProps= 实现的功能，可以用 =getDerivedStateFromProps + componentDidUpdate= 替代完成。
+   =static getDerivedStateFromProps(nextProps, prevState)= ，static 的函数意味着没有 =this= 可以访问。那怎么使用 =setState= 函数来改变状态呢？
+   事实上，你不需要 =setState= ，只需要把待更新的 data 数据返回即可，如果没有数据需要更新则返回 =null= 。
 
-*** render
+   但有的时候你需要在更新数据之后触发 =props= 的更新（异步调用），这种情况下，请使用 =componentDidUpdate= 来代替。
 
-React 组件的核心方法，也是必须要实现的一个方法，用于根据状态 state 和属性 props 渲染 React 组件。
-应保证无论执行多少次，相同的输入（state、props）有相同的输出（渲染结果），所以不要在 render 中改变组件状态（setState）。
+   也就是说，原来的 =componentWillReceiveProps= 实现的功能，可以用 =getDerivedStateFromProps + componentDidUpdate= 替代完成。
 
-*** componentDidMount
+** render
 
-=componentDidMount()= 首次渲染结束后调用的方法，只会被调用一次。异步的 API 调用应该放到这个函数中，而不是 =componentWillMount()= 中。
-具体可以查看 [[https://hackernoon.com/where-to-integrate-api-calls-in-reactjs-componentwillmount-vs-componentdidmount-710085dc05c3][Where to integrate API calls in ReactJs? --- componentWillMount vscomponentDidMount]]。
+   React 组件的核心方法，也是必须要实现的一个方法，用于根据状态 state 和属性 props 渲染 React 组件。
+   应保证无论执行多少次，相同的输入（state、props）有相同的输出（渲染结果），所以不要在 render 中改变组件状态（setState）。
 
-** 更新
+** componentDidMount
 
-数据（state 或者 props）发生了变化，会触发重新渲染。
+   =componentDidMount()= 首次渲染结束后调用的方法，只会被调用一次。异步的 API 调用应该放到这个函数中，而不是 =componentWillMount()= 中。
 
-*** shouldComponentUpdate
+   具体可以查看 [[https://hackernoon.com/where-to-integrate-api-calls-in-reactjs-componentwillmount-vs-componentdidmount-710085dc05c3][Where to integrate API calls in ReactJs? --- componentWillMount vscomponentDidMount]]。
 
-=shouldComponentUpdate(nextProps, nextState)= 用来告诉 React 组件的 state，props 发生变更之后是否引起组件的重新渲染， =shouldComponentUpdate= 在 props 和 state 被接受之后，渲染之前被调用。
-默认是 =true= ，该方法在首次渲染和使用 =forceUpdate()= 时不会被调用。当 =shouldComponentUpdate= 返回 =false= 时， =UNSAFE_componentWillUpdate()= 、 =render()= 、 =componentDidUpdate()= 将不会被调用。
+* 更新
 
-*** getSnapshotBeforeUpdate
+  数据（state 或者 props）发生了变化，会触发重新渲染。
 
-=getSnapshotBeforeUpdate(prevProps, prevState)=: 在最近一次渲染输出被提交之前调用，它使你的组件在可能更改之前从 DOM 中捕获一些信息（比如滚动位置）。
-返回值将作为 =componentDidUpdate= 函数的第三个参数。不是很常用的一个功能。
+** shouldComponentUpdate
 
-*** componentDidUpdate
+   =shouldComponentUpdate(nextProps, nextState)= 用来告诉 React 组件的 state，props 发生变更之后是否引起组件的重新渲染， =shouldComponentUpdate= 在 props 和 state 被接受之后，渲染之前被调用。
+   默认是 =true= ，该方法在首次渲染和使用 =forceUpdate()= 时不会被调用。当 =shouldComponentUpdate= 返回 =false= 时， =UNSAFE_componentWillUpdate()= 、 =render()= 、 =componentDidUpdate()= 将不会被调用。
 
-=componentDidUpdate(prevProps, prevState, snapshot)= 在更新发生后立刻调用，首次初始渲染之后不会触发。你可以在 =componentDidUpdate()= 中直接调用 =setState= ，
-但是注意一定要做条件判断（不然就死循环了）。类似这样:
+** getSnapshotBeforeUpdate
 
-#+BEGIN_EXAMPLE
-  componentDidUpdate(prevProps) {
-    // Typical usage (don't forget to compare props):
-    if (this.props.userID !== prevProps.userID) {
-      this.fetchData(this.props.userID);
-    }
-  }
-#+END_EXAMPLE
+   =getSnapshotBeforeUpdate(prevProps, prevState)=: 在最近一次渲染输出被提交之前调用，它使你的组件在可能更改之前从 DOM 中捕获一些信息（比如滚动位置）。
+   返回值将作为 =componentDidUpdate= 函数的第三个参数。不是很常用的一个功能。
 
-注意，在 =shouldComponentUpdate= 返回 =false= 时， =componentDidUpdate= 不会被调用。
+** componentDidUpdate
 
-** 卸载
+   =componentDidUpdate(prevProps, prevState, snapshot)= 在更新发生后立刻调用，首次初始渲染之后不会触发。你可以在 =componentDidUpdate()= 中直接调用 =setState= ，
+   但是注意一定要做条件判断（不然就死循环了）。类似这样:
 
-在组件卸载和销毁时，会调用 =componentWillUnmount()= 函数。可以在这个函数中做一些清理工作（定时器、取消网络请求等）。
-在 =componentWillUnmount()= 函数中不能调用 =setState()= 函数。一旦一个组件被销毁之后，就再也不能挂载了。
-
-更详细的使用说明请看 [[https://reactjs.org/docs/react-component.html][React 官方文档: React.Component]]，本文也是由此而来。
-
---------------
-
-*2019-07-10 14:53:22 更新*
-
-对于 =componentWillReceiveProps= 被废弃之后，使用 =getDerivedStateFromProps + componentDidUpdate= 来代替的说明:
-
-1. =getDerivedStateFromProps= 是一个 =static= 函数，也就意味着不属于任何一个实例，只属于类本身，那么如何在它里面使用  =this.setState= 呢？
-   答案是你不需要这么做。这个函数直接返回新的 state ，如果没有变更返回 null 即可。
    #+BEGIN_EXAMPLE
-      static getDerivedStateFromProps(nextProps, prevState) {
-        if (prevState !== nextProps) {
-          return {
-            // new state
-          }
-        }
-        return null
-      }
+	 componentDidUpdate(prevProps) {
+	   // Typical usage (don't forget to compare props):
+	   if (this.props.userID !== prevProps.userID) {
+		 this.fetchData(this.props.userID);
+	   }
+	 }
    #+END_EXAMPLE
-   返回 state 这种行为就相当于是 =setState= ，没有发生变更的值，不设置即不修改。
-   =getDerivedStateFromProps= 会在首次挂载和每次重新渲染时（re-rendering）调用，所以你可以替代在构造函数中使用 props 初始化 state。
-2. 如果同时使用了 =getDerivedStateFromProps= 和 =componentWillReceiveProps=，只有 =getDerivedStateFromProps= 会被调用
-3. =getDerivedStateFromProps= 中只能更新 state 的值，那更新了之后要异步更新数据怎么办呢？
-   答案是使用 =componentDidUpdate(prevProps, prevState, snapshot)= ，前两个参数表示在 =getDerivedStateFromProps= 更新之前的 props 和 state。
-   判断新旧的 props 或者 state，然后决定是否异步请求数据（谨慎判断，不然可能会死循环）。
 
-能满足需求，但是使用起来的确麻烦了。为什么废弃 componentWillXXX 系列的函数呢？好像是为了减少渲染次数，提高效率（搜了不少文章，能精确描述缘由的几乎没有）。
+   注意，在 =shouldComponentUpdate= 返回 =false= 时， =componentDidUpdate= 不会被调用。
 
-参考: [[https://medium.com/@baphemot/whats-new-in-react-16-3-d2c9b7b6193b][What'snew in React 16.3(.0-alpha)]]
+* 卸载
 
-*2019-08-02 10:25:09 更新*
+  在组件卸载和销毁时，会调用 =componentWillUnmount()= 函数。可以在这个函数中做一些清理工作（定时器、取消网络请求等）。
+  在 =componentWillUnmount()= 函数中不能调用 =setState()= 函数。一旦一个组件被销毁之后，就再也不能挂载了。
 
-如何判断属性是否从 null 到 data 的更新，在 =componentDidUpdate= 中做更好一些，直接比较 =preProps= 和 =this.props= 值是否相同即可。
+  更详细的使用说明请看 [[https://reactjs.org/docs/react-component.html][React 官方文档: React.Component]]，本文也是由此而来。
 
-以前都是在 =getDerivedStateFromProps= 中做的，但是下面这种情况会很棘手:
+  --------------
 
-1. =getDerivedStateFromProps= 中判断初始的 state 与 props 是否相同，然后给 state 赋值
-2. 调用 =setState= 写用户变更数据
+  *2019-07-10 14:53:22 更新*
 
-这种情况下，state 不会被修改，因为 =setState= 触发了渲染，进而调用 =getDerivedStateFromProps= 又把数据恢复的跟 props 相同了···。
+  对于 =componentWillReceiveProps= 被废弃之后，使用 =getDerivedStateFromProps + componentDidUpdate= 来代替的说明:
+
+  1. =getDerivedStateFromProps= 是一个 =static= 函数，也就意味着不属于任何一个实例，只属于类本身，那么如何在它里面使用  =this.setState= 呢？
+	 答案是你不需要这么做。这个函数直接返回新的 state ，如果没有变更返回 null 即可。
+	 #+BEGIN_EXAMPLE
+		static getDerivedStateFromProps(nextProps, prevState) {
+		  if (prevState !== nextProps) {
+			return {
+			  // new state
+			}
+		  }
+		  return null
+		}
+	 #+END_EXAMPLE
+	 返回 state 这种行为就相当于是 =setState= ，没有发生变更的值，不设置即不修改。
+	 =getDerivedStateFromProps= 会在首次挂载和每次重新渲染时（re-rendering）调用，所以你可以替代在构造函数中使用 props 初始化 state。
+  2. 如果同时使用了 =getDerivedStateFromProps= 和 =componentWillReceiveProps=，只有 =getDerivedStateFromProps= 会被调用
+  3. =getDerivedStateFromProps= 中只能更新 state 的值，那更新了之后要异步更新数据怎么办呢？
+	 答案是使用 =componentDidUpdate(prevProps, prevState, snapshot)= ，前两个参数表示在 =getDerivedStateFromProps= 更新之前的 props 和 state。
+	 判断新旧的 props 或者 state，然后决定是否异步请求数据（谨慎判断，不然可能会死循环）。
+
+	 能满足需求，但是使用起来的确麻烦了。为什么废弃 componentWillXXX 系列的函数呢？好像是为了减少渲染次数，提高效率（搜了不少文章，能精确描述缘由的几乎没有）。
+
+	 参考: [[https://medium.com/@baphemot/whats-new-in-react-16-3-d2c9b7b6193b][What'snew in React 16.3(.0-alpha)]]
+
+  *2019-08-02 10:25:09 更新*
+
+  如何判断属性是否从 null 到 data 的更新，在 =componentDidUpdate= 中做更好一些，直接比较 =preProps= 和 =this.props= 值是否相同即可。
+
+  以前都是在 =getDerivedStateFromProps= 中做的，但是下面这种情况会很棘手:
+
+  1. =getDerivedStateFromProps= 中判断初始的 state 与 props 是否相同，然后给 state 赋值
+  2. 调用 =setState= 写用户变更数据
+
+  这种情况下，state 不会被修改，因为 =setState= 触发了渲染，进而调用 =getDerivedStateFromProps= 又把数据恢复的跟 props 相同了···。
+
+* React hook
+
+  *2020-11-16 更新*
+
+  React v16.8 版本之后新增了 Hook。 我的理解是：hook 使得函数组件也可以 state，也可以有生命周期。
+
+  起初觉得难以理解很排斥，用起来之后「真香」。这也符合 React 的学习曲线：理解起来很难，但是用起来很简单。
+  专业的术语在[[https://zh-hans.reactjs.org/docs/hooks-intro.html][官方文档]]有说明，这里只说明怎么用，使用场景，以及一些注意事项。
+
+** State Hook
+
+   =useState= 声明并初始化一个变量，返回一个可修改变量值的 hook。
+
+   #+begin_src js
+	 const [count, setCount] = useState(0);
+   #+end_src
+
+   声明一个 count 并初始化为 0， =setCount= 用来修改 count 的值。如果需要声明多个变量，则多行调用 =useState= 即可。
+   如下：
+
+   #+begin_src js
+	 const [age, setAge] = useState(42);
+	 const [fruit, setFruit] = useState('banana');
+	 const [todos, setTodos] = useState([{ text: '学习 Hook' }]);
+   #+end_src
+
+   *注意* 函数退出时候变量会被销毁，而 state 中的变量会被保留。
+
+** Effect Hook
+
+   =useEffect= 可以认为是 =componentDidMount=, =componentDidUpdate=, =componentWillUnmount= 三个生命周期函数的组合。
+   也就是说函数式组件的生命周期由 =useEffect= 来实现。
+
+   在一个 class 组件中，想要在 DOM 更新之后发送网络请求，一般放在 =componentDidMount= 中，中间 props 发生变化，
+   再次更新数据数据放在 =componentDidUpdate= 中。
+
+   在 function 组件中，使用 =useEffect= 即可。
+
+   #+begin_src js
+	 useEffect(() => {
+		 fetch();
+	 }, []);
+   #+end_src
+
+   他不同于 =componentDidMount= 在于它在每次渲染后都会执行。也因此类似 =componentDidUpdate= ，需要一些判定条件，否则很容易死循环。
+   =useEffect= 的第二个可选参数来指定该参数发生变化之后才执行 =useEffect= 中的内容。第二个参数是个数组，可以填写多个值。
+
+   如果只希望在 function 组件初始化时调用一次，第二个参数填写 =[]= 即可。
+
+   对于需要清除的副作用，在 class 组件中通过 =componentWillUnmount= 中实现。function 组件中， =useEffect= 返回一个
+   callback，该 callback 函数在组件卸载时自动执行。
+
+   #+begin_src js
+	 useEffect(() => {
+		 // ...
+		 ChatAPI.subscribeToFriendStatus(props.friend.id, handleStatusChange);
+		 return () => {
+			 ChatAPI.unsubscribeFromFriendStatus(props.friend.id, handleStatusChange);
+		 };
+	 });
+   #+end_src
+
+** Hook 使用规则
+
+   - 只能在函数最顶层使用 Hook，不要在循环中，条件或者嵌套函数中调用 Hook。
+   - 只在 React 函数中调用 Hook
