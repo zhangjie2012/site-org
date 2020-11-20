@@ -33,18 +33,19 @@
    1. =lsp-workspace-folders-remove= 可以移出之前添加的 workspace，但是如果遇到大的目录变更，一个一个的移出很慢。
 	  目前似乎没有提供一次性 remove all 的方法。一个解决办法是删除 lsp 的存储文件（lsp 提供了 =lsp-session-file= 变量来定义文件路径，
 	  默认在 =.emacs.d/.lsp-session-*= 路径下，如果没找到也可以在 lsp 源代码中搜索 lsp-session-file）。
-   2. 当前 LSP 还不太稳定，遇到各种问题就可以重启是最有效的办法： =lsp-workspace-restart=
+   2. +当前 LSP 还不太稳定+ ，遇到各种问题就可以重启是最有效的办法： =lsp-workspace-restart=
 
    常用快捷键：
 
-   |------------+-------------------------|
-   | =M-.=      | 跳转到定义              |
-   | =M-,=      | 返回，与 ~M-,~ 一起使用 |
-   | =C-c f=    | 格式化                  |
-   | =<f9> s r= | 重启 lsp workspace      |
-   | =<f9> f r= | 查找所有引用            |
-   | =<f9> f d= | lsp-describe-thing-at-point                        |
-   |------------+-------------------------|
+   |------------+-----------------------------|
+   | =M-.=      | 跳转到定义                  |
+   | =M-,=      | 返回，与 ~M-,~ 一起使用     |
+   | =C-c f=    | 格式化                      |
+   | =<f9> s r= | 重启 lsp workspace          |
+   | =<f9> f r= | 查找所有引用                |
+   | =<f9> f d= | lsp-describe-thing-at-point |
+   | =<f9> f i= | lsp-find-implementions      |
+   |------------+-----------------------------|
 
 ** Web 开发
 
@@ -53,8 +54,6 @@
 ** Go
 
    按照 [[https://golang.org/doc/install][官方说明]] 安装 Go，LSP server 用的是 [[https://github.com/golang/tools/tree/master/gopls][gopls]]。
-
-   guru: a tool for answering questions about Go source code.
 
    #+begin_src sh
 	 GO111MODULE=on go get golang.org/x/tools/gopls@latest
