@@ -11,7 +11,7 @@
 
 - [[http://www.brendangregg.com/blog/index.html][Brendan Gregg's Blog]]: 2014 年写做游戏用研究 C++ 调优工具 Perf，的时候看过他的文章，被博客内容惊艳到了
 - [[https://dirtysalt.github.io/html/index.html][dirtysalt]]: 浮躁的时候看一看这里，心情一下就平静了
-- [[https://githubengineering.com/][Github 工程师博客]]: 最新的 Github 技术动态
+- [[https://github.blog/][Github 工程师博客]]: 最新的 Github 技术动态
 - [[http://www.brendangregg.com/linuxperf.html][Linux Performance]]
 - [[https://eng.uber.com/][Uber 工程师博客]]
 - [[https://engineering.videoblocks.com/][VideoBlocks Product & Engineer]]
