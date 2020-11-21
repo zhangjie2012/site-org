@@ -27,7 +27,8 @@
 				"fontFace": "Cascadia Mono",
 				"fontSize": 11,
 				"colorScheme": "One Half Light",
-				"cursorColor": "#00AA00"
+				"cursorColor": "#00AA00",
+				"scrollbarState": "hidden"
 			},
 		}
 
@@ -60,7 +61,10 @@
 			{ "command": { "action": "switchToTab", "index": 8 }, "keys": "alt+9" },
 
 			// Press Ctrl+Shift+F to open the search box
-			{ "command": "find", "keys": "ctrl+shift+f" }
+			{ "command": "find", "keys": "ctrl+shift+f" },
+
+			{ "command": null, "keys": "alt+enter" },
+			{ "command": "toggleFullscreen", "keys": "f11" }
 		]
 	}
   #+end_src
