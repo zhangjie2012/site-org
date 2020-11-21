@@ -4,6 +4,7 @@
 * 桌面系统
 
   - [[file:desktop/ubuntu.org][Ubuntu]]
+  - [[file:desktop/wsl.org][WSL2]]
 
 * 操作系统理论
 

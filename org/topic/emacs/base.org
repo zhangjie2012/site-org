@@ -23,11 +23,13 @@
   *注意* ：如果编译提示 =configure: error: The following required libraries were not found: gnutls= 需要安装 =gnutls= 开发包，
   使用 =apt-cache search 'libgnutls.*-dev'= 找到对应的包，然后安装 [fn:1]。
 
-  /以上是 Ubuntu 18.04 下源码状态的流程，其它系统也差不多。/
+  *Ubuntu 18.04 & Ubuntu 20.04*
 
-  *Ubuntu 20.04*
-
-  =apt install emacs=
+  #+begin_src sh
+	sudo add-apt-repository ppa:kelleyk/emacs
+	sudo apt update
+	sudo apt install emacs27
+  #+end_src
 
   *MacOS*
 
