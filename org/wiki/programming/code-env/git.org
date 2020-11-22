@@ -9,7 +9,7 @@
 + ~git config user.email your_email~ : 设置你的邮箱
 + ~git config core.quotepath false~ : 解决中文文件名显示为数字问题
 + ~git config --list~ : 查看现有的配置
-+ =git config color.ui=always= 设置 color，Emacs eshell 中 git diff 高亮
++ ~git config color.ui always~ 设置 color，Emacs eshell 中 git diff 高亮
 
 几个 alias 方便操作:
 

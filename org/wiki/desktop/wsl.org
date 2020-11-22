@@ -64,7 +64,11 @@
 			{ "command": "find", "keys": "ctrl+shift+f" },
 
 			{ "command": null, "keys": "alt+enter" },
-			{ "command": "toggleFullscreen", "keys": "f11" }
+			{ "command": "toggleFullscreen", "keys": "f11" },
+
+			// disable copy and parse
+			{ "command": null, "keys": "ctrl+c" },
+			{ "command": null, "keys": "ctrl+v" }
 		]
 	}
   #+end_src
@@ -81,3 +85,16 @@
   #+end_src
 
   如果访问不了，注意查看 Windows 系统防火墙。
+
+  *远程连接到服务器上，中文乱码* =/etc/default/locale= 中 LANG 改为 =zh_CN.UTF-8= 。
+
+  *WSL 不支持 systemd* ，那就严重依赖 Docker 安装服务了。好在 Docker 和 WSL2 融合的似乎很完美[fn:1]。
+  只要安装 Windows 版本的 Desktop 之后，开启 WSL2 即可。
+
+  *设置启动目录* ="startingDirectory" : "//wsl$/Ubuntu-18.04/home/<Your Ubuntu Username>"= [fn:2]。
+
+* Footnotes
+
+[fn:2] https://docs.microsoft.com/en-us/windows/terminal/troubleshooting#set-your-wsl-distribution-to-start-in-the-home--directory-when-launched
+
+[fn:1] https://docs.docker.com/docker-for-windows/wsl/
