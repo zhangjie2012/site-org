@@ -2,6 +2,14 @@
 #+TITLE: WSL2
 #+DATE: 2020-11-21 11:40:19
 
+* 简介
+
+  WSL[fn:3]，Windows Subsystem for Linux。允许开发人员在 Windows 下运行 GNU/Linux 环境。
+  包括大多数命令行工具，实用程序和引用程序。
+
+  比较牛逼的一个点在于，安装一个 Linux 发行版跟安装普通软件一样，但却能拥有近乎原生的 Linux 系统
+  （真正的 Linux 内核），而不需要安装虚拟机。
+
 * 安装指引
 
   https://docs.microsoft.com/zh-cn/windows/wsl/install-win10
@@ -94,6 +102,8 @@
   *设置启动目录* ="startingDirectory" : "//wsl$/Ubuntu-18.04/home/<Your Ubuntu Username>"= [fn:2]。
 
 * Footnotes
+
+[fn:3] https://docs.microsoft.com/en-us/windows/wsl/
 
 [fn:2] https://docs.microsoft.com/en-us/windows/terminal/troubleshooting#set-your-wsl-distribution-to-start-in-the-home--directory-when-launched
 
