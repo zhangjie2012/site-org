@@ -1,0 +1,11 @@
+#+SETUPFILE: ~/site/tpl/wiki-tpl.org
+#+TITLE: Go profile
+#+DATE: 2020-11-25 16:18:31
+
+
+1. 程序对接 https://golang.org/pkg/net/http/pprof/
+2. 使用 =go tool pprof= 查看
+
+最新版本的 https://github.com/google/pprof 如果没有火焰图，需要升级。
+
+在 web 上查看 ~go tool pprof -http="0.0.0.0:6061" http://localhost:8080/debug/pprof/profile~
