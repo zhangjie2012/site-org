@@ -3,6 +3,11 @@
 #+OPTIONS: toc:nil
 #+OPTIONS: num:nil
 
+
+* 2021
+
+- 01-05: [[file:2021/2020-personal-review.org][2020 个人总结]]
+
 * 2020
 
 - 06-02: [[file:2020/go-mysql-closing-bad-idle-connection.org][Go MySQL 报错 closing bad idle connection: EOF]]
