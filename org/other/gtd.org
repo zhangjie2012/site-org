@@ -1,0 +1,4 @@
+#+SETUPFILE: ~/site/tpl/link-tpl.org
+#+TITLE:  Todo List
+#+OPTIONS: toc:nil
+#+OPTIONS: num:nil
