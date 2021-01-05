@@ -2,3 +2,8 @@
 #+TITLE:  Todo List
 #+OPTIONS: toc:nil
 #+OPTIONS: num:nil
+
+* Kubernetes
+
+  - [ ] 服务映射 extservice
+  - [ ] 暴露的 Prometheus metrics
