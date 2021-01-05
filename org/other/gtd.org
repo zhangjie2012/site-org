@@ -1,7 +1,11 @@
-#+SETUPFILE: ~/site/tpl/link-tpl.org
+#+SETUPFILE: ~/site/tpl/gtd.org
 #+TITLE:  Todo List
 #+OPTIONS: toc:nil
 #+OPTIONS: num:nil
+
+* 阅读 & 协作
+
+  - [ ] 2020 年终总结
 
 * Kubernetes
 
