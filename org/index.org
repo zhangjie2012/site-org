@@ -23,3 +23,10 @@
   - 日志 :: 日志收集相关 pipeline 和组件
 	+ [[https://github.com/zhangjie2012/logrusredis-hook][logrusredis-hook]] Go 日志包 logrus 的 redis hook，将日志输出到 redis LIST 中 [稳定版本, 维护]
 	+ [[https://github.com/zhangjie2012/logbus][logbus]] 日志消费组件，一个输入源多个输出渠道，可自定义输入源和输出源 [稳定版本, 迭代]
+
+* 小程序
+
+  业务时间做了两个小程序：
+
+  - 节日倒数：节日倒计时，比如说生日、发工资日等
+  - 小桔日记：一个日记本
