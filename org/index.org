@@ -5,7 +5,7 @@
 
 * Entry
 
-  - [[file:blog/index.org][Blog]] :: 网络日志，偏技术和思考（现在写的比较少了）
+  - [[file:blog/index.org][Blog]] :: 网络日志，偏技术和思考
   - [[file:wiki/index.org][Wiki]] :: 偏向于工具化，比较散的知识点
   - Topic :: 技术专题，比较聚集的知识面
 	+ [[file:topic/emacs/index.org][Emacs]] 使用 Emacs 是一种信仰 /核心已完结，缓慢补充/
