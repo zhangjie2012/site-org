@@ -4,3 +4,4 @@
 
 + https://talks.golang.org/2014/go4gophers.slide Go PPT
 + [[https://talks.golang.org/2012/splash.article][Go at Google: Language Design in the Service of Software Engineering]] Go 为什么是这样设计的，[[https://www.oschina.net/translate/go-at-google-language-design-in-the-service-of-software-engineering?lang=chs][中文版本]]
++ [[https://blog.discord.com/why-discord-is-switching-from-go-to-rust-a190bbca2b1f][Why Discord is switching from Go to Rust]] Discard 从 Go 迁移到 Rust，主要谈的是 GC 问题，另外说 Rust 在各种性能指标上都比 Go 强
