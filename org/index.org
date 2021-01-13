@@ -13,10 +13,13 @@
 	+ [[file:topic/grpc/index.org][gRPC]] /核心已完结，缓慢补充/
   - [[file:reading/read-books.org][Read]]、[[file:reading/unread-books.org][Unread]] :: 读过的和打算读的书，包括电子书
   - [[file:other/resume.org][Resume]] :: 简历
+  - Contact ::
+    + twitter [[https://twitter.com/duzhuoyizui][@duzhuoyizui]]
+    + github https://github.com/zhangjie2012
+    + [[https://music.163.com/#/user/home?id=30239300][网易云音乐]]
+    + [[mailto:me@zhangjiee.com][email]]
 
 * Open Source
-
-  Github: https://github.com/zhangjie2012 。
 
   - [[https://github.com/zhangjie2012/_emacs.d][_emacs.d]] :: 我的 Emacs 配置，[稳定版本, 迭代]
   - [[https://github.com/zhangjie2012/cbl-go][cbl-go]] :: Go 的常用基础库封装（标准库中没有的）[迭代版本, 测试中]
@@ -26,7 +29,7 @@
 
 * 小程序
 
-  业务时间做了两个小程序：
+  业余时间做了两个小程序：
 
   - 节日倒数：节日倒计时，比如说生日、发工资日等
   - 小桔日记：一个日记本

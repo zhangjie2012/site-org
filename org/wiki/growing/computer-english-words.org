@@ -97,6 +97,7 @@
   - [[http://dict.cn/strategy][strategy]] ['strætədʒi] n. 策略
   - [[https://www.youdao.com/w/eng/optimize][optimize]] [ˈɑːptɪmaɪz] vi. 优化 eg. optimize DB 优化数据库
   - [[https://www.youdao.com/w/threshold][threshold]] [ˈθreʃhoʊld] n. 阈值
+  - [[https://www.youdao.com/w/Persistence][persistence]] [pərˈsɪstəns] n. 持久化
 
 * 短语
 
