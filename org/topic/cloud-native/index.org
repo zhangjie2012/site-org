@@ -18,6 +18,11 @@
 * 常见的术语
 
   - [[https://www.cncf.io/][CNCF]] The Cloud Native Computing Foundation，云原生计算基金会。
+  - [[https://opencontainers.org/][OCI]] Open Container Initiative，开放容器标准。
+    是一个轻量级的，开放的治理结构（项目），在 Linux 基金会的支持下成立，旨在围绕容器格式和运行时创建的开放行业标准。
+    OCI 于 2015 年 6 月由 Docker，CoreOS 和其他容器行业领导者成立。当前包含两种规范：
+    + [[https://github.com/opencontainers/runtime-spec][runtime-spec]] 运行时规范
+    + [[https://github.com/opencontainers/image-spec][image-spec]] 镜像规范
 
 * TODO 容器
 * TODO Docker
@@ -62,6 +67,11 @@ Kubernetes 提供了服务发现和负载均衡、自动部署和回滚、弹性
 kubectl 是用来管理 Kubernetes 集群的命令行工具。
 
 - [[file:kubernetes/kubectl-official.org][官方说明]]
+
+
+* Resources
+
+  - [[file:~/site/org/blog/2018/an-overall-view-on-docker-ecosystem-containers-moby-swarm-linuxkit-containerd-kubernete.org][Docker 生态系统一览]] 翻译的文章，较为详细的说明了 Docker 的前世今生
 
 * Footnotes
 
