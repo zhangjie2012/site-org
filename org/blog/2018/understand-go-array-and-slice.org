@@ -2,8 +2,7 @@
 #+TITLE: 理解 Go 的 Array 和 slice
 #+DATE: 2018-07-18 15:15:24
 
-今早 [[https://blog.opskumu.com/][磊磊]] 在 Twitter
-上看到一条消息，大致意思是问下面代码的执行结果是什么：
+今早 [[https://blog.opskumu.com/][磊磊]] 在 Twitter 上看到一条消息，大致意思是问下面代码的执行结果是什么：
 
 #+BEGIN_EXAMPLE
   package main
@@ -219,3 +218,7 @@ Go [[https://blog.golang.org/go-slices-usage-and-internals][有篇官方博客]]
 可能是希望刻意的把空指针区分开，上面的例子中 =Xxx= 用 =make([]int, 0)= 初始化就可以了。
 
 虽然我觉得这是个糟糕的设计（不过整个 Go 语言的设计思路就让人觉得很刻意，那我还能怎么办呢，当然是怎么设计怎么用啦）。
+
+*2021-01-15 16:58:51 更新：*
+
+这里的图片很好的说明 Go Slice 的基本原理： https://ueokande.github.io/go-slice-tricks/
