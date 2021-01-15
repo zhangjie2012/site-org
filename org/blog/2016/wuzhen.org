@@ -2,9 +2,11 @@
 #+TITLE: 乌镇之行
 #+DATE: 2016-04-26 00:00:00
 
+#+CAPTION: 五兄弟
+https://blog-1252349778.cos.ap-beijing.myqcloud.com/2016/wuzhen-0.jpg
 
-#+CAPTION: 
-[[http://zhangjiee-photos.oss-cn-shenzhen.aliyuncs.com/2016-04/IMG_0286.JPG]]
+#+CAPTION: 五兄弟(tk 在拍照)
+https://blog-1252349778.cos.ap-beijing.myqcloud.com/2016/wuzhen-6.jpg
 
 上周五到上周日，和群里的几个朋友到乌镇玩了一趟，写篇文章记录一下。说不定若干年以后，各自成事，这也算一个吹嘘资本吧(:-D)。
 
