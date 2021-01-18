@@ -1,0 +1,6 @@
+#+SETUPFILE: ~/site/tpl/wiki-tpl.org
+#+TITLE: 搜索技巧
+#+DATE: 2021-01-18 15:01:59
+
+- 如果想要知道某个技术的大概资料，可以在技术前面加上 =awesome= ，比如 =awesome emacs=
+- 如果想要知道一些常规的命令行操作，可以使用 =cheat sheet= ，比如 =emacs cheat sheet= 点开图片有会惊喜

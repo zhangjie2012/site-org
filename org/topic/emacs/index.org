@@ -13,7 +13,6 @@ Master only support Emacs 27+, 26 version checkout =emacs-26= branch.
   - *稳定* 使用稳定为第一要务，不追求新 /配置文件永不更新才是最好的/
   - *高效* 合理的编排快捷键，减少按键且易于记忆
 
-
 * Support
 
   - Emacs version: 27.1 [fn:1]
