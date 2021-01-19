@@ -115,7 +115,9 @@
   - reference material 参考资料
   - benchmarks 基准测试
   - design philosophy 设计理念
+  - dig into 深入挖掘
   - in particular 特别是
+  - the perspective of ... 的角度/观点，比如 from the perspective of an administrator 从管理员的角度
 
 * 说明
 

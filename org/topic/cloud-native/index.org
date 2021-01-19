@@ -72,6 +72,7 @@ kubectl 是用来管理 Kubernetes 集群的命令行工具。
 * Resources
 
   - [[file:~/site/org/blog/2018/an-overall-view-on-docker-ecosystem-containers-moby-swarm-linuxkit-containerd-kubernete.org][Docker 生态系统一览]] 翻译的文章，较为详细的说明了 Docker 的前世今生
+  - [[https://12factor.net/zh_cn/][12-Factor]] 构建 SaaS 应用方法论
 
 * Footnotes
 
