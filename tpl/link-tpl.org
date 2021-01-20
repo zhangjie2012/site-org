@@ -11,7 +11,6 @@
 #+HTML_HEAD:
 #+HTML_HEAD_EXTRA: <link rel="stylesheet" type="text/css" href="/static/site.css"/>
 #+INFOJS_OPT:
-#+CREATOR: <a href="https://www.gnu.org/software/emacs/">Emacs</a> 26.2 (<a href="https://orgmode.org">Org</a> mode 9.1.9)
 #+OPTIONS: num:nil
 #+LANGUAGE: zh
 #+EMAIL: me@zhangjiee.com
