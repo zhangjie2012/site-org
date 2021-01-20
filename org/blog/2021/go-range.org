@@ -1,0 +1,77 @@
+#+SETUPFILE: ~/site/tpl/site-tpl.org
+#+TITLE: Go for ... range
+#+DATE: 2021-01-20 15:58:58
+
+今天写代码发现一个 bug：数据回写到 MySQL 的时候，第一条数据被重复写了，后面的数据没写进入。最后定位到：
+
+#+begin_src go
+  for _, r := range recvs {
+      ib = ib.Values(&lastId, &e.Fingerprint, &e.Version, &r)
+  }
+#+end_src
+
+操作数据库使用了 [[https://github.com/Masterminds/squirrel][squirrel]]， =Values= 的参数是 =interface{}= ，所以我下意识的用了地址。我把取地址 =&= 去掉之后，
+就正常了。
+
+然后就开始怀疑， *难道 Go range 中的第二个参数每次的地址都是一样的？* 那不就是简单的赋值操作，做个浅拷贝？
+
+写了一段测试代码：
+
+#+begin_src go
+  package main
+
+  import "fmt"
+
+  func main () {
+      arr := []int{1, 2, 3, 4, 5, 6}
+
+      for i, a := range arr {
+          fmt.Println(&a, &arr[i])
+      }
+  }
+
+#+end_src
+
+输出：
+
+#+begin_src
+0xc0000140f0 0xc000018090
+0xc0000140f0 0xc000018098
+0xc0000140f0 0xc0000180a0
+0xc0000140f0 0xc0000180a8
+0xc0000140f0 0xc0000180b0
+0xc0000140f0 0xc0000180b8
+#+end_src
+
+还真是。查了一下官方文档[fn:1]
+
+#+begin_quote
+1. For an array, pointer to array, or slice value a, the index iteration values are produced in increasing order, starting at element index 0.
+   If at most one iteration variable is present, the range loop produces iteration values from 0 up to len(a)-1 and does not index
+   into the array or slice itself. For a nil slice, the number of iterations is 0.
+2. For a string value, the "range" clause iterates over the Unicode code points in the string starting at byte index 0.
+   On successive iterations, the index value will be the index of the first byte of successive UTF-8-encoded code points
+   in the string, and the second value, of type rune, will be the value of the corresponding code point.
+   If the iteration encounters an invalid UTF-8 sequence, the second value will be 0xFFFD, the Unicode replacement character,
+   and the next iteration will advance a single byte in the string.
+3. The iteration order over maps is not specified and is not guaranteed to be the same from one iteration to the next.
+   If a map entry that has not yet been reached is removed during iteration, the corresponding iteration value will not be produced.
+   If a map entry is created during iteration, that entry may be produced during the iteration or may be skipped.
+   The choice may vary for each entry created and from one iteration to the next. If the map is nil, the number of iterations is 0.
+4. For channels, the iteration values produced are the successive values sent on the channel until the channel is closed.
+   If the channel is nil, the range expression blocks forever.
+
+The iteration variables may be declared by the "range" clause using a form of short variable declaration (:=).
+In this case their types are set to the types of the respective iteration values and their scope is the block of the "for" statement;
+they are re-used in each iteration. If the iteration variables are declared outside the "for" statement,
+after execution their values will be those of the last iteration.
+#+end_quote
+
+也就是说对于 array, slice 这种只是一个简单的赋值 ~:=~ 然后变量复用。我本以为是一个迭代器，迭代器里引用了变量的地址。
+没想到是个这么原始的实现。
+
+既然这样的话，对于比较大的结构体，最好在数组中存放指针。如 =[]*BigStruct= ，或者在遍历的时候，通过索引访问（使用第一个参数，忽略第二个参数）。
+
+* Footnotes
+
+[fn:1] https://golang.org/ref/spec#For_statements
