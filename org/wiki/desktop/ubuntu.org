@@ -77,7 +77,7 @@ export http_proxy="http://127.0.0.1:8123" && export https_proxy="http://127.0.0.
 
 * 软件列表
 
-- 搜狗输入法 _目前尚不支持 Ubuntu 20.04_
+- 搜狗输入法
   + 先安装 fcitx =apt install fcitx=
   + 安装 [[https://pinyin.sogou.com/linux/?r=pinyin][搜狗拼音输入法]]
   + 重启电脑即可生效，如果没生效，通过 fctix 配置，添加搜狗输入法
@@ -87,9 +87,9 @@ export http_proxy="http://127.0.0.1:8123" && export https_proxy="http://127.0.0.
   2. 将 =flameshot gui= 绑定到 =Ctrl+Alt+A= 快捷键上
 - 视频播放器：[[https://www.videolan.org/vlc/download-ubuntu.html][VLC]] =apt install vlc=
 - gif 录屏：[[https://github.com/phw/peek][Peek]]，这个很好用，视频录制也有人推荐 [[https://github.com/hzbd/kazam][Kazam]]，就我个人而言 Peek 满足需求了
-- +网易云音乐+ ：经测试 Ubuntu 下的网易云音乐比较吃资源，就不用了
 - SNS
   + Telegram =apt install telegram-desktop=
+- 思维导图 =sudo snap install xmind=
 
 [[file:~/site/org/wiki/growing/programmer.org][技术人]] 有补充，重复的软件没有在这里体现。
 
@@ -114,12 +114,6 @@ GNOME 太不稳定了，换到了 Xubuntu，世界顿时清净了。
 <2020-04-19 13:32:41>
 
 迫于 Ubuntu 20.04 的诱惑，升级到了 20.04。
-
-<2020-05-01>
-
-换回 Windows 10 + 虚拟机了，不折腾了，Linux 桌面只适合研发，工具链撑不起来，弃了。
-
-*本文档只针对 Ubuntu Server。*
 
 * Xfce
 
