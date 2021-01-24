@@ -15,194 +15,205 @@ Kubernetes 为每一个 Pod 提供单独的 IP 并且为一组 Pod 提供单独�
 
 * 动机
 
-Kubernetes 的 Pod 不是一个持久的实体。使用 Deployment 运行应用时，它会动态的创建和销毁 Pods。
+  Kubernetes 的 Pod 不是一个持久的实体。使用 Deployment 运行应用时，它会动态的创建和销毁 Pods。
 
-虽然每一个 Pod 都有自己的 IP 地址，但是 Deployment 中的不同的时间段的 Pod 集合可能不同（有很多原因导致 Pod 重启）。
-所以，前端如何使用集群中的 Pod 集合？并且能都达到均衡的作用呢？
+  虽然每一个 Pod 都有自己的 IP 地址，但是 Deployment 中的不同的时间段的 Pod 集合可能不同（有很多原因导致 Pod 重启）。
 
-答案是 /Services/ 。
+  这就产生了一个问题：如果一些 Pods （称他们为“后端”）为另外集群中的另外一些 Pod（称他们为“前端”） 提供了功能，
+  前端是如何找到需要连接的后端 Pods 的 IP 地址呢？
+
+  答案是 /Services/ 。
 
 * Service 资源
 
-Service 是一种抽象，定义了 Pod 的逻辑集合和访问策略（有时称之为微服务）。Service 和目标 Pods 的关联通常有选择器来关联。
+  Service 是一种抽象，定义了 Pod 的逻辑集合和访问策略（有时称之为微服务）。Service 和目标 Pods 的关联通常由 selector w来关联。
 
-前端不用关心 Pod 的 IP 地址到底是什么，也不用关心 Pod 是不是之前的 Pod。Service 为它们提供了统一的出口。
-前端只需要关心 Service 的地址就行了，而 Service 的地址是不会变的。
+  前端不用关心 Pod 的 IP 地址到底是什么，也不用关心 Pod 是不是之前的 Pod。Service 为它们提供了统一的出口。
+  前端只需要关心 Service 的地址就行了，而 Service 的地址是不会变的。
+
+  Service 的抽象使这种解耦成为了可能。
+
+** 云原生的服务发现
+
+   在你的应用程序中你可以使用 Kubernetes APIs 做服务发现，可以向 API Server 查询 Endpoints，每当在 Service 中的 Pod 集合发生变更时，
+   这些更新就会耕者更新。
+
+   对于非原生应用，Kubernetes 提供了防止网络端口的方法或者在应用程序和后端 Pod 之间的负载均衡器。
 
 * 定义 Service
 
-Service 和 Pod 一样，是一个 REST 对象，和其它的对象一样，你可以 =POST= 一个 Service 到 API server 来创建一个实例。
-Service 的名字必须是一个有效的 DNS 标签。
+  Service 和 Pod 一样，是一个 REST 对象，和其它的对象一样，你可以 =POST= 一个 Service 到 API server 来创建一个实例。
+  Service 的名字必须是一个有效的 DNS 标签。
 
-假定你有一组 Pods，每个 Pod 监听 9376 的 TCP 端口，并且标签为 ~app=MyApp~ ：
+  假定你有一组 Pods，每个 Pod 监听 9376 的 TCP 端口，并且标签为 ~app=MyApp~ ：
 
-#+begin_src yaml
-  apiVersion: v1
-  kind: Service
-  metadata:
-	name: my-service
-  spec:
-	selector:
-	  app: MyApp
-	ports:
-	  - protocol: TCP
-		port: 80
-		targetPort: 9376
-#+end_src
+  #+begin_src yaml
+    apiVersion: v1
+    kind: Service
+    metadata:
+      name: my-service
+    spec:
+      selector:
+        app: MyApp
+      ports:
+        - protocol: TCP
+          port: 80
+          targetPort: 9376
+  #+end_src
 
-以上创建了一个叫做 =my-service= 的 service 对象。Kubernetes 为 Service 分配一个 IP 地址（有时称为"集群IP"），该地址为服务代理
-所用（见下面的虚拟 IP 和服务代理）。
+  以上创建了一个叫做 =my-service= 的 service 对象。Kubernetes 为 Service 分配一个 IP 地址（有时称为"集群IP"），该地址为服务代理
+  所用（见下面的虚拟 IP 和服务代理）。
 
-Service 控制器负责持续扫描与选择器相匹配的 Pod，然后更新 =my-service= 的 Endpoints 。
+  Service 控制器负责持续扫描与选择器相匹配的 Pod，然后更新 =my-service= 的 Endpoints 。
 
-#+begin_src
-*注意:* Service 可以把任何 =port= 映射到 =targetPort= 。默认为了方便， =targetPort= 通常和 =port= 相同。
-#+end_src
+  #+begin_src
+  *注意:* Service 可以把任何 =port= 映射到 =targetPort= 。默认为了方便， =targetPort= 通常和 =port= 相同。
+  #+end_src
 
 ** 没有选择器的 Services
 
-Service 最常见的是抽象对 Pod 集合的访问，但是他们也可以抽象其它类型的后端，比如：
+   Service 最常见的是抽象对 Pod 集合的访问，但是他们也可以抽象其它类型的后端，比如：
 
-- 你想要在生产中使用外部的数据库集群，但是在测试环境中，使用自己的数据库。
-- 你想要将 Service 指向其他 Namespace 或者另外一个集群。
-- 你正在将工作负载迁移到 Kubernetes。为了做测试，你在 Kubernetes 中运行一部分后端。
+   - 你想要在生产中使用外部的数据库集群，但是在测试环境中，使用自己的数据库。
+   - 你想要将 Service 指向其他 Namespace 或者另外一个集群。
+   - 你正在将工作负载迁移到 Kubernetes。为了做测试，你在 Kubernetes 中运行一部分后端。
 
-这种情况下，你可以定义一个 Service /不指定/ Pod 选择器，如下：
+   这种情况下，你可以定义一个 Service /不指定/ Pod 选择器，如下：
 
-#+begin_src yaml
-  apiVersion: v1
-  kind: Service
-  metadata:
-	name: my-service
-  spec:
-	ports:
-	  - protocol: TCP
-		port: 80
-		targetPort: 9376
-#+end_src
+   #+begin_src yaml
+     apiVersion: v1
+     kind: Service
+     metadata:
+       name: my-service
+     spec:
+       ports:
+         - protocol: TCP
+           port: 80
+           targetPort: 9376
+   #+end_src
 
-因为 Service 没有选择器，对应的 Endpoint 对象不会被创建。你可以手动将 Service 映射到其运行所在网络的地址和端口，手动添加
-Endpoint 对象：
+   因为 Service 没有选择器，对应的 Endpoint 对象不会被创建。你可以手动将 Service 映射到其运行所在网络的地址和端口，手动添加
+   Endpoint 对象：
 
-#+begin_src yaml
-  apiVersion: v1
-  kind: Endpoints
-  metadata:
-	name: my-service
-  subsets:
-	- addresses:
-		- ip: 192.0.2.42
-	  ports:
-		- port: 9376
-#+end_src
+   #+begin_src yaml
+     apiVersion: v1
+     kind: Endpoints
+     metadata:
+       name: my-service
+     subsets:
+       - addresses:
+           - ip: 192.0.2.42
+         ports:
+           - port: 9376
+   #+end_src
 
-Endpoints 对象必须是一个有效的 DNS 子域名。
+   Endpoints 对象必须是一个有效的 DNS 子域名。
 
-#+begin_quote
-*注意：*
+   #+begin_quote
+   *注意：*
 
-Endpoint IPs /不可以/ 为：回环地址（IPv4 的127.0.0.0/8，IPv6 的 ::1/128），或者本地链接（IPv4 的 169.254.0.0/16 和 224.0.0.0/24
-IPv6 的 fe80::/64）。
+   Endpoint IPs /不可以/ 为：回环地址（IPv4 的127.0.0.0/8，IPv6 的 ::1/128），或者本地链接（IPv4 的 169.254.0.0/16 和 224.0.0.0/24
+   IPv6 的 fe80::/64）。
 
-Endpoint IP 地址不能是 Kubernetes Services 集群 IPs，因为 kube-proxy 不支持虚拟 IPs 作为目标。
-#+end_quote
+   Endpoint IP 地址不能是 Kubernetes Services 集群 IPs，因为 kube-proxy 不支持虚拟 IPs 作为目标。
+   #+end_quote
 
-没有选择器的情况下访问 Service 和有选择器的访问一样。
+   没有选择器的情况下访问 Service 和有选择器的访问一样。
 
-ExternalName Service 是 Service 的特例，它没有选择器，而是使用 DNS 名称代替。
+   ExternalName Service 是 Service 的特例，它没有选择器，而是使用 DNS 名称代替。
 
 ** EndpointSlices
 
-https://kubernetes.io/docs/concepts/services-networking/service/#endpointslices
+   https://kubernetes.io/docs/concepts/services-networking/service/#endpointslices
 
 ** Application Protocol
 
-https://kubernetes.io/docs/concepts/services-networking/service/#application-protocol
+   https://kubernetes.io/docs/concepts/services-networking/service/#application-protocol
 
 * TODO 虚拟 IPs 和服务代理
 
-Kubernetes 集群中的每一个结点都运行一个 =kube-proxy= 。 =kube-proxy= 的责任是实现除了 ExternalName 之外的 =Services= 的虚拟 IP。
+  Kubernetes 集群中的每一个结点都运行一个 =kube-proxy= 。 =kube-proxy= 的责任是实现除了 ExternalName 之外的 =Services= 的虚拟 IP。
 
 ** 为什么不使用 DNS 轮询？
 
-经常会有人问，为什么 Kubernetes 要依赖于代理将流量转发到后端，而不是使用其他方式，比如说：是否可以配置具有多个 A 值的 DNS 记录，
-并依靠轮询名称进行解析呢？
+   经常会有人问，为什么 Kubernetes 要依赖于代理将流量转发到后端，而不是使用其他方式，比如说：是否可以配置具有多个 A 值的 DNS 记录，
+   并依靠轮询名称进行解析呢？
 
-使用服务代理有以下几个原因：
+   使用服务代理有以下几个原因：
 
-- DNS 实现的历史悠久都不遵守记录的 TTLs，并且在查找结果过期后进行缓存。
-- 某些应用仅执行一次 DNS 查找，并无限期缓存结果。
-- 即使应用程序和程序库做了适当的重新解析，DNS 的低或者 0 TTLs 可能会给 DNS 带来高负载，从而使 DNS 变的难以管理。
+   - DNS 实现的历史悠久都不遵守记录的 TTLs，并且在查找结果过期后进行缓存。
+   - 某些应用仅执行一次 DNS 查找，并无限期缓存结果。
+   - 即使应用程序和程序库做了适当的重新解析，DNS 的低或者 0 TTLs 可能会给 DNS 带来高负载，从而使 DNS 变的难以管理。
 
 ** 使用空间代理模式（User space proxy mode）
 
-在此模式下，Kube-proxy 监听 Kubernetes master 以添加或者删除 Service 和 Endpoint 对象。
-对于每一个 Service ，它都会在本地节点上打开一个端口（随机选择）。与此代理端口的连接将代理到 Service 后端 Pod 之一。
-在决定选择哪一个后端 Pod 时，kube-proxy 会考虑 Service 的 =SessionAffinity= 设置。
+   在此模式下，Kube-proxy 监听 Kubernetes master 以添加或者删除 Service 和 Endpoint 对象。
+   对于每一个 Service ，它都会在本地节点上打开一个端口（随机选择）。与此代理端口的连接将代理到 Service 后端 Pod 之一。
+   在决定选择哪一个后端 Pod 时，kube-proxy 会考虑 Service 的 =SessionAffinity= 设置。
 
-最后，user-space 代理安装 iptables 规则，以捕获到 Service 的 =clusterIP= 和 =port= 的流量。规则将流量重定向到代理后端 Pod 的
-代理端口。
+   最后，user-space 代理安装 iptables 规则，以捕获到 Service 的 =clusterIP= 和 =port= 的流量。规则将流量重定向到代理后端 Pod 的
+   代理端口。
 
-默认情况下，user-proxy 模式下的 kube-proxy 通过轮询算法选择后端。
+   默认情况下，user-proxy 模式下的 kube-proxy 通过轮询算法选择后端。
 
-#+CAPTION: from https://kubernetes.io/
-https://d33wubrfki0l68.cloudfront.net/e351b830334b8622a700a8da6568cb081c464a9b/13020/images/docs/services-userspace-overview.svg
+   #+CAPTION: from https://kubernetes.io/
+   https://d33wubrfki0l68.cloudfront.net/e351b830334b8622a700a8da6568cb081c464a9b/13020/images/docs/services-userspace-overview.svg
 
 ** =iptables= 代理模式
 
-在这种模式下，kube-proxy 监听 Kubernetes 控制面板用于添加和删除 Service 和 Endpoint 对象。对于每一个 Services，它安装
-iptables 规则，用来捕获到 Service 的 =clusterIP= 和 =port= 的流量，然后将该流量重定向到 Services 的后端集合之一。
-对于每一个 Endpoint 对象，都会安装 iptables 规则来选择后端 Pod。
+   在这种模式下，kube-proxy 监听 Kubernetes 控制面板用于添加和删除 Service 和 Endpoint 对象。对于每一个 Services，它安装
+   iptables 规则，用来捕获到 Service 的 =clusterIP= 和 =port= 的流量，然后将该流量重定向到 Services 的后端集合之一。
+   对于每一个 Endpoint 对象，都会安装 iptables 规则来选择后端 Pod。
 
-默认情况下，iptables 模式下的 kube-proxy 会随机选择一个后端。
+   默认情况下，iptables 模式下的 kube-proxy 会随机选择一个后端。
 
-使用 iptables 处理流有较低的系统开销，因为流量由 Linux netfilter 处理，而无需在用户空间和内核空间之间切换。这种方法也可能更可靠。
+   使用 iptables 处理流有较低的系统开销，因为流量由 Linux netfilter 处理，而无需在用户空间和内核空间之间切换。这种方法也可能更可靠。
 
-如果 kube-proxy 在 iptables 模式下运行，并且所选择的第一个 Pod 没有响应，则连接失败。这和 userspace 模式不同在于：
-在这种情况下，kube-proxy 会检测与第一个 Pod 的连接失败，并会自动使用其它后端 Pod 重试。
+   如果 kube-proxy 在 iptables 模式下运行，并且所选择的第一个 Pod 没有响应，则连接失败。这和 userspace 模式不同在于：
+   在这种情况下，kube-proxy 会检测与第一个 Pod 的连接失败，并会自动使用其它后端 Pod 重试。
 
-你可以使用 Pod 的可用检测（readiness）探针来检测后端 Pods 是不是正常运行，确保 kube-proxy 只看到经过测试后正常的后端。
-这样做可以避免流量通过 kube-proxy 发送到已知故障的 Pod。
+   你可以使用 Pod 的可用检测（readiness）探针来检测后端 Pods 是不是正常运行，确保 kube-proxy 只看到经过测试后正常的后端。
+   这样做可以避免流量通过 kube-proxy 发送到已知故障的 Pod。
 
-#+CAPTION: from https://kubernetes.io/
-https://d33wubrfki0l68.cloudfront.net/27b2978647a8d7bdc2a96b213f0c0d3242ef9ce0/e8c9b/images/docs/services-iptables-overview.svg
+   #+CAPTION: from https://kubernetes.io/
+   https://d33wubrfki0l68.cloudfront.net/27b2978647a8d7bdc2a96b213f0c0d3242ef9ce0/e8c9b/images/docs/services-iptables-overview.svg
 
 ** IPVS 代理模式
 
-=Kubernetes v1.11= 之后支持的特性, _stable_ 。
+   =Kubernetes v1.11= 之后支持的特性, _stable_ 。
 
-在 =ipvs= 模式中，kube-proxy 监听 Kubernetes Services 和 Endpoints，调用 =netlink= 接口创建对应的 IPVS 规则并定期与 Kubernetes
-中的对象保持同步。这种控制循环可确保 IPVS 状态与所期望状态匹配。当访问 Service 时，IPVS 直接转发流量到一个后端 Pod 中。
+   在 =ipvs= 模式中，kube-proxy 监听 Kubernetes Services 和 Endpoints，调用 =netlink= 接口创建对应的 IPVS 规则并定期与 Kubernetes
+   中的对象保持同步。这种控制循环可确保 IPVS 状态与所期望状态匹配。当访问 Service 时，IPVS 直接转发流量到一个后端 Pod 中。
 
-IPVS 代理模式基于 netfilter hook 函数与 iptables 模式类似，但是它使用哈希表作为基础数据结构，并在内核空间中工作。
-这意味着 kube-proxy 在 IPVS 模式重定向流量延迟比 iptables 模式下的 kube-proxy 还要低，在同步代理规则时具有更好的性能。
-与其他代理模式相比，IPVS 模式还支持更高网络流量吞吐量。
+   IPVS 代理模式基于 netfilter hook 函数与 iptables 模式类似，但是它使用哈希表作为基础数据结构，并在内核空间中工作。
+   这意味着 kube-proxy 在 IPVS 模式重定向流量延迟比 iptables 模式下的 kube-proxy 还要低，在同步代理规则时具有更好的性能。
+   与其他代理模式相比，IPVS 模式还支持更高网络流量吞吐量。
 
-IPVS 为后端 Pods 流量的负载均衡提供了更多的选项：
+   IPVS 为后端 Pods 流量的负载均衡提供了更多的选项：
 
-- =rr= 轮询
-- =lc= 最小连接（打开连接的最小数量）
-- =dh= 目标 hashing
-- =sh= 源 hashing
-- =sed= 最短预期延迟
-- =nq= 永不排队（never queue）
+   - =rr= 轮询
+   - =lc= 最小连接（打开连接的最小数量）
+   - =dh= 目标 hashing
+   - =sh= 源 hashing
+   - =sed= 最短预期延迟
+   - =nq= 永不排队（never queue）
 
-#+begin_quote
-*注意：*
-使用 IPVS 模式的 kube-proxy，必须在启动 kube-proxy 之前使 IPVS Linux 在节点上可用。
+   #+begin_quote
+   *注意：*
+   使用 IPVS 模式的 kube-proxy，必须在启动 kube-proxy 之前使 IPVS Linux 在节点上可用。
 
-当 kube-proxy 在 IPVS 代理模式下启动，它会验证 IPVS 内核模块是否可用。如果 IPVS 内核模块没有被检测到，它会以 iptables 代理
-模式运行。
-#+end_quote
+   当 kube-proxy 在 IPVS 代理模式下启动，它会验证 IPVS 内核模块是否可用。如果 IPVS 内核模块没有被检测到，它会以 iptables 代理
+   模式运行。
+   #+end_quote
 
-#+CAPTION: from https://kubernetes.io/
-https://d33wubrfki0l68.cloudfront.net/2d3d2b521cf7f9ff83238218dac1c019c270b1ed/9ac5c/images/docs/services-ipvs-overview.svg
+   #+CAPTION: from https://kubernetes.io/
+   https://d33wubrfki0l68.cloudfront.net/2d3d2b521cf7f9ff83238218dac1c019c270b1ed/9ac5c/images/docs/services-ipvs-overview.svg
 
-在这些代理模式中，Service 的 IP 流量限制：在客户端不知道 Kubernetes 或者 Service 或者 Pod 的任何信息的情况下，将 Port 代理到合适的后端。
+   在这些代理模式中，Service 的 IP 流量限制：在客户端不知道 Kubernetes 或者 Service 或者 Pod 的任何信息的情况下，将 Port 代理到合适的后端。
 
-如果你想确保每次都将来自特定的客户端的连接都传递给相同的 Pod，你可以通过设置客户端基于 IP 地址的会话亲和性
-=service.spec.sessionAffinity= 设置为 "ClientIP" （默认情况下是 "None"）。你也可以适当的设置
-=service.spec.sessionAffinityConfig.clientIP.timeoutSeconds= 来控制最大会话粘性时间。（默认是 10800，3小时）。
+   如果你想确保每次都将来自特定的客户端的连接都传递给相同的 Pod，你可以通过设置客户端基于 IP 地址的会话亲和性
+   =service.spec.sessionAffinity= 设置为 "ClientIP" （默认情况下是 "None"）。你也可以适当的设置
+   =service.spec.sessionAffinityConfig.clientIP.timeoutSeconds= 来控制最大会话粘性时间。（默认是 10800，3小时）。
 
 * TODO 多端口 Services
 

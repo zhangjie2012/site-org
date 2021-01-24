@@ -1,0 +1,12 @@
+#+SETUPFILE: ~/site/tpl/wiki-tpl.org
+#+TITLE: Services, Load Balancing, and Networking
+#+DATE: 2021-01-24 21:50:23
+
+https://kubernetes.io/docs/concepts/services-networking/
+
+K8s 网络解决了四个问题：
+
+- Pod 中的容器通过 loopback 使用网络进行通信；
+- 集群网络提供了不同的 Pods 之间的通信；
+- 通过 Service 资源，可以将 Pod 中运行的应用程序被集群外部访问；
+- 可以用 Services 来发布仅对集群内部使用的服务；
