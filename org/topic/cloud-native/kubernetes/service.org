@@ -311,9 +311,54 @@ Kubernetes 为每一个 Pod 提供单独的 IP 并且为一组 Pod 提供单独�
    Kubernetes DNS 服务器是唯一访问 =ExternalName= Services 的方法。你可以在 [[https://kubernetes.io/docs/concepts/services-networking/dns-pod-service/][DNS Pods 和 Services]] 中找到更多的关于 =ExternalName=
    的解释。
 
-* TODO Headless Services
+* Headless Services
 
-* TODO Publishing Services (ServiceTypes)
+  有时你不需要负载均衡和单独的 Service IP。这种情况下，你可以创建一个名为 "headless" 的 Services，通过显示的将集群 IP
+  =.spec.clusterIP= 设置为 ="None"= 。
+
+  你可以使用 Headless Service 与其他的服务发现机制接口，而不需要跟 Kubernetes 的实现绑定到一起。
+
+  对于 headless =Services= ，集群 IP 不会被分配，kube-proxy 也不会处理这些 Services，也不会给他们做负载均衡或者代理。
+  如何自动配置 DNS 取决于是否定义了选择器：
+
+** 有选择器（with selectors）
+
+   如果定义了选择器，endpoints 控制器在 API 中创建 =Endpoints= 记录，然后修改 DNS 配置返回记录（指向 =Service= 后面的 =Pods= ）。
+
+** 无选择器（without selectors）
+
+   如果没有定义选择器的话，endpoints 控制器不会创建 =Endpoints= 记录。然而，DNS 系统会查找并配置以下任意一项：
+
+   - ExternalName 类型 Services 的 CNAME 记录；
+   - 其他的类型，任何的 =Endpoints= 与 Services 共享名字的记录；
+
+* 发布 Services (ServiceTypes)
+
+  对于一些应用，你可能希望把 Service 暴露成一个集群外部的 IP 地址。
+
+  Kubernetes 的 =ServiceTypes= 允许你指定你所需要的 =ServiceType= 。默认是 =ClusterIP= 。
+
+  =Type= 的值以及行为如下：
+
+  - =ClusterIP= ：集群内部 IP 暴露 Service。只能在集群内部进行访问。这也是默认的 =SerivceType= 。
+  - NodePort：在每一个节点的 IP 上暴露一个静态端口，也就是 =NodePort= 。自动创建一个 =ClusterIP= Service，路由到 =NodePort= Service，
+    在外部集群，你可以通过请求 =<NodeIP>:<NodePort>= 来访问 =NodePort= 服务。
+  - LoadBalancer：使用云厂商提供的负载均衡器暴露服务。自动创建负载均衡路由到 =NodePort= 和 =ClusterIP= Services。
+  - ExternalName: 通过返回带有 =CNAME= 记录的值，把服务映射到 =externalName= 字段的内容（比如 =foo.bar.example.com= ）。没有设置任何代理。
+    #+begin_quote
+    *注意* 需要 kube-dns 1.7 或者 CoreDNS 0.0.8 或者更高的版本才能使用 ExternalName 类型。
+    #+end_quote
+
+  你也可以使用 Ingress 来暴露服务。Ingress 不是一个 Service 类型，但是扮演者集群访问的入口。它可以将你的路由规则整合成一个资源，
+  因为它可以在同一个 IP 地址下公开多个服务。
+
+** TODO NodePort 类型
+
+** TODO LoadBalancer 类型
+
+** TODO ExternalName 类型
+
+** TODO ExternalIPs
 
 * TODO Shortcomming
 
