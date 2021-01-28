@@ -352,15 +352,112 @@ Kubernetes 为每一个 Pod 提供单独的 IP 并且为一组 Pod 提供单独�
   你也可以使用 Ingress 来暴露服务。Ingress 不是一个 Service 类型，但是扮演者集群访问的入口。它可以将你的路由规则整合成一个资源，
   因为它可以在同一个 IP 地址下公开多个服务。
 
-** TODO NodePort 类型
+** NodePort 类型
 
-** TODO LoadBalancer 类型
+   当你的 =type= 字段设置为 =NodePort= ，Kubernetes 控制平面会从 =--service-node-port-range= 中分配一个端口
+   （默认为 30000-32767）。每一个节点都会代理这个端口到你的 Service 中。你的 Service 在它的 =.spec.ports[*].nodePort= 字段中
+   报告分配端口的值。
 
-** TODO ExternalName 类型
+   如果你想要指定特定的 IP(s) 代理到端口，你可以设置 =--nodeport-addresses= 在 kube-proxy 中指定 IP 块；
+   这个特性从 Kubernetes v1.10 开始支持。该标识用逗号分割的 IP 块（比如：10.0.0.0/8, 192.0.2.0/25）指定 IP 地址范围
+   以 kube-proxy 应该视该节点为本地节点。
 
-** TODO ExternalIPs
+   比如，你启动 kube-proxy 设置 =-nodeport-addresses=127.0.0.0/8= ，kube-proxy 只会选择 NodePort Services 的回环接口。
+   默认设置的 =--nodeport-addresses= 是一个空的列表。这意味着 kube-proxy 应该考虑 NodePort 的所有可用网络接口
+   （这也与早起的 Kubernetes 版本兼容）。
 
-* TODO Shortcomming
+   如果你想要指定端口号，你可以在 =nodePort= 字段中指定值。控制平面会为你分配该端口或者告诉你 API 事务失败。也就是说
+   你要自己注意端口是否会冲突。你还必须要使用有效的端口号，确保端口号在配置的范围内。
+
+   使用 NodePort 会给你自由设置自己的负载均衡方案，配置 Kubernetes 不完全支持的环境，甚至是直接暴露一个或者多个节点的 IP。
+
+   注意 Service 以 =<NodeIP>:spec.ports[*].nodePort= 和 =.spec.clusterIP:spec.ports[*].port= 可见（如果 =--nodeport-addresses= 在
+   kube-proxy 中设置了，将被过滤 NodeIPs ）。
+
+   比如：
+
+   #+begin_src yaml
+     apiVersion: v1
+     kind: Service
+     metadata:
+       name: my-service
+     spec:
+       type: NodePort
+       selector:
+         app: MyApp
+       ports:
+           # By default and for convenience, the `targetPort` is set to the same value as the `port` field.
+         - port: 80
+           targetPort: 80
+           # Optional field
+           # By default and for convenience, the Kubernetes control plane will allocate a port from a range (default: 30000-32767)
+           nodePort: 30007
+   #+end_src
+
+** LoadBalancer 类型
+   https://kubernetes.io/docs/concepts/services-networking/service/#loadbalancer
+** ExternalName 类型
+
+   类型为 ExternalName 的 Service 会将 Service 映射为一个 DNS 名字，而不是一个典型的类似 =my-service= 或者 =cassandra= 的选择器。
+   你可以使用 =.spec.externalName= 参数来指定这些 Services。
+
+   下面的 Service 定义，在 =prod= 空间中将 =my-service= 映射到 =my.database.example.com= :
+
+   #+begin_src yaml
+     apiVersion: v1
+     kind: Service
+     metadata:
+       name: my-service
+       namespace: prod
+     spec:
+       type: ExternalName
+       externalName: my.database.example.com
+   #+end_src
+
+   #+begin_quote
+   *注意：* ExternalName 接受一个 IPv4 的字符串地址，包括数字组成的 DNS 地址，而不是 IP 地址。
+   类似与 IPv4 地址的 ExternalName 不会被 CoreDNS 或者 ingress-nginx 解析，因为 ExternalName 用于指定规范的 DNS 名称。
+   要对 IP 地址进行硬编码，请考虑使用 headless Services。
+   #+end_quote
+
+   当查找 =my-service.prod.svc.cluster.local= 的主机时，集群的 DNS 服务将返回值为 =my.database.example.com= 的 CNAME 值。
+   访问 =my-service= 的方式与其他 Services 的方式相同，但主要区别在于重定向发生在 DNS 级别，而不是通过代理或者转发。
+   如果以后你决定将数据库迁移到集群中，则可以启动其 Pods，添加使用的选择器或者 endpoints，并修改它的 Services 类型。
+
+   #+begin_quote
+   *警告：* 你可以在使用 ExternalName 一些协议的过程中遇到麻烦，包括 HTTP 和 HTTPS。
+   如果你 ExternalName ，则集群内的客户端使用的主机名和 ExternalName 应用的名字不同。
+
+   对于使用主机名的协议，此差异可能导致错误或者意外的回包。HTTP 请求将具有原始服务器无法识别的 =Host:= header；
+   TLS 服务器将无法提供与客户端连接的主机名匹配的证书。
+   #+end_quote
+
+** ExternalIPs
+
+  如果有外部的 IP 路由到一个或者多个集群节点，Kubernetes Services 可以在 =externalIPs= 上暴露。
+  作为外部 IP（作为目标 IP）流量通过 ingresses 到集群，在 Service 端口上，会被路又道 Service 的 endpoints 之一。
+  =externalIPs= 不会受 Kubernetes 的管控，而是集群管理员的责任。
+
+  在 Service spec 中， =externalIPs= 与 =ServiceTypes= 一起指定。如下， =my-service= 可以被客户端在 =80.11.12.10:80= 上访问。
+
+  #+begin_src yaml
+    apiVersion: v1
+    kind: Service
+    metadata:
+      name: my-service
+    spec:
+      selector:
+        app: MyApp
+      ports:
+        - name: http
+          protocol: TCP
+          port: 80
+          targetPort: 9376
+      externalIPs:
+        - 80.11.12.10
+  #+end_src
+
+* TODO 缺点
 
 * TODO 虚拟 IP 实现
 
