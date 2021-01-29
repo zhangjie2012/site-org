@@ -9,53 +9,53 @@ Job 名称不可超过 63 个字符。
 
 * CronJob
 
-CronJob 对于周期性的重复任务非常有用，类似备份和发送邮件。也可以用来安排特定的任务在指定时间执行，比如在集群空闲的时候调度 Job。
+  CronJob 对于周期性的重复任务非常有用，类似备份和发送邮件。也可以用来安排特定的任务在指定时间执行，比如在集群空闲的时候调度 Job。
 
 ** 举例
 
-下面的例子周期性的在每分钟打印当前时间和 hello 消息：
+   下面的例子周期性的在每分钟打印当前时间和 hello 消息：
 
-#+NAME: application/job/cronjob.yaml
-#+BEGIN_SRC yaml
-  apiVersion: batch/v1beta1
-  kind: CronJob
-  metadata:
-	name: hello
-  spec:
-	schedule: "*/1 * * * *"
-	jobTemplate:
-	  spec:
-		template:
-		  spec:
-			containers:
-			- name: hello
-			  image: busybox
-			  args:
-			  - /bin/sh
-			  - -c
-			  - date; echo Hello from the Kubernetes cluster
-			restartPolicy: OnFailure
-#+END_SRC
+   #+NAME: application/job/cronjob.yaml
+   #+BEGIN_SRC yaml
+     apiVersion: batch/v1beta1
+     kind: CronJob
+     metadata:
+       name: hello
+       spec:
+         schedule: "*/1 * * * *"
+         jobTemplate:
+           spec:
+             template:
+               spec:
+                 containers:
+                   - name: hello
+                     image: busybox
+                     args:
+                       - /bin/sh
+                       - -c
+                       - date; echo Hello from the Kubernetes cluster
+                       restartPolicy: OnFailure
+   #+END_SRC
 
 * CronJob 局限性
 
-cron job 在隔一段时间应该会创建一个 job。我们说“应该”是因为在有些情况下可能会创建两个 job，或者可能不会被创建。
-这种情况很少，但是并不能完全防止。因此，jobs 应该是幂等的。
+  cron job 在隔一段时间应该会创建一个 job。我们说“应该”是因为在有些情况下可能会创建两个 job，或者可能不会被创建。
+  这种情况很少，但是并不能完全防止。因此，jobs 应该是幂等的。
 
-如果 =startingDeadlineSeconds= 设置一个较大的值或者使用默认值，且 =concurrencyPolicy= 设置成 =Allow= ，jobs 始终至少运行一次。
+  如果 =startingDeadlineSeconds= 设置一个较大的值或者使用默认值，且 =concurrencyPolicy= 设置成 =Allow= ，jobs 始终至少运行一次。
 
-对于每一个 CronJob 控制器会检查从上一个执行时间到现在，错过了多少次执行。如果超过 100 次，它不会启动 job 并且记录错误。
+  对于每一个 CronJob 控制器会检查从上一个执行时间到现在，错过了多少次执行。如果超过 100 次，它不会启动 job 并且记录错误。
 
-很重要的一点是如果 =startingDeadlineSeconds= 字段设置了（不是 =nil= ），控制器计算错过多少任务并不是上一次执行时间，而是按照
-=startingDeadlineSeconds= 来。比如，当 =startingDeadlineSeconds= 设置为 =200= 时，控制器计数是按照最近 200 秒内来算的。
+  很重要的一点是如果 =startingDeadlineSeconds= 字段设置了（不是 =nil= ），控制器计算错过多少任务并不是上一次执行时间，而是按照
+  =startingDeadlineSeconds= 来。比如，当 =startingDeadlineSeconds= 设置为 =200= 时，控制器计数是按照最近 200 秒内来算的。
 
-A CronJob is counted as missed if it has failed to be created at its scheduled time. For example, If =concurrencyPolicy= is
-set to =Forbid= and a CronJob was attempted to be scheduled when there was a previous schedule still running, then it would
-count as missed.
+  A CronJob is counted as missed if it has failed to be created at its scheduled time. For example, If =concurrencyPolicy= is
+  set to =Forbid= and a CronJob was attempted to be scheduled when there was a previous schedule still running, then it would
+  count as missed.
 
-比如说，从 =08:30:00= 开始每分钟执行一个任务， =startingDeadlineSeconds= 没有设置。如果在 =08:29:00= to =10:21:00= 之间，
-job 都没有启动，因为超过了 100 次，job 就不在会被执行。
+  比如说，从 =08:30:00= 开始每分钟执行一个任务， =startingDeadlineSeconds= 没有设置。如果在 =08:29:00= to =10:21:00= 之间，
+  job 都没有启动，因为超过了 100 次，job 就不在会被执行。
 
-进一步，如果上面的例子中设置了 =startingDeadlineSeconds= 为 200 秒，那么在 200 秒钟实际错过了 3 次执行，那么 job 会被继续执行。
+  进一步，如果上面的例子中设置了 =startingDeadlineSeconds= 为 200 秒，那么在 200 秒钟实际错过了 3 次执行，那么 job 会被继续执行。
 
-CronJob 的职责是在匹配的时间表中创建 Jobs，而 Job 则负责对应的 Pod 管理。
+  CronJob 的职责是在匹配的时间表中创建 Jobs，而 Job 则负责对应的 Pod 管理。

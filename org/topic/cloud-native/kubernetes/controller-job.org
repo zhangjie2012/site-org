@@ -11,114 +11,114 @@ Job 创建一个或者多个 Pods 并确保指定数量的 Pod 成功终止。�
 
 * 例子
 
-下面是一份 Job 的配置，它计算 ᴨ 的小数点后 2000 位，然后打印出来了，大约需要 10s 才能完成。
+  下面是一份 Job 的配置，它计算 ᴨ 的小数点后 2000 位，然后打印出来了，大约需要 10s 才能完成。
 
-#+name: controller/job.yaml
-#+begin_src yaml
-controllers/job.yaml
+  #+name: controller/job.yaml
+  #+begin_src yaml
+    controllers/job.yaml
 
-apiVersion: batch/v1
-kind: Job
-metadata:
-  name: pi
-spec:
-  template:
-    spec:
-      containers:
-      - name: pi
-        image: perl
-        command: ["perl",  "-Mbignum=bpi", "-wle", "print bpi(2000)"]
-      restartPolicy: Never
-  backoffLimit: 4
-#+end_src
+    apiVersion: batch/v1
+    kind: Job
+    metadata:
+      name: pi
+      spec:
+        template:
+          spec:
+            containers:
+              - name: pi
+                image: perl
+                command: ["perl",  "-Mbignum=bpi", "-wle", "print bpi(2000)"]
+                restartPolicy: Never
+                backoffLimit: 4
+  #+end_src
 
-在标准输出（ =kubectl logs $pods= ）中可以看到运行结果。
+  在标准输出（ =kubectl logs $pods= ）中可以看到运行结果。
 
 * 书写 Job 规范
 
 ** Pod Template
 
-=.spec.template= 是 =.spec= 中唯一需要的字段。
+   =.spec.template= 是 =.spec= 中唯一需要的字段。
 
-除了 Pod 必填的字段之外，job 中的 pod template 必须指定合适的标签和重启策略。
+   除了 Pod 必填的字段之外，job 中的 pod template 必须指定合适的标签和重启策略。
 
-=RestartPolicy= 的值只可以是 =Never= 或者 =OnFailure= 。
+   =RestartPolicy= 的值只可以是 =Never= 或者 =OnFailure= 。
 
 ** Pod Selector
 
-=.spec.selector= 字段是可选的。大部分情况下你不都不需要指定它。
+   =.spec.selector= 字段是可选的。大部分情况下你不都不需要指定它。
 
 ** 并行（Parallel）Jobs
 
-适合作为 Job 运行的主要三种类型任务：
+   适合作为 Job 运行的主要三种类型任务：
 
-1. 非并行 Jobs
-   + 一般情况，除非 Pod 失败了，否则只启动一个 Pod。
-   + 一旦 Pod 成功终止，作业即完成。
-2. 并行 Jobs（固定数量）
-   + =.spec.completions= 为正整数。
-   + Job 作为一个总体任务，在 1 到 =.spec.completions= 每个都完成时视为总任务完成。
-   + *尚未实现* 每个 Pod 传递不同的索引（1 ~ =.spec.completions= ）。
-3. 并行 Jobs（工作队列）
-   + 不指定 =.spec.completions= 默认是 =.spec.parallelism= 。
-   + Pod 彼此之间或者由外部服务进行协调，来确定 Pod 的工作。比如，Pod 可能从工作队列中获取 N 个项目的批处理。
-   + 每个 Pod 能够独立的确定它对等的端是否已完成，这样整个工作就完成了。
-   + 当 Job 中的任何 Pod 成功终止时，不会创建新的 Pod。
-   + 一旦个有一个且所有的 Pod 都终止，Job 完成
-   + 一旦一个 Pod 成功退出，其它的 Pod 不应该继续为 Job 工作，它们都应该退出。
+   1. 非并行 Jobs
+      + 一般情况，除非 Pod 失败了，否则只启动一个 Pod。
+      + 一旦 Pod 成功终止，作业即完成。
+   2. 并行 Jobs（固定数量）
+      + =.spec.completions= 为正整数。
+      + Job 作为一个总体任务，在 1 到 =.spec.completions= 每个都完成时视为总任务完成。
+      + *尚未实现* 每个 Pod 传递不同的索引（1 ~ =.spec.completions= ）。
+   3. 并行 Jobs（工作队列）
+      + 不指定 =.spec.completions= 默认是 =.spec.parallelism= 。
+      + Pod 彼此之间或者由外部服务进行协调，来确定 Pod 的工作。比如，Pod 可能从工作队列中获取 N 个项目的批处理。
+      + 每个 Pod 能够独立的确定它对等的端是否已完成，这样整个工作就完成了。
+      + 当 Job 中的任何 Pod 成功终止时，不会创建新的 Pod。
+      + 一旦个有一个且所有的 Pod 都终止，Job 完成
+      + 一旦一个 Pod 成功退出，其它的 Pod 不应该继续为 Job 工作，它们都应该退出。
 
 ** 控制并行
 
-=.spec.parallelism= 可以被设置为任何非负值，如果未指定，默认是 1。如果指定为 0，它会暂停等待到值增加之后才开始执行。
+   =.spec.parallelism= 可以被设置为任何非负值，如果未指定，默认是 1。如果指定为 0，它会暂停等待到值增加之后才开始执行。
 
-实际的并行性（瞬时运行的 pods 数量）可能多于或者少于请求并行量，可能有以下的原因：
+   实际的并行性（瞬时运行的 pods 数量）可能多于或者少于请求并行量，可能有以下的原因：
 
-- 对于 /固定完成数量/ 的 Jobs，实际的运行的 Pods 数量不会超过剩余完成次数。如果 =.spec.parallelism= 值过高被忽略。
-- 对于 /工作队列/ 的 Jobs，在任何 Pod 成功之后，不会再启动新的 Pod - 但是，其余 Pod 则可以完成。
-- 如果 Job 控制器没有时间做出反应。
-- 如果 Job 控制器由于任何原因（缺少 =ResourceQuota= ，权限不足等）而无法创建 Pod，最终 Pod 可能少于请求的数量。
-- Job 控制器可能由于同一个作业中先前过多的 Pod 故障而限制了新 Pod 的创建。
-- 当 Pod 优雅关闭了，需要一些时间才能停止。
+   - 对于 /固定完成数量/ 的 Jobs，实际的运行的 Pods 数量不会超过剩余完成次数。如果 =.spec.parallelism= 值过高被忽略。
+   - 对于 /工作队列/ 的 Jobs，在任何 Pod 成功之后，不会再启动新的 Pod - 但是，其余 Pod 则可以完成。
+   - 如果 Job 控制器没有时间做出反应。
+   - 如果 Job 控制器由于任何原因（缺少 =ResourceQuota= ，权限不足等）而无法创建 Pod，最终 Pod 可能少于请求的数量。
+   - Job 控制器可能由于同一个作业中先前过多的 Pod 故障而限制了新 Pod 的创建。
+   - 当 Pod 优雅关闭了，需要一些时间才能停止。
 
 * 处理 Pod 和容器失败
 
-Pod 中的容器可能有多种原因失败，比如说由于进程非 0 码退出，或者容器因为超出了内存限制而被杀，等等。
-如果发生这种情况，并且 ~.spec.template.spec.restartPolicy = "OnFailure"~ ，Pod 会停留在节点上，但是容器会重新运行。
-因此，你的程序需要当它在本次重启时处理这种情况，或者指定 ~.spec.template.spec.restartPolicy = "Never"~ 。
+  Pod 中的容器可能有多种原因失败，比如说由于进程非 0 码退出，或者容器因为超出了内存限制而被杀，等等。
+  如果发生这种情况，并且 ~.spec.template.spec.restartPolicy = "OnFailure"~ ，Pod 会停留在节点上，但是容器会重新运行。
+  因此，你的程序需要当它在本次重启时处理这种情况，或者指定 ~.spec.template.spec.restartPolicy = "Never"~ 。
 
-整个 Pod 也可能因为多种原因而失败，比如，当 Pod 被节点 kick off（节点升级、重启、删除等）时，或者 Pod 容器出现故障并且
-~.spec.template.spec.restartPolicy = "Never"~ 。当 Pod 发生故障时，Job 控制器将启动一个新的 Pod。这意味着你的应用程序需要在
-新的容器重新启动时处理该情况。尤其是，它需要处理先前处理的临时文件，锁，不完整的输出等。
+  整个 Pod 也可能因为多种原因而失败，比如，当 Pod 被节点 kick off（节点升级、重启、删除等）时，或者 Pod 容器出现故障并且
+  ~.spec.template.spec.restartPolicy = "Never"~ 。当 Pod 发生故障时，Job 控制器将启动一个新的 Pod。这意味着你的应用程序需要在
+  新的容器重新启动时处理该情况。尤其是，它需要处理先前处理的临时文件，锁，不完整的输出等。
 
-注意即便你设置了 ~.spec.parallelism = 1~  或者 ~.spec.completions = 1~ 且 ~.spec.template.spec.restartPolicy = "Never"~ ，
-同一程序也可能会启动两次。
+  注意即便你设置了 ~.spec.parallelism = 1~  或者 ~.spec.completions = 1~ 且 ~.spec.template.spec.restartPolicy = "Never"~ ，
+  同一程序也可能会启动两次。
 
-如果你指定了 =.spec.parallelism= 和 =.spec.completions= 都比 1 大，那么多个 Pods 可能同时运行。因此，你的 Pods 也必须容忍并发。
+  如果你指定了 =.spec.parallelism= 和 =.spec.completions= 都比 1 大，那么多个 Pods 可能同时运行。因此，你的 Pods 也必须容忍并发。
 
 ** Pod 回退（backoff）失败策略
 
-在某些情况下，由于配置等逻辑错误，你需要在重试一些次数之后再使 Job 失败。为此，设置 =.spec.backoffLimit= 指定重启次数，
-然后再将 Job 视为失败。默认的值是 6。失败的 Pod 重新创建，指数级的回退延迟（10s，20s，40s...）限制为 6 分钟。
-如果在下一个 Job 状态检查之前没有出现新的失败 Pod，则会重置回退计数。
+   在某些情况下，由于配置等逻辑错误，你需要在重试一些次数之后再使 Job 失败。为此，设置 =.spec.backoffLimit= 指定重启次数，
+   然后再将 Job 视为失败。默认的值是 6。失败的 Pod 重新创建，指数级的回退延迟（10s，20s，40s...）限制为 6 分钟。
+   如果在下一个 Job 状态检查之前没有出现新的失败 Pod，则会重置回退计数。
 
-#+begin_quote
-*注意：* 如果你的 job 设置了 ~restartPolicy = "OnFailure"~ ，记住容器重启到达 backoff 限制之后会被终止。这为 Job 调试带来了很多困难。
-建议设置 ~restartPolicy = "Never"~ ，使用日志记录系统以确保失败的 Job 的输出不会丢失时调试 Job。
-#+end_quote
+   #+begin_quote
+   *注意：* 如果你的 job 设置了 ~restartPolicy = "OnFailure"~ ，记住容器重启到达 backoff 限制之后会被终止。这为 Job 调试带来了很多困难。
+   建议设置 ~restartPolicy = "Never"~ ，使用日志记录系统以确保失败的 Job 的输出不会丢失时调试 Job。
+   #+end_quote
 
 * Job 终止和清理
 
-已经结束的 Job 通常不再需要再完成作业。一直留在系统中会给 API server 带来压力。如果 Job 有上级控制器直接管理，比如说 CronJobs，
-CronJobs 可以基于指定的基于容量的清理策略来清理 Jobs。
+  已经结束的 Job 通常不再需要再完成作业。一直留在系统中会给 API server 带来压力。如果 Job 有上级控制器直接管理，比如说 CronJobs，
+  CronJobs 可以基于指定的基于容量的清理策略来清理 Jobs。
 
 ** 已完成的 Jobs 实行 TTL 机制
 
-另外一种清理完成 Jobs（ =Complete= 或者 =Failed= ）是使用 TTL 机制来回收完成的资源，通过在 Job 中指定 =.spec.ttlSecondAfterFinished= 字段。
+   另外一种清理完成 Jobs（ =Complete= 或者 =Failed= ）是使用 TTL 机制来回收完成的资源，通过在 Job 中指定 =.spec.ttlSecondAfterFinished= 字段。
 
 * Job 模式（Patterns）
 
-https://kubernetes.io/docs/concepts/workloads/controllers/jobs-run-to-completion/#job-patterns
+  https://kubernetes.io/docs/concepts/workloads/controllers/jobs-run-to-completion/#job-patterns
 
 * 高级用法
 
-https://kubernetes.io/docs/concepts/workloads/controllers/jobs-run-to-completion/#advanced-usage
+  https://kubernetes.io/docs/concepts/workloads/controllers/jobs-run-to-completion/#advanced-usage
