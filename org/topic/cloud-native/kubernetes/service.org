@@ -457,10 +457,133 @@ Kubernetes 为每一个 Pod 提供单独的 IP 并且为一组 Pod 提供单独�
         - 80.11.12.10
   #+end_src
 
-* TODO 缺点
+* 缺点
+
+  VIPs 使用用户空间代理模式可以在中小型范围内使用，但不能扩展到具有千个服务的超大型集群。[[https://github.com/kubernetes/kubernetes/issues/1107][最初的设计稿]] 有说明。
+
+  使用用户空间代理会模糊访问 Service 的源 IP 地址。这使得某些网络过滤（防火墙）成为不可能。iptables 代理模式不会掩盖集群中的源 IP，
+  但仍会影响通过负载均衡器或者节点端口的客户端。
+
+  =Type= 字段被设计成一个嵌套功能 - 每个界别都会添加到上一个级别。并非所有的云厂商都强制需要（比如，Google 计算引擎不需要分配
+  一个 =NodePort= 来使 =LoadBalancer= 生效，但是 AWS 需要），但是当前的 API 要求使用它。
 
 * TODO 虚拟 IP 实现
 
-* TODO API 对象
+  对于只想使用 Services 的人来说，之前的信息应该足够了。但是，Services 后面的很多事情也值得我们去了解。
 
-* TODO 支持的协议
+** 避免冲突（Avoiding collisions）
+
+   Kubernetes 的一个主要的设计哲学是：不是你的错误，你不应该面临可能导致失败的场景。对于 Service 资源的设计，意味着如果你选择的端口
+   跟可能跟别的端口相冲突，那就不要让你来选择端口。这就是个隔离失败。
+
+   为了允许你为你的 Services 选择一个端口号，我们必须要保证两个 Services 可以冲突。Kubernetes 是通过每个 Service 都分配一个自己的
+   IP 地址来实现的。
+
+   为了保证每个 Service 都有一个唯一的 IP，内部分配器在创建 Service 之前原子更新 etcd  中的全局分配映射。映射对象必须在注册表中，
+   Services 才能分配到一个 IP 地址。否则会创建失败，并且提示无法分配 IP 地址的错误信息。
+
+   在控制平面中，后台控制器负责创建该映射关系，Kubernetes 还使用控制器来检查无效的分配（比如管理员的干预）和清理以不再被任何 Services
+   使用的 IP 地址。
+
+** Service IP 地址
+
+   不想 Pod 的 IP 地址，真实的路由到固定的目的地，Service IPs 不是由真实的单个主机来应答。而是，kube-proxy 使用 iptables（
+   Linux 上的包逻辑处理进程）来定义一个 /虚拟的/ IP 地址来透明的重定向到需要的地方。当客户端来连接 VIP 的时候，他们的流量
+   自动传输到适当的 endpoints。Services 的环境变量和 DNS 实际上是根据 Services 的虚拟 IP 地址（和端口）来填充的。
+
+   kube-proxy 支持三种代理模式 - 用户空间（usespace），iptables 和 IPVS - 每个操作都略有不同。
+
+*** 用户空间
+
+    作为一个范例，考虑上面的描述的图像处理程序。当后端 Servie 创建了之后，Kubernetes master 会分配一个虚拟 IP 地址，比如说是 10.0.0.1.
+    假设 Services 的端口是 1234，集群中所有 kube-proxy 实例都可以观察到该服务。当代理看到一个新的 Service 时，它打开一个新的随机端口，
+    建立一个 iptables 从虚拟 IP 地址重定向到新的端口，并开始接受连接。
+
+    当客户端连接到 Service 的虚拟 IP 地址，iptables 规则会被启动，并将数据包重定向到自己代理的端口。“Service 代理”选择一个后端，
+    然后开始把客户端的流量代理到后端。
+
+    也就是说，Service 自己可以选择任何他们想要的端口而不用考虑会有冲突的风险。客户端简单的连接 IP 和端口，不需要考虑实际访问的 Pods。
+
+*** iptables
+
+    同样，当后端 Service 创建之后，Kubernetes 控制平面分配一个虚拟 IP 地址，比如是 10.0.0.1。Services 的端口是 1234，
+    集群中所有 kube-proxy 实例都可以观察到该服务。当代理看到一个新的 Service 时，它安装一系列的 iptables 规则，这些规则蛔虫虚拟的 IP
+    地址重定向到每一个 Service 的规则。每个 Service 的规则会链接到每一个 Endpoints 规则，它将流量重定向到后端（使用 NAT）。
+
+    当客户端连接到服务器的虚拟 IP 地址时，iptables 规则就会生效，选择一个后端（基于回话亲和性或者随机选择）并将数据包重定向到后端。
+    不像用户空间代理，包不会拷贝到用户空间，kube-proxy 不必运行虚拟 IP 地址即可正常工作，节点看到的是未更改的客户端 IP 地址的流量。
+
+    当流量通过 node-port 或者负载均衡器时，执行相同的基本流程，但在这种情况下，客户端 IP 确实会更改。
+
+*** IPVS
+
+    在大型集群中 iptables 操作会明显变慢，比如说 10000 个 Service。IPVS 专门为负载均衡而设计，并且基于内核的哈希表。
+    因此你可以通过 IPVS 的 kube-proxy 实现大量服务的性能一致性。与此同事，基于 IPVS 的 kube-proxy 有更多复杂的负载均衡算法
+    （最小连接数，按地区，权重，一致性）。
+
+* API 对象
+
+  Service 是 Kubernetes REST API 的顶级资源，在 [[https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.20/#service-v1-core][Service API 对象]] 找到更多的信息。
+
+* 支持的协议
+
+** TCP
+
+   在任何的 Services 上你可以使用 TCP 协议，这也是默认的网络协议。
+
+** UDP
+
+   在大多数 Services 上你可以使用 UDP 协议，对于 type=LoadBalancer 的 Services，UDP 的支持取决于提供此功能的云厂商。
+
+** SCTP
+
+   *特性状态：* =kubernetes v1.20 [stable]=
+
+   当使用 SCTP 流量的网络插件时，你可以在大多数 Service 上使用 SCTP ，对于 type=LoadBalancer 的 Services，SCTP 的支持取决于
+   提供此功能的云厂商（大部分都不支持）。
+
+*** 警告
+
+    支持多宿主 SCTP 关联
+
+    #+begin_quote
+    *警告：*
+
+    The support of multihomed SCTP associations requires that the CNI plugin can support the assignment of multiple interfaces
+    and IP addresses to a Pod.
+
+    NAT for multihomed SCTP associations requires special logic in the corresponding kernel modules.
+    #+end_quote
+
+** Windows
+
+   #+begin_quote
+   *注意：* SCTP 不支持基于 Windows 的节点。
+   #+end_quote
+
+   用户空间 kube-proxy
+
+   #+begin_quote
+   *Warning*: The kube-proxy does not support the management of SCTP associations when it is in userspace mode.
+   #+end_quote
+
+** HTTP
+
+   如果你的云厂商提供了它，你就可以使用 Service 的 LoadBalancer 模式来设置外部的 HTTP/HTTPS 反向代理，转发到 Service 的 Endpoints。
+
+   #+begin_quote
+   *注意：* 你也使用 Ingress 替换 Service 来暴露 HTTP/HTTPS 协议。
+   #+end_quote
+
+** PROXY 协议
+
+   如果你的云厂商提供了它，你就可以使用 Service 的 LoadBalancer 模式来配置 Kubernetes 自身之外的负载均衡，它会转发以 PROXY 协议
+   为前缀的连接。
+
+   负载均衡器将发送一系列的出十字街，描述传入的连接，类似于：
+
+   #+begin_src
+   PROXY TCP4 192.0.2.202 10.0.42.7 12345 7\r\n
+   #+end_src
+
+   其次是来自客户端的数据。

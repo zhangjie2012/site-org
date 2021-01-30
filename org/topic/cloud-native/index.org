@@ -51,7 +51,8 @@ Kubernetes 提供了服务发现和负载均衡、自动部署和回滚、弹性
   + [[file:kubernetes/controller-job.org][Jobs]] 一次性的任务
   + [[file:kubernetes/controller-cronjobs.org][CronJobs]]
 - [[file:kubernetes/services-networking.org][Services、负载均衡和集群网络]]
-  + Service
+  + [[file:kubernetes/service.org][Service]] 集群内部的服务暴露抽象，提供虚拟 IP ，然后通过负载均衡策略，将流量转发到 Endpoints。
+    底层实现是 kube-proxy，它支持三种模式（用户空间，iptables，IPVS），主流都是使用 IPVS
   + DNS
   + Ingress 和 Ingress Controller
   + 网络策略
