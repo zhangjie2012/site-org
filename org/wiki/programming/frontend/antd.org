@@ -7,54 +7,63 @@ antd v4 发布了，以下如无特殊说明，均为 3.x 版本。
 * FAQ
 ** 表格内嵌表格，无数据时不显示 icon
 
-#+BEGIN_SRC javascript
-function expandIcon({ expanded, expandable, record, onExpand }) {
-  if (!expandable || record.canExpanded === false) return null;
+   #+BEGIN_SRC javascript
+     function expandIcon({ expanded, expandable, record, onExpand }) {
+         if (!expandable || record.canExpanded === false) return null;
 
-  return (
-    <a onClick={e => onExpand(record, e)}>
-      {expanded ? <Icon type="minus-square" /> : <Icon type="plus-square" />}
-    </a>
-    );
-}
-#+END_SRC
+         return (
+                 <a onClick={e => onExpand(record, e)}>
+                 {expanded ? <Icon type="minus-square" /> : <Icon type="plus-square" />}
+             </a>
+         );
+     }
+   #+END_SRC
 
-https://codesandbox.io/s/8x2j898pp2
+   https://codesandbox.io/s/8x2j898pp2
 
 ** 表格水平滚动条，显示时多了一个空白列
 
-1. 列设置固定宽度，比如 =width: 980= ，注意是数值不是字符串
-2. 设置 scroll，比如 =scroll={{ x: 1600 }}= x 的值对应的屏幕的大小，1600 的意思是超过 1600 宽度的屏幕才开始滚动。
-   另外 x 可以设置成 =max-content= 来自适应滚动[fn:1]。
+   1. 列设置固定宽度，比如 =width: 980= ，注意是数值不是字符串
+   2. 设置 scroll，比如 =scroll={{ x: 1600 }}= x 的值对应的屏幕的大小，1600 的意思是超过 1600 宽度的屏幕才开始滚动。
+      另外 x 可以设置成 =max-content= 来自适应滚动[fn:1]。
 
 ** 表单 required 校验时，提示 "xxx is not string"
 
-如果设置了 =required: true= ，会校验值是否有效，但是默认似乎是 =string= 类型，如果值不是 =string= 类型，需要手动设置值类型 =type= 。
+   如果设置了 =required: true= ，会校验值是否有效，但是默认似乎是 =string= 类型，如果值不是 =string= 类型，需要手动设置值类型 =type= 。
 
-=type= 可选值有：https://github.com/yiminghe/async-validator#type
+   =type= 可选值有：https://github.com/yiminghe/async-validator#type
 
-比如：
+   比如：
 
-#+begin_src js
-rules: [{ require: true, type: 'integer' }]
-#+end_src
+   #+begin_src js
+     rules: [{ require: true, type: 'integer' }]
+   #+end_src
 
 ** v4 form initialValue 只初始化一次
 
-官方说明：
+   官方说明：
 
-#+begin_quote
-在 v3 版本中，修改未操作的字段 initialValue 会同步更新字段值，这是一个 BUG。但是由于被长期作为一个 feature 使用，
-因而我们一直没有修复。在 v4 中，该 BUG 已被修复。initialValue 只有在初始化以及重置表单时生效。
-#+end_quote
+   #+begin_quote
+   在 v3 版本中，修改未操作的字段 initialValue 会同步更新字段值，这是一个 BUG。但是由于被长期作为一个 feature 使用，
+   因而我们一直没有修复。在 v4 中，该 BUG 已被修复。initialValue 只有在初始化以及重置表单时生效。
+   #+end_quote
 
-这会导致类似编辑的表单老的办法没法使用了，表单字段只能初始化一次，数据不更新。解决办法：
+   这会导致类似编辑的表单老的办法没法使用了，表单字段只能初始化一次，数据不更新。解决办法：
 
-- =form.setFieldsValue= 设置值 https://codepen.io/afc163-1472555193/pen/LYVjNWN?editors=0011
+   - =form.setFieldsValue= 设置值 https://codepen.io/afc163-1472555193/pen/LYVjNWN?editors=0011
+
+** v3/v4 更改全局 Empty 组件样式
+
+   可以使用 [[https://ant.design/components/config-provider-cn/][ConfigProvider]] 全局修改组件配置，如下：
+
+   #+begin_src js
+     const customizeRenderEmpty = () => <div style={{ textAlign: 'center' }}>暂无数据</div>
+     <ConfigProvider renderEmpty={customizeRenderEmpty} />
+   #+end_src
 
 * 资源
 
-- 定制主题：https://ant.design/docs/react/customize-theme-cn
+  - 定制主题：https://ant.design/docs/react/customize-theme-cn
 
 * Footnotes
 
