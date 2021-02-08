@@ -6,7 +6,7 @@
 
 * 2021
 
-  - 02-08: [[file:2021/kubernetes-vs-docker.org][{译}Kubernetes vs Docker: 了解 2021 的容器]]
+  - 02-08: [[file:2021/kubernetes-vs-docker.org][{译} Kubernetes vs Docker: 了解 2021 的容器]]
   - 01-20: [[file:2021/go-range.org][Go for ... range]]
   - 01-18: [[file:2021/pagination-scheme.org][分页（Pagination）技术规范]]
   - 01-05: [[file:2021/2020-personal-review.org][2020 个人总结]]
