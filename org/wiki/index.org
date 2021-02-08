@@ -54,6 +54,7 @@
    - [[file:devops/nginx.org][nginx]]
 
 ** 容器化
+
 *** Docker
 
 	- [[file:devops/docker-tutorial.org][学习笔记]]
@@ -71,6 +72,8 @@
 	  + [[file:devops/k8s-ingress.org][Ingress]] 服务暴露
 	- 实践
 	  + [[file:devops/k8s-deployment-strategies.org][部署策略]] 几种常见的部署策略
+        - https://semaphoreci.com/blog/what-is-canary-deployment
+        - https://semaphoreci.com/blog/continuous-blue-green-deployments-with-kubernetes
 	  + [[file:devops/k8s-practice.org][实践]]
 	- 书 & 文章
 	  + [[https://github.com/mvallim/kubernetes-under-the-hood][kubernetes-under-the-hood]] 侧重运维部署层面，涉及整体技术架构、网络、DNS 等；如果仅是关注 Kubernetes 本身，不推荐看
@@ -102,6 +105,7 @@
    - [[file:devops/grafana-loki.org][Loki 技术栈]]
 
 * 程序设计
+
 ** 前端
 
    - 样式：[[file:programming/frontend/css.org][CSS]]，[[file:programming/frontend/less.org][less]]
@@ -151,7 +155,6 @@
 
    - [[file:programming/regular-expression.org][正则表达式]]
 
-* 微服务
 * 成长
 
   - [[file:growing/programmer.org][技术人]]：一些常用的办公设备和软件记录
