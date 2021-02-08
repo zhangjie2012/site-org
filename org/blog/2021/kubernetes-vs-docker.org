@@ -1,0 +1,193 @@
+#+SETUPFILE: ~/site/tpl/site-tpl.org
+#+TITLE: Kubernetes vs Docker: 了解 2021 的容器
+#+DATE: 2021-02-08 10:27:59
+
+这是一篇 *译文* ，原文在：https://semaphoreci.com/blog/kubernetes-vs-docker
+
+容器、容器化这几年发展飞快发生了很多的变革，如果不是从头跟到尾的话，会有些稀里糊涂。我之前翻译过一篇文章：[[file:~/site/org/blog/2018/an-overall-view-on-docker-ecosystem-containers-moby-swarm-linuxkit-containerd-kubernete.org][Docker 生态一览]] 基本上说了
+Docker 的前世今生。但是 Docker 与 Kubernetes 的恩怨情仇并没有提到（那时候还没发生）。直到 Kubernetes v1.20 弃用 Docker 之后，
+一些人是一脸懵逼的，到底发生了什么？
+
+这篇文章会给你一个解释，从根源上说一些问题。当然我不是逐字翻译的，而且会加上一些个人的理解。
+
+这篇文章的图很帅，只看图也可以收获许多。
+
+---------------------------------------------
+
+几周之前，Kubernetes 开发团队声明了 [[https://github.com/kubernetes/kubernetes/blob/master/CHANGELOG/CHANGELOG-1.20.md#deprecation][弃用 Docker]]。这条新闻在社区和社交网络上掀起了波澜。Kubernetes 集群会崩溃吗？如果这样的话，我们
+该怎么运行自己的应用程序？现在应该怎么办？ 今天，我们会研究所有这些的疑问和更多的问题。
+
+* 什么是容器 ？
+
+  在 Docker 作为容器的代名词之前，事实上容器在很久之前就已经存在了。在 70 年代后期引入 [[https://man7.org/linux/man-pages/man2/chroot.2.html][chroot]] 之后，容器就已某种形式存在了。
+  Chroot 允许系统管理员在一种不是真正隔离的文件系统中运行程序。后来，这个想法被提炼并且扩展为容器引擎，比如：[[https://docs-dev.freebsd.org/en/books/handbook/jails][FreeBSD Jails]]，[[https://openvz.org/][OpenVZ]] 或者 [[https://linuxcontainers.org/][Linux Containers(LXC)]]。
+
+  什么是容器？
+
+  容器是一个逻辑分区，我们在其中运行与其它部分隔离的应用程序。每个应用程序都有属于自己的私有网络和虚拟文件系统，不会与其它的容器或者宿主机共享。
+
+  #+NAME: container arch
+  [[https://wpblog.semaphoreci.com/wp-content/uploads/2021/01/container-arch.png]]
+
+  应用程序容器化之后的运行要比安装和配置软件要方便的多。一方面，容器是便携式的，在一台服务器上构建，就可以保证在任何服务器上运行。另外一个优点是
+  我们可以同时运行同一个程序的多个副本，而不会发生冲突或者重叠。传统的部署方式很难做到这一点。
+
+  但是，要使这些工作正常运行，我们需要一个 /容器运行时/ ，它是一个能够运行容器的软件。
+
+* 什么是 Docker ？
+
+  从长远来看，Docker 是一个最受欢迎的容器运行时。因为 Docker，容器的概念才成为主流，后来启发了诸如 Kubernetes 之类的平台的诞生。
+
+  在 Docker 之前，运行容器是可能的，但是是一个艰巨的工作。Docker 使事情变得简单，因为它是一个完整的技术栈可以让你：
+
+  - 管理容器的生命周期；
+  - 往返容器的请求代理；
+  - 监控和记录容器活动；
+  - 挂载共享目录；
+  - 设置容器的资源限制；
+  - 构建镜像。 =Dockerfile= 用来构建容器镜像；
+  - 从镜像中心推送和拉取镜像；
+
+
+  在第一个迭代中，Docker 使用 LXC 作为底层的运行时。随着项目的发展，LXC 被 [[https://containerd.io/][Containerd]] 给替换了，这是 Docker 自己的实现。现代的 Docker 安装分两个服务：
+
+  - =containerd= 用来管理容器；
+  - =dockerd= 完成其余的工作；
+
+  #+NAME: Docker Engine
+  [[https://wpblog.semaphoreci.com/wp-content/uploads/2021/01/docker-arch.png]]
+
+* 什么是 Kubernetes ？
+
+  Kubernetes 利用了容器的概念并且提升了一个级别。Kubernetes 不在单个服务器上运行容器化的应用程序，而是将他们分布在一个集群中。
+  应用程序在 Kubernetes 中运行行为类似一个独立的单元，即使，他们可能由一些松散耦合的容器排列组成。
+
+  Kubernetes 在容器的上层添加了分布式计算的特性：
+
+  - *Pods* pods 是容器的逻辑分组，内部的容器共享诸如内存、CPU、存储和网络之类的资源；
+  - *自动伸缩（弹性扩容）* Kubernetes 可以根据需求启动和停止 Pod 来自动适应不断变化的工作负载；
+  - *自我修复* 容器会被监控，发生故障时自动重启；
+  - *负载均衡* 请求会被分布在健康可用的容器上；
+  - *Rollouts* Kubernetes 支持自动部署和回滚。像 [[https://semaphoreci.com/blog/what-is-canary-deployment][金丝雀]] 和 [[https://semaphoreci.com/blog/continuous-blue-green-deployments-with-kubernetes][蓝绿]] 复杂的发布策略变的简单;
+
+  Kubernetes 的架构是两个平面的组合：
+
+  - *控制平面* 是集群协调的大脑。它包含一组 /controller/ 来管理节点和服务， /scheduler/ 将 Pod 分配给节点，还有 /API Service/ 来处理通讯。
+    配置和状态存储在一个称为 /etcd/ 的高可用数据库中；
+  - *工作节点* 是运行容器的机器。每个工作节点都运行一些组件，比如 /kubelet/ 代理，网络代理，和容器的运行时。
+    默认的运行时在 Kubernetes v1.20 之前都是 Docker；
+
+  #+NAME: K8s arch
+  [[https://wpblog.semaphoreci.com/wp-content/uploads/2021/01/k8s-arch.png]]
+
+
+* 容器格式
+
+  在启动容器之前，我们首先要构建或者下载一个 /容器镜像/ ，它是一个打包了应用程序所需一切的文件系统：代码，二进制，配置文件，库和依赖。
+
+  容器受欢迎程度表明了需要一个开放的镜像标准。最终，Docker 公司和 CoreOS 在 2015 建立了 [[https://opencontainers.org/][OCI]]，以生产和厂商无关的格式为使命。
+  这项工作的结果是创建了两个标准：
+
+  - 镜像规范定义了镜像的二进制格式；
+  - [[https://github.com/opencontainers/runtime-spec][运行时规范]] 描述了如何解压和运行容器。OCI 维护了一个称为 [[https://github.com/opencontainers/runc][runc]] 的实现。containerd 和 CRI-O 后台都是用 runc 生成容器；
+
+  OCI 标准使得不同的容器解决方案之间可以相互操作。在系统中内置的镜像可以在其它兼容的堆栈中进行。
+
+  #+NAME: OCI interoperability
+  [[https://wpblog.semaphoreci.com/wp-content/uploads/2021/01/oci-interoperability.png]]
+
+
+* Docker Vs. Kubernetes
+
+  事情有点复杂。我之前说过 Kubernetes 工作节点需要一个容器运行时。在 [[https://github.com/kubernetes/kubernetes/blob/release-0.4/DESIGN.md][第一个初始设计]] 中，Docker 和 Kubernetes 是密不可分的，
+  因为它是唯一受支持的运行时。
+
+  但是 Docker 没有被设计成在 Kubernetes 中运行。意识到这个问题之后，Kubernetes 开发人员最终实现了一个称为 /容器运行时接口（CRI）/ 的 API。
+  这些接口使我们可以在不同的容器运行时中进行选择，从而使平台更加灵活，并且对 Docker 的依赖性降低。
+
+  #+NAME: CRI
+  [[https://wpblog.semaphoreci.com/wp-content/uploads/2021/01/cri.png]]
+
+  这个变动为 Kubernetes 团队带来了新的困难，即 Docker 不了解或者不支持 CRI。因此，在引入 API 的同时，他们必须编写一个将 CRI 消息转换
+  为 Docker 特定命令的配接器，也就是 /Dockershim/ 。
+
+* Dockershim 的弃用
+
+  尽管 Docker 是第一个也是唯一一个被支持的引擎，但是它从未列入长期规划中。[[https://github.com/kubernetes/kubernetes/blob/master/CHANGELOG/CHANGELOG-1.20.md#deprecation][Kubernetes 1.20 版本废弃了 Dockershim]]，从 Docker 开始平滑转换。
+
+  转换完成之后，堆栈变得更小。从：
+
+  #+NAME: kubelet-dockershim
+  [[https://wpblog.semaphoreci.com/wp-content/uploads/2021/01/kubelet-dockershim.png]]
+
+  到：
+
+  #+NAME: kubelet containerd
+  [[https://wpblog.semaphoreci.com/wp-content/uploads/2021/01/kubelet-containerd.png]]
+
+  减少了臃肿，而且减少了每个节点上的依赖项。
+
+  因此，为什么要这么做呢？
+
+  简单来说，Docker 太重了。轻量级的运行时，比如 containerd 或者 [[https://cri-o.io/][CRI-O]] 会有更佳的性能。例如，Google [[https://kubernetes.io/blog/2018/05/24/kubernetes-containerd-integration-goes-ga/][benchmarks]] 展示了 containerd
+  有更小的 CPU 和内存消耗，而且启动 Pod 的时间比 Docker 的时间更短。
+
+  此外，在一些方面 Docker 本身被认为存在 [[https://www.tariqislam.com/posts/kubernetes-docker-dep/][技术债务]]。Kubernetes 对 Docker 的真实需要是运行时 containerd。其它的东西，至少对于 Kubernetes
+  而言，是开销。
+
+* 弃用 Docker 之后对你有什么影响？
+
+  事情并不像听起来那样有戏剧性。我们开始说的一句话，v1.20 的唯一变化是，只有在运行 Docker 时，你才会收到弃用的警告。就这些。
+
+  *我依然可以在开发环境下使用 Docker ？*
+
+  是的，当然可以，不管是现在还是可遇见的将来。如你所知，Docker 并不是使用符合 Docker 规范的镜像；它运行符合 OCI-兼容的容器。
+  只要 Docker 继续使用这种格式，Kubernetes 就会持续接收他们。
+
+  *我仍然可以使用 Docker 打包我的生产应用程序吗？*
+
+  是的，和上一个问题的原因一样。Docker 打包的应用程序将继续运行 - 没有任何变化。因此，你仍然可以使用自己熟悉的和喜爱的工具来构建和测试容器。
+  你不需要改变 [[https://semaphoreci.com/blog/cicd-pipeline][CI/CD pipelines]] 或者切换到其它镜像中心。生产的 Docker 镜像会跟之前一样继续在你的集群中工作。
+
+  *我需要做哪些变更？*
+
+  目前，什么都不需要做。如果你的集群使用 Docker 作为运行时，升级到 v1.20 之后只会得到一个警告。但是，这一变化是 Kubernetes 社区明确表示
+  这是他们未来的方向。现在是时候为为未来做一些规划了。
+
+  *当 Dockershim 废弃之后，会发生什么？*
+
+  届时，迫使 Kubernetes 集群管理员切换到符合 CRI 的容器运行时。
+
+  *如果是最终用户* 不会为你带来很多变化。除非你在使用某种[[https://kubernetes.io/docs/concepts/extend-kubernetes/extend-cluster/][节点定制]]，否则你可能什么都不用做。只要测试你的应用程序和新的容器运行时是否可以一起用。
+
+  下面这些是升级到 v1.23 后会硬气的问题或者中断的一些事情：
+
+  - 使用 Docker 指定的日志和监控。也就是说，从日志中解析 Docker 信息或者轮询 Docker API；
+  - 使用 Docker 优化；
+  - 运行依赖 =docker= CLI 的脚本；
+  - 在 Pod 中使用 Docker 特权命令。比如：使用 =docker build= 构建镜像。参阅 [[https://github.com/GoogleContainerTools/kaniko][kaniko]] 之类的项目获取替代方案；
+  - 使用 Docker-in-Docker 的设置；
+  - 运行 Windows 容器。Containerd 确实可以在 Windows 中工作，但是支持的层级没有 Docker 那么深。
+    它的目标是在 [[https://github.com/kubernetes/enhancements/issues/1001][containerd 1.20 版本]] 中有一个发布一个支持 Windows 的稳定版本。
+
+  *如果你使用的托管集群* 在云厂商上，比如 AWS EKS，Google GKE 或者 Azure AKS，在 Docker 支持消失之前，检查你的集群是不是使用了受支持的运行时。
+  一些云供应商的版本落后一些，因此你可能有更多的时间进行规划。因此，请跟你的供应商联系。举个例子，Google 云宣布他们正在为新创建的将所有的默认是
+  Docker 的运行时更改成 containerd，但是你仍然可以选择使用 Docker。
+
+  *如果你运行自己的集群：*  除了检查上述的要点之外，你将需要评估转移到 CRI 完全兼容的另一个容器运行时。Kubernetes 文档详细的解释了这些步骤：
+
+  - [[https://kubernetes.io/docs/setup/production-environment/container-runtimes/#containerd][切换到 containerd]]
+  - [[https://kubernetes.io/docs/setup/production-environment/container-runtimes/#cri-o][切换到 CRI-O]]
+
+  另外，如果您想要在 1.23 以上的版本，继续使用 Docker。关注 [[https://github.com/Mirantis/cri-dockerd][cri-dockered]] 项目，它 [[https://www.mirantis.com/blog/mirantis-to-take-over-support-of-kubernetes-dockershim-2/][计划保留]] 作为运行时的替代方案。
+
+* 结论
+
+  Kubernetes 正在不断的壮大，但是这种变化不一定是一种痛苦的经历。大多数用户不需要采取任何措施。对于那些人，仍然有时间进行测试和计划。
+
+  要继续学习 Docker 和 Kubernetes，请阅读以下内容：
+
+  - 下载我们免费的书籍：[[https://semaphoreci.com/resources/cicd-docker-kubernetes][使用 Docker 和 Kubernetes 作为 CI/CD]]
+  - [[https://semaphoreci.com/product/docker][https://semaphoreci.com/product/docker]]
+  - [[https://semaphoreci.com/blog/guide-continuous-deployment-kubernetes][https://semaphoreci.com/blog/guide-continuous-deployment-kubernetes]]
+  - [[https://semaphoreci.com/blog/2018/03/14/docker-image-size.html][Docker Image Size – Does It Matter?]]
