@@ -67,19 +67,23 @@
 
    - [[file:kubernetes/kubectl-official.org][官方说明]]
 
-** TODO 书籍
-
-   - [ ] Kubernetes: Up and Running
-   - [ ] Kubernetes in Action
-   - [ ] Kubernetes Patterns
-   - [ ] Kubernetes Best Practices
-
 * Resources
 
   - [[file:../../blog/2018/an-overall-view-on-docker-ecosystem-containers-moby-swarm-linuxkit-containerd-kubernete.org][Docker 生态系统一览]] 翻译的文章，较为详细的说明了 Docker 的前世今生
   - [[file:../../blog/2021/kubernetes-vs-docker.org][Kubernetes vs Docker]] 2021 翻译的文章，容器、Docker、Kubernetes 之间的关系，
     Kubernetes v1.20 开始废弃了 Dockershim 之后，对于研发人员、管理员以及 CI/CD 流程上会有哪些影响？
   - [[https://12factor.net/zh_cn/][12-Factor]] 构建 SaaS 应用方法论
+  - [[https://kubernetesreadme.com/][kubernetes README]] Kubernetes 书籍、教程和其它资源列表
+
+** 书籍
+
+   - [ ] Kubernetes: Up and Running
+   - [ ] Kubernetes in Action
+   - [ ] Kubernetes Patterns
+   - [ ] Kubernetes Best Practices
+   - [ ] Cloud Native Patterns
+   - [ ] Kubernetes Patterns
+   - [ ] The Kubernetes Book 这本书每年都会更新一次，以跟上最新的 Kubernetes 生态
 
 * Footnotes
 
