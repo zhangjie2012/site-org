@@ -26,7 +26,7 @@
 
 * TODO 容器
 * TODO Docker
-* TODO Kubernetes
+* Kubernetes
 
   Kubernetes 是开源的微服务或者容器化应用的编排工具，是谷歌开发的集群管理工具（前身是谷歌内部运行十几年的集群管理工具 Borg[fn:2]，
   Kubernetes 吸取 Borg 的经验，然后针对社区定制的开源版本[fn:1]），现已捐赠给 CNCF[fn:4]。
@@ -53,9 +53,7 @@
    - [[file:kubernetes/services-networking.org][Services、负载均衡和集群网络]]
      + [[file:kubernetes/service.org][Service]] 集群内部的服务暴露抽象，提供虚拟 IP ，然后通过负载均衡策略，将流量转发到 Endpoints。
        底层实现是 kube-proxy，它支持三种模式（用户空间，iptables，IPVS），主流都是使用 IPVS
-     + DNS
-     + Ingress 和 Ingress Controller
-     + 网络策略
+     + [ ] [[file:kubernetes/service-topology.org][服务拓扑]] 实现基于 Service 的亲和性
    - 存储: Volumes, Persistent Volumes, Storage Class 等
    - 调度: 调度器和调度策略
 

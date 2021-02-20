@@ -1,0 +1,5 @@
+#+SETUPFILE: ~/site/tpl/wiki-tpl.org
+#+TITLE: Kubernetes - 服务拓扑
+#+DATE: 2021-02-09 16:44:29
+
+服务拓扑目标是是实现基于 Service 上的亲和性，使 Service 实现就近转发到 Endpoint，而不是等概率转发。

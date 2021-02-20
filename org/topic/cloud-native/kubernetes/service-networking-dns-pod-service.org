@@ -1,0 +1,21 @@
+#+SETUPFILE: ~/site/tpl/wiki-tpl.org
+#+TITLE: Kubernetes - Services 和 Pods 的 DNS
+#+DATE: 2021-02-09 16:50:29
+
+* 介绍
+
+  Kubernetes DNS 负责规划集群中 Services 和 Pods 的 DNS，配置 kubelet 告诉各个容器使用 DNS 的 Service IP 解析 DNS 名称。
+
+** 什么东西得到 DNS 名字？
+
+   每个在集群中定义的 Service （包括 DNS 服务自己）都会分配给一个 DNS 名字。默认情况下，客户端 Pod 的 DNS 搜索列表将包含：Pod 自己的空间
+   和集群的默认域。下面是一个例子：
+
+   假设在空间 =bar= 中包含一个名为 =foo= 的 Service。在 =bar= 空间下运行的 Pod 可以简单的通过 =foo= 的 DNS 查询找到 Service。
+   在空间 =quux= 访问 =foo= 可以通过 =foo.bar= 的 DNS 查询。
+
+   下面各节详细介绍了受支持的记录类型和布局。其它可行的布局、名字或者查询都使实现细节，如果有更改不会另行通知。有关最新的规范，查看 [[https://github.com/kubernetes/dns/blob/master/docs/specification.md][Kubernetes 基于 DNS 的服务发现]]。
+
+* Services
+
+* Pods
