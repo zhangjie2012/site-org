@@ -1,0 +1,86 @@
+#+SETUPFILE: ~/site/tpl/wiki-tpl.org
+#+TITLE: Kubernetes 空间对象
+#+DATE: 2021-02-20 16:49:05
+
+
+同一个物理机群支持划分出多个虚拟集群，这些虚拟集群被称为命名空间（namespace）。
+
+* 用途
+
+  命名空间用于很多跨多个团队或者项目的用户场景。几个或者几十个用户的集群，不需要考虑命名空间。当你需要的时候，再开始使用。
+
+  资源名称在同一个命名空间中是唯一的（跨空间允许相同），命名空间之间的名字是唯一的。命名空间不支持嵌套，同一个资源只能属于一个空间。
+
+  命名空间是多个用户之间划分集群资源的一种方法（通过[[https://kubernetes.io/docs/concepts/policy/resource-quotas/][资源配额]]）。
+
+  轻微不同的资源，不需要使用命名空间来区分，比如同一个软件的不同版本，可通过 Label 来区分。
+
+* 使用
+
+  空间的创建和删除在[[https://kubernetes.io/docs/tasks/administer-cluster/namespaces/][命名空间管理员指导文档]]中有描述。
+
+  #+begin_quote
+  *注意：*  避免创建空间时使用 =kube-= 前缀，因为它是为 Kubernetes 系统内部空间保留的。
+  #+end_quote
+
+** 查看空间列表
+
+   #+BEGIN_SRC sh
+     $ kubectl get namespaces
+     NAME              STATUS   AGE
+     default           Active   1d
+     kube-node-lease   Active   1d
+     kube-public       Active   1d
+     kube-system       Active   1d
+   #+END_SRC
+
+   Kubernetes 会创建四个初始的空间：
+
+   - =default= 未指定其它命名空间的资源使用的默认空间；
+   - =kube-system= 系统创建的对象所使用的命名空间；
+   - =kube-public= 自动创建，所有用户都可使用，为集群所用；
+   - =kube-node-lease= 该空间是为了与每个节点关联的租赁对象，随着集群的扩展，这么做可以提高节点心跳的性能；[fn:1]
+
+
+** 请求中设置命名空间
+
+   设置 =--namespace= 标识，比如：
+
+   #+begin_src sh
+     kubectl run nginx --image=nginx --namespace=<insert-namespace-name-here>
+     kubectl get pods --namespace=<insert-namespace-name-here>
+   #+end_src
+
+** 设置空间首选项（preference）
+
+   你可以为所有的 kubectl 子命令的上下文中设置空间：
+
+   #+begin_src sh
+     kubectl config set-context --current --namespace=<insert-namespace-name-here>
+     # Validate it
+     kubectl config view --minify | grep namespace:
+   #+end_src
+
+* 命名空间和 DNS
+
+  当创建一个 Service 时，Kubernetes 会创建一个对应的 DNS 条目，形式为： =<service-name>.<namespace-name>.svc.cluster.local= 。
+  如果容器使用 =<service-name>= 将被解析到本地命名空间的服务。如果希望跨命名空间访问，需要使用完全限定域名（FQDN）。
+
+* 并非所有对象都在命名空间中
+
+  大部分的 Kubernetes 资源（比如：pods，services，RC 等）都是在某些命名空间中的。然而有些空间的资源不在命名空间中。
+  而且，低级别的资源，比如节点和 persistentVolumes，就不属于任何空间。
+
+  在查询资源时，可通过指定 =-namespace=true/false= 来查看哪些资源不在命名空间中。
+
+  #+BEGIN_SRC shell
+    # In a namespace
+    kubectl api-resources --namespaced=true
+
+    # Not in a namespace
+    kubectl api-resources --namespaced=false
+  #+END_SRC
+
+* Footnotes
+
+[fn:1] [[https://stackoverflow.com/questions/59659966/what-is-the-kube-node-lease-namespace-for][What is the “kube-node-lease” namespace for?]]

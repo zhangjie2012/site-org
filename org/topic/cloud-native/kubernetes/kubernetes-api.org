@@ -1,0 +1,11 @@
+#+SETUPFILE: ~/site/tpl/wiki-tpl.org
+#+TITLE: Kubernetes API
+#+DATE: 2021-02-20 17:02:29
+
+* TODO OpenAPI 规范
+
+* TODO 持久化
+
+* TODO API 组和版本控制
+
+* TODO API 扩展

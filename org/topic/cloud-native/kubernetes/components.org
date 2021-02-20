@@ -1,0 +1,9 @@
+#+SETUPFILE: ~/site/tpl/wiki-tpl.org
+#+TITLE: Kubernetes 组件
+#+DATE: 2021-02-20 16:55:57
+
+* TODO 控制平面组件
+
+* TODO 节点组件
+
+* TODO 插件

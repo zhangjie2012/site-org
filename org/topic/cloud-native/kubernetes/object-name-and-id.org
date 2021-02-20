@@ -1,0 +1,5 @@
+#+SETUPFILE: ~/site/tpl/wiki-tpl.org
+#+TITLE: Kubernetes 对象命名和 IDs
+#+DATE: 2021-02-20 17:16:10
+
+https://kubernetes.io/docs/concepts/overview/working-with-objects/names/

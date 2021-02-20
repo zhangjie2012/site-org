@@ -467,7 +467,7 @@ Kubernetes 为每一个 Pod 提供单独的 IP 并且为一组 Pod 提供单独�
   =Type= 字段被设计成一个嵌套功能 - 每个界别都会添加到上一个级别。并非所有的云厂商都强制需要（比如，Google 计算引擎不需要分配
   一个 =NodePort= 来使 =LoadBalancer= 生效，但是 AWS 需要），但是当前的 API 要求使用它。
 
-* TODO 虚拟 IP 实现
+* 虚拟 IP 实现
 
   对于只想使用 Services 的人来说，之前的信息应该足够了。但是，Services 后面的很多事情也值得我们去了解。
 

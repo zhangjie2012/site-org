@@ -1,0 +1,9 @@
+#+SETUPFILE: ~/site/tpl/wiki-tpl.org
+#+TITLE: 理解 Kubernetes 对象
+#+DATE: 2021-02-20 16:49:05
+
+https://kubernetes.io/docs/concepts/overview/working-with-objects/kubernetes-objects/
+
+之前整理过，应该是文档的版本更新重新调整了结构：
+
+https://www.zhangjiee.com/wiki/devops/kubernetes-overview-objects.html
