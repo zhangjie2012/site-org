@@ -52,13 +52,13 @@ Kubernetes 为每一个 Pod 提供单独的 IP 并且为一组 Pod 提供单独�
     kind: Service
     metadata:
       name: my-service
-    spec:
-      selector:
-        app: MyApp
-      ports:
-        - protocol: TCP
-          port: 80
-          targetPort: 9376
+      spec:
+        selector:
+          app: MyApp
+          ports:
+            - protocol: TCP
+              port: 80
+              targetPort: 9376
   #+end_src
 
   以上创建了一个叫做 =my-service= 的 service 对象。Kubernetes 为 Service 分配一个 IP 地址（有时称为"集群IP"），该地址为服务代理
@@ -85,11 +85,11 @@ Kubernetes 为每一个 Pod 提供单独的 IP 并且为一组 Pod 提供单独�
      kind: Service
      metadata:
        name: my-service
-     spec:
-       ports:
-         - protocol: TCP
-           port: 80
-           targetPort: 9376
+       spec:
+         ports:
+           - protocol: TCP
+             port: 80
+             targetPort: 9376
    #+end_src
 
    因为 Service 没有选择器，对应的 Endpoint 对象不会被创建。你可以手动将 Service 映射到其运行所在网络的地址和端口，手动添加
@@ -100,11 +100,11 @@ Kubernetes 为每一个 Pod 提供单独的 IP 并且为一组 Pod 提供单独�
      kind: Endpoints
      metadata:
        name: my-service
-     subsets:
-       - addresses:
-           - ip: 192.0.2.42
-         ports:
-           - port: 9376
+       subsets:
+         - addresses:
+             - ip: 192.0.2.42
+               ports:
+                 - port: 9376
    #+end_src
 
    Endpoints 对象必须是一个有效的 DNS 子域名。
@@ -235,18 +235,18 @@ Kubernetes 为每一个 Pod 提供单独的 IP 并且为一组 Pod 提供单独�
     kind: Service
     metadata:
       name: my-service
-    spec:
-      selector:
-        app: MyApp
-      ports:
-        - name: http
-          protocol: TCP
-          port: 80
-          targetPort: 9376
-        - name: https
-          protocol: TCP
-          port: 443
-          targetPort: 9377
+      spec:
+        selector:
+          app: MyApp
+          ports:
+            - name: http
+              protocol: TCP
+              port: 80
+              targetPort: 9376
+              - name: https
+                protocol: TCP
+                port: 443
+                targetPort: 9377
   #+end_src
 
   #+begin_quote
@@ -381,17 +381,17 @@ Kubernetes 为每一个 Pod 提供单独的 IP 并且为一组 Pod 提供单独�
      kind: Service
      metadata:
        name: my-service
-     spec:
-       type: NodePort
-       selector:
-         app: MyApp
-       ports:
-           # By default and for convenience, the `targetPort` is set to the same value as the `port` field.
-         - port: 80
-           targetPort: 80
-           # Optional field
-           # By default and for convenience, the Kubernetes control plane will allocate a port from a range (default: 30000-32767)
-           nodePort: 30007
+       spec:
+         type: NodePort
+         selector:
+           app: MyApp
+           ports:
+             # By default and for convenience, the `targetPort` is set to the same value as the `port` field.
+             - port: 80
+               targetPort: 80
+               # Optional field
+               # By default and for convenience, the Kubernetes control plane will allocate a port from a range (default: 30000-32767)
+               nodePort: 30007
    #+end_src
 
 ** LoadBalancer 类型
@@ -409,9 +409,9 @@ Kubernetes 为每一个 Pod 提供单独的 IP 并且为一组 Pod 提供单独�
      metadata:
        name: my-service
        namespace: prod
-     spec:
-       type: ExternalName
-       externalName: my.database.example.com
+       spec:
+         type: ExternalName
+         externalName: my.database.example.com
    #+end_src
 
    #+begin_quote
@@ -434,28 +434,28 @@ Kubernetes 为每一个 Pod 提供单独的 IP 并且为一组 Pod 提供单独�
 
 ** ExternalIPs
 
-  如果有外部的 IP 路由到一个或者多个集群节点，Kubernetes Services 可以在 =externalIPs= 上暴露。
-  作为外部 IP（作为目标 IP）流量通过 ingresses 到集群，在 Service 端口上，会被路又道 Service 的 endpoints 之一。
-  =externalIPs= 不会受 Kubernetes 的管控，而是集群管理员的责任。
+   如果有外部的 IP 路由到一个或者多个集群节点，Kubernetes Services 可以在 =externalIPs= 上暴露。
+   作为外部 IP（作为目标 IP）流量通过 ingresses 到集群，在 Service 端口上，会被路又道 Service 的 endpoints 之一。
+   =externalIPs= 不会受 Kubernetes 的管控，而是集群管理员的责任。
 
-  在 Service spec 中， =externalIPs= 与 =ServiceTypes= 一起指定。如下， =my-service= 可以被客户端在 =80.11.12.10:80= 上访问。
+   在 Service spec 中， =externalIPs= 与 =ServiceTypes= 一起指定。如下， =my-service= 可以被客户端在 =80.11.12.10:80= 上访问。
 
-  #+begin_src yaml
-    apiVersion: v1
-    kind: Service
-    metadata:
-      name: my-service
-    spec:
-      selector:
-        app: MyApp
-      ports:
-        - name: http
-          protocol: TCP
-          port: 80
-          targetPort: 9376
-      externalIPs:
-        - 80.11.12.10
-  #+end_src
+   #+begin_src yaml
+     apiVersion: v1
+     kind: Service
+     metadata:
+       name: my-service
+       spec:
+         selector:
+           app: MyApp
+           ports:
+             - name: http
+               protocol: TCP
+               port: 80
+               targetPort: 9376
+               externalIPs:
+                 - 80.11.12.10
+   #+end_src
 
 * 缺点
 
@@ -587,3 +587,74 @@ Kubernetes 为每一个 Pod 提供单独的 IP 并且为一组 Pod 提供单独�
    #+end_src
 
    其次是来自客户端的数据。
+
+* 官方文档之外
+
+  *<2021-02-22 13:58:26> Headless Service 应用场景*
+
+  当部署 Service 时，Kubernetes 为会其分配一个 DNS 名称，集群中的其它组件可以使用此名称和 DNS 与上游 Pods 通信（Endpoints）。
+  （上面文档有写）。格式类似：
+
+  #+begin_src text
+    my-svc.my-namespace.svc.cluster-domain.example
+  #+end_src
+
+  当 =ServiceTypes= 类型为 =ClusterIP= 时， 值设置为 ="None"= 创建的 Service，称之为 Headless Service。
+  因为没有 Cluster IP，kube-proxy 不会处理它。
+
+
+  对于 Headless Service 关联的 Pod，也会被配置 A 或者 AAAA 记录，这样对 Headless Service 指定 DNS 查询时，会直接解析到所连接的 Pod 的
+  IP 地址。
+
+  区别在于，对于 Service，client 到达 Pod 的流程为：
+
+  1. 通过 DNS 服务，拿到 Service 的虚拟 IP 地址；
+  2. 使用时，VIP 通过 Kube-proxy（iptables/ipvs） 通过负载均衡策略，从 Endpoints 中选择一个 Pod 的 IP: ；
+
+  _不管有多少个 Endpoints，DNS 查询时最终只返回 Service 的 VIP 地址。具体 client 访问时哪个 Pod，是由负载均衡器（ipvs）来决定的。_
+
+  _而对于 Headless Service，DNS 查询会直接返回 Endpoint(IP) 列表。_
+
+  一般的场景在于：
+
+  - 客户端有自助选择权来决定使用那个 Pod，不走集群负载均衡的策略；
+  - Headless Service 对应的 Endpoints，每个 Pod 都有一个唯一的 DNS 域名。这样 Pod 之间就可以互相访问。
+    这种情况下通常和 statefulset 一起使用来部署有状态应用；
+
+  参考：
+
+  - https://www.cnblogs.com/wuchangblog/p/14032057.html
+  - https://mp.weixin.qq.com/s/a_a2Bev_L2sq_G1a9R_kUA
+
+  *<2021-02-22 14:37:39> ExternalName 类型 Service 应用场景*
+
+  将集群内部的名称映射到集群外部。只是一层重定向，与其它类型的 Service 完全不同，没有 Pod 相关联。
+
+  #+begin_src yaml
+    apiVersion: v1
+    kind: Service
+    metadata:
+      name: my-xn-service
+    spec:
+      type: ExternalName
+      externalName: example.com
+  #+end_src
+
+  当在集群内部访问 =my-xn-service= 内部的 DNS 会被映射到外部的 =example.com= 。
+
+  参考：
+
+  - https://cloud.google.com/kubernetes-engine/docs/concepts/service?hl=zh-cn#service_of_type_externalname
+  - https://blog.opskumu.com/kubernetes-ext-service.html
+
+  *<2021-02-22 14:44:42> Kubernetes 中的服务发现和负载均衡组件关系*
+
+  刚开始的时候这块会比较混乱（尤其是我这种不是运维出身的）。这里放一些总结：
+
+  - Service 是 Pods 访问的抽象，集群控制面板会给 Service 分配一个虚拟 IP，这个 IP 只能在集群内部使用，是个完全虚拟的；
+  - Service 和 Pods 的关系是通过标签选择器来建立的（Kubernetes 中的资源关系大都是这么建立的）；
+  - kube-proxy 会将 Service VIP 和 Endpoints 的规则写入到 iptables/ipvs 规则中；当 client 访问 VIP 时，kube-proxy 通过
+    负载均衡策略为 client 选择一个 endpoints(IP:Port)；
+  - 创建 Service 时，集群的 DNS 插件（如 coredns）会为 Service 创建一个 DNS 记录。
+
+  所以，访问流程为： =my-service -> DNS -> VIP -> kubeproxy -> IP:Port= 。
