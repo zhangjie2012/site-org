@@ -1,5 +1,6 @@
 #+SETUPFILE: ~/site/tpl/link-tpl.org
 #+TITLE:  云原生
+#+OPTIONS: toc:t
 
 * 定义
 
