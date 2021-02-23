@@ -2,4 +2,148 @@
 #+TITLE: 推荐的 Labels
 #+DATE: 2021-02-20 16:49:05
 
-https://kubernetes.io/docs/concepts/overview/working-with-objects/common-labels/
+你可以使用比 kubectl 和仪表盘更多的工具来可视化和管理 Kubernetes 对象。一组通用的标签允许工具交互操作，以所有工具都可以理解的通用方式描述对象。
+
+除了支持工具之外，推荐的标签描述应用程序（可以被查询）。metadata 是围绕 /应用/ 的概念组织的。Kubernetes 不是个 PaaS，并没有与应用对等的实施。
+取而代之的是，应用使用非正式的，使用 metadata 来描述。定义应用的内容很松散。
+
+#+begin_quote
+*注意：* 这些是推荐的标签。他们使得应用程序的管理更加容易，但是核心的工具都用不到它们。
+#+end_quote
+
+共享的标签和注解共享一个公共前缀： =app.kubernetes.io= 。没有前缀的标签是用户专有的。共享前缀可确保共享标签不会影响到用户自定义的标签。
+
+* 标签（labels）
+
+  为了重新利用这些标签，应该将它们应用于每个资源对象。
+
+  | Key                            | Description                | Example        | Type   |
+  |--------------------------------+----------------------------+----------------+--------|
+  | =app.kubernetes.io/name=       | 应用名称                   | =mysql=        | string |
+  | =app.kubernetes.io/instance=   | 应用实例的唯一描述         | =mysql-abcxzy= | string |
+  | =app.kubernetes.io/version=    | 当前应用的版本号           | =5.7.21=       | string |
+  | =app.kubernetes.io/component=  | 架构中的组件               | =database=     | string |
+  | =app.kubernetes.io/part-of=    | 应用所属更高级别的应用名称 | =workpress=    | string |
+  | =app.kubernetes.io/managed-by= | 用于管理应用程序的工具     | =helm=         | string |
+
+  为了说明这些标签的作用，请考虑以下的 StatefulSet 对象：
+
+  #+BEGIN_SRC yaml
+    apiVersion: apps/v1
+    kind: StatefulSet
+    metadata:
+      labels:
+        app.kubernetes.io/name: mysql
+        app.kubernetes.io/instance: wordpress-abcxzy
+        app.kubernetes.io/version: "5.7.21"
+        app.kubernetes.io/component: database
+        app.kubernetes.io/part-of: wordpress
+        app.kubernetes.io/managed-by: helm
+  #+END_SRC
+
+* 应用程序和应用程序实例
+
+  一个应用可以在 Kubernetes 集群中安装一次或者多次，并且，一些情况下还是在同一个空间中。比如，Wordpress 可以安装多次，不同的网站有不同的 Wordpress。
+
+
+  应用的名字和应用的实例名字是分开记录的。比如 WordPress 的 =app.kubernetes.io/name= 是 =wordpress= ，它的实例名称是用
+  =app.kubernetes.io/instance= 表示的，值为 =wordpress-abcxzy= 。这样做使得应用和应用的实例是可被识别的，每个实例都必须有一个唯一的名称。
+
+
+* 范例
+
+** 一个简单的无状态服务
+
+   考虑一个简单的无状态服务通过 =Deployment= 和 =Service= 对象部署。
+
+   =Deployment= 用来监视应用运行的容器。
+
+   #+BEGIN_SRC yaml
+     apiVersion: apps/v1
+     kind: Deployment
+     metadata:
+       labels:
+         app.kubernetes.io/name: myservice
+         app.kubernetes.io/instance: myservice-abcxzy
+     ...
+   #+END_SRC
+
+   =Service= 用来暴露应用。
+
+   #+BEGIN_SRC yaml
+     apiVersion: v1
+     kind: Service
+     metadata:
+       labels:
+         app.kubernetes.io/name: myservice
+         app.kubernetes.io/instance: myservice-abcxzy
+     ...
+   #+END_SRC
+
+** 数据库的 Web 应用
+
+   考虑稍微复杂一点的应用程序：一个 Web 应用（WordPress）使用了一个数据库（MySQL），使用 Helm 安装。
+
+   WordPress 使用 =Deployment= 部署：
+
+   #+BEGIN_SRC yaml
+     apiVersion: apps/v1
+     kind: Deployment
+     metadata:
+       labels:
+         app.kubernetes.io/name: wordpress
+         app.kubernetes.io/instance: wordpress-abcxzy
+         app.kubernetes.io/version: "4.9.4"
+         app.kubernetes.io/managed-by: helm
+         app.kubernetes.io/component: server
+         app.kubernetes.io/part-of: wordpress
+     ...
+   #+END_SRC
+
+   =Service= 暴露 WordPress：
+
+   #+BEGIN_SRC yaml
+     apiVersion: v1
+     kind: Service
+     metadata:
+       labels:
+         app.kubernetes.io/name: wordpress
+         app.kubernetes.io/instance: wordpress-abcxzy
+         app.kubernetes.io/version: "4.9.4"
+         app.kubernetes.io/managed-by: helm
+         app.kubernetes.io/component: server
+         app.kubernetes.io/part-of: wordpress
+     ...
+   #+END_SRC
+
+   MySQL 使用 =StatefulSet= 暴露，元数据中包含它从属的应用：
+
+   #+begin_src yaml
+     apiVersion: apps/v1
+     kind: StatefulSet
+     metadata:
+       labels:
+         app.kubernetes.io/name: mysql
+         app.kubernetes.io/instance: mysql-abcxzy
+         app.kubernetes.io/version: "5.7.21"
+         app.kubernetes.io/managed-by: helm
+         app.kubernetes.io/component: database
+         app.kubernetes.io/part-of: wordpress
+     ...
+   #+end_src
+
+   =Service= 作为 WordPress 的一部分暴露：
+
+   #+begin_src yaml
+     apiVersion: v1
+     kind: Service
+     metadata:
+       labels:
+         app.kubernetes.io/name: mysql
+         app.kubernetes.io/instance: mysql-abcxzy
+         app.kubernetes.io/version: "5.7.21"
+         app.kubernetes.io/managed-by: helm
+         app.kubernetes.io/component: database
+         app.kubernetes.io/part-of: wordpress
+     ...
+   #+end_src
