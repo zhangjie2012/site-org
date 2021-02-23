@@ -2,4 +2,56 @@
 #+TITLE: Kubernetes 字段选择器（Field Selectors）
 #+DATE: 2021-02-20 16:49:05
 
-https://kubernetes.io/docs/concepts/overview/working-with-objects/field-selectors/
+/字段选择器/ 允许用户根据一个或者多个资源字段值[[https://kubernetes.io/docs/concepts/overview/working-with-objects/kubernetes-objects/][选择 Kubernetes 资源]]。比如:
+
+- ~metadata.name=my-service~
+- ~metadata.namespace!=default~
+- ~status.phase=Pending~
+
+=kubectl= 命令通过 =--field-selector= 筛选资源，比如：
+
+#+BEGIN_SRC shell
+  kubectl get pods --field-selector status.phase=Running
+#+END_SRC
+
+#+begin_quote
+*注意：* 字段选择器本质上资源过滤器。默认情况下，没有应用选择器/过滤器，意味着选择指定类型的所有资源。
+=kubectl= 查询 =kubectl get pods= 和 =kubectl get pods --field-selector ""= 是等价的。
+#+end_quote
+
+* 支持的字段
+
+  支持的字段视不同的 Kubernetes 资源而定。但是所有的资源类型都支持 =metadata.name= 和 =metadata.namespace= 。
+  使用不支持的字段选择器会报错。比如：
+
+  #+begin_src sh
+    $ kubectl get ingress --field-selector foo.bar=baz
+    Error from server (BadRequest): Unable to find "ingresses" that match label selector "", field selector "foo.bar=baz": "foo.bar" is not a known field selector: only "metadata.name", "metadata.namespace"
+  #+end_src
+
+* 支持的运算符
+
+  - 相等： ~=~ 和 ~==~ /两者意义相同/
+  - 不相等： ~!=~
+
+  比如，下面的 =kubectl= 命令，选择 Kubernetes 中所有的 Services 但不在 =default= 空间中：
+
+  #+begin_src sh
+    kubectl get services  --all-namespaces --field-selector metadata.namespace!=default
+  #+end_src
+
+* 链式选择器
+
+  通过逗号分隔组成一个选择链，逗号表示 /与/ 。比如：
+
+  #+begin_src sh
+    kubectl get pods --field-selector=status.phase!=Running,spec.restartPolicy=Always
+  #+end_src
+
+* 多种资源类型
+
+  多种资源类型中逗号分隔，可以 /同时/ 筛选。比如：
+
+  #+BEGIN_SRC shell
+    kubectl get statefulsets,services --all-namespaces --field-selector metadata.namespace!=default
+  #+END_SRC

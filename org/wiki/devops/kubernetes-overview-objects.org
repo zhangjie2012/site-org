@@ -2,36 +2,6 @@
 #+TITLE: Kubernetes 对象
 #+DATE: 2020-02-05 12:25:24
 
-* 字段选择器
-
-字段选择器允许用户根据一个或者多个资源字段值筛选资源。比如 ~metadata.name=my-service~ ， ~status.phase=Pending~ 。
-
-=kubectl= 命令通过 =--field-selector= 筛选资源，比如：
-
-#+BEGIN_SRC shell
-kubectl get pods --field-selector status.phase=Running
-#+END_SRC
-
-** 支持的字段
-
-不同的资源类型（deployment，pod 等）支持不同的字段选择器，所有的资源都支持 =metadata.name= 和  =metadata.namespace= 。
-
-** 支持的运算符
-
-- 相等： ~=~ 和 ~==~ /两者意义相同/
-- 不相等： ~!=~
-
-** 链式选择器
-
-通过逗号分隔组成一个选择链，逗号表示 /与/ 。
-
-** 多种资源类型
-
-多种资源类型中逗号分隔，可以 /同时/ 筛选。比如：
-
-#+BEGIN_SRC shell
-kubectl get statefulsets,services --all-namespaces --field-selector metadata.namespace!=default
-#+END_SRC
 
 * 推荐使用的标签
 
