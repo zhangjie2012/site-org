@@ -1,9 +1,86 @@
 #+SETUPFILE: ~/site/tpl/wiki-tpl.org
 #+TITLE: 理解 Kubernetes 对象
-#+DATE: 2021-02-20 16:49:05
+#+DATE: 2020-02-05 12:25:24
 
-https://kubernetes.io/docs/concepts/overview/working-with-objects/kubernetes-objects/
+* 理解 Kubernetes 对象
 
-之前整理过，应该是文档的版本更新重新调整了结构：
+  /Kubernetes 对象/ 是 Kubernetes 系统的持久化实体，Kubernetes 使用这些实体来表示整个集群的状态。
+  具体来说，它们描述了：
 
-https://www.zhangjiee.com/wiki/devops/kubernetes-overview-objects.html
+  - 哪些容器化应用在运行（以及运行在哪些节点上）
+  - 可以被应用使用的资源
+  - 关于应用运行时表现的策略，比如重启策略、升级，以及容错
+
+
+  Kubernetes 对象是一个「意图记录」——创建对象后，Kubernetes 系统将不断工作来确保对象存在。
+  通过创建一个对象，可以有效的告知 Kubernetes 系统所需要的集群工作负载看起来是什么样的，这就是集群的 *期望状态（Desired State）* 。
+
+  /理解上面这一点很重要。/
+
+  Kubernetes 对象的操作（CRUD） 都需要使用 [[https://kubernetes.io/docs/concepts/overview/kubernetes-api/][Kubernetes API]]。kubectl 其实也是将 API 的一层封装成了 CLI 工具；
+  同样，你可以在你的程序中通过[[https://kubernetes.io/docs/reference/using-api/client-libraries/][客户端库]]直接调用调用 Kubernetes API。
+
+** 对象规约（Spec）和状态（Status）
+
+   每个 Kubernetes 对象包含两个嵌套的字段，它们负责管理对象的配置：一个是对象 =Spec= ；一个是 =Status= ；
+
+   - =Spec= 必须在创建对象时进行设置，提供所需资源的特征描述，也就是 /期望状态（Desired State）/
+   - =Status= 描述对象的 /实际状态（Actual State）/ ，它由 Kubernetes 系统和组件提供和更新
+
+   Kubernetes 控制平面持续的管理每个对象的实际状态，来满足你的期望状态。
+   也就是说， *在任何时刻，Kubernetes 都一直努力的实现 =Spec= 和 =Status= 相匹配。*
+
+   举个例子：在 Kubernetes 中，Deployment 对象可以表示集群中的运行的应用。当你创建一个 Deployment 时，你可能会设置 Deployment 的
+   =spec= 来指定你希望此应用有 3 个副本（replicas, 也可以理解成实例）在运行。Kubernetes 系统发现 Deployment 的 spec 之后会启动
+   应用程序所需要的三个实例 —— 更新状态直到符合你的 spec。如果其中的任何一个实例失败（状态变更），Kubernetes 系统会对比 spec 和 status
+   的差异做出响应 —— 在这种情况下，会启动一个新的实例替换掉之前的实例。
+
+   有关对象 spec，status 和 metadata，请参见 [[https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md][Kubernetes API 约定]]。
+
+** 描述 Kubernetes 对象
+
+   创建 Kubernetes 对象时，必须提供对象的 Spec，描述对象的期望状态，以及关于对象的一些基本信息（名称，空间等）。
+   API 请求必须在 body 中包含 JSON 信息，kubectl 使用 yaml 格式，发起请求时，将这些信息转换成 JSON。比如：
+
+   #+BEGIN_SRC yaml :file application/deployment.yaml
+     apiVersion: apps/v1
+     kind: Deployment
+     metadata:
+       name: nginx-deployment
+     spec:
+       selector:
+         matchLabels:
+           app: nginx
+       replicas: 2 # tells deployment to run 2 pods matching the template
+       template:
+         metadata:
+           labels:
+             app: nginx
+         spec:
+           containers:
+           - name: nginx
+             image: nginx:1.14.2
+             ports:
+             - containerPort: 80
+   #+END_SRC
+
+   一种使用 =.yaml= 文件创建 Deployment 的方法是类似这样的文件使用 =kubectl apply= 命令使用 kubectl CLI 来创建，传递 =.yaml= 文件
+   作为参数，比如：
+
+   #+begin_src sh
+     ~: kubectl apply -f https://k8s.io/examples/application/deployment.yaml --record
+     deployment.apps/nginx-deployment created
+   #+end_src
+
+** 必须的字段
+
+   创建 Kubernetes 对象中对应的 =.yaml= 文件，需要配置如下字段：
+
+   - =apiVersion= 创建该对象所使用的 Kubernetes API 版本
+   - =kind= 想要创建的对象类型
+   - =metadata= 帮助识别对象唯一性的数据，包括 =name=, =UID= 和可选的 =namespace=
+   - =spec= 对象的期望状态
+
+
+   每个对象的 =spec= 的细节格式都不同，会包含特定于该对象的嵌套字段。[[https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.20/][Kubernetes API 参考]]可以帮助你找到对应创建对象的 spec 格式。
+   比如， Pod 的 =spec= 格式在 [[https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.20/#podspec-v1-core][PodSpec v1 core]]。
