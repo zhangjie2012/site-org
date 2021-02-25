@@ -22,6 +22,11 @@
     OCI 于 2015 年 6 月由 Docker，CoreOS 和其他容器行业领导者成立。当前包含两种规范：
     + [[https://github.com/opencontainers/runtime-spec][runtime-spec]] 运行时规范
     + [[https://github.com/opencontainers/image-spec][image-spec]] 镜像规范
+  - [[https://kubernetes.io/blog/2016/12/container-runtime-interface-cri-in-kubernetes/][CRI]] Container Runtime Interface，由 protocol buffers 和 gRPC API 和一些库组成。
+    是 Kubernetes 提出的给 kubelet 来管理节点的容器来用的。符合 CRI 的容器，Kubernetes 就可以直接使用。
+    目前 CRI 的实现有 Containerd，CRI-O，Docker 不符合 CRI，所以 Kubernetes 写了 [[https://github.com/kubernetes/kubernetes/tree/release-1.5/pkg/kubelet/dockershim][dockershim]] 来做协议转换
+    （这也是 Kubernetes v1.20 之后废弃 Docker 的原因， =kubelet->dockershim->dockerd->containerd= 这个链路太长，
+    废弃之后改成了 =kubelet->contaienrd= ）。
 
 * TODO 容器
 * TODO Docker
