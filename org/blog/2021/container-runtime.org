@@ -1,0 +1,116 @@
+#+SETUPFILE: ~/site/tpl/site-tpl.org
+#+TITLE: 容器运行时的综合比较
+#+DATE: 2021-02-25 16:55:11
+
+这是一篇 *译文* ，原文在：https://www.capitalone.com/tech/cloud/container-runtime/
+
+之前翻译过：
+
+- [[file:../2018/different-from-docker-and-vm.org][Docker 与 VM 的区别]]
+- [[file:../2018/an-overall-view-on-docker-ecosystem-containers-moby-swarm-linuxkit-containerd-kubernete.org][Docker 生态一览]]
+- [[file:kubernetes-vs-docker.org][Kubernetes vs Docker]] 内容比较新（2021）
+
+通过这 3 篇内容基本上比较完善的了解从 VM 到 Docker 再到 Kubernetes 的变迁。这篇文章会有些内容重叠，可以作为补充（侧重于一些容易混淆的概念）。
+
+
+-----------------------
+
+在本文中，我将研究容器运行时的术语和工具。最后，你将对容器有一个很好的了解，容器的格局如何随着时间而演变，以为今天为何称为这个状态。
+
+* 首先，什么是容器？
+
+  在分析运行时之前，让我们快速的回顾一下容器。
+
+  在 Linux 内核中，容器不是一类对象。容器本质上由几个底层的内核原语组成：namespace（允许你跟谁交谈），cgroups（允许使用的资源量），和 LSMs
+  （Linux 安全模块 —— 允许你做的事情）。这些凑在一起能够为我们的进程设置安全、隔离和可计量的执行环境。这很棒，但是，当我们要创建一个新的隔离进程时，
+  手动执行所有的操作将很麻烦。
+
+  每次创建隔离进程时，都不需要手动隔离、自定义命名空间等，把这些组件捆绑在一起，我们称之为「容器」。我们称之为「容器运行时」的工具将这些部分组合成
+  一个隔离的、安全的执行环境变得很容易，来让我们可以以重复的方式部署[fn:1]。
+
+  有关容器的更多信息，可以查看我们的文章[[https://www.capitalone.com/tech/cloud/what-is-a-container/][什么是容器？定义，优点和使用范例]]。
+
+
+* 什么是容器运行时？
+
+  你可能听过「运行时」一词，指的是程序的生命周期阶段或者使用特定语言的执行程序。容器运行时的功能类似于后者——它是一种软件，用于运行和管理容器运行所需要的组件。
+  正如刚才所说，这些工具使得安全执行和高效部署容器变得更加容易。并且是[[https://www.capitalone.com/tech/cloud/holistic-container-management/][容器管理]]的关键组件。随着容器自身的发展和变化，它们的运行时也在随着变化。
+
+* 容器运行时的简短历史
+
+  2007 年 /cgroup/ 加入到 Linux 内核中之后，通过创建容器化进程，出现了几个利用它们的项目：
+
+  - [[https://linuxcontainers.org/lxc/][lxc]]
+  - [[https://github.com/google/lmctfy][LMCTFY]]
+  - [[https://www.freedesktop.org/software/systemd/man/systemd-nspawn.html][systemd-nspawn]]
+  - [[https://github.com/rkt/rkt][rkt]]
+
+  LXC，Linux 容器，是在 cgroup 之后不久推出的，被设计用于「全系统（full-system）」。systemd 也获得了类似容器的支持——systemd-nspawn
+  可以运行命名空间的（namespaced）的进程，而 systemd 本身可以控制 cgroup。不管是是 LXC 还是 systemd-nspawn 都没能吸引最终用户，
+  但是它们确实在其它的系统中有一些用途。比如说，Canonical 的 JuJu  和 Docker（简单版）是在 LXC 上构建的著名工具。
+
+  Docker（当时，"dotcloud"），开始围绕 LXC 够建工具，以使容器对更多的开发人员和用户更加的友好。不久之后，Docker 就放弃了 LXC，创建了
+  [[https://github.com/opencontainers/runtime-spec][开放容器倡议]]（OCI）来建立容器标准（稍后更多），并将一些容器组件开源为 *libcontainer* 项目。
+
+  Google 也开源了内部的容器堆栈版本，LMCTFY，但是随着 Docker 的流行而放弃了它。LMCTFY 开发人员将大多数功能逐渐复制到 Docker 的 libcontainer 中。
+
+  CoreOS，在最初在其 Container Linux 产品中只使用 Docker 之后，创建了一个 Docker 的替代品，称之为 *rkt* 。
+  rkt 提前具备了与 Docker 和其它早期运行时区分开的功能。值得注意的是，它不需要以 root 用户身份运行所有内容，是没有守护程序和 CLI 驱动的，
+  并且具有加密验证和完全的 Docker 镜像兼容等便利的设施。
+
+  在 Docker 创建 OCI 之前，CoreOS 也发布了一个容器标准叫做 *appc* 。然而，随着 Docker 的流行[fn:2]，CoreOS 致力于共建和支持 OCI。
+  这有助于推广，而且最终 OCI 也囊括了 appc 的部分。rkt 和 appc 最终都被遗弃。
+
+  随着时间的推移，这些早期和多样化的容器尝试的经验有助于使得 OCI 规范达到一定程度的标准化。规范的各种实现都已经发布，这些构成了我称之为「现代」的
+  容器运行时环境内容。
+
+
+* 容器运行时比较
+
+  在本节中，我们将回顾不同类型的容器运行时。通常，它们分为两大类：OCI 运行时和 CRI（容器运行接口）。
+
+  + 开放容器规范（OCI）运行时
+    - 本地运行时
+      * runC
+      * Railcar
+      * Crun
+      * rkt
+    - 沙盒和虚拟化运行时
+      * gviso
+      * nabla-containers
+      * runV
+      * clearcontainers
+      * kata-containers
+  + CRI
+    - containerd
+    - cri-o
+
+* 开放容器规范（OCI）运行时
+
+  有时称为「低级别」运行时，实现 OCI 运行时规范专注于管理容器的生命周期——抽象了 Linux 原语——并且无需其它操作。
+  低级别运行时创建和运行「容器」。
+
+  *本地运行时（Native runtimes）*
+
+  本地低级别运行时包括：
+
+  - [[https://github.com/opencontainers/runc][runC]]
+  - [[https://github.com/oracle/railcar][railcar]]（不推荐使用）
+  - [[https://github.com/containers/crun][crun]]
+  - [[https://github.com/rkt/rkt][rkt]]（不推荐使用）
+
+  *runC* Docker 在 libcontainer 和 OCI 上的所有工作结果。这是事实上的标准低级别的运行时。由 Go 编写的，并由 Docker 开源的 *moby* 项目维护。
+
+  *Railcar* 是 Oracle 创建的 OCI 运行时实现。由 Rust 编写，与 runC 的 Go 代码相比，他们人为，对于像容器运行时这样的组件而言，Rust 是
+  一种出色的语言，它可以与内核进行低级别的交互。不幸的是，Railcar 已经被遗弃。
+
+  TODO
+
+
+
+
+* Footnotes
+
+[fn:2] https://www.redhat.com/en/blog/history-containers
+
+[fn:1] https://jvns.ca/blog/2016/10/10/what-even-is-a-container/
