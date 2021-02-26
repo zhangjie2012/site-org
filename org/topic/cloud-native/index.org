@@ -97,6 +97,8 @@
     Kubernetes v1.20 开始废弃了 Dockershim 之后，对于研发人员、管理员以及 CI/CD 流程上会有哪些影响？
   - [[https://12factor.net/zh_cn/][12-Factor]] 构建 SaaS 应用方法论
   - [[https://kubernetesreadme.com/][kubernetes README]] Kubernetes 书籍、教程和其它资源列表
+  - [[https://events19.linuxfoundation.org/wp-content/uploads/2017/11/How-Container-Runtime-Matters-in-Kubernetes_-OSS-Kunal-Kushwaha.pdf][How Container Runtimes matter in Kubernetes?]] PPT，Kubernetes 中的运行时
+  - [[https://object-storage-ca-ymq-1.vexxhost.net/swift/v1/6e4619c416ff4bd19e1c087f27a43eea/www-assets-prod/presentation-media/hyper-kata-frakti-cri2.pdf][Unified Kubernetes CRI runtimes based on Kata Containers]] PPT，理解 Kubernetes 中的运行时
 
 ** 书籍
 
