@@ -95,21 +95,111 @@
   本地低级别运行时包括：
 
   - [[https://github.com/opencontainers/runc][runC]]
-  - [[https://github.com/oracle/railcar][railcar]]（不推荐使用）
+  - [[https://github.com/oracle/railcar][railcar]]（弃用）
   - [[https://github.com/containers/crun][crun]]
-  - [[https://github.com/rkt/rkt][rkt]]（不推荐使用）
+  - [[https://github.com/rkt/rkt][rkt]]（弃用）
 
   *runC* Docker 在 libcontainer 和 OCI 上的所有工作结果。这是事实上的标准低级别的运行时。由 Go 编写的，并由 Docker 开源的 *moby* 项目维护。
 
   *Railcar* 是 Oracle 创建的 OCI 运行时实现。由 Rust 编写，与 runC 的 Go 代码相比，他们人为，对于像容器运行时这样的组件而言，Rust 是
   一种出色的语言，它可以与内核进行低级别的交互。不幸的是，Railcar 已经被遗弃。
 
-  TODO
+  *crun* 是 Redhat 领导的 OCI 实现，也是[[https://github.com/containers][容器项目]]更广泛的一部分，也是 libpod 的同级产品（稍后会详细介绍）。它是由 C 开发的，性能好且轻量级。
+  并且是最早支持 [[https://medium.com/nttlabs/cgroup-v2-596d035be4d7][cgroup v2]] 的运行时。
+
+  *rkt* 不是一个 OCI 运行时的实现，但这是一个类似低级别的容器运行时。除了 appc 捆绑之外，它支持运行 Docker 和 OCI 镜像，但不能与使用 OCI 运行时
+  高级别的组件交互。
+
+  需要注意的是，正如我们在[[https://events19.linuxfoundation.org/wp-content/uploads/2017/11/How-Container-Runtime-Matters-in-Kubernetes_-OSS-Kunal-Kushwaha.pdf][本次开源峰会演讲]]所看到的，低级别的运行时性能仅在容器创建和删除期间才有意义。一旦进程运行之后，容器运行时就消失了。
+
+  *沙盒和虚拟化的运行时*
+
+  除了本地运行时，还可以在同一个主机内核上运行容器化的进程，有一些 OCI 规范的沙盒化和虚拟化实现：
+
+  - [[https://gvisor.dev/][gVisor]]
+  - [[https://nabla-containers.github.io/][nabla-containers]]
+  - [[https://github.com/hyperhq/runv][runV]]（被非正式弃用）
+  - [[https://github.com/clearcontainers][clearcontainers]]（弃用）
+  - [[https://github.com/kata-containers][kata-containers]]
+
+  *gVisor* 和 *Nabla* 是沙盒化的运行时，这样可以进一步的隔离宿主和容器化的进程。取代共享主机内核，容器化的进程在 unikernel 或者内核代理层运行，
+  然后代表容器与主机内核进行交互。随着逐渐增多的隔离，这些运行时减少了攻击面，使容器化进程对主机产生恶意影响的可能性降低。
+
+  *runV*, *Clear* 和 *Kata* 是虚拟化的运行时。它们是 OCI 运行时规范的实现，有虚拟机接口（而不是主机内核）支持。runV 和 Clear 已经被废弃，
+  他们的特性被 Kata 所吸收。它们都可以运行标准的 OCI 容器镜像，尽管它们通过更强的主机隔离来做到这一点。它们使用标准的 Linux 内核镜像并在虚拟机
+  中运行「容器化」的进程。
+
+  与本地运行时相比，沙盒化和虚拟化运行时在整个容器化进程的生命周期中都会对性能产生影响。在沙盒容器中，有一个额外的抽象层：进程运行在沙盒的
+  unikernetl/代理上运行，该指令中继到主机内核。在虚拟化的容器中，有一层虚拟化：进程全部在虚拟机中运行，这样会比直接在本地运行慢。将 VM 技术
+  （如注重性能的 [[https://github.com/firecracker-microvm/firecracker][AWS Firecracker]]）用作 VM 容器的支持虚拟机类型可以最大程度上减少性能的影响。
+
+* 容器运行时接口（CRI）
+
+  当引入 Kubernetes 容器编排时，Docker 运行时硬编码到机器的守护进程中，也就是 *kubelet* 。但是，随着 Kubernetes 的迅速流行，社区开始有
+  替代运行时的需求。
+
+  *rkt* 通过自定义 rkt 的 kubelet 代码（rktlet）添加了支持。但是这种基于运行时的自定义构建过程不能扩展，并且暴露了 Kubernetes 对抽象运行时
+  模型的需求。为了解决这个问题，Hyper，CoreOS，Google 和其它的 Kubernetes 赞助合作商在容器编排的角度上抽象了容器运行时的高级规范：也就是
+  [[https://kubernetes.io/blog/2016/12/container-runtime-interface-cri-in-kubernetes/][CRI]]（Container Runtime Interface）。与 CRI 集成（而不是特定的运行时）允许 kubelet 支持多个容器运行时，而无需为每个运行时编译自定义的 kubelet。
+
+  CRI 对 OCI 运行时还存在其它额外的担忧，包括镜像管理和分发，存储，快照，网络（与 CNI 有所不同），等等。CRI 还有在动态云环境中对容器所需的功能，
+  与 OCI 运行时不同，OCI 运行时始终专注于在机器上创建容器。此外，CRI 通常委托 OCI 运行时进行实际的容器执行。通过引入 CRI，Kubernetes 的坐着
+  以可扩展的方式有效的将 kubelet 与基础容器运行时进行解耦。
+
+  最初的 CRI 实现是 *dockershim* ，它在 Docker 引擎之前提供了一层约定的抽象。后来 containerd 和 runC 从 Docker 的核心中分离出来，
+  后来 Docker 这一层就变得不重要了，因为 containerd 提供了完整的 CRI 实现。
+
+  还有一个 VM CRI， *frakti* （v1），是第一个 [[https://object-storage-ca-ymq-1.vexxhost.net/swift/v1/6e4619c416ff4bd19e1c087f27a43eea/www-assets-prod/presentation-media/hyper-kata-frakti-cri2.pdf][非 Docker CRI 的实现]]。它是为以下目的创建的，旨在与之配合使用：runV 并提供与本机 OCI 支持的
+  CRI 相同的功能，但有 VM。由于 Kata 吸收了 Clear 和 runV 功能集合，因此 frakti 的重要性降低了 —— containerd + kata 是更现代的 frakti + runV。
+
+  目前，CRI 领域有两个主要的参与者：
+
+  - [[https://github.com/containerd][containerd]]
+  - [[https://cri-o.io/][cri-o]]
 
 
+  *containerd* 是 Docker 的高级别运行时，在 Moby 项目下开源管理和开发。默认情况下，底层是 runC 。就像其它来自 Docker 容器工具一样，
+  它是当前事实上的标准 CRI。它提供了 CRI 的所有核心功能以及更多其它功能[fn:3]，这是我们在 [[https://www.capitalone.com/tech/solutions/container-orchestration/][Critical Stack]] 中的 CRI，我们基于 Kubernetes 构建的
+  容器编排平台。containerd 有一个插件的设计 - [[https://github.com/containerd/cri][cri-containerd]] 实现了 CRI，并且存在各种 shims 来将 containerd 和低级别的运行时集合在一起
+  （比如 Kata）。
 
+  *cri-o* 是由 Redhat 领导的一个瘦（slim）的 CRI 实现，专为 Kubernetes 设计。它旨在充当 CRI 和支持的 OCI 运行时的轻量级桥梁。
+  相比 containerd 具有较少的外围功能，并委托 libpod 和容器工具项目[fn:4]中的组件进行镜像管理和存储。默认情况下，cri-o 使用 runC 作为它的 OCI，
+  但是在最近的 Redhat Fedora 安装（cgroups v2）使用的是 crun。由于它具有完全的 OCI 兼容性，cri-o 与低级别的运行时开箱即用[fn:5]，
+  比如 kata，不需要其它的零部件，而且很小的配置即可。
+
+  这两个 CRIs 都通过本机交互操作或者 shim/插件（包括沙盒和虚拟化实现）支持上述所有的 OCI 运行时的交互操作。
+
+* 容器引擎
+
+  你可能注意到了 Docker 不是 CRI 或者 OCI 的实现，而是包含了 containerd 和 runC。事实上，它具有 CRI 或者 OCI 范围之外的其他功能，
+  比如镜像构建和签名。那么，它的应用场景在哪些方面呢？
+
+  Docker 的产品叫『Docker 引擎』，并且通常将这些完整的容器工具套件称之为『容器引擎』。除了 Docker 之外，没有一个可执行文件提供如此功能齐全的
+  的功能，但是我们可以从容器工具（Container Tools）项目中拼凑出类似的工具。
+
+  Container Tools 项目遵循了 UNIX 小型工具哲学，每个工具只做好一件事情：
+
+  - *podman* - 运行镜像
+  - *buildah* - 构建镜像
+  - *skopeo* - 分发镜像
+
+  实际上，这些是独立 Docker 堆栈的替代方案，包括 cri-o（cri-o 项目替代了最后缺少的一部分）。
+
+
+* 包装容器运行时
+
+  至此，我们调查了容器运行时的历史和当前状态。容器是用于打包、隔离和安全性强大的工具，合理使用，它们可以轻松的可靠且一致性的交付软件。
+  容器运行时是该生态系统中很小但至关重要的部分，在评估使用场景时，了解各种运行时的历史和意图很重要。希望这里的信息可以帮助你确定本地开发，
+  CI/CD 和 Kubernetes 需求组件的上下文。
 
 * Footnotes
+
+[fn:5] https://github.com/kata-containers/documentation/blob/master/how-to/run-kata-with-k8s.md#cri-o
+
+[fn:4] https://github.com/containers/
+
+[fn:3] https://containerd.io/img/architecture.png
 
 [fn:2] https://www.redhat.com/en/blog/history-containers
 
