@@ -68,7 +68,7 @@
 *** Kubernetes
 
 	- 官方文档
-	  + 架构：[[file:devops/kubernetes-architechture-nodes.org][节点]]、[[file:devops/kubernetes-architecture-master-node-communication.org][Master-Node 通信]]
+	  + 架构：[[file:devops/kubernetes-architecture-master-node-communication.org][Master-Node 通信]]
 	  + 容器：[[file:devops/kubernetes-containers-images.org][镜像]]、[[file:devops/kubernetes-containers-container-environment-variables.org][容器环境变量]]、[[file:devops/kubernetes-containers-runtime-class.org][运行时类]]、[[file:devops/kubernetes-containers-container-lifecycle-hooks.org][生命周期 Hooks]]
 	  + [[file:devops/k8s-ingress.org][Ingress]] 服务暴露
 	- 实践
