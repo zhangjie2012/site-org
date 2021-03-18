@@ -90,6 +90,7 @@
 	  现今，Prometheus 已经是云原生体系下的监控标配。而未来将致力于做监控的标准化工作。
 	- [[file:devops/prometheus.org][Prometheus 文档（非官方）]] 官方文档笔记
 	- [[file:devops/monitor-based-on-prometheus.org][基于 Prometheus 的监控告警]]
+    - [[https://particule.io/en/blog/thanos-monitoring/][Multi-Cluster Monitoring with Thanos]] 使用 Thanos 解决 Prometheus 的单点问题
 
 *** Grafana
 
