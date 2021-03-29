@@ -1,0 +1,19 @@
+#+SETUPFILE: ~/site/tpl/wiki-tpl.org
+#+TITLE: Kubernetes 架构：控制平面 - 节点通信
+#+DATE: 2021-03-23 18:03:02
+
+所谓控制平面就是 Kubernetes 的 apiserver。
+
+* 节点到控制平面
+
+  Kubernetes 是集中式的 API 模式。来自节点的所有 API 使用（或者他们运行的 Pods）在 apiserver 处终止（其他控制平面组件都未被设计为公开远程服务）。
+  apiserver 配置为监听启用一种或者多种形式的客户端身份验证的安全 HTTPS 端口（通常为 443）上的远程连接。应该启用一种或者多种形式的[[https://kubernetes.io/docs/reference/access-authn-authz/authorization/][授权]]，
+  尤其是在允许[[https://kubernetes.io/docs/reference/access-authn-authz/authentication/#anonymous-requests][匿名请求]]或者[[https://kubernetes.io/docs/reference/access-authn-authz/authentication/#service-account-tokens][服务账户令牌]]的情况下。
+
+* 控制平面到节点
+
+** apiserver 到节点，pods 和 services
+
+** SSH 隧道（tunnels）
+
+** Konnectivity service

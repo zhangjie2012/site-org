@@ -237,6 +237,5 @@ Kubernetes 在 /节点（nodes）/ 上将容器放入 Pods 中运行你的工作
   - =ShutdownGracePeriodCriticalPods=:
     + 指定关键 Pods 终止的总时间。这个应该比 =ShutdownGracePeriod= 要短；
 
-
   举例，如果 =ShutdownGracePeriod=30s=, =ShutdownGracePeriodCriticalPods=10s= ，kubelet 会将节点关闭延迟 30s。在关机期间，
   前 20（30-10）秒将保留用于正常终止正常 Pod，而后 10 秒将保留用于终止关键 Pod。

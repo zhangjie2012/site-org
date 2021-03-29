@@ -1,0 +1,7 @@
+#+SETUPFILE: ~/site/tpl/wiki-tpl.org
+#+TITLE: kubectl 常用命令集合
+#+DATE: 2021-03-29 11:57:19
+
+* 节点
+
+- 通过标签过滤节点 ~kubectl get nodes  -l "aaa=bbb"~

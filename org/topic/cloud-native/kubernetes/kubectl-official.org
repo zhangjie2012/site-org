@@ -57,9 +57,6 @@ https://kubernetes.io/docs/reference/kubectl/overview/
 - =version=, =kubectl version [--client] [flags]=: 显示运行在客户端和服务器的Kubernetes 版本
 
 ** 资源类型
-    :PROPERTIES:
-    :CUSTOM_ID: 资源类型
-    :END:
 
 下面是 =kubectl= 做支持的资源类型和他们的简写：
 
@@ -109,9 +106,6 @@ https://kubernetes.io/docs/reference/kubectl/overview/
 ** 输出选项
 
 *** 格式化输出
-     :PROPERTIES:
-     :CUSTOM_ID: 格式化输出
-     :END:
 
 语法: =kubectl [command] [TYPE] [NAME] -o=<output_format>=
 
@@ -163,9 +157,6 @@ https://kubernetes.io/docs/reference/kubectl/overview/
 #+END_EXAMPLE
 
 **** 服务端（Server-side）的列
-      :PROPERTIES:
-      :CUSTOM_ID: 服务端server-side的列
-      :END:
 
 =kubectl= 支持从服务器接受有关对象的特定信息的列，这意味着任意给定的资源，服务器会返回资源相关的行和列，供客户端输出。这样的设定保证了相同的集群提供一致的跨客户端的人类可读的输出（服务器封装了打印的细节）。
 
