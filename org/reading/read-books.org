@@ -64,10 +64,8 @@
    - [[https://book.douban.com/subject/26772677/][微服务设计]]：不厚但读起来挺费劲，2018-08-29
 
 ** Programming Language
+
 *** C/C++
-    :PROPERTIES:
-    :CUSTOM_ID: cc
-    :END:
 
 	- [[http://book.douban.com/subject/2377310/][C 专家编程]]：2008-2012
 	- [[http://book.douban.com/subject/3012360/][C 和指针]]：2008-2012
@@ -87,9 +85,6 @@
 	- [[http://book.douban.com/subject/2116929/][高质量 C++ 编程指南]]：2013
 
 *** Go
-    :PROPERTIES:
-    :CUSTOM_ID: go
-    :END:
 
 	- [[https://yar999.gitbooks.io/gopl-zh/content/][Go 语言圣经]]：Go 语言入门书籍，2017 年
 	- [[https://golang.org/doc/effective_go.html][Effective Go]]：Go 语言必读书籍，2018 年
@@ -135,6 +130,8 @@
 * Fiction
 
 ** [[https://book.douban.com/subject/3079029/][大秦帝国]]
+
+   <2020-10-26 ~ 2021-04-05> https://book.douban.com/subject/3079029/
 
    - 第一部：黑色裂变（上、下）
    - 第二部：国命纵横（上、下）
