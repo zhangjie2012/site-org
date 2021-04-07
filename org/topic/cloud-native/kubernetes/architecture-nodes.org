@@ -5,15 +5,16 @@
 Kubernetes 在 /节点（nodes）/ 上将容器放入 Pods 中运行你的工作负载。节点可能是一个虚拟或者物理的机器，依赖于你的集群。
 每个节点都会被控制平面管理，并且包含运行 Pods 所需要的服务。
 
-节点上的 [[https://kubernetes.io/docs/concepts/overview/components/#node-components][组件]] 包含：kubelet，容器运行时和 kube-proy。
+通常，一个集群中包含多个节点。在学习或者有限的资源环境中，您可能只有一个节点。
+
+节点上的 [[https://kubernetes.io/docs/concepts/overview/components/#node-components][组件]] 包含：kubelet，容器运行时（container runtime）和 kube-proxy。
 
 * 管理
 
   将节点添加到 API server 主要有两种方法：
 
   1. 节点上的 kubelet 自动注册到控制平面
-  2. 你，或者其他人手动添加节点对象
-
+  2. 你（或者其他人）手动添加节点对象
 
   在你创建了节点对象之后，或者节点上的 kubelet 自注册，控制平面会检查新的节点是否有效。举个例子，如果你想用一下的 JSON 创建一个节点：
 
@@ -34,10 +35,18 @@ Kubernetes 在 /节点（nodes）/ 上将容器放入 Pods 中运行你的工作
   如果节点健康（是否所有必要的服务都在运行），确定它是否有资格运行 Pod。否则的话，该节点对于任何的集群活动都会被忽略，直到它变得健康为止。
 
   #+begin_quote
-  *注意：* Kubernetes 将保留无效的节点，然后持续检查该节点是否健康。你，或者控制器，必须显式的删除节点对象才能停止该健康检测。
+  *注意：* Kubernetes 将保留无效的节点，然后持续检查该节点是否健康。
+
+  你，或者控制器，必须显式的删除节点对象才能停止该健康检测。
   #+end_quote
 
   节点对象的命名格式必须是一个有效的 [[https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#dns-subdomain-names][DNS 子域格式]]。
+
+** 节点名称唯一性
+
+   名字可以标识一个节点。两个节点不可能在同一个时间内有相同的名字。Kubernetes 假定具有相同名称的资源是相同的对象。对于节点，他隐式的假定相同名称的实例
+   具有相同的状态（比如说：网络设置，根磁盘内容）。如果在不更改实例名称的情况下对其进行了修改，则可能导致不一致。如果需要大量更换或者更新的节点，现有的节点
+   对象首先从 APIServer 中删除，并在更新后重新添加。
 
 ** 节点的自注册
 
@@ -54,10 +63,9 @@ Kubernetes 在 /节点（nodes）/ 上将容器放入 Pods 中运行你的工作
    - =--node-labels= - 注册到集群之后添加的标签；
    - =--node-status-update-frequency= - 指定 kubelet 多久同步一次节点状态到主节点；
 
-
    当 [[https://kubernetes.io/docs/reference/access-authn-authz/node/][节点认证模式]] 和 [[https://kubernetes.io/docs/reference/access-authn-authz/admission-controllers/#noderestriction][节点限制准入插件]] 是开启状态，kubelet 仅被授权创建/修改自己的节点资源。
 
-** 手动节点管理
+** 手动管理节点
 
    你可以使用 kubectl 创建或者修改节点对象。
 
@@ -79,7 +87,6 @@ Kubernetes 在 /节点（nodes）/ 上将容器放入 Pods 中运行你的工作
    *注意：* 作为 DaemonSet 的一部分 Pods 是可以运行在不可调度节点上的。DaemonSet 通常会提供本地节点服务，即使正在耗尽工作负载的应用程序，
    它也应该在节点上运行。
    #+end_quote
-
 
 * 节点状态
 
