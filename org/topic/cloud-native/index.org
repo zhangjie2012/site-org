@@ -59,8 +59,8 @@
        - [[file:kubernetes/object-common-label.org][推荐的 Labels]]
    - [[file:kubernetes/architecture.org][集群架构]]: kubernetes 架构与组件概览
      + [[file:kubernetes/architecture-nodes.org][节点]]
-     + 控制平面节点通信
-     + 控制器
+     + [[file:kubernetes/architecture-control-plane-node-communication.org][控制平面节点通信]]
+     + [[file:kubernetes/architecture-controller.org][控制器]]
      + 云控制器管理器
    - 容器
    - 工作负载（Workloads）

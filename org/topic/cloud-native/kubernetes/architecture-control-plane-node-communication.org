@@ -2,6 +2,8 @@
 #+TITLE: Kubernetes 架构：控制平面 - 节点通信
 #+DATE: 2021-03-23 18:03:02
 
+https://kubernetes.io/docs/concepts/architecture/control-plane-node-communication/
+
 所谓控制平面就是 Kubernetes 的 apiserver。
 
 * 节点到控制平面
@@ -10,10 +12,66 @@
   apiserver 配置为监听启用一种或者多种形式的客户端身份验证的安全 HTTPS 端口（通常为 443）上的远程连接。应该启用一种或者多种形式的[[https://kubernetes.io/docs/reference/access-authn-authz/authorization/][授权]]，
   尤其是在允许[[https://kubernetes.io/docs/reference/access-authn-authz/authentication/#anonymous-requests][匿名请求]]或者[[https://kubernetes.io/docs/reference/access-authn-authz/authentication/#service-account-tokens][服务账户令牌]]的情况下。
 
+  Nodes should be provisioned with the public root certificate for the cluster such that they can connect securely to the apiserver along with valid client credentials. A good approach is that the client credentials provided to the kubelet are in the form of a client certificate. See kubelet TLS bootstrapping for automated provisioning of kubelet client certificates.
+
+  Pods that wish to connect to the apiserver can do so securely by leveraging a service account so that Kubernetes will automatically inject the public root certificate and a valid bearer token into the pod when it is instantiated. The kubernetes service (in default namespace) is configured with a virtual IP address that is redirected (via kube-proxy) to the HTTPS endpoint on the apiserver.
+
+  The control plane components also communicate with the cluster apiserver over the secure port.
+
+  As a result, the default operating mode for connections from the nodes and pods running on the nodes to the control plane is secured by default and can run over untrusted and/or public networks.
+
 * 控制平面到节点
+
+  从控制平面（apiserver）到节点两种主要的通信方式是：
+
+  1. 从 apiserver 到集群中每个节点的都运行的 kubelet 进程；
+  2. 通过 apiserver 的代理功能 从 apiserver 到任何节点，pod，或者 server
+
+** apiserver 到 kubelet
+
+   从 apiserver 到 kubelet 的连接用于：
+
+   - 获取 pods 的日志；
+   - 通过 kubectl 附加到正在运行的 pods；
+   - 提供 kubelet 的端口转发功能；
+
+
+   These connections terminate at the kubelet's HTTPS endpoint. By default, the apiserver does not verify the kubelet's serving certificate, which makes the connection subject to man-in-the-middle attacks and unsafe to run over untrusted and/or public networks.
+
+   To verify this connection, use the --kubelet-certificate-authority flag to provide the apiserver with a root certificate bundle to use to verify the kubelet's serving certificate.
+
+   If that is not possible, use SSH tunneling between the apiserver and kubelet if required to avoid connecting over an untrusted or public network.
+
+   Finally, Kubelet authentication and/or authorization should be enabled to secure the kubelet API.
 
 ** apiserver 到节点，pods 和 services
 
+   The connections from the apiserver to a node, pod, or service default to plain HTTP connections and are therefore
+   neither authenticated nor encrypted. They can be run over a secure HTTPS connection by prefixing https: to the node,
+   pod, or service name in the API URL, but they will not validate the certificate provided by the HTTPS endpoint nor
+   provide client credentials. So while the connection will be encrypted, it will not provide any guarantees
+   of integrity. These connections are not currently safe to run over untrusted or public networks.
+
 ** SSH 隧道（tunnels）
 
+   Kubernetes supports SSH tunnels to protect the control plane to nodes communication paths.
+   In this configuration, the apiserver initiates an SSH tunnel to each node in the cluster (connecting
+   to the ssh server listening on port 22) and passes all traffic destined for a kubelet, node, pod, or service
+   through the tunnel. This tunnel ensures that the traffic is not exposed outside of the network
+   in which the nodes are running.
+
+   SSH tunnels are currently deprecated, so you shouldn't opt to use them unless you know what you are doing.
+   The Konnectivity service is a replacement for this communication channel.
+
+
 ** Konnectivity service
+
+   FEATURE STATE: Kubernetes v1.18 [beta]
+
+   As a replacement to the SSH tunnels, the Konnectivity service provides TCP level proxy for the control plane to
+   cluster communication. The Konnectivity service consists of two parts: the Konnectivity server in the control
+   plane network and the Konnectivity agents in the nodes network. The Konnectivity agents initiate connections
+   to the Konnectivity server and maintain the network connections. After enabling the Konnectivity service,
+   all control plane to nodes traffic goes through these connections.
+
+   Follow the Konnectivity service task to set up the Konnectivity service in your cluster.

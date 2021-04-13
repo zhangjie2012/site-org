@@ -1,0 +1,86 @@
+#+SETUPFILE: ~/site/tpl/wiki-tpl.org
+#+TITLE: Kubernetes 集群架构：控制器
+#+DATE: 2021-04-13 17:25:11
+
+https://kubernetes.io/docs/concepts/architecture/controller/
+
+在机器人技术和自动化领域， /控制回路（control loop）/ 是一个用来调节系统状态的不会停止的循环。
+
+控制回路的一个范例是：房间中的恒温器。
+
+当你设定温度值时，你告诉恒温器你的 /期望状态（desired state）/ ，室温是 /当前状态（current state）/ 。恒温器扮演的角色是通过打开或者关闭设备
+来让当前状态更接近期望状态。
+
+在 Kubernetes 中，控制器是控制回路用来监听你集群的状态，然后在需要的时候进行更改或者请求更改。每个控制器都尝试将集群的当前状态调整成期望的状态。
+
+* 控制器模式
+
+  控制器至少跟踪一种 Kubernetes 资源类型。这些 [[https://kubernetes.io/docs/concepts/overview/working-with-objects/kubernetes-objects/#kubernetes-objects][对象]] 有一个 spec 字段用来表示期望状态。该资源的控制器负责将当前的状态更接近于期望状态。
+
+  The controller might carry the action out itself; more commonly, in Kubernetes, a controller will send messages
+  to the API server that have useful side effects. You'll see examples of this below.
+
+** 通过 API server 进行控制
+
+   Job 控制器是 Kubernetes 中内置控制器的一个例子。内置控制器通过与集群 API server 进行交互来管理状态。
+
+   Job 是一种 Kubernetes 资源，它运行 Pod 或者多个 Pod 来执行任务，结束后自动停止。
+
+   （一旦 [[https://kubernetes.io/docs/concepts/scheduling-eviction/][调度]]，Pod 对象成为 kubelet 所需状态的一部分。）
+
+   当 Job 控制器看到新的任务会确保，在集群中的某个位置，一组节点上的 kubelet 正在运行正确数量的 Pod，用来完成工作。
+   Job 控制器本身不会运行任何 Pod 或者容器。而是，告诉 API server 来创建或者删除 Pods。在控制平面中的其他组件根据信息来采取行动（
+   有新的 Pod 调度或者运行），直到工作完成。
+
+   当你创建新的 Job 之后，Job 的期望状态需要被完成。Job 控制器确保当前的状态逐渐的接近于期望状态：通过创建 Pods 来做你的 Job 想要做的事情。
+
+   控制器还会更新对象的配置。比如说：一旦 Job 的工作完成，Job 控制器会标记 Job 对象为 =Finished= 。
+
+   （这一点很像某些恒温器如何关闭灯来指示你的房间目前处于你所设定的温度的状态）。
+
+** 直接控制
+
+   与 Job 相比，某些控制器需要对集群外部的内容进行更改。
+
+   For example, if you use a control loop to make sure there are enough Nodes in your cluster, then that controller needs something outside the current cluster to set up new Nodes when needed.
+
+   Controllers that interact with external state find their desired state from the API server, then communicate directly with an external system to bring the current state closer in line.
+
+   (There actually is a controller that horizontally scales the nodes in your cluster.)
+
+   The important point here is that the controller makes some change to bring about your desired state, and then reports current state back to your cluster's API server. Other control loops can observe that reported data and take their own actions.
+
+   In the thermostat example, if the room is very cold then a different controller might also turn on a frost protection heater. With Kubernetes clusters, the control plane indirectly works with IP address management tools, storage services, cloud provider APIs, and other services by extending Kubernetes to implement that.
+
+* 期望 vs 当前状态
+
+  Kubernetes 采用云原生系统视图，并能够处理不断变化的情况。
+
+  随着工作的进行，你的集群可能随时随地发生变化，并且控制回路会自动修复故障。这意味着，你的集群可能永远无法达到稳定的状态。
+
+  只要集群的控制器正在运行并且能够进行有用的更改，总体状态是否稳定都没有关系。
+
+
+* 设计
+
+  As a tenet of its design, Kubernetes uses lots of controllers that each manage a particular aspect of cluster state. Most commonly, a particular control loop (controller) uses one kind of resource as its desired state, and has a different kind of resource that it manages to make that desired state happen. For example, a controller for Jobs tracks Job objects (to discover new work) and Pod objects (to run the Jobs, and then to see when the work is finished). In this case something else creates the Jobs, whereas the Job controller creates Pods.
+
+  It's useful to have simple controllers rather than one, monolithic set of control loops that are interlinked. Controllers can fail, so Kubernetes is designed to allow for that.
+
+  #+begin_quote
+  *Note:*
+
+  There can be several controllers that create or update the same kind of object. Behind the scenes, Kubernetes controllers make sure that they only pay attention to the resources linked to their controlling resource.
+
+  For example, you can have Deployments and Jobs; these both create Pods. The Job controller does not delete the Pods that your Deployment created, because there is information (labels) the controllers can use to tell those Pods apart.
+  #+end_quote
+
+
+* 运行控制器的方式
+
+  kube-controller-manager 携带一组内置的控制器，这些内置的控制器提供了核心能力。
+
+  Deployment 控制器和 Job 控制器是 Kubernetes 本身一部分（内置控制器）的控制器的两个例子。Kubernetes 允许你弹性运行控制平面，这样的话，
+  如果任何内置控制器发生故障，控制平面的另外一部分将接管工作。
+
+  You can find controllers that run outside the control plane, to extend Kubernetes. Or, if you want, you can write a new controller yourself. You can run your own controller as a set of Pods, or externally to Kubernetes. What fits best will depend on what that particular controller does.

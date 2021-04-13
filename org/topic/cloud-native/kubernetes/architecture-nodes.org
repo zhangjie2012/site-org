@@ -2,6 +2,8 @@
 #+TITLE: Kubernetes 架构：节点
 #+DATE: 2021-02-28 18:00:19
 
+https://kubernetes.io/docs/concepts/architecture/nodes/
+
 Kubernetes 在 /节点（nodes）/ 上将容器放入 Pods 中运行你的工作负载。节点可能是一个虚拟或者物理的机器，依赖于你的集群。
 每个节点都会被控制平面管理，并且包含运行 Pods 所需要的服务。
 
@@ -155,7 +157,6 @@ Kubernetes 在 /节点（nodes）/ 上将容器放入 Pods 中运行你的工作
    - =Capacity= 显示节点的资源总量
    - =Allocatable= 显示可提供给 Pod 消耗的资源总量
 
-
 ** 信息（info）
 
    节点的通用信息（System Info），包含：内核版本、系统、容器运行时以及 Kubernetes 版本信息等。
@@ -219,7 +220,6 @@ Kubernetes 在 /节点（nodes）/ 上将容器放入 Pods 中运行你的工作
    *注意：* 如果你要为非 Pod 进程显式的保留资源，查看[[https://kubernetes.io/docs/tasks/administer-cluster/reserve-compute-resources/#system-reserved][为系统后台进程预留资源]]。
    #+end_quote
 
-
 * 节点拓扑结构
 
   *FEATURE STATE:* =Kubernetes v1.16 [alpha]=
@@ -244,5 +244,5 @@ Kubernetes 在 /节点（nodes）/ 上将容器放入 Pods 中运行你的工作
   - =ShutdownGracePeriodCriticalPods=:
     + 指定关键 Pods 终止的总时间。这个应该比 =ShutdownGracePeriod= 要短；
 
-  举例，如果 =ShutdownGracePeriod=30s=, =ShutdownGracePeriodCriticalPods=10s= ，kubelet 会将节点关闭延迟 30s。在关机期间，
+  举例，如果 ~ShutdownGracePeriod=30s~, ~ShutdownGracePeriodCriticalPods=10s~ ，kubelet 会将节点关闭延迟 30s。在关机期间，
   前 20（30-10）秒将保留用于正常终止正常 Pod，而后 10 秒将保留用于终止关键 Pod。
