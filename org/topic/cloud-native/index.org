@@ -61,8 +61,12 @@
      + [[file:kubernetes/architecture-nodes.org][节点]]
      + [[file:kubernetes/architecture-control-plane-node-communication.org][控制平面节点通信]]
      + [[file:kubernetes/architecture-controller.org][控制器]]
-     + 云控制器管理器
+     + [[file:kubernetes/architecture-cloud-controller.org][云控制器管理器]]
    - 容器
+     + 镜像
+     + 容器环境
+     + 运行时类
+     + 容器生命周期 Hooks
    - 工作负载（Workloads）
      + Pods
      + 工作负载资源

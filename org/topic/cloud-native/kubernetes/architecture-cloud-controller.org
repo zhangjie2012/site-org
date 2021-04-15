@@ -1,0 +1,174 @@
+#+SETUPFILE: ~/site/tpl/wiki-tpl.org
+#+TITLE: Kubernetes 集群架构：云控制器管理器
+#+DATE: 2021-04-14 17:27:05
+
+*FEATURE STATE: =Kubernetes v1.11 [beta]= *
+
+云基础技术架构允许你可以在公有云、私有云和混合云上运行 Kubernetes。Kubernetes 相信自动化的，由 API 驱动的基础架构不会在组件之间紧耦合。
+
+云控制器管理器是一个 Kubernetes 控制平面组件，它签入和特定云的控制逻辑。云控制器管理器允许你的集群连接到云提供商的 API，并将与该云平台进行交互的
+组件与你的集群交互组件分开。、
+
+通过分离 Kubernetes 和底层云基础架构之间的交互逻辑，与主要的 Kubernetes 项目相比，云控制器管理器（cloud-controller-manager）组件
+是云提供商可以以不通的速度发布功能。
+
+云控制器管理器使用插件机制构建，该机制允许不同的云提供商将其平台与 Kubernetes 集成。
+
+* 设计
+
+  [[https://d33wubrfki0l68.cloudfront.net/2475489eaf20163ec0f54ddc1d92aa8d4c87c96b/e7c81/images/docs/components-of-kubernetes.svg]]
+
+  云控制器管理器作为一组重复的进程（通常是 Pod 中的容器）在控制平面中运行。每个云控制器管理器在单个进程中实现多个控制器。
+
+  #+begin_quote
+  *注意：* 你还可以将云控制器管理器作为 Kubernetes 插件运行，而不是作为控制平面的一部分运行。
+  #+end_quote
+
+* 云控制器管理器功能
+
+  云控制器管理器内部的控制器包括：
+
+** 节点控制器
+
+   在云基础架构中创建新服务器时，节点控制器负责创建节点对象。节点控制器获取有关在租户内部通过云提供商运行的主机的信息。
+   节点控制器执行以下功能：
+
+   1. 控制器通过云提供商 API 发现的每个服务器初始化一个节点对象（Node object）；
+   2. 使用特定云信息注解（annotating）和标签（labelling）节点对象，比如节点部署到的区和可用资源（CPU，内存等）；
+   3. 获取节点的主机名和网络地址；
+   4. 验证节点的健康度。该控制器通过云提供商的 API 来查看服务器是否已经被停止、删除、终止。如果节点已经被云删除了，控制器将从你的 Kubernetes
+      集群中删除节点对象；
+
+   一些云提供商的实现将其分为节点控制器和单独的节点生命周期控制器。
+
+** 路由（Route）控制器
+
+   路由控制器的责任是在云中配置路由规则来确保 Kubernetes 集群中不同节点的容器可以互通。
+
+   取决于云提供商，路由控制器可能还为 Pod 网络分配 IP 地址块。
+
+** Service 控制器
+
+   Services 和云基础架构组件集成，比如管理负载均衡器，IP 地址，网络包过滤，和目标运行状态检查。当你声明一个 Service 资源说明你需要他们时，
+   service 控制器和云提供商 APIs 互动来设置负载均衡器和其他基础架构组件。
+
+* 授权
+
+  本节将分解云控制器管理器对各种API对象进行执行操作所需的访问权限。
+
+** 节点控制器
+
+   节点控制器仅适用于节点对象。它需要完全访问权限才能读取和修改节点对象。
+
+   =v1/Node=:
+
+   - Get
+   - List
+   - Create
+   - Update
+   - Patch
+   - Watch
+   - Delete
+
+** 路由控制器
+
+   路由控制器监听节点对象的创建并适当地配置路由。它需要获得对节点对象的访问权限。
+
+   =v1/Node=:
+
+   - Get
+
+** Service 控制器
+
+   Service 控制器监听 Service 对象的 Create、Update 和 Delete 事件，然后为这些 Service 配置 Endpoints。
+
+   要访问 Services，它需要 List 和 Watch 权限。要更新 Services，它需要 Patch 和 Update 权限。
+
+   要为 Service 配置端点（Endpoints）资源，它需要 Create、List、Get、Watch 和 Update 权限。
+
+   =v1/Service=:
+
+   - List
+   - Get
+   - Watch
+   - Patch
+   - Update
+
+** 其它
+
+   云控制器管理器核心的实现需要访问权限以创建事件对象，并且为了确保安全操作，还需要访问权限以创建 ServiceAccounts。
+
+   =v1/Event=:
+
+   - Create
+   - Patch
+   - Update
+
+   =v1/ServiceAccount=:
+
+   - Create
+
+
+   为云控制器管理器创建的 RBAC ClusterRole 类似：
+
+   #+begin_src yaml
+     apiVersion: rbac.authorization.k8s.io/v1
+     kind: ClusterRole
+     metadata:
+       name: cloud-controller-manager
+     rules:
+     - apiGroups:
+       - ""
+       resources:
+       - events
+       verbs:
+       - create
+       - patch
+       - update
+     - apiGroups:
+       - ""
+       resources:
+       - nodes
+       verbs:
+       - '*'
+     - apiGroups:
+       - ""
+       resources:
+       - nodes/status
+       verbs:
+       - patch
+     - apiGroups:
+       - ""
+       resources:
+       - services
+       verbs:
+       - list
+       - patch
+       - update
+       - watch
+     - apiGroups:
+       - ""
+       resources:
+       - serviceaccounts
+       verbs:
+       - create
+     - apiGroups:
+       - ""
+       resources:
+       - persistentvolumes
+       verbs:
+       - get
+       - list
+       - update
+       - watch
+     - apiGroups:
+       - ""
+       resources:
+       - endpoints
+       verbs:
+       - create
+       - get
+       - list
+       - watch
+       - update
+   #+end_src
