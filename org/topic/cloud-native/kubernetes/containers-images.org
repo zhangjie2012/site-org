@@ -1,0 +1,60 @@
+#+SETUPFILE: ~/site/tpl/wiki-tpl.org
+#+TITLE: Kubernetes 容器 - 镜像
+#+DATE: 2021-04-15 22:06:42
+
+https://kubernetes.io/docs/concepts/containers/images
+
+容器镜像封装了应用程序和它的所有软件依赖的二进制数据。容器镜像是可执行的独立运行的软件包，并且对他们的运行时环境进行了明确的定义。
+
+通常，你在 Pod 中引用应用程序之前，先创建应用程序的容器镜像，然后推送到镜像仓库（registry）。
+
+* 镜像名
+
+  镜像通常有一个名字，比如 =pause= ， =example/mycontainer= 或者 =kube-apiserver= 。镜像也可以包含镜像仓库的主机名；比如：
+  =fictional.registry.example/imagename= ，还可能包含一个端口号；比如 =fictional.registry.example:10443/imagename= 。
+
+  如果你没有指定仓库主机名，Kubernetes 会认为你使用的是 Docker 公共的仓库。
+
+  镜像部分之后你可以添加一个 /标签（tag）/ （可以与 =docker= 和 =podman= 之类的工具一起使用）。标签标记镜像的不同版本。
+
+  镜像标签由小写字母和大写字母，数字，下划线，点和短横线组成。关于将分隔符 =_, - , .= 放在镜像标签中的位置，还有其他规则。
+
+  如果你不指定一个标签，Kubernetes 认为你使用的是 =latest= 标签。
+
+  #+begin_quote
+  *警告：*
+
+  在生产环境中部署容器时，应避免使用 =latest= 标签，因为它很难跟踪镜像具体哪本版本在运行，并且版本回滚也非常困难。
+
+  建议使用一个有意义的标签，比如 =v1.42.0= 。
+  #+end_quote
+
+* 更新镜像
+
+  当你第一次创建 Deployment，StatefulSet，Pod 或者其他包含 Pod 模板的对象时，如果没有明确指定，默认的镜像拉取策略是 =IfNotPresent= 。
+  如果镜像已经存在，该策略会导致 kubelet 跳过拉取镜像。
+
+  如果你想使用强制拉取，则可以自行一下操作之一：
+
+  - 设置容器的 =imagePullPolicy= 为 =Always= ；
+  - 忽略 =imagePullPolicy= 并且使用 =:latest= 作为镜像标签；Kubernetes 会设置策略为 =Always= ；
+  - 忽略 =imagePullPolicy= 和要使用的镜像标签；
+  - 开启 [[https://kubernetes.io/docs/reference/access-authn-authz/admission-controllers/#alwayspullimages][AlwaysPullImages]] 准入控制器；
+
+
+  #+begin_quote
+  *注意：*
+
+  容器 =imagePullPolicy= 的值始终在首次创建对象时设置，并且以后更改镜像的 tag 也不会修改该值。
+
+  比如说，你创建一个 Deployment 的镜像标签不是 =:latest= ，但是之后把 Deployment 的镜像设置为 =:latest= 标签，
+  =imagePullPolicy= 的字段不会改为 =Always= 。首次创建之后，你必须手动修改对象的拉取策略。
+  #+end_quote
+
+  当定义 =imagePullPolicy= 时不指定特定值，默认值也是 =Always= 。
+
+* TODO 具有镜像索引的多体系架构镜像
+
+* TODO 使用私有仓库
+
+* TODO 使用案例

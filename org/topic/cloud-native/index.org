@@ -62,8 +62,8 @@
      + [[file:kubernetes/architecture-control-plane-node-communication.org][控制平面节点通信]]
      + [[file:kubernetes/architecture-controller.org][控制器]]
      + [[file:kubernetes/architecture-cloud-controller.org][云控制器管理器]]
-   - 容器
-     + 镜像
+   - [[file:kubernetes/container.org][容器]]
+     + [[file:kubernetes/containers-images.org][镜像]]
      + 容器环境
      + 运行时类
      + 容器生命周期 Hooks
@@ -108,6 +108,7 @@
   - [[https://kubernetesreadme.com/][kubernetes README]] Kubernetes 书籍、教程和其它资源列表
   - [[https://events19.linuxfoundation.org/wp-content/uploads/2017/11/How-Container-Runtime-Matters-in-Kubernetes_-OSS-Kunal-Kushwaha.pdf][How Container Runtimes matter in Kubernetes?]] PPT，Kubernetes 中的运行时
   - [[https://object-storage-ca-ymq-1.vexxhost.net/swift/v1/6e4619c416ff4bd19e1c087f27a43eea/www-assets-prod/presentation-media/hyper-kata-frakti-cri2.pdf][Unified Kubernetes CRI runtimes based on Kata Containers]] PPT，理解 Kubernetes 中的运行时
+  - [[https://brennerm.github.io/posts/kubernetes-overview-diagrams.html][Kubernetes Overview Diagrams]] Kubernetes 概述图（很帅），涵盖架构，工作负载，网络存储，RBAC，资源 requests 和 limits 等
 
 ** 书籍
 

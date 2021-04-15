@@ -1,0 +1,21 @@
+#+SETUPFILE: ~/site/tpl/wiki-tpl.org
+#+TITLE: Kubernetes 容器（containers）
+#+DATE: 2021-04-15 21:56:14
+
+每个运行的容器都是可重复的；通过包含依赖项来实现标准化，意味着无论在哪里运行它，都可以得到相同的行为。
+
+容器将应用程序与主机基础架构解耦。这使得在不同的云或者 OS 环境中的部署更加容易。
+
+* 容器镜像
+
+  [[https://kubernetes.io/docs/concepts/containers/images/][容器镜像]] 是一个准备好可以运行（ready-to-run）的软件包，包含应用程序所需要的一切：代码和它需要的一切运行时，应用和系统库，
+  和任何必要设置的默认值。
+
+  设计上，容器是不可变的（immutable）：你不可以更改已经运行的容器的代码。如果你有一个容器化的应用程序并且想要进行修改，
+  你需要构建一个包含变更的新的镜像，然后使用新的镜像重新创建容器。
+
+* 容器运行时
+
+  容器运行时是负责运行容器的软件。
+
+  Kubernetes 支持几种容器运行时：Docker，containerd，CRI-O，和任何符合 [[https://github.com/kubernetes/community/blob/master/contributors/devel/sig-node/container-runtime-interface.md][Kubernetes CRI(Container Runtime Interface)]] 的实现。
