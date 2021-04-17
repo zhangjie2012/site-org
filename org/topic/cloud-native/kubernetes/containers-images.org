@@ -53,8 +53,66 @@ https://kubernetes.io/docs/concepts/containers/images
 
   当定义 =imagePullPolicy= 时不指定特定值，默认值也是 =Always= 。
 
-* TODO 具有镜像索引的多体系架构镜像
+* 具有镜像索引的多体系架构镜像
 
-* TODO 使用私有仓库
+  As well as providing binary images, a container registry can also serve a [[https://github.com/opencontainers/image-spec/blob/master/image-index.md][container image index]].
+  An image index can point to multiple [[https://github.com/opencontainers/image-spec/blob/master/manifest.md][image manifests]] for architecture-specific versions of a container.
+  The idea is that you can have a name for an image (for example: =pause=, =example/mycontainer=, =kube-apiserver=)
+  and allow different systems to fetch the right binary image for the machine architecture they are using.
 
-* TODO 使用案例
+  Kubernetes itself typically names container images with a suffix =-$(ARCH)=. For backward compatibility, please
+  generate the older images with suffixes. The idea is to generate say =pause= image which has the manifest for all
+  the arch(es) and say =pause-amd64= which is backwards compatible for older configurations or YAML files which
+  may have hard coded the images with suffixes.
+
+* 使用私有仓库
+
+  私有仓库可能需要密钥才能拉取镜像。证书可以有以下几种方式：
+
+  - 给私有仓库配置节点认证
+    + 所有的 pods 都可以从已配置的私有仓库中读取
+    + 需要节点管理员配置节点
+  - 预拉取镜像
+    + 所有的 Pod 都可以使用节点上缓存的镜像
+    + 需要所有节点的 root 权限才能进行设置
+  - 在 Pod 上指定 ImagePullSecrets
+    + 只有提供自己密钥的 Pod 才能访问仓库
+  - 供应商特定（Vendor-specific）或本地扩展
+    + 如果你使用的是自定义的节点配置，你（或者你的云提供商）可以实现你的向容器仓库验证节点的机制
+
+  这些选项将在下面更详细的说明。
+
+** TODO 配置节点向私有仓库认证
+
+** TODO 预拉取（Pre-pulled）镜像
+
+** TODO 在 Pod 上指定 imagePullSecrets
+
+* 使用案例
+
+  有许多的用于配置私有仓库的的解决方案，以下是一些常见的案例和建议的解决方案。
+
+  1. 集群仅运行非私有的镜像（比如说开源的）。不需要隐藏镜像。
+     + 使用 Docker hub 的公共镜像
+       - 不需要配置；
+       - 一些云厂商会自动缓存或者镜像（mirror）公共镜像，从而提高性能并减少拉取镜像的时间；
+  2. 集群使用一些专有镜像，这些镜像对公司的外部人员不可见，但对所有集群的用户可见。
+     + 使用私有托管的 [[https://docs.docker.com/registry/][Docker registry]]
+       - 可以托管在 [[https://hub.docker.com/][Docker Hub]]，或者其他地方；
+       - 在每个节点上如上所述的手动管理 .docker/config.json；
+     + 或者，在具有开放只读权限的防火墙后内部运行私有仓库
+       - 不需要 Kubernetes 配置；
+     + 使用托管的容器镜像仓库服务来控制镜像访问
+       - 与手动配置节点相比，它在群集自动扩展方面会更好地工作；
+     + 或者，在不方便更改节点配置的集群上，使用 =imagePullSecrets=
+  3. 集群使用专有镜像，其中一些镜像需要严格的访问控制
+     + 确保 [[https://kubernetes.io/docs/reference/access-authn-authz/admission-controllers/#alwayspullimages][AlwaysPullImages 准入控制器]] 是激活状态。否则所有的 Pods 都可以访问所有的镜像；
+     + 将敏感数据移动到『Secret』资源，而不是打包在镜像中；
+  4. 一个多租户集群，其中每个租户都需要自己的私有镜像仓库
+     + 确保 AlwaysPullImages 准入控制器激活。否则，所有租户的所有 Pod 都可能有权访问所有的镜像；
+     + 在需要授权的情况下运行私有注册表；
+     + 为每个租户生成仓库凭证，并放到 secret 中，然后向每个租户的空间中设置 secret；
+     + 租户将 secret 添加到每个空间的 imagePullSecrets 中；
+
+
+  如果你需要访问多个仓库，你可以为每一个仓库创建一个 secret。Kubelet 会合并任何 =imagePullSecrets= 到单个虚拟的 =.docker/config.json= 中。
