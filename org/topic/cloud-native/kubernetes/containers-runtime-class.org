@@ -1,0 +1,122 @@
+#+SETUPFILE: ~/site/tpl/wiki-tpl.org
+#+TITLE: Kubernetes 容器 - 运行时类
+#+DATE: 2021-04-17 09:38:52
+
+*FEATURE STATE: =Kubernetes v1.20[stable]= *
+
+本页面描述 RuntimeClass 资源和运行时选择机制。
+
+RuntimeClass 是用于选择容器运行时配置的功能。容器的运行时配置用于运行 Pod 的容器。
+
+* 动机
+
+  你可以在不同的 Pod 之间设置不同的 RuntimeClass，以实现安全和性能之间的平衡。比如，如果你的部分工作负载需要高级别的信息安全保障，你可能选择性的调度
+  这些 Pods，以便它们在使用硬件虚拟化的容器运行时中运行。然后，好处是收到的额外运行时隔离，但同时要付出一些额外的开销。
+
+  你还可以使用 RuntimeClass 在相同的容器运行时但使用不同的设置来运行不同的 Pod。
+
+* 设置（Setup）
+
+  1. 在节点上配置 CRI 实现（运行时依赖）；
+  2. 创建对应的 RuntimeClass 资源实现；
+
+** 1. 节点上配置 CRI 实现
+
+   RuntimeClass 可用的配置取决于运行时接口（CRI）的实现。有关如何配置的信息，请查看 CRI 实现的相应文档（[[https://kubernetes.io/docs/concepts/containers/runtime-class/#cri-configuration][如下]]）。
+
+   #+begin_quote
+   *注意：* RuntimeClass 假设默认情况下整个集群采用同构节点配置（也就是说，关于容器运行时，所有节点的配置方式都相同）。
+   要支持异构的节点配置，查看下面的调度。
+   #+end_quote
+
+   这些配置有相应的 =handler= 名称，由 RuntimeClass 引用。这些处理器必须是一个有效的 DNS 1123 标签（字母数字 + =-= 符号）。
+
+** 2. 创建对应的 RuntimeClass 资源
+
+   在步骤 1 中配置设置应该有一个关联的 =handler= 名称，作为配置标识。每个 handler，创建一个对应的 RuntimeClass 对象。
+
+   RuntimeClass 资源当前只有 2 个重要的字段：RuntimeClass 名称 =metadata.name= 和处理器 =handler= 。对象定义类似：
+
+   #+begin_src yaml
+     apiVersion: node.k8s.io/v1  # RuntimeClass is defined in the node.k8s.io API group
+     kind: RuntimeClass
+     metadata:
+       name: myclass  # The name the RuntimeClass will be referenced by
+       # RuntimeClass is a non-namespaced resource
+     handler: myconfiguration  # The name of the corresponding CRI configuration
+   #+end_src
+
+   RuntimeClass 对象必须是一个有效的 [[https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#dns-subdomain-names][DNS 子域名]] 格式。
+
+* 使用（Usage）
+
+  一旦 RuntimeClasses 配置到集群上，用起来就非常简单了。在 Pod spec 中指定 =runtimeClassName= 即可。比如：
+
+  #+begin_src yaml
+    apiVersion: v1
+    kind: Pod
+    metadata:
+      name: mypod
+    spec:
+      runtimeClassName: myclass
+      # ...
+  #+end_src
+
+  这会告诉 kubelet 使用 RuntimeClass 命名的来运行此 Pod。如果命名的 RuntimeClass 不存在，CRI 无法处理响应的 handler 程序，Pod 会进去
+  =Failed= 阶段（phase）。从响应的 [[https://kubernetes.io/docs/tasks/debug-application-cluster/debug-application-introspection/][事件]] 中获取错误信息。
+
+  如果没有 =runtimeClassName= 指定，会使用默认的 RuntimeHandler，其行为等价于 RuntimeClass 特性被关闭了。
+
+** CRI 配置
+
+   有关设置 CRI 运行时的更多信息，查看 [[https://kubernetes.io/docs/setup/production-environment/container-runtimes/][CRI 安装]]。
+
+*** dockershim
+
+    带有 dockershim 的 RuntimeClasses 必须将运行时处理程序设置为 =docker= 。Dockershim 不支持自定义 runtime 处理器的配置。
+
+*** containerd
+
+    通过 containerd 配置的 Runtime 处理器在 =/etc/containerd/config.toml= 中。有效的处理器在 runtime 小结配置：
+
+    #+begin_src text
+    [plugins.cri.containerd.runtimes.${HANDLER_NAME}]
+    #+end_src
+
+    更多配置：[[https://github.com/containerd/cri/blob/master/docs/config.md][https://github.com/containerd/cri/blob/master/docs/config.md]]
+
+*** CRI-O
+
+    CRI-O 的 Runtime 处理器在 =/etc/crio/crio.conf= 中配置。配置在 [[https://github.com/cri-o/cri-o/blob/master/docs/crio.conf.5.md#crioruntime-table][crio.runtime.table]] 中：
+
+    #+begin_src text
+    [crio.runtime.runtimes.${HANDLER_NAME}]
+    runtime_path = "${PATH_TO_BINARY}"
+    #+end_src
+
+    查看配置文档：https://raw.githubusercontent.com/cri-o/cri-o/9f11d1d/docs/crio.conf.5.md
+
+* 调度（Scheduling）
+
+  *FEATURE STATE: =Kubernetes v1.16 [beta]= *
+
+  通过指定 RuntimeClass 的 =scheduling= 字段，你可以设置约束以保证将此 RuntimeClass 一起运行的 Pod 调度到支持该 Pod 的节点上。
+  如果 =scheduling= 没设置，RuntimeClass 认为所有的节点都支持。
+
+  为确保 Pod 运行在在支持特定 RuntimeClass 的节点上，节点应该包含一个公共标签，然后由 =runtimeclass.scheduling.nodeSelector= 来选择该标签。
+  RuntimeClass 的 nodeSelector 会跟 Pod 的 nodeSelector 合并，有效的获取每个节点选择的节点集合的交集。如果存在冲突，pod 会被拒绝。
+
+  如果对选择的节点进行了污点（tainted）以防止其他 RuntimeClass 容器在该节点上运行，你可以给 RuntimeClass 添加 =tolerations= 。
+  与 =nodeSelector= 一样，容忍也会被 pod 的容忍进行合并，有效的考虑每个节点可容忍的节点集的并集。
+
+  了解更多的节点选择和容忍的信息，查看 [[https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/][将 Pod 赋值给节点]]。
+
+** Pod Overhead
+
+   *FEATURE STATE: =Kubernetes v1.18 [beta]= *
+
+   你可以指定与运行 Pod 相关的 /overhead/ 资源。声明 overhead 允许集群（包括调度器），在做出有关 Pod 和资源决策时要考虑这一点。
+   使用 Pod overhead，你必须开启 PodOverhead [[https://kubernetes.io/docs/reference/command-line-tools-reference/feature-gates/][feature gate]] （默认是开启的）。
+
+   Pod overhead 定义在 RuntimeClass 的 =overhead= 字段上。通过使用这些字段，你可以使用此 RuntimeClass 指定运行 Pod 的开销，并确保在
+   Kubernetes 中考虑了这些开销。
