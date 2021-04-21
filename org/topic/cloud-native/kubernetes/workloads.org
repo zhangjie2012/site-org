@@ -1,0 +1,45 @@
+#+SETUPFILE: ~/site/tpl/wiki-tpl.org
+#+TITLE: Kubernetes 工作负载
+#+DATE: 2021-04-20 17:33:18
+
+工作负载（workload）是运行在 Kubernetes 中的应用。你的工作负载无论是一个组件还是多个组件都可以一起协同工作，在 Kubernetes 中你把它们运行在一组 [[https://kubernetes.io/docs/concepts/workloads/pods][Pods]] 中。
+在 Kubernetes 中， =Pod= 表示你集群中运行的一组容器。
+
+Kubernetes pods 有 [[https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/][确定的生命周期]]。比如，一旦 Pod 所在的节点发生严重的故障意味着节点上所有的 Pod 都会发生故障。Kubernetes 将该故障作为最终级别来对待：
+你将需要创建一个新的 Pod 进行恢复，即使节点后面恢复健康状态。
+
+然而，为了让你的生活更加的轻松，你不需要直接管理每一个 =Pod= 。而是，你可以使用 /工作负载资源/ 替代你来管理一组 Pods。这些资源配置控制器会确保正在运行的
+Pods 数量匹配你的预期。
+
+Kubernetes 提供了几种内置的工作负载资源：
+
+- [[https://kubernetes.io/docs/concepts/workloads/controllers/deployment/][Deployment]] 和 [[https://kubernetes.io/docs/concepts/workloads/controllers/replicaset/][ReplicaSet]]（替换旧版本的 ReplicationController）。 =Deployment= 非常适合管理集群上的无状态应用工作负载， =Deployment=
+  中的每个 =Pod= 都可以被互换的，而且有需要随时会被替换；
+- [[https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/][StatefulSet]] 允许你运行一个或者多个以某种方式跟踪状态相关的 Pods。比如，如果你的工作负载持续记录数据，你可以运行一个 =StatefulSet= 来使一个 =Pod=
+  对应一个 [[https://kubernetes.io/docs/concepts/storage/persistent-volumes/][持久化卷]]。在该 =StatefulSet= 的 =Pod= 中运行的代码可以将数据复制到同一的 =StatefulSet= 中的其他 Pod，以提高总体弹性；
+- [[https://kubernetes.io/docs/concepts/workloads/controllers/daemonset/][DaemonSet]] 定义提供本地节点功能的 =Pods= 。这些可能是集群运行的基建，比如网络辅助工具，或者插件（add-on）的一部分；
+
+  每次向集群中添加一个与 =DaemonSet= 规范（Spec）匹配的节点时，控制平面都会将该 =DaemonSet= 的 =Pod= 调度到新节点上。
+
+- [[https://kubernetes.io/docs/concepts/workloads/controllers/job/][Job]] 和 [[https://kubernetes.io/docs/concepts/workloads/controllers/cron-jobs/][CronJob]] 定义任务运行完成之后就停止。Jobs 表示一次性的任务， =CronJobs= 是定时执行的。
+
+在 Kubernetes 生态中，你可以找到第三方提供的工作负载资源表示其他行为。如果你想要的不是 Kubernetes 核心的特定行为，可以使用 [[https://kubernetes.io/docs/concepts/extend-kubernetes/api-extension/custom-resources/][自定义资源]]，
+添加第三方的工作负载资源。比如，如果你想为你的应用程序运行一组 =Pods= ，但除非所有的 Pod 都可用，才可以开始工作（可能是一些高吞吐量的分布式任务），
+那么你可以实现或者安装一个扩展来实现此功能。
+
+* 下一步
+
+  除了阅读每种资源之外，你还可以了解与他们相关的特定任务：
+
+  - [[https://kubernetes.io/docs/tasks/run-application/run-stateless-application-deployment/][使用 Deployment 运行无状态应用]]；
+  - 以 [[https://kubernetes.io/docs/tasks/run-application/run-single-instance-stateful-application/][单实例]] 或者 [[https://kubernetes.io/docs/tasks/run-application/run-replicated-stateful-application/][replicated set]] 的方式运行有状态应用；
+  - [[https://kubernetes.io/docs/tasks/job/automated-tasks-with-cron-jobs/][使用 CronJob 运行自动化任务]]
+
+  了解 Kubernetes 中代码和配置分离的机制，查看 [[https://kubernetes.io/docs/concepts/configuration/][配置]] 文档。
+
+  有两个支撑的概念为 Kubernetes 如何管理应用程序的 Pod 提供了背景知识：
+
+  - [[https://kubernetes.io/docs/concepts/workloads/controllers/garbage-collection/][垃圾回收]] 在删除其拥有的资源之后，从集群中整理对象；
+  - [[https://kubernetes.io/docs/concepts/workloads/controllers/ttlafterfinished/][控制器完成之后的 TTL]] 在经过一定的时间之后，完成的一次性 Jobs；
+
+  一旦你的应用程序运行，你可能在内部需要 [[https://kubernetes.io/docs/concepts/services-networking/service/][Service]]，或者只是 web 应用的话，使用 [[https://kubernetes.io/docs/concepts/services-networking/ingress/][Ingress]]。

@@ -2,6 +2,8 @@
 #+TITLE: Kubernetes 容器 - 运行时类
 #+DATE: 2021-04-17 09:38:52
 
+https://kubernetes.io/docs/concepts/containers/runtime-class/
+
 *FEATURE STATE: =Kubernetes v1.20[stable]= *
 
 本页面描述 RuntimeClass 资源和运行时选择机制。
