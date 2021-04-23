@@ -1,0 +1,10 @@
+#+SETUPFILE: ~/site/tpl/wiki-tpl.org
+#+TITLE: InfluxDB v1.x
+#+DATE: 2021-04-23 14:02:41
+
+*Retention policy DURATION* 决定 InfluxDB 保留数据的时长。 *SHARD DURATION* 决定子语句确定分片组覆盖的时间范围。对应关系：
+
+| Retention policy DURATION | Shard Group Duration |
+| < 2 days | 1 hour  |
+| >= 2 days and <= 6 months | 1 day |
+| > 6 months | 7 day||
