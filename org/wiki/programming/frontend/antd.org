@@ -61,6 +61,43 @@ antd v4 发布了，以下如无特殊说明，均为 3.x 版本。
      <ConfigProvider renderEmpty={customizeRenderEmpty} />
    #+end_src
 
+
+** v4 使用 iconfont
+
+   [[https://ant.design/components/icon-cn/][antd@v4 icon]] 支持 [[https://www.iconfont.cn/][iconfont.cn]] 的扩展。方式如下：
+
+   #+begin_src js
+     import { createFromIconfontCN } from '@ant-design/icons';
+
+     const IconFont = createFromIconfontCN({
+       scriptUrl: '//at.alicdn.com/t/font_8d5l8fzk5b87iudi.js',
+     });
+
+     ReactDOM.render(
+       <div className="icons-list">
+         <IconFont type="icon-tuichu" />
+         <IconFont type="icon-facebook" />
+         <IconFont type="icon-twitter" />
+       </div>,
+       mountNode,
+     );
+   #+end_src
+
+   遇到的第一个问题： =//at.alicdn.com/t/font_8d5l8fzk5b87iudi.js= 是怎么生成的？这是在 iconfont.cn 网站上进行操作的：
+
+   1. 登录 -> 资源管理 -> 我的项目 -> 新建项目（加号）。
+   2. 搜索到需要使用的 icon -> 选择购买（购物框的按钮）
+   3. 点击右上角购物车 -> 点击添加到项目
+   4. 资源管理 -> 我的项目 -> 我发起的项目 然后就可以看到 =Unicode/Font class/Symbol= 三种使用方法对应的地址。
+
+   antd 官网提供的方法是使用 =Symbol= 的方式（也是推荐的方式）。
+
+   但是我们公司的框架中对 cdn 引用进行了特殊的处理，导致按照 Symbol 来引入会跨域的问题。所以只能使用 css 的方式:
+
+   1. 在全局 less 文件中引入 =@import "//at.alicdn.com/t/font_2505499_6jppz07ad8.css";=
+   2. 代码中直接使用 ~<i className="iconfont icondocker"/>~
+
+
 * 资源
 
   - 定制主题：https://ant.design/docs/react/customize-theme-cn
