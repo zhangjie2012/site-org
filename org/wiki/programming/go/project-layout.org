@@ -9,6 +9,8 @@
 
 [[https://github.com/golang-standards/project-layout][project-layout]] 提供了 Go 大中型项目的目录规范。本文对内容进行了整理，隔段时间会根据原项目中更新一次。
 
+*官方已经提供了中文版本，这里不再更新：https://github.com/golang-standards/project-layout/blob/master/README_zh.md*
+
 --------------------------------------------
 
 * Go 项目布局标准（Standard Go Project Layout）
