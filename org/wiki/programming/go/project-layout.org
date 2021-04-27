@@ -15,182 +15,182 @@
 
 * Go 项目布局标准（Standard Go Project Layout）
 
-这 /不是/ Go 官方团队定义的标准；但是它参考了 Go 生态中常见的布局模式（以前的和新兴的）。
+  这 /不是/ Go 官方团队定义的标准；但是它参考了 Go 生态中常见的布局模式（以前的和新兴的）。
 
-如果你仅仅是用来学习 Go 或者写一个小的 Demo 是不需要按照此项目结构的（一个 =main.go= 可能就足够了）。
-但如果你打算做一个长期的项目来维护，合理的代码结构是非常重要的，不然随着代码变多，依赖关系会变的混乱不堪，难以维护。
-有很多人参同时维护一个项目的时候，代码结构就更重要了，就需要引入通用的管理软件包和库的方法。
-当你拥有一个开源项目或者有其它项目要从仓库中引入代码时，有一个私有（又称为 =internal= ）的包和代码就变的很重要了。
-把代码克隆下来，需要的保留，不需要的删掉。这种模式不是所有的项目都这么用的，甚至 =vendor= 也不是通用的。
+  如果你仅仅是用来学习 Go 或者写一个小的 Demo 是不需要按照此项目结构的（一个 =main.go= 可能就足够了）。
+  但如果你打算做一个长期的项目来维护，合理的代码结构是非常重要的，不然随着代码变多，依赖关系会变的混乱不堪，难以维护。
+  有很多人参同时维护一个项目的时候，代码结构就更重要了，就需要引入通用的管理软件包和库的方法。
+  当你拥有一个开源项目或者有其它项目要从仓库中引入代码时，有一个私有（又称为 =internal= ）的包和代码就变的很重要了。
+  把代码克隆下来，需要的保留，不需要的删掉。这种模式不是所有的项目都这么用的，甚至 =vendor= 也不是通用的。
 
-注意 [[https://github.com/golang/go/wiki/Modules][Go modules]] 和相关功能会对项目布局产生影响，可以在此 [[https://github.com/golang-standards/project-layout/issues/18 ][issue]] 中添加你的想法。
+  注意 [[https://github.com/golang/go/wiki/Modules][Go modules]] 和相关功能会对项目布局产生影响，可以在此 [[https://github.com/golang-standards/project-layout/issues/18 ][issue]] 中添加你的想法。
 
-如果需要命名、代码风格方面的帮助，请先运行 [[https://golang.org/cmd/gofmt/][gofmt]] 和 [[https://github.com/golang/lint][golint]] , 推荐阅读 Go 代码风格指南和建议的文档：
+  如果需要命名、代码风格方面的帮助，请先运行 [[https://golang.org/cmd/gofmt/][gofmt]] 和 [[https://github.com/golang/lint][golint]] , 推荐阅读 Go 代码风格指南和建议的文档：
 
-- [[https://talks.golang.org/2014/names.slide#1][https://talks.golang.org/2014/names.slide]]
-- [[https://golang.org/doc/effective_go.html#names][https://golang.org/doc/effective_go.html#names]]
-- [[https://blog.golang.org/package-names][https://blog.golang.org/package-names]]
-- [[https://github.com/golang/go/wiki/CodeReviewComments][https://github.com/golang/go/wiki/CodeReviewComments]]
-- [[https://rakyll.org/style-packages/][https://rakyll.org/style-packages/]] (rakyll/JBD)
+  - [[https://talks.golang.org/2014/names.slide#1][https://talks.golang.org/2014/names.slide]]
+  - [[https://golang.org/doc/effective_go.html#names][https://golang.org/doc/effective_go.html#names]]
+  - [[https://blog.golang.org/package-names][https://blog.golang.org/package-names]]
+  - [[https://github.com/golang/go/wiki/CodeReviewComments][https://github.com/golang/go/wiki/CodeReviewComments]]
+  - [[https://rakyll.org/style-packages/][https://rakyll.org/style-packages/]] (rakyll/JBD)
 
-查看 [[https://medium.com/golang-learn/go-project-layout-e5213cdcfaa2][Go Project Layout]] 文章获取额外的背景。
+  查看 [[https://medium.com/golang-learn/go-project-layout-e5213cdcfaa2][Go Project Layout]] 文章获取额外的背景。
 
-更多的关于命名和代码组织结构的建议资料：
+  更多的关于命名和代码组织结构的建议资料：
 
-- [[https://www.youtube.com/watch?v=PTE4VJIdHPg][GopherCon EU 2018: Peter Bourgon - Best Practices for Industrial Programming]]
-- [[https://www.youtube.com/watch?v=MzTcsI6tn-0][GopherCon Russia 2018: Ashley McNamara + Brian Ketelsen - Go best practices.]]
-- [[https://www.youtube.com/watch?v=ltqV6pDKZD8][GopherCon 2017: Edward Muller - Go Anti-Patterns]]
-- [[https://www.youtube.com/watch?v=oL6JBUk6tj0][GopherCon 2018: Kat Zien - How Do You Structure Your Go Apps]]
+  - [[https://www.youtube.com/watch?v=PTE4VJIdHPg][GopherCon EU 2018: Peter Bourgon - Best Practices for Industrial Programming]]
+  - [[https://www.youtube.com/watch?v=MzTcsI6tn-0][GopherCon Russia 2018: Ashley McNamara + Brian Ketelsen - Go best practices.]]
+  - [[https://www.youtube.com/watch?v=ltqV6pDKZD8][GopherCon 2017: Edward Muller - Go Anti-Patterns]]
+  - [[https://www.youtube.com/watch?v=oL6JBUk6tj0][GopherCon 2018: Kat Zien - How Do You Structure Your Go Apps]]
 
 ** Go 目录
 *** =/cmd=
 
-项目的主应用目录。目录中名称一般与可执行文件相对应（比如： =/cmd/myapp= ）。
+    项目的主应用目录。目录中名称一般与可执行文件相对应（比如： =/cmd/myapp= ）。
 
-_不要_ 在本目录下放很多的代码，如果代码可以被其他项目导入使用的，请放到 =/pkg= 目录下，
-如果代码不可复用或者你不希望其他项目使用，请放到 =/internal= 目录下。
+    _不要_ 在本目录下放很多的代码，如果代码可以被其他项目导入使用的，请放到 =/pkg= 目录下，
+    如果代码不可复用或者你不希望其他项目使用，请放到 =/internal= 目录下。
 
-通常只包含一个简单的 =main= 函数，调用 =/internal= 和 =/pkg= 中的代码。
+    通常只包含一个简单的 =main= 函数，调用 =/internal= 和 =/pkg= 中的代码。
 
-查看 =/cmd= 目录范例：https://github.com/golang-standards/project-layout/blob/master/cmd/README.md
+    查看 =/cmd= 目录范例：https://github.com/golang-standards/project-layout/blob/master/cmd/README.md
 
 *** =/internal=
 
-私有的应用和库代码。这些是是不希望被其他应用程序或者库导入的代码。
-注意，这种布局方式是 Go 编译器强制限制的，查看 Go 1.4 的 [[https://golang.org/doc/go1.4#internalpackages][发布日志]]，而且不只是顶部的 =internal= 目录，所有子目录中的 =internal= 目录都受限制。
+    私有的应用和库代码。这些是是不希望被其他应用程序或者库导入的代码。
+    注意，这种布局方式是 Go 编译器强制限制的，查看 Go 1.4 的 [[https://golang.org/doc/go1.4#internalpackages][发布日志]]，而且不只是顶部的 =internal= 目录，所有子目录中的 =internal= 目录都受限制。
 
-（也就是说，在 Go 编译器层面约束的 =internal= 目录是不可被导出的）
+    （也就是说，在 Go 编译器层面约束的 =internal= 目录是不可被导出的）
 
-你还可以在 internal 目录内部增加一些代码结构来区分共享和非共享的。虽然它并不是必须的（尤其是小的项目），但是最好能从视觉上区分包的用途。
-你实际的代码可以放在 =/internal/app/myapp= 中，而应用的共享代码可以放在 =/internal/pkg/= 目录下。
+    你还可以在 internal 目录内部增加一些代码结构来区分共享和非共享的。虽然它并不是必须的（尤其是小的项目），但是最好能从视觉上区分包的用途。
+    你实际的代码可以放在 =/internal/app/myapp= 中，而应用的共享代码可以放在 =/internal/pkg/= 目录下。
 
 *** =/pkg=
 
-外部应用可以使用的库代码（比如 =/pkg/mypubliclib= ）。其它项目想要导入他们，然后正常的工作，所以将内容放到这里请三思。
-注意 =/internal= 是更好的方式来确保你的私有代码不被别人使用，因为它是 Go 强制执行的。
-=/pkg= 是明确传达给别人这是公开的代码可被安全使用的好方法。Travis Jeffery 写的 [[https://travisjeffery.com/b/2019/11/i-ll-take-pkg-over-internal/][I'll take pkg over internal]] 文章很好的说明了
-=/internal= 和 =/pkg= 以及何时使用它们。
+    外部应用可以使用的库代码（比如 =/pkg/mypubliclib= ）。其它项目想要导入他们，然后正常的工作，所以将内容放到这里请三思。
+    注意 =/internal= 是更好的方式来确保你的私有代码不被别人使用，因为它是 Go 强制执行的。
+    =/pkg= 是明确传达给别人这是公开的代码可被安全使用的好方法。Travis Jeffery 写的 [[https://travisjeffery.com/b/2019/11/i-ll-take-pkg-over-internal/][I'll take pkg over internal]] 文章很好的说明了
+    =/internal= 和 =/pkg= 以及何时使用它们。
 
-当根目录中包含很多非 Go 的组件时，这也是将 Go 代码分组到一起的一个办法，也使得运行各种 Go 工具更加的容易。
+    当根目录中包含很多非 Go 的组件时，这也是将 Go 代码分组到一起的一个办法，也使得运行各种 Go 工具更加的容易。
 
-查看哪些流程的项目使用 [[https://github.com/golang-standards/project-layout/blob/master/pkg/README.md][=/pkg=]] 目录。这是一种很常见的布局方式，但还没有被普遍接受，而且 Go 社区中的有些人不推荐这么做。
+    查看哪些流程的项目使用 [[https://github.com/golang-standards/project-layout/blob/master/pkg/README.md][=/pkg=]] 目录。这是一种很常见的布局方式，但还没有被普遍接受，而且 Go 社区中的有些人不推荐这么做。
 
-如果应用不大，额外嵌套一个目录没什么价值，就不需要使用了；在项目很大，根目录比较复杂的情况下，可以考虑一下（特别是包含了很多的非 Go 程序组件）。
+    如果应用不大，额外嵌套一个目录没什么价值，就不需要使用了；在项目很大，根目录比较复杂的情况下，可以考虑一下（特别是包含了很多的非 Go 程序组件）。
 
 *** =/vendor=
 
-应用程序依赖包（手动管理或者使用包管理工具类似 [[https://github.com/golang/dep][dep]] 或者新版本中内置的，但仍旧在实验阶段的 [[https://github.com/golang/go/wiki/Modules][modules]] 特性）。
+    应用程序依赖包（手动管理或者使用包管理工具类似 [[https://github.com/golang/dep][dep]] 或者新版本中内置的，但仍旧在实验阶段的 [[https://github.com/golang/go/wiki/Modules][modules]] 特性）。
 
-如果要构建库的话, _不要_ 提交应用程序依赖。
+    如果要构建库的话, _不要_ 提交应用程序依赖。
 
-注意 [[https://golang.org/doc/go1.13#modules][1.13]] 的 Go 允许打开模块代理特性（使用 https://proxy.golang.org/ 作为他们的模块代理服务器）。
-从 [[https://blog.golang.org/module-mirror-launch][这里]] 查看更多的信息，看他是否满足你的需求。如果满足的话，你可能都不需要 'vendor' 目录了。
+    注意 [[https://golang.org/doc/go1.13#modules][1.13]] 的 Go 允许打开模块代理特性（使用 https://proxy.golang.org/ 作为他们的模块代理服务器）。
+    从 [[https://blog.golang.org/module-mirror-launch][这里]] 查看更多的信息，看他是否满足你的需求。如果满足的话，你可能都不需要 'vendor' 目录了。
 
 ** 服务应用程序目录
 *** =/api=
 
-OpenAPI/Swagger 规范，JSON 模式（schema）文件，协议定义文件。
+    OpenAPI/Swagger 规范，JSON 模式（schema）文件，协议定义文件。
 
-查看 [[https://github.com/golang-standards/project-layout/blob/master/api/README.md][ =/api= ]] 范例。
+    查看 [[https://github.com/golang-standards/project-layout/blob/master/api/README.md][ =/api= ]] 范例。
 
 ** Web 应用程序目录
 *** =/web=
 
-Web 应用程序特定组件：静态网站资源，服务端模板和单网页应用（SPAs）。
+    Web 应用程序特定组件：静态网站资源，服务端模板和单网页应用（SPAs）。
 
 ** 通用的应用程序目录
 *** =/configs=
 
-配置文件模板和默认的配置项。
+    配置文件模板和默认的配置项。
 
-把 =confd= 或者 =consul-template= 模板文件放到这儿。
+    把 =confd= 或者 =consul-template= 模板文件放到这儿。
 
 *** =/init=
 
-系统初始化（systemd, upstart, sysv）和进程管理（runit, supervisord）配置。
+    系统初始化（systemd, upstart, sysv）和进程管理（runit, supervisord）配置。
 
 *** =/scripts=
 
-用于构建、安装、分析等操作脚本。
+    用于构建、安装、分析等操作脚本。
 
-这些脚本可以使根部的 =Makefile= 文件变的小且简单，比如：https://github.com/hashicorp/terraform/blob/master/Makefile
+    这些脚本可以使根部的 =Makefile= 文件变的小且简单，比如：https://github.com/hashicorp/terraform/blob/master/Makefile
 
-查看 [[https://github.com/golang-standards/project-layout/blob/master/scripts/README.md][ =/script= ]] 范例。
+    查看 [[https://github.com/golang-standards/project-layout/blob/master/scripts/README.md][ =/script= ]] 范例。
 
 *** =/build=
 
-打包和持续集成。
+    打包和持续集成。
 
-Put your cloud (AMI), container (Docker), OS (deb, rpm, pkg) package configurations and scripts in the =/build/package= directory.
+    Put your cloud (AMI), container (Docker), OS (deb, rpm, pkg) package configurations and scripts in the =/build/package= directory.
 
-Put your CI (travis, circle, drone) configurations and scripts in the =/build/ci= directory. Note that some of the CI tools (e.g., Travis CI) are very picky about the location of their config files. Try putting the config files in the /build/ci directory linking them to the location where the CI tools expect them (when possible).
+    Put your CI (travis, circle, drone) configurations and scripts in the =/build/ci= directory. Note that some of the CI tools (e.g., Travis CI) are very picky about the location of their config files. Try putting the config files in the /build/ci directory linking them to the location where the CI tools expect them (when possible).
 
 *** =/deployment=
 
-IaaS, PaaS，系统和容器编排文件和模板（docker-compose, kubernetes/helm, mesos, terraform, bosh）。
+    IaaS, PaaS，系统和容器编排文件和模板（docker-compose, kubernetes/helm, mesos, terraform, bosh）。
 
 *** =/test=
 
-其他外部测试应用程序和测试数据。较大的项目需要一个数据目录，如果你想让 Go 忽略掉他的话，可以命名为 =/test/data= 或者 =/test/testdata= 。
-Go 还会忽略以 =.= 或者 =_= 开头的文件。
+    其他外部测试应用程序和测试数据。较大的项目需要一个数据目录，如果你想让 Go 忽略掉他的话，可以命名为 =/test/data= 或者 =/test/testdata= 。
+    Go 还会忽略以 =.= 或者 =_= 开头的文件。
 
-查看 [[https://github.com/golang-standards/project-layout/blob/master/test/README.md][ =/test= ]] 更多范例。
+    查看 [[https://github.com/golang-standards/project-layout/blob/master/test/README.md][ =/test= ]] 更多范例。
 
 ** 其他目录
 
 *** =/docs=
 
-设计和用户文档（除了 godoc 生成的文档之外）。
+    设计和用户文档（除了 godoc 生成的文档之外）。
 
-查看 [[https://github.com/golang-standards/project-layout/blob/master/docs/README.md][ =/docs= ]] 更多范例。
+    查看 [[https://github.com/golang-standards/project-layout/blob/master/docs/README.md][ =/docs= ]] 更多范例。
 
 *** =/tools=
 
-此项目的支持工具。注意，这些工具可以从 =/pkg= 和 =/internal= 目录中导入代码。
+    此项目的支持工具。注意，这些工具可以从 =/pkg= 和 =/internal= 目录中导入代码。
 
-查看 [[https://github.com/golang-standards/project-layout/blob/master/tools/README.md][ =/tools= ]] 更多范例。
+    查看 [[https://github.com/golang-standards/project-layout/blob/master/tools/README.md][ =/tools= ]] 更多范例。
 
 *** =/examples=
 
-你的应用程序或者公共库的范例。
+    你的应用程序或者公共库的范例。
 
-查看 [[https://github.com/golang-standards/project-layout/blob/master/examples/README.md][ =/example= ]] 更多范例。
+    查看 [[https://github.com/golang-standards/project-layout/blob/master/examples/README.md][ =/example= ]] 更多范例。
 
 *** =/third_party=
 
-外部帮助工具，交叉代码和其他第三方工具（比如：Swagger UI）。
+    外部帮助工具，交叉代码和其他第三方工具（比如：Swagger UI）。
 
 *** =/githooks=
 
-Git hooks.
+    Git hooks.
 
 *** =/assets=
 
-与项目一起的其他资源文件（图片，logos 等等）。
+    与项目一起的其他资源文件（图片，logos 等等）。
 
 *** =/website=
 
-如果你不使用 github pages，就在这里放置项目的网站数据。
+    如果你不使用 github pages，就在这里放置项目的网站数据。
 
-查看 [[https://github.com/golang-standards/project-layout/blob/master/website/README.md][ =/website= ]] 更多范例。
+    查看 [[https://github.com/golang-standards/project-layout/blob/master/website/README.md][ =/website= ]] 更多范例。
 
 ** 你不应该使用的目录
 *** =/src=
 
-一些 Go 项目包含 =src= 目录，通常是 Java 世界中的程序员干的。但是你如果想省点事的话，千万不要这么干（除非你想让你的 Go 项目看起来像是 Java）。
+    一些 Go 项目包含 =src= 目录，通常是 Java 世界中的程序员干的。但是你如果想省点事的话，千万不要这么干（除非你想让你的 Go 项目看起来像是 Java）。
 
-在 [[https://golang.org/doc/code.html][How to Write Go Code]] 中说过不要将项目中的 =/src= 目录和 Go 工作区间（ =GOPATH= ）中的 =/src= 目录混淆。
+    在 [[https://golang.org/doc/code.html][How to Write Go Code]] 中说过不要将项目中的 =/src= 目录和 Go 工作区间（ =GOPATH= ）中的 =/src= 目录混淆。
 
-=GOPATH= 在顶级目录中包含了 =/pkg= =/bin= 和 =/src= 目录。如果你把你的代码放在 =/src= 子目录下，你的包路径会类似这样
-=/some/path/to/workspace/src/your_project/src/your_code.go= 。尽管 Go 1.11 之后，项目可以放在 =GOPATH= 之外，但并不意味这这种布局是一个好主意。
+    =GOPATH= 在顶级目录中包含了 =/pkg= =/bin= 和 =/src= 目录。如果你把你的代码放在 =/src= 子目录下，你的包路径会类似这样
+    =/some/path/to/workspace/src/your_project/src/your_code.go= 。尽管 Go 1.11 之后，项目可以放在 =GOPATH= 之外，但并不意味这这种布局是一个好主意。
 
 ** 徽章（Badges）
 
-- [[https://goreportcard.com/][Go Report Card]] - 它会使用 =gofmt= =go vet= =gocyclo= =golint= =ineffassign= =license= 和 =misspell= 。
-  替换 =github.com/golang-standards/project-layout= 作为你的项目参考。
-- [[https://godoc.org/][GoDoc]] - 提供 GoDoc 生成文档的在线版本，更改连接指向您的项目。
-- Release - It will show the latest release number for your project. Change the github link to point to your project.
+   - [[https://goreportcard.com/][Go Report Card]] - 它会使用 =gofmt= =go vet= =gocyclo= =golint= =ineffassign= =license= 和 =misspell= 。
+     替换 =github.com/golang-standards/project-layout= 作为你的项目参考。
+   - [[https://godoc.org/][GoDoc]] - 提供 GoDoc 生成文档的在线版本，更改连接指向您的项目。
+   - Release - It will show the latest release number for your project. Change the github link to point to your project.
 
------------------------
+   -----------------------
 
-最后更新时间 2020-02-25 11:20:18 Tue。
+   最后更新时间 2020-02-25 11:20:18 Tue。
