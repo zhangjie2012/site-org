@@ -1,0 +1,76 @@
+#+SETUPFILE: ~/site/tpl/wiki-tpl.org
+#+TITLE: Go MySQL
+#+DATE: 2020-03-17 16:32:37
+
+使用 [[https://github.com/go-sql-driver/mysql][go-sql-driver/mysql]]，但是它是一个驱动，使用使用 SQL 的 CRUD，还是要看 Go 的标准库 [[https://golang.org/pkg/database/sql/][database/sql]]。
+看起来有些蛋疼，但我觉得这是 Go 标准化做的好的一个体现。不管是你用的什么 SQL，只要有驱动，就可以一视同仁。
+这样的话，比如从 MySQL 到 MS SQL Server，只需要在初始化的做一下变更，其它部分代码基本上不需要动。
+
+驱动列表可以见：https://github.com/golang/go/wiki/SQLDrivers
+
+官方的使用范例：https://github.com/golang/go/wiki/SQLInterface
+
+/Python 也提供了 [[https://www.python.org/dev/peps/pep-0249/][PEP 249 -- Python Database API Specification v2.0]]，但它更像是一个协议上的约束，并不是实际限制库的实现。/
+
+使用标准库对 DB 操作时，需要手写 SQL 的 CRUD，一方面不方便，另外一方面也不安全。有一些包提供 SQL 构建器（用来生成 SQL 语句）。
+
+比如：[[https://github.com/doug-martin/goqu][doug-martin/goqu]]，你可以这样：
+
+#+begin_src go
+  ds := goqu.Insert("user").
+      Cols("first_name", "last_name").
+      Vals(
+          goqu.Vals{"Greg", "Farley"},
+          goqu.Vals{"Jimmy", "Stewart"},
+          goqu.Vals{"Jeff", "Jeffers"},
+      )
+  insertSQL, args, _ := ds.ToSQL()
+  fmt.Println(insertSQL, args)
+#+end_src
+
+会输出：
+
+#+begin_src sql
+  INSERT INTO "user" ("first_name", "last_name") VALUES ('Greg', 'Farley'), ('Jimmy', 'Stewart'), ('Jeff', 'Jeffers') []
+#+end_src
+
+它是一个 SQL 语句生成器，并不会实际的执行。
+
+再比如：[[https://github.com/Masterminds/squirrel][squirrel]] ，你可以这样：
+
+#+begin_src go
+  sql, args, err := sq.
+      Insert("users").Columns("name", "age").
+      Values("moe", 13).Values("larry", sq.Expr("? + 5", 12)).
+      ToSql()
+#+end_src
+
+它会生成：
+
+#+begin_src sql
+sql == "INSERT INTO users (name,age) VALUES (?,?),(?,? + 5)"
+#+end_src
+
+但是它也允许直接执行 SQL 语句：
+
+#+begin_src go
+  stooges := users.Where(sq.Eq{"username": []string{"moe", "larry", "curly", "shemp"}})
+  three_stooges := stooges.Limit(3)
+  rows, err := three_stooges.RunWith(db).Query()
+#+end_src
+
+等价于：
+
+#+begin_src go
+  rows, err := db.Query("SELECT * FROM users WHERE username IN (?,?,?,?) LIMIT 3",
+	  "moe", "larry", "curly", "shemp")
+#+end_src
+
+goqu 和 squirrel 是社区比较出名的两个 SQL 构建器。我自己使用下来：
+
+- goqu 基本上没有什么学习成本，也很好 debug，但自己还是要封装 SQL 调用和异常处理；
+- squirrel 基本上封装了 SQL 调用这一层，自己全做了，用起来省事，但有一定的学习成本；
+
+具体用哪个看个人。
+
+<2020-05-13 17:44:38> squirrel 用习惯了真舒服，推荐！

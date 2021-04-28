@@ -1,0 +1,15 @@
+#+SETUPFILE: ~/site/tpl/wiki-tpl.org
+#+TITLE: Go redis client
+#+DATE: 2019-03-14 17:50:00
+
+redis go clients: https://redis.io/clients#go
+
+推荐两个：
+
++ [[https://github.com/go-redis/redis][go-redis/redis]]：对 Redis 命令进行了封装，易用性也好，支持集群
++ [[https://github.com/gomodule/redigo][gomodule/redigo]]：不支持集群，更接近原生的 Redis 的使用方法（Print-like API），并且提供了常用基本类型的转换方法，统一的结果处理方法。用习惯了觉得非常简单
+
+各有优劣势，看个人喜好和业务场景：
+
+1. 轻度依赖缓存，量也不是很大的情况下，推荐使用 redigo，感觉上比 go-redis 要方便一些
+2. 重度依赖缓存，量很大，使用 go-redis，特性支持的好，主要对 Cluster 方便容量扩展

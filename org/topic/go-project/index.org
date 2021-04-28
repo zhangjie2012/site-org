@@ -13,3 +13,29 @@
 
   - [[file:project-layout.org][Go 项目目录结构]]
   - [[https://github.com/zhangjie2012/go-project-layout-template][go-project-layout-template]] github 上的项目模板。
+
+* 包管理
+
+  以前用 govender，go 1.11 之后统一使用 module 了。[[file:../../wiki/programming/go/package-manager.org][包管理工具]]。
+
+* package 发布
+
+  一个 github 的 Go 项目如何发布？[[file:../../wiki/programming/go/go-package-release.org][Go 项目发布]]。
+
+* 技术选型
+
+  - [[file:go-web-framework.org][Web 框架选择]]
+  - [[file:redis.org][Redis]]
+  - [[file:log.org][Go logger packages]]
+  - [[file:go-mysql.org][Go MySQL]]
+  - [[file:go-mongodb.org][Go MongoDB]]
+
+* 服务质量
+
+  - [[file:write-go-testing.org][写测试用例]]
+  - [[file:monitor.org][使用 Prometheus 监控 API]]
+  - [[file:go-profile.org][调优]]
+
+* 上线
+
+  - [[file:build-deploy.org][构建和部署]]

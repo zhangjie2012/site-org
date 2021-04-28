@@ -1,0 +1,56 @@
+#+SETUPFILE: ~/site/tpl/wiki-tpl.org
+#+TITLE: Go API 监控
+#+DATE: 2020-03-17 16:32:37
+
+使用 prometheus_client 暴露 API metrics，对接 promethues 之后可以很方便的监控 API 调用情况，调用耗时、状态码等等。因为 Prometheus 是 pull
+的模式，所以服务很好解耦，不会依赖 promethues server。
+
+[[https://github.com/prometheus/client_golang][prometheus/client_golang]] 是 Go 的客户端。对于 gin，你可以写一个中间件来完成 API 耗时统计：
+
+#+begin_src go
+  var (
+      APICalledLatency = prometheus.NewSummaryVec(
+          prometheus.SummaryOpts{
+              Name: "metaserver_api_called_latency",
+              Help: "Latency in microseconds",
+          },
+          []string{"api", "method", "status_code"},
+      )
+  )
+
+  func init() {
+      prometheus.MustRegister(APICalledLatency)
+  }
+
+  func SinceInMicroseconds(start time.Time) float64 {
+      return float64(time.Since(start).Nanoseconds() / time.Microsecond.Nanoseconds())
+  }
+
+  func metricsExport() gin.HandlerFunc {
+      return func(c *gin.Context) {
+          start := time.Now()
+          defer func() {
+              cost := SinceInMicroseconds(start)
+              api := c.Request.URL.Path
+              method := c.Request.Method
+              status := strconv.Itoa(c.Writer.Status())
+
+              // set ignore itself in here
+              if api == "/metrics" {
+                  return
+              }
+
+              APICalledLatency.WithLabelValues(api, method, status).Observe(cost)
+              logrus.Tracef("api run time, api=%s, method=%s, status=%s, time=%f(ms)", api, method, status, cost/1000)
+          }()
+
+          c.Next()
+      }
+  }
+#+end_src
+
+因为 gin 的 Handler 不是标准库的 =ServeHTTP(ResponseWriter, *Request)= ，但是它提供了一个转换函数，我们可以这样：
+
+#+begin_src go
+  r.GET("/metrics", gin.WrapH(promhttp.Handler()))
+#+end_src

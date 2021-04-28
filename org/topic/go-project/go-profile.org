@@ -2,7 +2,6 @@
 #+TITLE: Go profile
 #+DATE: 2020-11-25 16:18:31
 
-
 1. 程序对接 https://golang.org/pkg/net/http/pprof/
 2. 使用 =go tool pprof= 查看
 

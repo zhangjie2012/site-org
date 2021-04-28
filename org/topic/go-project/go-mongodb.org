@@ -1,8 +1,9 @@
 #+SETUPFILE: ~/site/tpl/wiki-tpl.org
-#+TITLE: Go Mongo Driver
-#+DATE: 2020-06-29 14:43:51
+#+TITLE: Go MongoDB
+#+DATE: 2020-03-17 16:32:37
 
-以下内容均基于 Go MongoDB Client: =go.mongodb.org/mongo-driver=
+建议使用 [[https://github.com/mongodb/mongo-go-driver][mongo-go-driver]]，目前已经 v1.5.1。mgo.v2 我也用过一段时间，但是目前已经不在维护了。
+
 
 * interface{} decode to bson.M
 
@@ -15,9 +16,9 @@
   有人给 MongoDB 提过 issue， https://jira.mongodb.org/browse/GODRIVER-988 ，问题是相同的。解决办法是：在初始连接 MongoDB 的时候设置解析方式，
 
   #+begin_src go
-	tM := reflect.TypeOf(bson.M{})
-	reg := bson.NewRegistryBuilder().RegisterTypeMapEntry(bsontype.EmbeddedDocument, tM).Build()
-	client, err := mongo.Connect(ctx, options.Client().ApplyURI(uri).SetRegistry(reg))
+    tM := reflect.TypeOf(bson.M{})
+    reg := bson.NewRegistryBuilder().RegisterTypeMapEntry(bsontype.EmbeddedDocument, tM).Build()
+    client, err := mongo.Connect(ctx, options.Client().ApplyURI(uri).SetRegistry(reg))
   #+end_src
 
   查看 =RegisterTypeMapEntry= 的定义，发现在它已经在注释中说明了解析逻辑：
@@ -52,7 +53,7 @@
   排序通过 =Sort= 来实现。整体如下：
 
   #+begin_src
-options.Find().SetSkip(skip).SetLimit(limit).SetSort(bson.M{"create_timestamp": -1})
+  options.Find().SetSkip(skip).SetLimit(limit).SetSort(bson.M{"create_timestamp": -1})
   #+end_src
 
 * 只取 Document 中的一部分
@@ -70,3 +71,43 @@ options.Find().SetSkip(skip).SetLimit(limit).SetSort(bson.M{"create_timestamp": 
 
   有个地方要注意 =time.Now()= 是本地 locale，但是 =time.Parse= 并不是，它的结果是 UTC 时间，
   使用 =time.ParseInLocation= 替代即可。
+
+* [[https://github.com/mongodb/mongo-go-driver][mongo-go-driver]] 构建索引报错：
+
+  #+BEGIN_QUOTE
+  (BadValue) Invalid field specified for createIndexes command:
+  maxTimeMS
+  #+END_QUOTE
+
+  代码如下：
+
+  #+begin_src go
+    func yieldIndexModel(key string, unique bool, order int) mongo.IndexModel {
+        keys := bsonx.Doc{{Key: key, Value: bsonx.Int32(int32(order))}}
+        index := mongo.IndexModel{
+            Keys: keys,
+        }
+        if unique {
+            index.Options = options.Index().SetUnique(true)
+        }
+        return index
+    }
+
+    func (sc *StorageClient) BuildIndex(name string, key string, unique bool) error {
+        db, err := sc.GetDatabase()
+        if err != nil {
+            return err
+        }
+
+        collection := db.Collection(name)
+        opts := options.CreateIndexes().SetMaxTime(20 * time.Second) // set max build time
+        indexModel := yieldIndexModel(key, unique, ASCENDING)
+        indexName, err := collection.Indexes().CreateOne(context.Background(), indexModel, opts)
+
+        // ...
+    }
+  #+end_src
+
+  去掉 =SetMaxTime= 之后就正常了。
+
+  有一个 [[https://github.com/mongodb/mongo-php-driver/issues/510][issue]] 说明这个问题， =maxTimeMS= 只适合只读操作，是一个遗留选项，应该是不同的版本支持不同，这也就印证了在我 macOS 本地是可以的，在 server 端却是不行的。
