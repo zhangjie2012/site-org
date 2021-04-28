@@ -54,8 +54,7 @@
     - =server.go= server 的生命周期
     - =router.go= API 路由
     - =middleware.go= API 的中间件
-
-    API 的 handler 根据 API 的版本号分隔到不同的目录： =/pkg/api/v1= =/pkg/api/v2= =/pkg/vpi/v3= ....
+    - =xxx_api.go= xxx 模块的 handler
 
     另外， =package api= 应该是顶层的 package，除了 =main= 之外，不应该有模块依赖它（否则很容易导致循环依赖）。
 
