@@ -2,6 +2,8 @@
 #+TITLE: Kubernetes - 工作负载：Pod 生命周期
 #+DATE: 2021-04-24 08:50:04
 
+https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/
+
 Pods 遵循定义的生命周期，从 =Pending= 阶段（Phase）开始，至少有一个主容器开始运行，变更为 =Running= 状态，最终的状态是 =Succssed= 或者 =Failed=
 状态，取决于 Pod 中的任何容器是否因失败而终止。
 
@@ -153,7 +155,7 @@ Pods 一生中只会被 [[https://kubernetes.io/docs/concepts/scheduling-evictio
   [[https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.21/#probe-v1-core][探针（Probe）]] 是 kubelet 对容器定时执行的诊断。为了执行诊断，kubelet 调用容器上实现的处理器（handler）程序。一共有三类的处理器：
 
   - [[https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.21/#execaction-v1-core][ExecAction]] 容器内执行命令。命令的退出状态码是 0，会被认为是诊断成功；
-  - [[TCPSocketAction][TCPSocketAction]] 根据指定的端口对容器执行 TCP 检查。如果端口打开，则认为诊断成功；
+  - [[https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.21/#tcpsocketaction-v1-core][TCPSocketAction]] 根据指定的端口对容器执行 TCP 检查。如果端口打开，则认为诊断成功；
   - [[https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.21/#httpgetaction-v1-core][HTTPGetAction]] 针对特定的端口和路径上的执行 HTTP =get= 请求。如果响应的状态 ~>=200~ 并且 ~<400~ ，则认为诊断成功；
 
   每个探针具有三中结果之一：

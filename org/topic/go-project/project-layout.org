@@ -1,0 +1,107 @@
+#+SETUPFILE: ~/site/tpl/wiki-tpl.org
+#+TITLE:  Go 项目布局
+#+DATE: 2021-04-27 15:52:18
+
+* 概览
+
+  根据多年写 Go 的经历，按照项目布局结构可以分为两类：
+
+  - 扁平（flat）结构，所有的 Go 源文件都放在一个目录下，包括 Makefile, scripts 等。
+    这种结构适合相对简单的业务，类似 agent 的场景；
+  - 多目录结构，也是本文要说的内容。扁平的结构在业务场景复杂的情况，模块化无法划分，后期维护成本高，一个略微复杂的 Web 服务器
+    就不太适合扁平结构。
+
+  我的很多项目都是参考 [[https://github.com/golang-standards/project-layout][project-layout]] 来做的，但是他的粒度比较大，不够细致，而且不一定适合私有项目。
+  [[https://github.com/zhangjie2012/go-project-layout-template][go-project-layout-template]] 是我建的一个针对 Web 服务通常场景下的模板项目（可能会不定期的更新），本文介绍每个目录（模块）的职责。
+
+* Go 目录
+
+** =/cmd=
+
+   项目的主干，应用的入口（main）。逻辑尽可能简单，用作初始化资源和启动服务。如果一个应用程序可能输出多个二进制文件，那么可以在此目录下再创建对应的 app
+   目录。如果只有一个输出，直接写 =main.go= 就可以了。
+
+   通常应用程序有配置文件需要解析和初始化，可以在 cmd 中创建一个 options 目录，用于配置文件的解析和初始化工作。
+
+   所以 cmd 目录下最终的目录结构可能是：
+
+   #+begin_src sh
+     ├── cmd
+     │   ├── main.go
+     │   └── options
+     │       └── options.go
+   #+end_src
+
+** =/pkg=
+
+   开源项目喜欢把 =/internal= 和 =/pkg= 分开，一个用户对内的，一个用户对外的；这样做是有必要的，开源项目的一些 package 会被当做 SDK 来用。
+   而且开源项目本身都会自带一些组件化的属性。
+
+   但是公司/个人的项目，服务之间调用大都是通过 RPC 的方式（当然本身都是公共组件是个例外），这种分隔往往会让开发者迷惑，实际划分模块的时候，不知道自己的
+   服务应该是一个对内的还是对外的。
+
+   所以，我只保留 =/pkg= 目录，用来放应用程序库代码。不抽象出一个 =/pkg= 目录是不是也可以，当然是可以的。只不过有一个弊端，让 =/pkg= 下的目录
+   置于 =/cmd= 同级之后，同级的还会包含 =/docs= ， =/script= ， =sqls= 等目录。随着业务逻辑的的复杂，这一级的目录会越来越多，会很乱。
+
+   因此， =/pkg= 的作用仅是把 Go 的 package（除了 main）统一的放在一个地方，保证结构上的清晰。
+
+   子目录：
+
+*** =/pkg/api=
+
+    apiserver 的入口，本目录应该保持简单，少业务相关逻辑：
+
+    - =server.go= server 的生命周期
+    - =router.go= API 路由
+    - =middleware.go= API 的中间件
+
+    API 的 handler 根据 API 的版本号分隔到不同的目录： =/pkg/api/v1= =/pkg/api/v2= =/pkg/vpi/v3= ....
+
+    另外， =package api= 应该是顶层的 package，除了 =main= 之外，不应该有模块依赖它（否则很容易导致循环依赖）。
+
+*** =/pkg/types=
+
+    通用类型定义，我的习惯是只要不是临时使用的类型，统一定义在 types 目录中。types 不应该依赖任何业务 package。
+
+*** =/pkg/controller=
+
+    controller 用于实现业务逻辑，往往被 api 的 handler 调用，实现业务逻辑处理。按照业务模块，再切分模块。
+
+*** =/pkg/store=
+
+    持久化数据的 CRUD wrapper，去掉具体的存储库属性（MySQL/MongoDB），统一提供接口。
+
+*** =/pkg/cache=
+
+    缓存统一接口。
+
+*** =thirdparty=
+
+    第三方服务 RPC 封装调用，隐藏服务对接细节。
+
+*** =...=
+
+    其他业务相关的模块抽象。
+
+* 其他目录
+
+** =/configs=
+
+   存放应用程序启动所需的配置。可以区分环境： =app.dev.yaml= =app.test.yaml= 等等。
+
+** =/sqls=
+
+   sqls scheme。
+
+** =/scripts=
+
+   工具脚本。
+
+** =/docs=
+
+   文档。
+
+* 其他文件
+
+  - =Makefile=
+  - =Dockerfile=
