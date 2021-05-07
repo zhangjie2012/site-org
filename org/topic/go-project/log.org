@@ -21,62 +21,85 @@
 
   结构化的，可插拔的日志系统。
 
-  - 优点：业内评价较高，易用性好，定制化也很强，人性化。
-
-  使用范例
-
-  #+begin_src go
-  func init() {
-	  // TEXT
-	  logrus.SetFormatter(&logrus.TextFormatter{
-		  ForceColors:     false,
-		  DisableColors:   true,
-		  FullTimestamp:   true,
-		  TimestampFormat: "2006-01-02 15:04:05.000",
-		  CallerPrettyfier: func(frame *runtime.Frame) (function string, file string) {
-			  ss := strings.Split(frame.Function, ".")
-			  function = ss[len(ss)-1]
-			  file = fmt.Sprintf("%s:%d", filepath.Base(frame.File), frame.Line)
-			  return function, file
-		  },
-	  })
-	  // JSON
-	  logrus.SetFormatter(&logrus.JSONFormatter{
-		  TimestampFormat: "2006-01-02 15:04:05.000",
-		  CallerPrettyfier: func(frame *runtime.Frame) (function string, file string) {
-			  ss := strings.Split(frame.Function, ".")
-			  function = ss[len(ss)-1]
-			  file = fmt.Sprintf("%s:%d", filepath.Base(frame.File), frame.Line)
-			  return function, file
-		  },
-		  // FieldMap: logrus.FieldMap{
-		  // 	logrus.FieldKeyTime:  "@timestamp",
-		  // 	logrus.FieldKeyLevel: "@level",
-		  // 	logrus.FieldKeyMsg:   "@message",
-		  // 	logrus.FieldKeyFunc:  "@caller",
-		  // },
-		  PrettyPrint: true,
-	  })
-
-	  // 设置输出流
-	  logrus.SetOutput(os.Stdout)
-	  // include calling method
-	  logrus.SetReportCaller(true)
-	  // 日志级别
-	  logrus.SetLevel(logrus.TraceLevel)
-  }
-  #+end_src
+  - 业内评价较高，易用性好，定制化也很强，人性化。
+  - 支持 hook，[[https://github.com/zhangjie2012/logrus-hook][logrus-hook]] 我是自己写的 hook
 
 * [[https://github.com/uber-go/zap][uber-go/zap]]
 
   Uber 开源的日志系统。
 
-  - 优点：性能 __非常__ 好
-  - 缺点：可能是设计就是为了设计之初就是为了高性能，定制性很强，就是非常不人性化，以至于不知道怎么定制···，好在有这个 [[https://github.com/sandipb/zap-examples][sandipb/zap-examples]]
+  - 性能 __非常__ 好
+  - 支持 Hook
+  - 可能是设计就是为了设计之初就是为了高性能，定制性很强，就是非常不人性化，以至于不知道怎么定制···，好在有这个 [[https://github.com/sandipb/zap-examples][sandipb/zap-examples]]
 
   性能相比： ~zap > glog > logrus > log~ ，值得一提的是，zap 是远大于 glog 和 logrus 的。
 
 * 结论
 
   - 高性能的系统，推荐使用 zap；
-  - 业务系统推荐使用 logrus，glog 的日志级别（ ~V()~ ）很容易误导开发人员，体验并不是很好。
+  - 业务系统使用 zap/logrus，glog 的日志级别（ ~V()~ ）很容易误导开发人员，体验并不是很好。
+
+* 初始化范例
+
+** logrus
+
+  #+begin_src go
+    func init() {
+        // TEXT
+        logrus.SetFormatter(&logrus.TextFormatter{
+            ForceColors:     false,
+            DisableColors:   true,
+            FullTimestamp:   true,
+            TimestampFormat: "2006-01-02 15:04:05.000",
+            CallerPrettyfier: func(frame *runtime.Frame) (function string, file string) {
+                ss := strings.Split(frame.Function, ".")
+                function = ss[len(ss)-1]
+                file = fmt.Sprintf("%s:%d", filepath.Base(frame.File), frame.Line)
+                return function, file
+            },
+        })
+        // JSON
+        logrus.SetFormatter(&logrus.JSONFormatter{
+            TimestampFormat: "2006-01-02 15:04:05.000",
+            CallerPrettyfier: func(frame *runtime.Frame) (function string, file string) {
+                ss := strings.Split(frame.Function, ".")
+                function = ss[len(ss)-1]
+                file = fmt.Sprintf("%s:%d", filepath.Base(frame.File), frame.Line)
+                return function, file
+            },
+            // FieldMap: logrus.FieldMap{
+            // 	logrus.FieldKeyTime:  "@timestamp",
+            // 	logrus.FieldKeyLevel: "@level",
+            // 	logrus.FieldKeyMsg:   "@message",
+            // 	logrus.FieldKeyFunc:  "@caller",
+            // },
+            PrettyPrint: true,
+        })
+
+        // 设置输出流
+        logrus.SetOutput(os.Stdout)
+        // include calling method
+        logrus.SetReportCaller(true)
+        // 日志级别
+        logrus.SetLevel(logrus.TraceLevel)
+    }
+  #+end_src
+
+** zap
+
+   #+begin_src go
+     logger, _ := zap.Config{
+         Encoding:      "console",
+         Level:         zap.NewAtomicLevelAt(logLevel),
+         DisableCaller: true,
+         OutputPaths:   []string{"stdout"},
+         EncoderConfig: zapcore.EncoderConfig{
+             TimeKey:     "ts",
+             LevelKey:    "level",
+             MessageKey:  "msg",
+             EncodeLevel: zapcore.CapitalLevelEncoder,
+             EncodeTime:  zapcore.RFC3339TimeEncoder,
+         },
+     }.Build()
+     zap.ReplaceGlobals(logger)
+   #+end_src
