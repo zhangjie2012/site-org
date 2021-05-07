@@ -30,6 +30,10 @@
   - [[file:go-mysql.org][Go MySQL]]
   - [[file:go-mongodb.org][Go MongoDB]]
 
+* 编码规范
+
+  - [[https://github.com/uber-go/guide][uber go guide]]
+
 * 服务质量
 
   - [[file:write-go-testing.org][写测试用例]]
