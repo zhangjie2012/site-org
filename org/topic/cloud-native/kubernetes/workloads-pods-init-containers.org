@@ -44,7 +44,239 @@ Init containers 是在 Pod 中的应用容器之前运行的专有容器；Init 
   - Init containers 可以在与同一个 Pod 中的应用程序的不同文件系统视图下运行。因为，可以授予他们应用程序容器无法访问的机密（Secrets）权限；
   - 由于 init containers 在任何应用程序启动之前就已经运行完毕，因此 init containers 提供了一种机器来阻止或者延迟应用程序容器启动，直到满足
     一组先决条件。
+  - Init containers 可以安全的运行应用程序或者自定义代码，否则他们回使应用程序容器镜像的安全性降低。通过将不必要的工具分开，
+    您可以限制应用程序容器映像的攻击面。
+
+** 例子
+
+   以下是如何使用初始化容器的一些想法：
+
+   - 等待 Service 被创建，使用像这样的一行 shell 命令：
+     #+begin_src sh
+       for i in {1..100}; do sleep 1; if dig myservice; then exit 0; fi; done; exit 1
+     #+end_src
+   - 使用这样一行命令从远端的 downward API 注册该 Pods：
+     #+begin_src sh
+       curl -X POST http://$MANAGEMENT_SERVICE_HOST:$MANAGEMENT_SERVICE_PORT/register -d 'instance=$(<POD_NAME>)&ip=$(<POD_IP>)'
+     #+end_src
+   - 等待一段时间，然后使用类似的命令启用应用程序：
+     #+begin_src sh
+       sleep 60
+     #+end_src
+   - 将 Git 仓库 clone 到 Volume 中
+   - 将值放到配置文件中，然后运行模板工具为主 app 动态生成配置文件。比如，将 =POD_IP= 的值放在配置中，然后用 Jinja 生成主 app 的配置
+     文件。
+
+*** 使用中的 Init containers
+
+    本示例定义了一个简单的 Pod 包含两个 init containers。第一个等待 =myservice= ，第二个等待 =myapp= 。一旦两个初始化容器都完成，
+    Pod 按照 =spec= 开始运行应用容器。
+
+    #+begin_src yaml
+      apiVersion: v1
+      kind: Pod
+      metadata:
+        name: myapp-pod
+        labels:
+          app: myapp
+      spec:
+        containers:
+        - name: myapp-container
+          image: busybox:1.28
+          command: ['sh', '-c', 'echo The app is running! && sleep 3600']
+        initContainers:
+        - name: init-myservice
+          image: busybox:1.28
+          command: ['sh', '-c', "until nslookup myservice.$(cat /var/run/secrets/kubernetes.io/serviceaccount/namespace).svc.cluster.local; do echo waiting for myservice; sleep 2; done"]
+        - name: init-mydb
+          image: busybox:1.28
+          command: ['sh', '-c', "until nslookup mydb.$(cat /var/run/secrets/kubernetes.io/serviceaccount/namespace).svc.cluster.local; do echo waiting for mydb; sleep 2; done"]
+    #+end_src
+
+    启动 Pod：
+
+    #+begin_src sh
+      kubectl apply -f myapp.yaml
+    #+end_src
+
+    输出类似：
+
+    #+begin_src sh
+      pod/myapp-pod created
+    #+end_src
+
+    并使用以下命令检查状态：
+
+    #+begin_src sh
+      kubectl get -f myapp.yaml
+    #+end_src
+
+    输出类似：
+
+    #+begin_src sh
+      NAME        READY     STATUS     RESTARTS   AGE
+      myapp-pod   0/1       Init:0/2   0          6m
+    #+end_src
+
+    查看更多：
+
+    #+begin_src sh
+      kubectl describe -f myapp.yaml
+    #+end_src
+
+    输出类似：
+
+    #+begin_src sh
+      Name:          myapp-pod
+      Namespace:     default
+      [...]
+      Labels:        app=myapp
+      Status:        Pending
+      [...]
+      Init Containers:
+        init-myservice:
+      [...]
+          State:         Running
+      [...]
+        init-mydb:
+      [...]
+          State:         Waiting
+            Reason:      PodInitializing
+          Ready:         False
+      [...]
+      Containers:
+        myapp-container:
+      [...]
+          State:         Waiting
+            Reason:      PodInitializing
+          Ready:         False
+      [...]
+      Events:
+        FirstSeen    LastSeen    Count    From                      SubObjectPath                           Type          Reason        Message
+        ---------    --------    -----    ----                      -------------                           --------      ------        -------
+        16s          16s         1        {default-scheduler }                                              Normal        Scheduled     Successfully assigned myapp-pod to 172.17.4.201
+        16s          16s         1        {kubelet 172.17.4.201}    spec.initContainers{init-myservice}     Normal        Pulling       pulling image "busybox"
+        13s          13s         1        {kubelet 172.17.4.201}    spec.initContainers{init-myservice}     Normal        Pulled        Successfully pulled image "busybox"
+        13s          13s         1        {kubelet 172.17.4.201}    spec.initContainers{init-myservice}     Normal        Created       Created container with docker id 5ced34a04634; Security:[seccomp=unconfined]
+        13s          13s         1        {kubelet 172.17.4.201}    spec.initContainers{init-myservice}     Normal        Started       Started container with docker id 5ced34a04634
+      To see logs for the init containers in this Pod, run:
+    #+end_src
+
+    查看容器的运行日志：
+
+    #+begin_src sh
+      kubectl logs myapp-pod -c init-myservice # Inspect the first init container
+      kubectl logs myapp-pod -c init-mydb      # Inspect the second init container
+    #+end_src
+
+    此刻，这些 init containers 等待发现命名为 =mydb= 和 =myservice= 。
+
+    你可以使用以下配置来创建这些 Service：
+
+    #+begin_src yaml
+
+      ---
+      apiVersion: v1
+      kind: Service
+      metadata:
+        name: myservice
+      spec:
+        ports:
+        - protocol: TCP
+          port: 80
+          targetPort: 9376
+      ---
+      apiVersion: v1
+      kind: Service
+      metadata:
+        name: mydb
+      spec:
+        ports:
+        - protocol: TCP
+          port: 80
+          targetPort: 9377
+    #+end_src
+
+    #+begin_src sh
+      kubectl apply -f services.yaml
+    #+end_src
+
+    输出类似：
+
+    #+begin_src sh
+      service/myservice created
+      service/mydb created
+    #+end_src
+
+    然后你回看到这些 init container 已经完成，并且 =myapp-pod= Pod 进入运行中状态：
+
+    #+begin_src sh
+      kubectl get -f myapp.yaml
+    #+end_src
+
+    输出类似：
+
+    #+begin_src sh
+      NAME        READY     STATUS    RESTARTS   AGE
+      myapp-pod   1/1       Running   0          9m
+    #+end_src
 
 * 详细行为
 
+  在 Pod 启动期间，kubelet 会延迟运行 init containers 直到网络和存储就绪。然后，kubelet 按照 Pod spec 中出现的顺序运行 Pod
+  的 init containers。
+
+  每个 init container 必须成功退出下一个容器才会开始启动。如果一个容器由于运行时启动失败或者执行失败而退出，它会按照 Pod 的
+  =restartPolicy= 执行重启策略。但是，如果 Pod 的 =restartPolicy= 设置为 Always，init containers 会使用 =restartPolicy=
+  为 OnFailure。
+
+  在所有 init container 都成功之前，Pod 不会 =ready= 。init container 的端口不会在 Service 下聚合。正在初始化的 Pod 处于
+  =Pending= 状态，但 condition 的 =Initialized= 的值为 false。
+
+  如果 Pod 重启了，所有的 init containers 都会被重新执行。
+
+  修改 init container spec 仅限于修改镜像字段。修改 init container 镜像字段等同于重启 Pod。
+
+  由于 init container 可能被重启，重试，或者重新执行，所以 init container 的代码应该是幂等的。尤其是，打算在 =EmptyDirs= 下写入文件的代码，
+  要兼容输出的文件已经存在的情况。
+
+  Init container 拥有应用容器一样的字段。然而，Kubernetes 禁止使用 =readinessProbe= ，因为 init containers 无法定义与完成不同的就绪状态。
+  这是在验证期间强制执行的。
+
+  使用 Pod 上的 =activeDeadlineSeconds= 和容器上的 =livenessProbe= 可以防止 init containers 永远失败。active deadline 包括 init containers。
+
+  Pod 中的每个应用和 init container 的名称必须唯一；任何一个名称相同的容器都会引发验证错误。
+
+** 资源
+
+   考虑到 init container 的有序执行，适用于以下资源的使用规则：
+
+   - The highest of any particular resource request or limit defined on all init containers is the /effective init request/limit/
+   - The Pod's /effective request/limit/ for a resource is the higher of:
+     + the sum of all app containers request/limit for a resource
+     + the effective init request/limit for a resource
+   - Scheduling is done based on effective requests/limits, which means init containers can reserve resources for
+     initialization that are not used during the life of the Pod.
+   - The QoS (quality of service) tier of the Pod's /effective QoS tier/ is the QoS tier for init containers and
+     app containers alike.
+
+   Quota and limits are applied based on the effective Pod request and limit.
+
+   Pod level control groups (cgroups) are based on the effective Pod request and limit, the same as the scheduler.
+
+** Pod 重启原因
+
+   A Pod can restart, causing re-execution of init containers, for the following reasons:
+
+   - The Pod infrastructure container is restarted. This is uncommon and would have to be done by someone with root access to nodes.
+   - All containers in a Pod are terminated while restartPolicy is set to Always, forcing a restart, and the init container
+      completion record has been lost due to garbage collection.
+
+   The Pod will not be restarted when the init container image is changed, or the init container completion record has been
+   lost due to garbage collection. This applies for Kubernetes v1.20 and later. If you are using an earlier version of Kubernetes,
+   consult the documentation for the version you are using.
+
 * 下一步
+
+  - 阅读 [[https://kubernetes.io/docs/tasks/configure-pod-container/configure-pod-initialization/#create-a-pod-that-has-an-init-container][Create a Pod that has an Init Container]]
+  - 学习如何 [[https://kubernetes.io/docs/tasks/debug-application-cluster/debug-init-containers/][调试 init containers]]

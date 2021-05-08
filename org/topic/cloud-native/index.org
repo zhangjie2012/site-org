@@ -70,6 +70,8 @@
    - [[file:kubernetes/workloads.org][工作负载（workloads）]]
      + [[file:kubernetes/workloads-pods.org][Pods]]
        - [[file:kubernetes/workloads-pods-pod-lifecycle.org][Pod Lifecyle]]
+       - [[file:kubernetes/workloads-pods-init-containers.org][Init Containers]]
+       - /stop in here/
      + 工作负载资源
    - [[file:kubernetes/pod.org][Pod]]: 概念、为什么需要 Pod、状态标识、健康检查、生命周期等
    - 控制器(controller):

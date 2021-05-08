@@ -35,7 +35,13 @@
    按照 [[https://golang.org/doc/install][官方说明]] 安装 Go，LSP server 用的是 [[https://github.com/golang/tools/tree/master/gopls][gopls]]。
 
    #+begin_src sh
-	 GO111MODULE=on go get golang.org/x/tools/gopls@latest
+     GO111MODULE=on go get golang.org/x/tools/gopls@latest
+   #+end_src
+
+   另外安装 [[https://github.com/fatih/gomodifytags][gomodifytags]]。
+
+   #+begin_src sh
+     go get github.com/fatih/gomodifytags
    #+end_src
 
 ** TODO Python
