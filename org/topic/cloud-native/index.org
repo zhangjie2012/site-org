@@ -112,14 +112,7 @@
   - [[https://events19.linuxfoundation.org/wp-content/uploads/2017/11/How-Container-Runtime-Matters-in-Kubernetes_-OSS-Kunal-Kushwaha.pdf][How Container Runtimes matter in Kubernetes?]] PPT，Kubernetes 中的运行时
   - [[https://object-storage-ca-ymq-1.vexxhost.net/swift/v1/6e4619c416ff4bd19e1c087f27a43eea/www-assets-prod/presentation-media/hyper-kata-frakti-cri2.pdf][Unified Kubernetes CRI runtimes based on Kata Containers]] PPT，理解 Kubernetes 中的运行时
   - [[https://brennerm.github.io/posts/kubernetes-overview-diagrams.html][Kubernetes Overview Diagrams]] Kubernetes 概述图（很帅），涵盖架构，工作负载，网络存储，RBAC，资源 requests 和 limits 等
-  - [[https://cloud.google.com/blog/products/containers-kubernetes/kubernetes-best-practices-terminating-with-grace][Kubernetes best practices: terminating with grace]] 优雅终止的最佳实践：
-    1. Pod 被设置为 "Terminating" 时，会从 Service 中的 endpoints 列表中移出；
-    2. 执行 preStop Hook，preStop Hook 可以帮助你做应用程序的优雅关闭；
-    3. SIGTERM 信号发送到 Pod（此时应用程序判断 TERM 信号，然后优雅退出）；
-    4. Kubernetes 等待宽限期（grace period）：Kubernetes 会等待 preStop Hook 和 Pod 的结束（注意：preStop Hook 和 Pod 的终止是并行执行的），
-       - 如果程序在 terminationGracePeriod 之前执行完成，Kubernetes 会立即执行下一步。默认的宽限期是 30s；
-       - 一般情况下使用 preStop Hook 要手动设置 terminationGracePeriod 一起来操作，来增加宽限期；
-    5. 向 Pod 发送 SIGKILL，移出 Pod。也就是说如果 terminationGracePeriod 内进程没有自动退出，会强制杀掉进程。
+  - [[file:kubernetes/gce-kubernetes-best-practive-series.org][GCE Kubernetes 最佳实践系列]]
 
 ** 书籍
 

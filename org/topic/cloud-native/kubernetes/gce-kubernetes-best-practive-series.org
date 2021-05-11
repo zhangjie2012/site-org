@@ -1,0 +1,27 @@
+#+SETUPFILE: ~/site/tpl/wiki-tpl.org
+#+TITLE: GCE 的 Kubernetes 最佳实践系列
+#+DATE: 2021-05-11 16:58:20
+
+* TODO [[https://cloud.google.com/blog/products/containers-kubernetes/your-guide-kubernetes-best-practices][Kubernetes 最佳实践指引]]
+
+* TODO [[https://cloud.google.com/blog/topics/kubernetes-best-practices][构建最小化镜像（为什么要这么做，如何做）]]
+
+* TODO [[https://cloud.google.com/blog/products/containers-kubernetes/kubernetes-best-practices-organizing-with-namespaces][使用命令空间进行组织]]
+
+* TODO [[https://cloud.google.com/blog/products/containers-kubernetes/kubernetes-best-practices-setting-up-health-checks-with-readiness-and-liveness-probes][使用就绪探针和存活探针进行健康检测]]
+
+* TODO [[https://cloud.google.com/blog/products/containers-kubernetes/kubernetes-best-practices-resource-requests-and-limits][资源的 requests 和 limits]]
+
+* [[https://cloud.google.com/blog/products/containers-kubernetes/kubernetes-best-practices-terminating-with-grace][优雅终止]]
+
+  1. Pod 被设置为 "Terminating" 时，会从 Service 中的 endpoints 列表中移出；
+  2. 执行 preStop Hook，preStop Hook 可以帮助你做应用程序的优雅关闭；
+  3. SIGTERM 信号发送到 Pod（此时应用程序判断 TERM 信号，然后优雅退出）；
+  4. Kubernetes 等待宽限期（grace period）：Kubernetes 会等待 preStop Hook 和 Pod 的结束（注意：preStop Hook 和 Pod 的终止是并行执行的），
+     - 如果程序在 terminationGracePeriod 之前执行完成，Kubernetes 会立即执行下一步。默认的宽限期是 30s；
+     - 一般情况下使用 preStop Hook 要手动设置 terminationGracePeriod 一起来操作，来增加宽限期；
+  5. 向 Pod 发送 SIGKILL，移出 Pod。也就是说如果 terminationGracePeriod 内进程没有自动退出，会强制杀掉进程。
+
+* TODO [[https://prog.world/kubernetes-best-practices-mapping-external-services/][外部服务映射]]
+
+* TODO [[https://cloud.google.com/blog/products/containers-kubernetes/kubernetes-best-practices-upgrading-your-clusters-with-zero-downtime][零宕机更新集群]]
