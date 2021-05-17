@@ -18,6 +18,8 @@
 
   以前用 govender，go 1.11 之后统一使用 module 了。[[file:../../wiki/programming/go/package-manager.org][包管理工具]]。
 
+  - [[https://encore.dev/guide/go.mod][Go modules cheat sheet]]
+
 * package 发布
 
   一个 github 的 Go 项目如何发布？[[file:../../wiki/programming/go/go-package-release.org][Go 项目发布]]。
