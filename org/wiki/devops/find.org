@@ -2,9 +2,9 @@
 #+TITLE: find
 #+DATE: 2018-12-13 22:50
 
-#+BEGIN_EXAMPLE
+#+begin_src sh
   find [查找目录] [查找规则/目标] [查找完之后执行的 action]
-#+END_EXAMPLE
+#+end_src
 
 * 查找规则
 
@@ -13,10 +13,9 @@
   - =-name= 根据文件名精确查找
   - =-iname= 忽略大小写查找，也算是精确查找
   - 通配符：
-
-    - =*= 匹配任意字符
-    - =?= 匹配任意的单个字符
-    - =[]= 匹配括号里面的任意一个字符
+    + =*= 匹配任意字符
+    + =?= 匹配任意的单个字符
+    + =[]= 匹配括号里面的任意一个字符
 
   2、根据文件所属用户和组
 
@@ -33,13 +32,12 @@
 
   4、文件属性
 
-  - =-atime= =-mtime=
-    =-ctime=：最新一次访问时间、最近一次内容修改、最近一次属性修改，单位是天
+  - =-atime= =-mtime= =-ctime= ：最新一次访问时间、最近一次内容修改、最近一次属性修改，单位是天
   - =-amin= =-mmin= =-cmin= ：同上，单位是分钟
 
   比如：
 
-  - =find /data/log/ -atime +30= 30 天内没有访问过的日志文件
+  - =find /data/log -atime +30= 30 天内没有访问过的日志文件
   - =find /data/log -atime -30= 30 天内访问过的日志文件
 
   5、根据文件类型来查找文件
@@ -77,4 +75,17 @@
   - =-ok [command]= 查找后执行命令的时候询问用户是否要执行
   - =-exec [command]= 查找后执行命令（不询问，直接执行）
 
-  一个很常用的命令，查找 30 天未使用的日志文件，删除: =find /data/log -atime +30 -exec rm -rf {} \;=
+* 最佳实践
+
+  查找 30 天未使用的日志文件并删除: =find /data/log -type f -atime +30 -exec rm -rf {} \;=
+
+  如何在 Linux 中查找最大 10 个文件[fn:1]：
+
+  =find / -type f -print0 | xargs -0 du -h | sort -rh | head -n 10=
+  =find / -type f -exec du -Sh {} + | sort -rh | head -n 10=
+  =find / -type f -print0 | xargs -0 du | sort -n | tail -10 | cut -f2 | xargs -I{} du -sh {}=
+  =find / -type f -ls | sort -k 7 -r -n | head -10 | column -t | awk '{print $7,$11}'=
+
+* Footnotes
+
+[fn:1] https://linux.cn/article-9495-1.html
