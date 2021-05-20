@@ -8,8 +8,9 @@
   - [[https://gradolabs.com/][Grado]] SR325e：纯手工制作耳机，长相帅的一B，就是包装丑了一点，当初是为了听摇滚买的。
   - 你也可以买森海塞尔，比较中庸（听什么都 OK），我后来买了 [[https://item.jd.com/2184483.html][森海塞尔（Sennheiser）MOMENTUM In-Ear I Black Chrome]]，只能说电子产品一分钱一分货，相比 Grado 还是有一定差距的
 + 机械键盘
-  - FILCO 87 圣手二代 茶轴，千元左右
   - Cherry MX2.0 G80-3800 性价比超级高，不喜欢机械键盘的朋友也可以尝试这款的低键位
+  - FILCO 87 圣手二代 茶轴，千元左右
+  - DURGOD 杜伽 K320 茶轴，五六百，支持无线和蓝牙，目前在用这款
 + 显示器
   - DELL U2718Q 27 英寸 4K
   - 非 MacOS，2K 屏幕也可
@@ -39,12 +40,13 @@
   - [[https://github.com/adobe-fonts/source-code-pro][Source Code Pro]]
   - [[https://github.com/be5invis/Sarasa-Gothic][更纱黑体]] 中英文等宽等高，好评，Microsoft-Yahei-Mono 和 文泉驿也可以，但是太丑
   - [[https://www.jetbrains.com/lp/mono/][Jetbrains Mono]] 官方推荐 13 号字体和 1.20 倍行号
+  - [[https://github.com/supercomputra/SF-Mono-Font][SF Mono]] 苹果官方出的，目前在用
 + 包管理工具
   - [[https://brew.sh/][Homebrew]]：The missing package manager for macOS
 + 版本管理
   - git
 + 命令行使用优化
-  - [[https://github.com/ggreer/the_silver_searcher][ag]]
+  - [[https://github.com/BurntSushi/ripgrep][rg]] grep 替代工具，以前用 [[https://github.com/ggreer/the_silver_searcher][ag]] ，听说 rg 更快
   - [[https://github.com/wting/autojump][autojump]]：目录快捷跳转
   - [[https://github.com/tmux/tmux][tmux]]：终端复用
   - [[https://github.com/junegunn/fzf][fzf]]：命令行模糊查找，zsh [[https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/fzf][设置]]
@@ -71,6 +73,7 @@
 + Docker
 
 * 工具软件
+
 ** 公有云
 
 目前只推荐腾讯云，UCloud 也还不错毕竟小厂。阿里云就算了，坑太多了。
@@ -80,6 +83,7 @@
 + 云笔记
   - [[https://note.youdao.com/][有道云笔记]]，支持 Windows 和 Mac 平台，Mac 体验优于印象笔记，不支持 Ubuntu，手机上广告很多。
     开始使用 org-mode 之后，云笔记也不咋用了。
+  - 印象笔记，相比有道云笔记，印象笔记支持团队空间。
 + TODO
   - +[[https://www.wunderlist.com/zh/][Wunderlist]]：支持 Windows 和 Mac 平台，[[https://github.com/edipox/wunderlistux][Ubuntu]]+ ，部分功能用 org-mode 代替了。 gtd 是一个很艰难的事，与工具无关。
 
@@ -102,7 +106,7 @@
 
 + 科学上网
   + [[https://github.com/shadowsocks/ShadowsocksX-NG][ShadowsocksX-NG]]，没有稳定的梯子，现在都改成了 [[https://github.com/paradiseduo/ShadowsocksX-NG-R8][ShadowsocksX-NG-R8]] 了
-  + iOS +Potatso Lite+ 太吃内存了，删了
+  + iOS Potatso Lite 太吃内存了，删了
 + 刻录
   - [[https://unetbootin.github.io/][UNetbootin]]：Windows、MacOS、Linux
 + 录屏
