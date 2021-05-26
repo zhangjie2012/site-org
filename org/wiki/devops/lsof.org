@@ -1,0 +1,5 @@
+#+SETUPFILE: ~/site/tpl/wiki-tpl.org
+#+TITLE: lsof
+#+DATE: 2021-05-26 10:45:44
+
+=lsof -p <pid>= 查看进程打开的 fd
