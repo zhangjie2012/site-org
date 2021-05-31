@@ -113,6 +113,12 @@
   - [[https://object-storage-ca-ymq-1.vexxhost.net/swift/v1/6e4619c416ff4bd19e1c087f27a43eea/www-assets-prod/presentation-media/hyper-kata-frakti-cri2.pdf][Unified Kubernetes CRI runtimes based on Kata Containers]] PPT，理解 Kubernetes 中的运行时
   - [[https://brennerm.github.io/posts/kubernetes-overview-diagrams.html][Kubernetes Overview Diagrams]] Kubernetes 概述图（很帅），涵盖架构，工作负载，网络存储，RBAC，资源 requests 和 limits 等
   - [[file:kubernetes/gce-kubernetes-best-practive-series.org][GCE Kubernetes 最佳实践系列]]
+  - [[https://jimmysong.io/kubernetes-handbook/concepts/pause-container.html][Pause 容器]]，也称之为 Infra 容器，Pause 即暂停，但并不是停止状态，而是启动之后就会把自己阻塞住，什么都不干
+    + 目标是为了解决多个容器之间最高效的共享某些资源和数据（打破 Linux Namespace/cgroups 隔离），
+      Pause 是为了解决网络问题（如何共享网络）；
+    + Pod 中的其他容器 Join namespace 的方式加入到 Pause 容器的 Network namespace。所以其他容器所看到的网络设备、IP 地址、
+      Mac 地址等网络信息都是 Pause 容器的；
+    + Pause 容器为业务容器提供：1. Linux namespace 的基础；2. 启用 pid 命名空间，开启 init 进程。
 
 ** 书籍
 

@@ -29,7 +29,7 @@
   | [[https://github.com/zhangjie2012/logrus-hook][logrus-hook]]                | Go   | 日志包 logrus 的 hook 集合，目前支持 Redis LIST | 迭代中 |
   | [[https://github.com/zhangjie2012/yinyang][yinyang]]                    | Go   | 中国公历和农历转换服务，支持农历日历            | 稳定   |
   | [[https://github.com/zhangjie2012/promclient-go][promclient-go]]              | Go   | Prometheus HTTP API 封装                        | 迭代   |
-  | [[https://github.com/zhangjie2012/go-project-layout-template][go-project-layout-template]] | Go   | go project layout template                      | 迭代     |
+  | [[https://github.com/zhangjie2012/go-project-layout-template][go-project-layout-template]] | Go   | go project layout template                      | 迭代   |
 
 * 小程序
 
