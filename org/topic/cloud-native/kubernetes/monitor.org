@@ -6,3 +6,21 @@
 
 + [[https://github.com/kubernetes/kube-state-metrics/tree/master/docs][kube-state-metrics]]：集群、节点、空间，Pod 等
 + [[https://github.com/google/cadvisor/blob/master/docs/storage/prometheus.md][cAdvisor export metric]]：容器暴露的 metric name、类型、描述、单位等
+
+* 监控指标与表达式
+
+** 容器 CPU 利用率
+
+  #+begin_src
+  (sum(rate(container_cpu_usage_seconds_total{namespace != "", container!=""}[5m])) by (namespace, pod)) / (sum(container_spec_cpu_quota{namespace!="", container!=""}/container_spec_cpu_period{namespace!="", container!=""}) by (namespace, pod)) * 100
+  #+end_src
+
+  注意：一定要指定 ~container!=""~ 否则，数据会计算成多份。比如说查询表达式为： ~container_cpu_usage_seconds_total{pod="client-boss-6f86b6f7f-ssrmt"}~
+
+  #+begin_src
+  container_cpu_usage_seconds_total{container="POD",cpu="total",id="/kubepods.slice/kubepods-burstable.slice/kubepods-burstable-pod63cecba9_3bd5_47ed_89f5_cd98e4de7dee.slice/docker-c5079f13184284f9d1c71344f6bb240529177f4a942ac48f0c9fcbba95fca8c7.scope",image="dockerhub.test.wacai.info/google_containers/pause-amd64:3.1",instance="172.30.1.3",job="kubernetes-nodes-cadvisor",name="k8s_POD_client-boss-6f86b6f7f-ssrmt_cloud_63cecba9-3bd5-47ed-89f5-cd98e4de7dee_0",namespace="cloud",node="172.30.1.3",pod="client-boss-6f86b6f7f-ssrmt"}	7.855229224
+  container_cpu_usage_seconds_total{container="client-boss",cpu="total",id="/kubepods.slice/kubepods-burstable.slice/kubepods-burstable-pod63cecba9_3bd5_47ed_89f5_cd98e4de7dee.slice/docker-3e7af8aa1ecf321f08b6966a0a406ec0db6839831629bfc228d3d2b1505e4e20.scope",image="sha256:3a9858a23eb393f2458cc677a88f5be0e569cde6cfd4ed5506d1ffe431f26be6",instance="172.30.1.3",job="kubernetes-nodes-cadvisor",name="k8s_client-boss_client-boss-6f86b6f7f-ssrmt_cloud_63cecba9-3bd5-47ed-89f5-cd98e4de7dee_0",namespace="cloud",node="172.30.1.3",pod="client-boss-6f86b6f7f-ssrmt"}	942.895084514
+  container_cpu_usage_seconds_total{cpu="total",id="/kubepods.slice/kubepods-burstable.slice/kubepods-burstable-pod63cecba9_3bd5_47ed_89f5_cd98e4de7dee.slice",instance="172.30.1.3",job="kubernetes-nodes-cadvisor",namespace="cloud",node="172.30.1.3",pod="client-boss-6f86b6f7f-ssrmt"}	950.755770628
+  #+end_src
+
+  可以看到最后一条记录是前两条记录的加和（Pause 和 业务容器）。
