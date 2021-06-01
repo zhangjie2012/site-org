@@ -7,12 +7,12 @@
 + [[https://github.com/kubernetes/kube-state-metrics/tree/master/docs][kube-state-metrics]]：集群、节点、空间，Pod 等
 + [[https://github.com/google/cadvisor/blob/master/docs/storage/prometheus.md][cAdvisor export metric]]：容器暴露的 metric name、类型、描述、单位等
 
-* 监控指标与表达式
+* 容器监控
 
-** 容器 CPU 利用率
+** CPU 利用率
 
   #+begin_src
-  (sum(rate(container_cpu_usage_seconds_total{namespace != "", container!=""}[5m])) by (namespace, pod)) / (sum(container_spec_cpu_quota{namespace!="", container!=""}/container_spec_cpu_period{namespace!="", container!=""}) by (namespace, pod)) * 100
+  (sum(rate(container_cpu_usage_seconds_total{namespace != "", container != ""}[5m])) by (namespace, pod)) / (sum(container_spec_cpu_quota{namespace!="", container!=""}/container_spec_cpu_period{namespace!="", container!=""}) by (namespace, pod)) * 100
   #+end_src
 
   注意：一定要指定 ~container!=""~ 否则，数据会计算成多份。比如说查询表达式为： ~container_cpu_usage_seconds_total{pod="client-boss-6f86b6f7f-ssrmt"}~
@@ -24,3 +24,54 @@
   #+end_src
 
   可以看到最后一条记录是前两条记录的加和（Pause 和 业务容器）。
+
+** 内存利用率
+
+   #+begin_src
+   (sum(container_memory_usage_bytes{container != "POD", container != "", namespace !="kube-system"} - container_memory_cache{container != "POD", container != "", namespace !="kube-system"}) by (pod, namespace, container)) / (sum(container_spec_memory_limit_bytes{container != "POD",container != "",namespace !="kube-system"}) by (pod, namespace, container)) * 100
+   #+end_src
+
+
+** 磁盘占用
+
+   #+begin_src
+   (sum by (namespace, container, pod) (container_fs_usage_bytes{container!="POD", container!=""}) / (1024 * 1024 * 1024))
+   #+end_src
+
+** 空间 CPU 配额
+
+   #+begin_src
+   sum(kube_resourcequota{type="hard", resource="limits.cpu"}) by (namespace) - sum(kube_resourcequota{type="used", resource="limits.cpu"}) by (namespace)
+   #+end_src
+
+** 空间内存配额不足
+
+   #+begin_src
+   (sum(kube_resourcequota{type="hard", resource="limits.memory"}) by (namespace) - sum(kube_resourcequota{type="used", resource="limits.memory"}) by (namespace) ) / 1024 / 1024 / 1024
+   #+end_src
+
+* 节点监控
+
+** CPU 利用率
+
+   #+begin_src
+   100 - (avg by (kubernetes_node)  (irate(node_cpu_seconds_total{mode="idle", kubernetes_node!=""}[2m]))) * 100
+   #+end_src
+
+** 内存利用率
+
+   #+begin_src
+   sum by (kubernetes_node) (100 - ((node_memory_MemFree_bytes{kubernetes_node!=""}+node_memory_Cached_bytes{kubernetes_node!=""}+node_memory_Buffers_bytes{kubernetes_node!=""})/node_memory_MemTotal_bytes{kubernetes_node!=""}) * 100)
+   #+end_src
+
+** 磁盘利用率
+
+   #+begin_src
+   100 - (sum by (kubernetes_node) (node_filesystem_avail_bytes{device!~'rootfs|tmpfs', kubernetes_node!=""})) / (sum by (kubernetes_node) (node_filesystem_size_bytes{device!~'rootfs|tmpfs', kubernetes_node!=""})) * 100
+   #+end_src
+
+** 网络出
+
+   #+begin_src
+   sum by (instance) (rate(node_network_transmit_bytes_total{device=~"eth[0-9]", instance="172.16.64.10:9100"}[1m]))
+   #+end_src
