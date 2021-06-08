@@ -73,4 +73,10 @@ goqu 和 squirrel 是社区比较出名的两个 SQL 构建器。我自己使用
 
 具体用哪个看个人。
 
-<2020-05-13 17:44:38> squirrel 用习惯了真舒服，推荐！
+<2020-05-13 Wed 17:44> squirrel 用习惯了真舒服，推荐！
+
+<2021-06-08 Tue 17:20>
+
+MySQL 连接是时区和 =time= 解析问题，需要设置 DSL 参数： =parseTime=true&loc=Asia%2FShanghai= ，否则 time 解析不了，而且时区有可能是错的。
+
+DSL 全路径 =`${username}:${password}@tcp(${address})/${dbname}`= 。
