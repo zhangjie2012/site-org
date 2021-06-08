@@ -63,25 +63,26 @@
    sum by (kubernetes_namespace, instance, kubernetes_io_hostname) (process_open_fds)
    #+end_src
 
-
 * 节点监控
 
 ** CPU 利用率
 
    #+begin_src
-   100 - (avg by (kubernetes_node)  (irate(node_cpu_seconds_total{mode="idle", kubernetes_node!=""}[2m]))) * 100
+   100 - (avg by (kubernetes_node) (irate(node_cpu_seconds_total{mode="idle", kubernetes_node!=""}[2m]))) * 100
    #+end_src
 
 ** 内存利用率
 
    #+begin_src
-   sum by (kubernetes_node) (100 - ((node_memory_MemFree_bytes{kubernetes_node!=""}+node_memory_Cached_bytes{kubernetes_node!=""}+node_memory_Buffers_bytes{kubernetes_node!=""})/node_memory_MemTotal_bytes{kubernetes_node!=""}) * 100)
+   sum by (kubernetes_node) (100 - ((node_memory_MemFree_bytes{kubernetes_node!=""}+node_memory_Cached_bytes{kubernetes_node!=""}+node_memory_Buffers_bytes{kubernetes_node!=""}+node_memory_Slab_bytes{kubernetes_node!=""})/node_memory_MemTotal_bytes{kubernetes_node!=""}) * 100)
    #+end_src
+
+   注意，一定要计算 =node_memory_Buffers_bytes= ，否则 Cache/Buffer 计算的值要比实际小很多[fn:1]。
 
 ** 磁盘利用率
 
    #+begin_src
-   100 - (sum by (kubernetes_node) (node_filesystem_avail_bytes{device!~'rootfs|tmpfs', kubernetes_node!=""})) / (sum by (kubernetes_node) (node_filesystem_size_bytes{device!~'rootfs|tmpfs', kubernetes_node!=""})) * 100
+   100 - (sum by (kubernetes_node) (node_filesystem_avail_bytes{mountpoint="/",fstype!="rootfs",kubernetes_node!=""})) / (sum by (kubernetes_node) (node_filesystem_size_bytes{mountpoint="/",fstype!="rootfs",kubernetes_node!=""})) * 100
    #+end_src
 
 ** 网络
@@ -92,3 +93,7 @@
    #+end_src
 
    具体 device 怎么匹配，要跟运维的同学咨询一下。
+
+* Footnotes
+
+[fn:1] https://github.com/prometheus/node_exporter/issues/1519
