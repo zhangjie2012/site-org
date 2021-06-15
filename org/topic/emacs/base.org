@@ -4,54 +4,54 @@
 
 * 安装
 
-  *源码安装*
+** 源码安装
 
-  直接使用系统的包管理工具安装的 Emacs 版本都很低，推荐使用源码安装， +当前最新稳定版本是 26.3。[fn:2]+
-  推荐使用 Emacs 27，性能更好，我的配置已经同步到 Emacs 27，以下安装办法可能已经滞后。
+   直接使用系统的包管理工具安装的 Emacs 版本都很低，推荐使用源码安装， +当前最新稳定版本是 26.3。[fn:2]+
+   推荐使用 Emacs 27，性能更好，我的配置已经同步到 Emacs 27，以下安装办法可能已经滞后。
 
-  下载源码：[[http://mirrors.ustc.edu.cn/gnu/emacs/][http://mirrors.ustc.edu.cn/gnu/emacs/]]
+   下载源码：[[http://mirrors.ustc.edu.cn/gnu/emacs/][http://mirrors.ustc.edu.cn/gnu/emacs/]]
 
-  #+BEGIN_SRC shell
+   #+BEGIN_SRC shell
 	apt install make gcc g++ autoconf
 	apt-get install build-essential texinfo libx11-dev libxpm-dev libjpeg-dev libpng-dev libgif-dev libtiff-dev libgtk2.0-dev libncurses-dev
 	./autogen.sh
 	./configure
 	make -j4
 	sudo make install
-  #+END_SRC
+   #+END_SRC
 
-  *注意* ：如果编译提示 =configure: error: The following required libraries were not found: gnutls= 需要安装 =gnutls= 开发包，
-  使用 =apt-cache search 'libgnutls.*-dev'= 找到对应的包，然后安装 [fn:1]。
+   *注意* ：如果编译提示 =configure: error: The following required libraries were not found: gnutls= 需要安装 =gnutls= 开发包，
+   使用 =apt-cache search 'libgnutls.*-dev'= 找到对应的包，然后安装 [fn:1]。
 
-  *Ubuntu 18.04 & Ubuntu 20.04*
+** Ubuntu 18.04 & Ubuntu 20.04
 
-  #+begin_src sh
+   #+begin_src sh
 	sudo add-apt-repository ppa:kelleyk/emacs
 	sudo apt update
 	sudo apt install emacs27
-  #+end_src
+   #+end_src
 
-  *MacOS*
+** MacOS
 
-  #+BEGIN_SRC shell
+   #+BEGIN_SRC shell
 	brew install emacs
-  #+END_SRC
+   #+END_SRC
 
-  *Windows 10*
+** Windows 10
 
-  下载 Emacs: https://mirrors.ustc.edu.cn/gnu/emacs/windows/ ，然后 runemacs.exe 运行 emacs。
+   下载 Emacs: https://mirrors.ustc.edu.cn/gnu/emacs/windows/ ，然后 runemacs.exe 运行 emacs。
 
-  配置文件位置在： =/c/Users/me/AppData/Roaming= 用户主目录在这里。
+   配置文件位置在： =/c/Users/me/AppData/Roaming= 用户主目录在这里。
 
-  /Win10 比以前更好用了一些，我不在 Win10 下写代码，但是会写文档。/
+   /Win10 比以前更好用了一些，我不在 Win10 下写代码，但是会写文档。/
 
-  *终端使用*
+   *终端使用*
 
-  打开 =.bashrc= 添加两行 alias：
+   打开 =.bashrc= 添加两行 alias：
 
-  #+BEGIN_SRC shell
+   #+BEGIN_SRC shell
 	alias em="env TERM=xterm-256color emacs -nw"
-  #+END_SRC
+   #+END_SRC
 
 * 键位约定
 
@@ -73,6 +73,11 @@
   另外 Super 键大部分时候都是冲突的，有关 Super 的我都重新映射了。[fn:3]
 
   每个初学者建议先阅读 Emacs 的 ~help-with-tutorial~ （ =C-h t= ）。走一遍，基本上就可以流畅的操作 Emacs 了。
+
+  我的配置中除了 Emacs 默认的 =C= 和 =M= 之外，额外约定了两个 Leader Key：
+
+  - =F8= project 管理
+  - =F9= 其他
 
 * 包安装与管理
 
