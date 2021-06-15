@@ -115,7 +115,6 @@
 ** 前端
 
    - 样式：[[file:programming/frontend/css.org][CSS]]，[[file:programming/frontend/less.org][less]]
-   - 打包：[[file:programming/frontend/webpack.org][Webpack]]
    - 脚手架：[[file:programming/frontend/umi.org][umi]]
    - UI 组件：[[file:programming/frontend/antd.org][antd]]
    - React 全家桶：
