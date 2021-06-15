@@ -50,6 +50,7 @@ Master only support Emacs 27+, 26 version checkout =emacs-26= branch.
 
   - [[file:base.org][基础]] 安装、键位约定、包安装与管理
   - [[file:package.org][插件]] 实用的的插件（包）推荐
+  - [[file:dired.org][dired]] 目录操作
   - [[file:ide.org][IDE]] 多项目管理、编程语言配置、版本管理器，像 IDE 一样使用 Emacs
   - [[file:orgmode.org][orgmode]] 最强力的插件，一种标记语言，比 Markdown 丰富，支持内嵌 LaTeX、导出成 HTML、pdf 等
 	我的博客就是用 orgmode 生成的
