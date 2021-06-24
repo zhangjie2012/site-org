@@ -13,7 +13,7 @@
 
 ** SELECT 语句
 
-   #+begin_src sql
+   #+begin_src
      SELECT <field_key>[,<field_key>,<tag_key>] FROM <measurement_name>[,<measurement_name>]
    #+end_src
 
@@ -31,28 +31,28 @@
 
 *** 引号
 
-   如果标识符包含除了 =[A-z,0-9,_]= 以外的字符、以数字开头或者是 InfluxQL 关键则，那么标识符必须用双引号引起来。
-   虽然不总是必要，但是建议你使用双引号。
+    如果标识符包含除了 =[A-z,0-9,_]= 以外的字符、以数字开头或者是 InfluxQL 关键则，那么标识符必须用双引号引起来。
+    虽然不总是必要，但是建议你使用双引号。
 
 *** 范例
 
-   查询所有的 fields =SELECT *::field= ，但是不能通过这个方法来查询所有的 tags。
+    查询所有的 fields =SELECT *::field= ，但是不能通过这个方法来查询所有的 tags。
 
-   数学运算： =SELECT ("water_level" * 2) + 4 FROM "h2o_feet"= 。
+    数学运算： =SELECT ("water_level" * 2) + 4 FROM "h2o_feet"= 。
 
-   常见 SELECT 问题：在 SELECT 中只包含 tag，会查询不到数据。
+    常见 SELECT 问题：在 SELECT 中只包含 tag，会查询不到数据。
 
 ** WHERE 语句
 
    =WHERE= 基于 fields，tags 和 timestamps 的过滤。
 
-   #+begin_src sql
+   #+begin_src
      SELECT_clause FROM_clause WHERE <conditional_expression> [(AND|OR) <conditional_expression> [...]]
    #+end_src
 
    *注意* InfluxDB 不支持在 WHERE 语句中用多个时间范围之间用 =OR= 运算。如下语句会返回空：
 
-   #+begin_src sql
+   #+begin_src
      > SELECT * FROM "absolutismus" WHERE time = '2016-07-31T20:07:00Z' OR time = '2016-07-31T23:07:17Z'
    #+end_src
 
@@ -123,7 +123,7 @@
 
 **** Basic GROUP BY time() syntax
 
-     #+begin_src sql
+     #+begin_src
      SELECT <function>(<field_key>) FROM_clause WHERE <time_range> GROUP BY time(<time_interval>),[tag_key] [fill(<fill_option>)]
      #+end_src
 
@@ -132,7 +132,7 @@
 
 **** Advanced GROUP BY time() syntax
 
-     #+begin_src sql
+     #+begin_src
      SELECT <function>(<field_key>) FROM_clause WHERE <time_range> GROUP BY time(<time_interval>,<offset_interval>),[tag_key] [fill(<fill_option>)]
      #+end_src
 
@@ -140,7 +140,7 @@
 
    INTO 将查询结果写入到用户指定的 measurment。
 
-   #+begin_src sql
+   #+begin_src
    SELECT_clause INTO <measurement_name> FROM_clause [WHERE_clause] [GROUP_BY_clause]
    #+end_src
 
@@ -148,4 +148,54 @@
 
 ** ORDER BY time DESC
 
-   https://docs.influxdata.com/influxdb/v1.8/query_language/explore-data/#order-by-time-desc
+   #+begin_src
+   SELECT_clause [INTO_clause] FROM_clause [WHERE_clause] [GROUP_BY_clause] ORDER BY time DESC
+   #+end_src
+
+   如果包含 =GROUP BY= 条件的话， =ORDER by time DESC= 必须出现在 =GROUP BY= 之后。如果查询包含 =WHERE= 但是没有
+   =GROUP BY= 条件， =ORDER by time DESC= 必须在 =WHERE= 之后。
+
+** LIMIT 和 SLIMIT 语句
+
+   =LIMIT= 和 =SLIMIT= 限制 points 和 series 查询的返回数量。
+
+
+*** LIMIT 语句
+
+    #+begin_src
+    SELECT_clause [INTO_clause] FROM_clause [WHERE_clause] [GROUP_BY_clause] [ORDER_BY_clause] LIMIT <N>
+    #+end_src
+
+    注意 =LIMIT= 必须放在上面所有语句的最后。
+
+*** SLIMIT 语句
+
+    #+begin_src
+      SELECT_clause [INTO_clause] FROM_clause [WHERE_clause] GROUP BY *[,time(<time_interval>)] [ORDER_BY_clause] SLIMIT <N>
+    #+end_src
+
+
+** OFFSET 和 SOFFSET 语句
+
+   =OFFSET <N>= 对查询结果进行 N points 的分页。
+
+   #+begin_src
+     SELECT_clause [INTO_clause] FROM_clause [WHERE_clause] [GROUP_BY_clause] [ORDER_BY_clause] LIMIT_clause OFFSET <N> [SLIMIT_clause]
+   #+end_src
+
+   =OFFSET= 需要和 =LIMIT= 一起使用，否则会导致查询结果不一致。整体表达的是： =OFFSET= 之后的 =LIMIT= 个元素。
+
+
+** 时区（time zone）语句
+
+   =tz()= 语句指定时区[fn:1]。
+
+   #+begin_src
+     SELECT_clause [INTO_clause] FROM_clause [WHERE_clause] [GROUP_BY_clause] [ORDER_BY_clause] [LIMIT_clause] [OFFSET_clause] [SLIMIT_clause] [SOFFSET_clause] tz('<time_zone>')
+   #+end_src
+
+   默认情况下，InfluxDB 存储和返回 UTC 时间戳。
+
+* Footnotes
+
+[fn:1] https://en.wikipedia.org/wiki/List_of_tz_database_time_zones#List
