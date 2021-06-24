@@ -47,7 +47,7 @@
   - 12-17: [[file:2018/an-overall-view-on-docker-ecosystem-containers-moby-swarm-linuxkit-containerd-kubernete.org][{译} Docker 生态系统一览 - Containers, Moby, Swarm, Linuxkit, containerd, Kubernetes ..]]
   - 12-15: [[file:2018/different-from-docker-and-vm.org][{译} Docker 和 VM 的区别]]
   - 12-11: [[file:2018/lixiang-do-right-thing-do-hard-thing.org][{转载} 李想：做正确的事，不做容易的事]]
-  - 12-06: [[file:2018/go-http-get-close-body.org][Go http.Get 是必须要 close response body]]
+  - 12-06: [[file:2018/go-http-get-close-body.org][Go http 请求 必须要 resp.Body.Close]]
   - 12-06: [[file:2018/go-flag-usage.org][flag 中的 usage 一个细节]]
   - 10-25: [[file:2018/redis-cluster-hash.org][Redis cluster 中的 hashing]]
   - 10-24: [[file:2018/consistent-hashing.org][{译} 一致性 hash 指南]]

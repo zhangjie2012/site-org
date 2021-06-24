@@ -1,5 +1,5 @@
 #+SETUPFILE: ~/site/tpl/site-tpl.org
-#+TITLE: Go http.Get 是必须要 close response body
+#+TITLE: Go http 请求（get/post）必须要手动 resp.Body.Close
 #+DATE: 2018-12-06 19:34
 
 Go 里有个很奇怪的设计是 =http.Get= 或者 =http.Post= 的回包 =resp= 是必须要手动调用 =resp.Body.Close()= 的。
@@ -9,10 +9,10 @@ Go 里有个很奇怪的设计是 =http.Get= 或者 =http.Post= 的回包 =resp=
 文档里是这么写的：
 
 #+BEGIN_QUOTE
-  Callers should close resp.Body when done reading from it. If resp.Body
-  is not closed, the Client's underlying RoundTripper (typically
-  Transport) may not be able to re-use a persistent TCP connection to
-  the server for a subsequent "keep-alive" request.
+Callers should close resp.Body when done reading from it. If resp.Body
+is not closed, the Client's underlying RoundTripper (typically
+Transport) may not be able to re-use a persistent TCP connection to
+the server for a subsequent "keep-alive" request.
 #+END_QUOTE
 
 也有人在 Stackoverflow 上问了类似的问题：[[https://stackoverflow.com/questions/18598780/is-resp-body-close-necessary-if-we-dont-read-anything-from-the-body][is resp.Body.Close() necessary if we don't read anything from the body?]]
@@ -20,26 +20,26 @@ Go 里有个很奇怪的设计是 =http.Get= 或者 =http.Post= 的回包 =resp=
 被采纳的答案是：
 
 #+BEGIN_QUOTE
-  Yes. When you call http.Get, the function returns a response as soon
-  as all the HTTP headers have been read. The body of the response has
-  not been read yet. The Response.Body is a wrapper around the network
-  connection to the server. When you read from it, it downloads the body
-  of the response.
+Yes. When you call http.Get, the function returns a response as soon
+as all the HTTP headers have been read. The body of the response has
+not been read yet. The Response.Body is a wrapper around the network
+connection to the server. When you read from it, it downloads the body
+of the response.
 
-  .Close() tells the system that you're done with the network
-  connection. If you have not read the response body, the default http
-  transport closes the connection. (The transport can only re-use the
-  connection if the body has been read, because if it reused a
-  connection with an unread body the next request made using that
-  connection would receive the previous request's response!)
+.Close() tells the system that you're done with the network
+connection. If you have not read the response body, the default http
+transport closes the connection. (The transport can only re-use the
+connection if the body has been read, because if it reused a
+connection with an unread body the next request made using that
+connection would receive the previous request's response!)
 
-  So reading the Body is often more efficient than simply Close()ing if
-  you're making more than one request - especially with TLS connections
-  which are relatively expensive to create.
+So reading the Body is often more efficient than simply Close()ing if
+you're making more than one request - especially with TLS connections
+which are relatively expensive to create.
 
-  If you don't need the body of the response, you should use Head
-  instead of Get. Head doesn't require reading or closing the response
-  body.
+If you don't need the body of the response, you should use Head
+instead of Get. Head doesn't require reading or closing the response
+body.
 #+END_QUOTE
 
 简单来讲就是：为了提高效率，http.Get 等请求的 TCP 连接是不会关闭的（再次向同一个域名请求时，复用连接），所以必须要手动关闭。
@@ -48,3 +48,22 @@ Go 里有个很奇怪的设计是 =http.Get= 或者 =http.Post= 的回包 =resp=
 
 不管是否使用 Resp 的内容都需要手动关闭，否则会导致进程打开的 =fd=
 一直变多，最终系统杀掉进程，报错类似： =http: Accept error: accept tcp [::]:4200: accept4: too many open files; retrying in 1s=
+
+*2021-06-24 14:05:30 更新*
+
+无论是 Get 还是 Post，只要 resp 中的 body 内容非 =nil= ，都需要手动关闭。其实上面的文档已经说的很清楚了。但是我主观上会认为:
+
+#+begin_src go
+  http.Post(url, "application/json", nil)
+#+end_src
+
+我不对返回值进行判断，也不读取 =resp.Body= 就不用手动释放。但实际上并不是这样，只要 Body 中有数据就必须要手动关闭。也就是说，在 Go 中，
+所有的 http 请求必须这样：
+
+#+begin_src go
+  resp, err := http.Post(url, "application/json", nil)
+  if err != nil {
+      return err
+  }
+  defer resp.Body.Close()
+#+end_src
