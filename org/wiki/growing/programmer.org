@@ -35,12 +35,9 @@
   + IDE/Editor /我不用 IDE/
     + [[https://www.gnu.org/software/emacs/][Emacs]]，主力编辑器，[[file:../../topic/emacs/index.org][我的 Wiki]]
     + [[https://www.vim.org/][Vim]]，没办法，服务器只有 Vi/Vim
-  + 编码字体
-    - [[https://github.com/tonsky/FiraCode][Fira Code]]
-    - [[https://github.com/adobe-fonts/source-code-pro][Source Code Pro]]
-    - [[https://github.com/be5invis/Sarasa-Gothic][更纱黑体]] 中英文等宽等高，好评，Microsoft-Yahei-Mono 和 文泉驿也可以，但是太丑
-    - [[https://www.jetbrains.com/lp/mono/][Jetbrains Mono]] 官方推荐 13 号字体和 1.20 倍行号
-    - [[https://github.com/supercomputra/SF-Mono-Font][SF Mono]] 苹果官方出的，目前在用
+  + 编码字体（当然是等宽字体）：
+    - 英文等宽 [[https://github.com/tonsky/FiraCode][Fira Code]]、 [[https://github.com/adobe-fonts/source-code-pro][Source Code Pro]]、[[https://www.jetbrains.com/lp/mono/][Jetbrains Mono]]（官方推荐 13 号字体和 1.20 倍行号，可是太小了）、[[https://github.com/supercomputra/SF-Mono-Font][SF Mono]] 苹果官方出的，目前在用
+    - 中英文等宽等高：[[https://github.com/be5invis/Sarasa-Gothic][更纱黑体]] 一般的字体中英文等宽但是不等高，这款字体等宽又等高，但是总体略丑
   + 包管理工具
     - [[https://brew.sh/][Homebrew]]：The missing package manager for macOS
   + 版本管理
@@ -66,7 +63,7 @@
     - [[https://semver.org/lang/zh-CN/][semver]]: =<MAJORL>.<MINOR>.<PATCH>= ，大部分软件发布都是用的这种规则
     - [[https://calver.org/][calver]]: =YY.mm.<patch>= ，基于日历的版本发布，适用于对时间敏感的项目，目前使用这种规则的有 Docker、Ubuntu 等
   + 思维导图
-    - [[https://www.xmind.cn/][XMind]]，WPS 也不错（但是 Linux 下的 WPS 不支持）。
+    - [[https://www.xmind.cn/][XMind]]，WPS 也不错（但是 Linux 下的 WPS 不支持）
   + UML
     - Mac 平台下的 WPS 支持画图，很好用
     - Windows 下当然是 Visio 啦，各种在线的都感觉不好用
@@ -81,9 +78,9 @@
 ** 记录
 
    + 云笔记
-     - [[https://note.youdao.com/][有道云笔记]]，支持 Windows 和 Mac 平台，Mac 体验优于印象笔记，不支持 Ubuntu，手机上广告很多。
-       开始使用 org-mode 之后，云笔记也不咋用了。
-     - 印象笔记，相比有道云笔记，印象笔记支持团队空间。
+     - [[https://note.youdao.com/][有道云笔记]]，支持 Windows 和 Mac 平台，Mac 体验优于印象笔记，不支持 Ubuntu，手机上广告很多
+       开始使用 org-mode 之后，云笔记也不咋用了
+     - 印象笔记，相比有道云笔记，印象笔记支持团队空间
    + TODO
      - +[[https://www.wunderlist.com/zh/][Wunderlist]]：支持 Windows 和 Mac 平台，[[https://github.com/edipox/wunderlistux][Ubuntu]]+ ，部分功能用 org-mode 代替了。 gtd 是一个很艰难的事，与工具无关。
 
@@ -105,13 +102,13 @@
 ** 其它
 
    + 科学上网
-     + [[https://github.com/shadowsocks/ShadowsocksX-NG][ShadowsocksX-NG]]，没有稳定的梯子，现在都改成了 [[https://github.com/paradiseduo/ShadowsocksX-NG-R8][ShadowsocksX-NG-R8]] 了
-     + iOS Potatso Lite 太吃内存了，删了
+     - VPN 如何选择可以上 [[https://www.duyaoss.com/][duyaoss]] 找
+     - +[[https://github.com/shadowsocks/ShadowsocksX-NG][ShadowsocksX-NG]]，没有稳定的梯子，现在都改成了 [[https://github.com/paradiseduo/ShadowsocksX-NG-R8][ShadowsocksX-NG-R8]] 了+ 目前 MacOS 使用 [[https://github.com/yichengchen/clashX][clashX]] ，Windows 和 Linux 据说都支持，但是没试过
+     - iOS Potatso Lite
    + 刻录
      - [[https://unetbootin.github.io/][UNetbootin]]：Windows、MacOS、Linux
    + 录屏
      - [[https://www.cockos.com/licecap/][LICEcap]]：Windows、MacOS
-
 
 * FAQ
 
