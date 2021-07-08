@@ -2,11 +2,40 @@
 #+TITLE: GCE 的 Kubernetes 最佳实践系列
 #+DATE: 2021-05-11 16:58:20
 
-* TODO [[https://cloud.google.com/blog/products/containers-kubernetes/your-guide-kubernetes-best-practices][Kubernetes 最佳实践指引]]
+* [[https://cloud.google.com/blog/products/containers-kubernetes/kubernetes-best-practices-organizing-with-namespaces][使用命令空间进行组织]]
+
+  命名空间可以理解成 Kubernetes 集群中的虚拟集群，一个 Kubernetes 集群中可以包含多个命名空间，逻辑上相互隔离；
+
+  一般情况下，Kubernetes 默认会创建三个空间：
+
+  + =default=
+  + =kube-system= 用于 Kubernetes 组件
+  + =kube-public= 用户公共资源
+
+  =kube-public= 通常不怎么使用， =kube-system= 相对独立，所以你的 services 和 apps 通常会被创建在 =default= 空间中。
+  =default= 空间没有什么特别的，除了默认会创建还有你不能通过 kubectl 删掉他。适合很小的集群，但是不建议在生产环境中这么用
+  （同一个空间中的应用名是不可重复的，所以很容易被别人覆盖掉）。
+
+** 服务发现
+
+   Kubernetes 中 Services 使用以下的通用 DNS 模式来暴露他们的端点（endpoints）。类似这样：
+
+   #+begin_src
+   <Service Name>.<Namespace Name>.svc.cluster.local
+   #+end_src
+
+   通常只需要指定 Service 名字，DNS 会自动解析全路径。跨空间的情况下需要携带空间名字，比如： =database.test= =database.production= 。
+
+   *警告：* 如果你创建一个 =com= 或者 =org= 这样的顶级域名，然后创建和网站同名的服务，比如 "google" 或者 "reddit" 。这会导致你的服务请求 ="google.com"=
+   会映射到 Service 上。这通常对于测试和代理非常有用，但也很容易破坏集群中的东西。
+
+   *注意：*如果你想隔离命名空间，你应该使用 [[https://ahmet.im/blog/kubernetes-network-policy/][网络策略]] 来实现他。
+
+** 空间的粒度
+
+   视公司的阶段和规模而定。大公司下业务比较复杂（技术栈丰富），团队较多，需要配合 CI/CD 工具来使用，使用 RBAC 和资源配合是个好主意。
 
 * TODO [[https://cloud.google.com/blog/topics/kubernetes-best-practices][构建最小化镜像（为什么要这么做，如何做）]]
-
-* TODO [[https://cloud.google.com/blog/products/containers-kubernetes/kubernetes-best-practices-organizing-with-namespaces][使用命令空间进行组织]]
 
 * TODO [[https://cloud.google.com/blog/products/containers-kubernetes/kubernetes-best-practices-setting-up-health-checks-with-readiness-and-liveness-probes][使用就绪探针和存活探针进行健康检测]]
 
