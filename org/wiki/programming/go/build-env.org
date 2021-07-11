@@ -7,7 +7,7 @@
 ** Linux, macOS, and FreeBSD tarballs
 
    #+BEGIN_SRC shell
-     wget https://dl.google.com/go/go1.13.6.darwin-amd64.tar.gz --no-check-certificate
+     wget https://golang.org/dl/go1.15.13.linux-amd64.tar.gz
      sudo tar -C /usr/local -xzf go1.13.6.darwin-amd64.tar.gz
    #+END_SRC
 
@@ -22,7 +22,7 @@
    =go get= 安装的二进制包会放到 =$HOME/go/bin= 下面。所以，还要在 =.bashrc/.zshrc= 中添加路径：
 
    #+begin_src shell
-export PATH=$PATH:$(go env GOPATH)/bin
+   export PATH=$PATH:$(go env GOPATH)/bin
    #+end_src
 
 ** 检测是否安装成功

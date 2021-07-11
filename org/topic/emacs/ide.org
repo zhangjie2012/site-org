@@ -38,10 +38,18 @@
      GO111MODULE=on go get golang.org/x/tools/gopls@latest
    #+end_src
 
+   lint 工具：
+
+   #+begin_src sh
+     curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin v1.41.1
+   #+end_src
+
+   配置文件在：https://github.com/zhangjie2012/dotfiles/blob/master/_golangci.yaml
+
    另外安装 [[https://github.com/fatih/gomodifytags][gomodifytags]]。
 
    #+begin_src sh
-     go get github.com/fatih/gomodifytags
+     GO111MODULE=on go get github.com/fatih/gomodifytags
    #+end_src
 
 ** TODO Python
