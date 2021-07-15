@@ -4,4 +4,8 @@
 
 * 节点
 
-- 通过标签过滤节点 ~kubectl get nodes  -l "aaa=bbb"~
+  - 通过标签过滤节点 ~kubectl get nodes  -l "aaa=bbb"~
+
+* 日志
+
+  - Pod 内容器 crash 之后，看之前的日志： ~kubectl logs --previous <podName>~
