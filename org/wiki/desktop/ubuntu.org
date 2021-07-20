@@ -77,7 +77,7 @@
 
    *注意* ：electron-ssr 是用 Python 写的，但一些较新的系统默认只安装了 Python3，所以需要手动安装一下，否则将无法正常使用。
 
-   可以参考这个安装教程：https://github.com/qingshuisiyuan/electron-ssr-backup/blob/master/Ubuntu.md，较新版本的 Linux 发行版，systemd 自己运行了一个
+   可以参考这个安装教程：https://github.com/qingshuisiyuan/electron-ssr-backup/blob/master/Ubuntu.md， 较新版本的 Linux 发行版，systemd 自己运行了一个
    DNS server（127.0.0.53, =systemd-resolved= 这个服务），这会导致全局代理不生效（PAC 也更新不了），参考文档中的“系统设置”修改之后即可解决这个问题。
 
 * 软件列表
