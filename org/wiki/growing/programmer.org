@@ -103,8 +103,9 @@
 
    + 科学上网
      - VPN 如何选择可以上 [[https://www.duyaoss.com/][duyaoss]] 找
-     - +[[https://github.com/shadowsocks/ShadowsocksX-NG][ShadowsocksX-NG]]，没有稳定的梯子，现在都改成了 [[https://github.com/paradiseduo/ShadowsocksX-NG-R8][ShadowsocksX-NG-R8]] 了+ 目前 MacOS 使用 [[https://github.com/yichengchen/clashX][clashX]] ，Windows 和 Linux 据说都支持，但是没试过
-     - iOS Potatso Lite
+     - [[https://github.com/shadowsocks/ShadowsocksX-NG][ShadowsocksX-NG]]，没有稳定的梯子，现在都改成了 [[https://github.com/paradiseduo/ShadowsocksX-NG-R8][ShadowsocksX-NG-R8]] 了
+       很多人推荐 [[https://github.com/yichengchen/clashX][clashX]] ，支持很多平台，配置比较强大，但是用起来发现很多不该走代理的全部都走代理了（比如说 QQ 音乐和网易云音乐），就没用
+     - iOS：Potatso Lite
    + 刻录
      - [[https://unetbootin.github.io/][UNetbootin]]：Windows、MacOS、Linux
    + 录屏
