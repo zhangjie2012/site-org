@@ -4,6 +4,17 @@
 
 建议使用 [[https://github.com/mongodb/mongo-go-driver][mongo-go-driver]]，目前已经 v1.5.1。mgo.v2 我也用过一段时间，但是目前已经不在维护了。
 
+* 连接报错
+
+  #+begin_src
+  connection() error occured during connection handshake: auth error: sasl conversation error: unable to authenticate using mechanism "SCRAM-SHA-1": (AuthenticationFailed) Authentication failed.
+  #+end_src
+
+  MongoDB 的权限比较复杂，我也折腾不明白。不过报这个错，肯定是因为权限的问题。
+
+  在连接 MongoDB 时，URI 格式一般为： =mongodb://<username>:<password>@localhost:27017= ，此时的 =username= 和 =password= 对应的是 MongoDB 超级管理员，
+  如果对应的 =username= 和 =password= 不是超级管理员，而是某一个 database 的权限，则会报如上的错。解决办法是在 uri 中携带 database 的名字。如：
+  =mongodb://<username>:<password>@localhost:27017/<database>= [fn:1]
 
 * interface{} decode to bson.M
 
@@ -111,3 +122,7 @@
   去掉 =SetMaxTime= 之后就正常了。
 
   有一个 [[https://github.com/mongodb/mongo-php-driver/issues/510][issue]] 说明这个问题， =maxTimeMS= 只适合只读操作，是一个遗留选项，应该是不同的版本支持不同，这也就印证了在我 macOS 本地是可以的，在 server 端却是不行的。
+
+* Footnotes
+
+[fn:1] https://groups.google.com/g/mongodb-go-driver/c/nlkVePkOiGc
