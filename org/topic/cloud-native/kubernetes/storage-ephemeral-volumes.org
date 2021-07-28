@@ -1,0 +1,37 @@
+#+SETUPFILE: ~/site/tpl/wiki-tpl.org
+#+TITLE: Kubernetes 存储：临时卷（ephemeral volumes）
+#+DATE: 2021-07-28 16:57:43
+
+建议先熟悉一下 volumes，特别是 PersisentVolumeClaim 和 PersistentVolume。
+
+- 一些应用程序需要额外的存储，但并不会关心在 Pod 重启之后是否能够持久化。比如说缓存服务通常会受内存的限制，把不常用的数据迁移到比内存慢的存储中，但是对整体性能影响不大。
+- 还有些应用程序希望数据放在只读文件中，比如配置数据和秘钥（secret keys）。
+
+
+临时卷是为这些场景设计的。在 Pod 的 spec 中内联指定临时卷，这样简化了应用程序的部署和管理。
+
+* 临时卷的类型
+
+  出于不同的目的，Kubernetes 支持几种不同类型的临时卷：
+
+  - [[https://kubernetes.io/docs/concepts/storage/volumes/#emptydir][emptyDir]]：Pod 启动时为空，存储在本地或者 RAM 中；
+  - [[https://kubernetes.io/docs/concepts/storage/volumes/#configmap][configMap]]，[[https://kubernetes.io/docs/concepts/storage/volumes/#downwardapi][downwardAPI]]，[[https://kubernetes.io/docs/concepts/storage/volumes/#secret][secret]]：将不同类型的 Kubernetes 数据注入到 Pod 中；
+  - [[https://kubernetes.io/docs/concepts/storage/ephemeral-volumes/#csi-ephemeral-volumes][CSI 临时卷]]：与前面几种类型卷类似，但是由专门支持 [[https://kubernetes-csi.github.io/docs/drivers.html][此功能的]] 特殊的 [[https://github.com/container-storage-interface/spec/blob/master/spec.md][CSI 驱动]] 提供；
+  - [[https://kubernetes.io/docs/concepts/storage/ephemeral-volumes/#generic-ephemeral-volumes][通用的临时卷]] 它可以由所有支持持久卷的存储驱动程序提供；
+
+
+  =emptyDir=, =configMap=, =downwardAPI=, =secret= 由 [[https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/#local-ephemeral-storage][本地临时存储]] 提供，由每个节点上的 kubelet 管理。
+
+  CSI 临时卷必须提供第三方的 CSI 存储驱动。
+
+* TODO CSI 临时卷
+
+* TODO 通用的临时卷
+
+  这是个比较新的特性， =v1.21[beta]= 。
+
+* TODO 生命周期和 PersistentVolumeClaim
+
+* TODO PersistentVolumeClaim 命名
+
+* TODO 安全
