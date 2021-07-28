@@ -4,7 +4,7 @@
 
 https://kubernetes.io/docs/concepts/services-networking/
 
-K8s 网络解决了四个问题：
+Kubernetes 网络解决了四个问题：
 
 - Pod 中的容器通过 loopback 使用网络进行通信；
 - 集群网络提供了不同的 Pods 之间的通信；

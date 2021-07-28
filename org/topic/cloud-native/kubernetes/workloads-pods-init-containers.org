@@ -270,7 +270,7 @@ Init containers 是在 Pod 中的应用容器之前运行的专有容器；Init 
 
    - The Pod infrastructure container is restarted. This is uncommon and would have to be done by someone with root access to nodes.
    - All containers in a Pod are terminated while restartPolicy is set to Always, forcing a restart, and the init container
-      completion record has been lost due to garbage collection.
+     completion record has been lost due to garbage collection.
 
    The Pod will not be restarted when the init container image is changed, or the init container completion record has been
    lost due to garbage collection. This applies for Kubernetes v1.20 and later. If you are using an earlier version of Kubernetes,
@@ -280,3 +280,8 @@ Init containers 是在 Pod 中的应用容器之前运行的专有容器；Init 
 
   - 阅读 [[https://kubernetes.io/docs/tasks/configure-pod-container/configure-pod-initialization/#create-a-pod-that-has-an-init-container][Create a Pod that has an Init Container]]
   - 学习如何 [[https://kubernetes.io/docs/tasks/debug-application-cluster/debug-init-containers/][调试 init containers]]
+
+
+* 其他资料
+
+  - https://medium.com/bb-tutorials-and-thoughts/kubernetes-learn-init-container-pattern-7a757742de6b
