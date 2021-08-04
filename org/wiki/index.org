@@ -41,6 +41,10 @@
 
    - [[file:database/influxdb-v1.org][InfluxDB v1.x]]
 
+** 消息中间件
+
+   - [[file:database/kafka.org][Kafka]]
+
 * DevOps
 
 ** 系统运维

@@ -1,0 +1,14 @@
+#+SETUPFILE: ~/site/tpl/wiki-tpl.org
+#+TITLE: Kafka
+#+DATE: 2021-08-04 11:27:28
+
+
+* FAQ
+
+** kafka-topics.sh 执行命令报错 =java.rmi.server.ExportException: Port already in use: 5555; nested exception is:=
+
+   也有人提问：https://github.com/ches/docker-kafka/issues/49
+
+   答案：https://github.com/ches/docker-kafka/pull/11#issuecomment-292752506
+
+   在必须要使用 =docker exec= 的时候指定环境变量 ~--env JMX_PORT=~ 但是 =kubectl= 似乎没有 =--env= 参数。可以在 exec 之后，命令行 ~export JMX_PORT=""~ 即可。
