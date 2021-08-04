@@ -111,6 +111,7 @@
   - [[http://dict.cn/ultimately][ultimately]] ['ʌltɪmətli] adv. 最终
   - [[http://dict.cn/prerequisite][prerequisite]] [ˌpriː'rekwəzɪt] n. 先决条件；前提
   - [[http://dict.cn/Ephemeral][ephemeral]] [ɪ'femərəl] adj. 临时的
+  - [[http://dict.cn/Prologue][prologue]]  ['proʊlɔːɡ] n. 开场白，序幕
 
 * 短语
 
@@ -136,6 +137,9 @@
   - the perspective of ... 的角度/观点，比如 from the perspective of an administrator 从管理员的角度
   - the separation of ... 的分离，eg. the separation of networking from the business logic 网络和业务逻辑的分离
   - trade offs 权衡取舍
+  - furthermore 此外
+  - release candidate 发布候选，eg RC 版本
+  - consists of 由 ... 组成
 
 * 说明
 
