@@ -45,7 +45,9 @@
 
    /Win10 比以前更好用了一些，我不在 Win10 下写代码，但是会写文档。/
 
-   *终端使用*
+   Windows 下 Projectile 报错 =’tr’ is not recognized as an internal or external command, operable program or batch file./")= ，设置 =(setq projectile-git-submodule-command nil)= 即可[fn:4]。
+
+* 终端使用
 
    打开 =.bashrc= 添加两行 alias：
 
@@ -123,6 +125,8 @@
   上面的 =pin= 可以设置为 =package-archives= 列表中的值。
 
 * Footnotes
+
+[fn:4] https://github.com/bbatsov/projectile/issues/1302
 
 [fn:3] http://ergoemacs.org/emacs/emacs_hyper_super_keys.html
 
