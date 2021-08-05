@@ -174,7 +174,6 @@
       SELECT_clause [INTO_clause] FROM_clause [WHERE_clause] GROUP BY *[,time(<time_interval>)] [ORDER_BY_clause] SLIMIT <N>
     #+end_src
 
-
 ** OFFSET 和 SOFFSET 语句
 
    =OFFSET <N>= 对查询结果进行 N points 的分页。
@@ -185,7 +184,6 @@
 
    =OFFSET= 需要和 =LIMIT= 一起使用，否则会导致查询结果不一致。整体表达的是： =OFFSET= 之后的 =LIMIT= 个元素。
 
-
 ** 时区（time zone）语句
 
    =tz()= 语句指定时区[fn:1]。
@@ -195,6 +193,100 @@
    #+end_src
 
    默认情况下，InfluxDB 存储和返回 UTC 时间戳。
+
+
+* 监控
+
+** InfluxDB _internal 1.x 表和字段
+
+   默认情况下，InfluxDB 生成内部的指标保存到 =_internal= 库中。
+
+*** 在生产环境下禁用 _internal 库
+
+    InfluxData 不推荐在生产集群中使用 =_internal= 。它带来了不必要的开销，特别是集群比较忙的情况下，会加重集群的复杂。
+    _internal 数据库中存储的指标主要衡量工作负载性能，只能在非生产环境使用。
+
+    InfluxDB 配置文件将 =[monitor]= 下的 =store-enabled= 设置成 =false= 可以关闭 =_internal= 数据库。
+
+    #+begin_src text
+      # ...
+      [monitor]
+        # ...
+        # Whether to record statistics internally.
+        store-enabled = false
+        #...
+    #+end_src
+
+*** 将内部指标存储在外部监控中
+
+    在生产的集群中 InfluxDB =_internal= 指标，使用 Telegraf 和 [[https://github.com/influxdata/telegraf/tree/master/plugins/inputs/influxdb][influxdb 输入插件]] 来捕获 =/debug/vars= 端点下的指标然后存储在外部的 InfluxDB
+    监控实例中。具体看：[[https://docs.influxdata.com/platform/monitoring/influxdata-platform/external-monitor-setup/][配置监控的监控]]。
+
+*** 那 InfluxDB 生产的实例到底怎么监控呢？
+
+    1. InfluxDB 实例会暴露 http://localhost:8086/debug/vars
+    2. 本机的 Telegraf 添加 InfluxDB Input 插件
+    3. Telegraf 配置数据暴露给 Prometheus
+    4. Prometheus 新增 Target
+
+* FAQ
+
+** [[   https://docs.influxdata.com/influxdb/v1.8/troubleshooting/frequently-asked-questions/#how-does-influxdb-handle-duplicate-points][InfluxDB 如何处理重复的点？]]
+
+   Point（点）由表名，tag 集合和时间戳唯一标识。如果你提交的一个 point 和现有的 point 有相同的标识，fields 集合会变成新的 field
+   和老的 field 的合集，关联关系会指向新的 field 集合。这是预料中的事。
+
+   比如：
+
+   - Old point: =cpu_load,hostname=server02,az=us_west val_1=24.5,val_2=7 1234567890000000=
+   - New point: =cpu_load,hostname=server02,az=us_west val_1=5.24 1234567890000000=
+
+   提交新的 point 之后，InfluxDB 会覆写 =val_1= 的新值， 不管 =val_2= 。最终的结果是：
+
+   #+begin_src sql
+     > SELECT * FROM "cpu_load" WHERE time = 1234567890000000
+     name: cpu_load
+     --------------
+     time                      az        hostname   val_1   val_2
+     1970-01-15T06:56:07.89Z   us_west   server02   5.24    7
+   #+end_src
+
+   为了存储这两个 points：
+
+   - 引入一个任意的新标签来强制保持唯一
+
+     Old point: =cpu_load,hostname=server02,az=us_west,uniq=1 val_1=24.5,val_2=7 1234567890000000=
+
+     New point: =cpu_load,hostname=server02,az=us_west,uniq=2 val_1=5.24 1234567890000000=
+
+     在 New point 写入到 InfluxDB 之后：
+
+     #+begin_src sql
+       > SELECT * FROM "cpu_load" WHERE time = 1234567890000000
+       name: cpu_load
+       --------------
+       time                      az        hostname   uniq   val_1   val_2
+       1970-01-15T06:56:07.89Z   us_west   server02   1      24.5    7
+       1970-01-15T06:56:07.89Z   us_west   server02   2      5.24
+
+     #+end_src
+
+   - 时间上增加一个纳秒
+
+     Old point: =cpu_load,hostname=server02,az=us_west,uniq=1 val_1=24.5,val_2=7 1234567890000000=
+
+     New point: =cpu_load,hostname=server02,az=us_west,uniq=2 val_1=5.24 1234567890000000=
+
+     在 New point 写入到 InfluxDB 之后：
+
+     #+begin_src sql
+       > SELECT * FROM "cpu_load" WHERE time >= 1234567890000000 and time <= 1234567890000001
+       name: cpu_load
+       --------------
+       time                             az        hostname   val_1   val_2
+       1970-01-15T06:56:07.89Z          us_west   server02   24.5    7
+       1970-01-15T06:56:07.890000001Z   us_west   server02   5.24
+     #+end_src
 
 * Footnotes
 
