@@ -100,6 +100,7 @@
   - SNS
     + Telegram =apt install telegram-desktop=
   - 思维导图 =sudo snap install xmind=
+  - [[https://albertlauncher.github.io/][albert]] Linux 下最好的 Laucher 工具，类似 macOS 下的 alfred
 
   [[file:~/site/org/wiki/growing/programmer.org][技术人]] 有补充，重复的软件没有在这里体现。
 
