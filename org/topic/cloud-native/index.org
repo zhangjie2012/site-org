@@ -85,11 +85,11 @@
        + [[file:kubernetes/controller-cronjobs.org][CronJobs]] 定时任务
        + +ReplicationController+: ReplicaSet 是下一代的 RC（支持新的基于集合的标签选择器），建议使用 RS
        + [[file:kubernetes/controller-gc.org][Garbage Collection]]: 负责集群资源回收
-   - [[file:kubernetes/services-networking.org][Services、负载均衡和集群网络]] [1/11]
+   - [[file:kubernetes/services-networking.org][Services、负载均衡和集群网络]] [2/11]
      + [X] [[file:kubernetes/service.org][Service]] 集群内部的服务暴露抽象，提供虚拟 IP，然后通过负载均衡策略，将流量转发到 Endpoints。
        底层实现是 kube-proxy，它支持三种模式（用户空间，iptables，IPVS），主流都是使用 IPVS
      + [ ] [[file:kubernetes/service-topology.org][服务拓扑]] 实现基于 Service 的亲和性
-     + [ ] [[https://kubernetes.io/docs/concepts/services-networking/dns-pod-service/][Services 和 Pods 的 DNS]]
+     + [X] [[file:kubernetes/service-networking-dns-pod-service.org][Services 和 Pod 的 DNS]]
      + [ ] [[https://kubernetes.io/docs/concepts/services-networking/connect-applications-service/][使用 Services 连接应用]]
      + [ ] [[https://kubernetes.io/docs/concepts/services-networking/ingress/][Ingress]]
      + [ ] [[https://kubernetes.io/docs/concepts/services-networking/ingress-controllers/][Ingress Controllers]]
