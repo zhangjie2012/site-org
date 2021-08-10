@@ -199,6 +199,8 @@
 
 ** InfluxDB _internal 1.x 表和字段
 
+   https://docs.influxdata.com/platform/monitoring/influxdata-platform/tools/measurements-internal/
+
    默认情况下，InfluxDB 生成内部的指标保存到 =_internal= 库中。
 
 *** 在生产环境下禁用 _internal 库
