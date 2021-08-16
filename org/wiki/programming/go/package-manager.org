@@ -92,6 +92,24 @@ The commands are:
 
    然后在 =$GOPATH/pkg/mod= 中就会出现 =git.zhangjiee.com/group/project@vx.y.z= 目录了，并且添加到了 go.mod 和 go.sum 文件中。
 
+   *<2021-08-16 Mon 15:45> UPDATE*
+
+   Go 1.16 之后， =-insecure= 参数将会被逐渐废弃，如果你使用的话，会提示 =deprecated= ，官方的 [[https://golang.org/doc/go1.16][release log]] 里有说明：
+
+   #+begin_quote
+   The =go get -insecure= flag is deprecated and will be removed in a future version. This flag permits fetching from repositories and
+   resolving custom domains using insecure schemes such as HTTP, and also bypasses module sum validation using the checksum database.
+   To permit the use of insecure schemes, use the =GOINSECURE= environment variable instead. To bypass module sum validation,
+   use GOPRIVATE or GONOSUMDB. See go help environment for details.
+   #+end_quote
+
+   可以看出后续使用 =GOINSECURE= 环境变量来代替。相关的讨论：
+
+   - https://github.com/golang/go/issues/37519
+   - https://github.com/golang/go/issues/32966
+
+   也就是说，之前的使用方式是 =go get -u -v -insecure git.zhangjiee.com/group/project= 现在改成了 =GOINSECURE=git.zhangjiee.com go get git.zhangjiee.com/group/project= 。
+
 ** go get proxy
 
    由于众所周知的原因， =go get= 速度非常慢，经常 timeout。一种解决办法是自己有 VPN 设置 http.https 代理，另外一种办法是使用公共的代理。
