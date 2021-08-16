@@ -11,7 +11,9 @@
   var (
       APICalledLatency = prometheus.NewSummaryVec(
           prometheus.SummaryOpts{
-              Name: "metaserver_api_called_latency",
+              Namespace: "",
+              Subsystem: "",
+              Name: "api_called_latency",
               Help: "Latency in microseconds",
           },
           []string{"api", "method", "status_code"},
@@ -22,15 +24,11 @@
       prometheus.MustRegister(APICalledLatency)
   }
 
-  func SinceInMicroseconds(start time.Time) float64 {
-      return float64(time.Since(start).Nanoseconds() / time.Microsecond.Nanoseconds())
-  }
-
   func metricsExport() gin.HandlerFunc {
       return func(c *gin.Context) {
           start := time.Now()
           defer func() {
-              cost := SinceInMicroseconds(start)
+              cost := time.Since(start).Nanoseconds()
               api := c.Request.URL.Path
               method := c.Request.Method
               status := strconv.Itoa(c.Writer.Status())
@@ -40,8 +38,7 @@
                   return
               }
 
-              APICalledLatency.WithLabelValues(api, method, status).Observe(cost)
-              logrus.Tracef("api run time, api=%s, method=%s, status=%s, time=%f(ms)", api, method, status, cost/1000)
+              APICalledLatency.WithLabelValues(api, method, status).Observe(float64(cost))
           }()
 
           c.Next()
