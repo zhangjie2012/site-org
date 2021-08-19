@@ -233,7 +233,7 @@
 
 * FAQ
 
-** [[   https://docs.influxdata.com/influxdb/v1.8/troubleshooting/frequently-asked-questions/#how-does-influxdb-handle-duplicate-points][InfluxDB 如何处理重复的点？]]
+** [[https://docs.influxdata.com/influxdb/v1.8/troubleshooting/frequently-asked-questions/#how-does-influxdb-handle-duplicate-points][InfluxDB 如何处理重复的点？]]
 
    Point（点）由表名，tag 集合和时间戳唯一标识。如果你提交的一个 point 和现有的 point 有相同的标识，fields 集合会变成新的 field
    和老的 field 的合集，关联关系会指向新的 field 集合。这是预料中的事。
