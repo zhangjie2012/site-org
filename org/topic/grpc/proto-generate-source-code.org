@@ -4,32 +4,32 @@
 
 * 生成结果
 
-protobuf 编译器运行一个 =.proto= 文件，会编译生成具体语言的源代码（定义的类型、get/set 接口，序列化和反序列化接口）。
+  protobuf 编译器运行一个 =.proto= 文件，会编译生成具体语言的源代码（定义的类型、get/set 接口，序列化和反序列化接口）。
 
-| Language    | result file       | note                                                                                                |
-| C++         | .h/.cc            | message => class                                                                                    |
-| Java        | .java             | message => class，以及用于消息类创建的特殊 ~Builder~ 类                                             |
-| Python      |                   | 生成一个模块，包含消息类型的静态描述符，和 /metaclass/ 一起使用，运行时创建必要的 Python 数据访问类 |
-| Go          | .pb.go            | message => struct                                                                                   |
-| Ruby        | .rb               | Ruby module include message types                                                                   |
-| Objective-C | pbobjc.h/pbobjc.m | message => class                                                                                    |
-| C#          | .cs               | message => class                                                                                    |
-| Dart        | .pb.dart          | message => class                                                                                    |
+  | Language    | result file       | note                                                                                                |
+  | C++         | .h/.cc            | message => class                                                                                    |
+  | Java        | .java             | message => class，以及用于消息类创建的特殊 ~Builder~ 类                                             |
+  | Python      |                   | 生成一个模块，包含消息类型的静态描述符，和 /metaclass/ 一起使用，运行时创建必要的 Python 数据访问类 |
+  | Go          | .pb.go            | message => struct                                                                                   |
+  | Ruby        | .rb               | Ruby module include message types                                                                   |
+  | Objective-C | pbobjc.h/pbobjc.m | message => class                                                                                    |
+  | C#          | .cs               | message => class                                                                                    |
+  | Dart        | .pb.dart          | message => class                                                                                    |
 
-更多 API 查看 https://developers.google.com/protocol-buffers/docs/reference/overview
+  更多 API 查看 https://developers.google.com/protocol-buffers/docs/reference/overview
 
 * 命令行
 
-安装编译器（用于将 .proto 文件生成不同语言的源代码）：
+  安装编译器（用于将 .proto 文件生成不同语言的源代码）：
 
-#+begin_src sh
+  #+begin_src sh
   # macOS
   brew install protobuf -> protoc 命令
   # Ubuntu
   apt install protobuf-compiler
-#+end_src
+  #+end_src
 
-#+begin_src sh
+  #+begin_src sh
   protoc --proto_path=IMPORT_PATH \
 		 --cpp_out=DST_DIR --java_out=DST_DIR \
 		 --python_out=DST_DIR \
@@ -38,61 +38,62 @@ protobuf 编译器运行一个 =.proto= 文件，会编译生成具体语言的�
 		 --objc_out=DST_DIR \
 		 --csharp_out=DST_DIR \
 		 path/to/file.proto
-#+end_src
+  #+end_src
 
-=IMPORT_PATH= 指定要 =import= 指令导入 =.proto= 文件所在目录，多个目录通过指定多次来实现。 =--proto_path= 可以用 =-I= 来简写。
+  =IMPORT_PATH= 指定要 =import= 指令导入 =.proto= 文件所在目录，多个目录通过指定多次来实现。 =--proto_path= 可以用 =-I= 来简写。
 
-=--xxx_out= 指定语言和输出目录。如果目录指定成 =.zip= 或者 =.jar= 。编译器会生成一个压缩文件。
+  =--xxx_out= 指定语言和输出目录。如果目录指定成 =.zip= 或者 =.jar= 。编译器会生成一个压缩文件。
 
-比如：
+  比如：
 
-#+NAME: user.proto
-#+BEGIN_SRC
-syntax = "proto3";
+  #+NAME: user.proto
+  #+BEGIN_SRC protobuf
+    syntax = "proto3";
 
-message User {
-  enum Gender {
-        MALE = 0;
-        FEMALE = 1;
-  }
-  string username = 1;
-  int32 age = 2;
-  Gender gender = 3;
-}
-#+END_SRC
+    message User {
+      enum Gender {
+            MALE = 0;
+            FEMALE = 1;
+      }
+      string username = 1;
+      int32 age = 2;
+      Gender gender = 3;
+    }
+  #+END_SRC
 
-生成 C++ 代码：
+  生成 C++ 代码：
 
-#+begin_src sh
-protoc -I=. --cpp_out=. user.proto
-#+end_src
+  #+begin_src sh
+  protoc -I=. --cpp_out=. user.proto
+  #+end_src
 
-生成 Python 代码：
+  生成 Python 代码：
 
-#+begin_src sh
+  #+begin_src sh
 protoc -I=. --python_out=. user.proto
-#+end_src
+  #+end_src
 
-*生成 Go 代码*
+  *生成 Go 代码*
 
-https://developers.google.com/protocol-buffers/docs/reference/go-generated
+  https://developers.google.com/protocol-buffers/docs/reference/go-generated
 
-对于 Go，protobuf 编译器需要 Go 代码插件 proto-gen-go。安装方式：
+  对于 Go，protobuf 编译器需要 Go 代码插件 proto-gen-go。安装方式：
 
-#+begin_src sh
-go get github.com/golang/protobuf/protoc-gen-go
-#+end_src
+  #+begin_src sh
+    go install google.golang.org/protobuf/cmd/protoc-gen-go@lastest
+    go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@lastest
+  #+end_src
 
-另外 =.proto= 文件包含一个完全的 Go package 导入路径来指示生成的包，类似：
+  另外 =.proto= 文件包含一个完全的 Go package 导入路径来指示生成的包，类似：
 
-#+begin_src
-option go_package = "github.com/zhangjie2012/xxxx/libproto"
-#+end_src
+  #+begin_src
+  option go_package = "github.com/zhangjie2012/xxxx/libproto"
+  #+end_src
 
-如果这只了 =go_package= ，输出文件会放在 go 当前目录中的的 =github.com/zhangjiee2020/xxx/libproto/= 下面。上面的例子中会相对于 =.proto= 目录。
+  如果这指了 =go_package= ，输出文件会放在 go 当前目录中的的 =github.com/zhangjiee2020/xxx/libproto/= 下面。上面的例子中会相对于 =.proto= 目录。
 
-如果想改变输出目录可以设置项目目录，给 =protoc= 指定了 ~--go_opt=paths=source_relative~ 参数，输出文件和输出文件为止在相同的相对目录中。
+  如果想改变输出目录可以设置项目目录，给 =protoc= 指定了 ~--go_opt=paths=source_relative~ 参数，输出文件和输出文件为止在相同的相对目录中。
 
-#+begin_src sh
-protoc --proto_path=. --go_out=. --go_opt=paths=source_relative user.proto
-#+end_src
+  #+begin_src sh
+  protoc -I=pblib --go-grpc_out=pblib --go-grpc_opt=paths=source_relative  pblib/*.proto
+  #+end_src
