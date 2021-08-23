@@ -22,9 +22,6 @@
 
    ~git config~ 加上 ~--global~ 表示全局配置，如果不加的话则会被认为是当前仓库的。
 
-   =git config --global core.autocrlf true= 将 =LRLF= 自动转换成 =LF= ，对于跨平台开发很重要。
-   =LRLF= 是 Windows 下的换行符， =Unix/Linux/MacOS= 都是 =LF= ，一般都是使用 =LF= 。
-
 ** 基本操作
 
    + ~git init~: 初始化一个 git 仓库
