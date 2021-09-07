@@ -81,7 +81,7 @@
   - [[http://dict.cn/facilitates][facilitates]] [fə'sɪlɪteɪt] vt. 促进
   - [[http://dict.cn/failover][failover]] [feɪl'oʊvər] n. [计算机]故障转移
   - [[http://dict.cn/flexibility][flexibility]] [ˌfleksə'bɪləti] 灵活性，弹性 flexible adj. 灵活的
-  - [[http://dict.cn/fundamental][fundamental]] [ˌfʌndə'mentl] adj. 基本的
+  - [[http://dict.cn/fundamental][fundamental]] [ˌfʌndə'mentl] adj. 基本的，从根本上
   - [[http://dict.cn/idempotent][idempotent]] [aɪ'dempətənt] [数] 幂等的
   - [[http://dict.cn/immutable][immutable]] [ɪ'mjuːtəbl] adj. 不可变的, 一成不变的
   - [[http://dict.cn/independent][independent]] [ˌɪndɪ'pendənt] 独立的
