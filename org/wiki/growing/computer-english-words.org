@@ -142,6 +142,7 @@
   - the perspective of ... 的角度/观点，比如 from the perspective of an administrator 从管理员的角度
   - the separation of ... 的分离，eg. the separation of networking from the business logic 网络和业务逻辑的分离
   - trade offs 权衡取舍
+  - comprised of 包含
 
 * 说明
 

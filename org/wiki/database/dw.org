@@ -1,0 +1,19 @@
+#+SETUPFILE: ~/site/tpl/wiki-tpl.org
+#+TITLE: 数仓的一些概念
+#+DATE: 2021-09-28 14:12:53
+
+Data Warehouse，简写为 DW，数据仓库。一整套的理论体系。专门为数据分析设计的。
+
+数据运营层：Operation Data Store，简写为 ODS，数据准备区，最原始的数据存储。是后续数据加工的来源。
+
+数据仓库层（DW）：
+
+从上而下：
+
+- DWD，data warehouse detail，对 ODS 进行做一层清洗和规范化；
+- DWB，data warehouse base 数据基础层，中间层，大量指标的数据层；
+- DWS，ata warehouse service 数据服务层，基于DWB上的基础数据，整合汇总成分析某一个主题域的服务数据层，一般是宽表。用于提供后续的业务查询，OLAP分析，数据分发等；
+
+数据服务层/应用层（ADS）：提供产品和数据分析使用的数据。最上层。
+
+ETL：Extract-Transform-Load，用于描述将数据从来源端经过抽取、转换、加载到目的端的过程。
