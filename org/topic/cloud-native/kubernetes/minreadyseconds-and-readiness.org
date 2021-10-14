@@ -12,27 +12,20 @@
 
 --------------------
 
-一些理解，不一定对。
+这里面涉及到 3 个层面的事情：
 
-K8s Pod 的启动可以分成两个阶段：
+- *Deployment 滚动更新*
+  =.spec.minReadySeconds= 是在 Deployment 上配置的，Pod 无感知，在滚动更新时作为 Deployment 认为新 Pod 已经可用，老 Pod 杀掉的一个参考值；
+  Deployment 在获取到 Pod 处于 Ready 状态时，再等待 =minReadySeconds= 的时间之后，杀掉老的 Pod
+- *Pod 的状态*
+  Pod 的启动分两个阶段：容器启动、应用启动。 =initialDelaySeconds= 是开始执行健康监测的时间。也就是说 K8s 假定 initialDelaySeconds 是容器启动和应用启动的时间。
+  如果 Pod 没有设置健康监测，Pod 立即被置为可用。而配置了健康监测之后，健康监测通过才会标记为可用；
+- *添加到 service 提供服务* 只要 Pod 状态为可用，就会添加到 Endpoints 列表中，对外提供服务；
 
-1. 容器启动
-2. 应用启动
+总结：minReadySeconds 不会影响 Pod 的对外提供服务，影响的是滚动更新中哪些 Pod 不提供服务时机（Kill Pod）。
 
-一个服务是否真正对外可用，是通过应用启动成功，并且应用是健康的。但是这一点，从 K8s 上无法准确的检测到。所以才加了很多的辅助手段。
-
-这里面还隐含了一个知识点，应用可以对外提供通常是以 Pod 的 Endpoint 加到 service 来算的。
-
-在这个背景下，重新梳理一下：
-
-- =.spec.minReadySeconds= 用来表示 Pod 就绪的所需要的时间，只是一个数值限制。Pod 设置为就绪。
-  *就绪不代表已经对外提供服务，只是说已经准备好了，隐含了 K8s 认为容器和应用都启动 OK 了*
-- =initialDelaySeconds= 表示 K8s 从容器开始执行健康监测的延迟时间。
-  跟 =minReadySeconds= 没什么关系，只是说从这时间之后，我就要开始健康监测了。
-
-Pod 如何对外提供服务？在 Pod 就绪之后，健康监测 OK ，此时会把 Pod 添加到 service 中。所以在 K8s 中我们可以看到一个临界状态，Pod 已经 ready，但是还没提供服务。
-
-如果没有配置健康监测，Pod 标记为 Ready，就会加到 service 中。
+当然上面说的是流程，实际上 K8s 的设计中，不存在 Deployment Kill Pod 这样的操作，Deployment 通过控制 ReplicaSet 中的副本数增减来实现滚动更新
+（maxUnavailable 和 maxSurge 两个参数）。
 
 * Footnotes
 

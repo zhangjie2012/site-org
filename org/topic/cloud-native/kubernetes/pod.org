@@ -51,17 +51,17 @@
   常见的 pod 控制器有：Deployment, StatefulSet, DaemonSet 等。控制器通常使用用户提供的 pod 模板来创建 pod。模板样例：
 
   #+BEGIN_SRC yaml
-apiVersion: v1
-kind: Pod
-metadata:
-  name: myapp-pod
-  labels:
-    app: myapp
-spec:
-  containers:
-  - name: myapp-container
-    image: busybox
-    command: ['sh', '-c', 'echo Hello Kubernetes! && sleep 3600']
+    apiVersion: v1
+    kind: Pod
+    metadata:
+      name: myapp-pod
+      labels:
+        app: myapp
+    spec:
+      containers:
+      - name: myapp-container
+        image: busybox
+        command: ['sh', '-c', 'echo Hello Kubernetes! && sleep 3600']
   #+END_SRC
 
   上面提供了 pod 容器的名称、镜像和启动命令。
