@@ -167,65 +167,64 @@
 
    本文从一个问题入手讨论了 Go 的 Array 和 Slice 的区别、Slice 的设计以及浅拷贝可能会带来的「陷阱」。Go 官方博客有两篇博客 [[https://blog.golang.org/go-slices-usage-and-internals][Go Slices: usage and internals]] 和 [[https://blog.golang.org/slices][Arrays, slices (and strings): The mechanics of 'append']] 也对相关的实现和特性做了介绍，推荐阅读。
 
-* 更新记录
+** 更新记录
 
-  *2018-07-24 16:55:03 更新：*
+   *2018-07-24 16:55:03 更新：*
 
-  看了 Effective Go 中的 Data 章节，描述了 Go 的数组与 C 的不同：
+   看了 Effective Go 中的 Data 章节，描述了 Go 的数组与 C 的不同：
 
-  - 数组是值，赋值时会把所有的数据拷贝一份
-  - 如果把数组传递给函数，函数拿到的是数组的 copy ，而不是指针
-  - 数组的大小是类型的一部分。 =[10]int= 和 =[20]int= 是不同的
+   - 数组是值，赋值时会把所有的数据拷贝一份
+   - 如果把数组传递给函数，函数拿到的是数组的 copy ，而不是指针
+   - 数组的大小是类型的一部分。 =[10]int= 和 =[20]int= 是不同的
 
-    其实，Go 不仅仅是 C-safe language，很多的实现细节都不同，也并不是一门简单的语言。
+     其实，Go 不仅仅是 C-safe language，很多的实现细节都不同，也并不是一门简单的语言。
 
-    --------------
 
-    *2018-09-04 15:45:14 更新：*
+   *2018-09-04 15:45:14 更新：*
 
-    今天遇到个问题，默认初始化的 slices 被 json 序列化之后，值竟然是 =nil= 而不是 =[]= ，但是正常输出是却为 =[]= 。
+   今天遇到个问题，默认初始化的 slices 被 json 序列化之后，值竟然是 =nil= 而不是 =[]= ，但是正常输出是却为 =[]= 。
 
-    #+BEGIN_EXAMPLE
-      package main
+   #+BEGIN_EXAMPLE
+     package main
 
-      import (
-          "encoding/json"
-          "fmt"
-      )
+     import (
+         "encoding/json"
+         "fmt"
+     )
 
-      type T struct {
-          Xxx []int `json:"xxx"`
-      }
+     type T struct {
+         Xxx []int `json:"xxx"`
+     }
 
-      func main() {
-          var t T
-          fmt.Printf("%v\n", t)
+     func main() {
+         var t T
+         fmt.Printf("%v\n", t)
 
-          x, _ := json.Marshal(t)
-          fmt.Println(string(x))
-      }
-    #+END_EXAMPLE
+         x, _ := json.Marshal(t)
+         fmt.Println(string(x))
+     }
+   #+END_EXAMPLE
 
-    输出结果为：
+   输出结果为：
 
-    #+BEGIN_EXAMPLE
-      {[]}
-      {"xxx":null}
-    #+END_EXAMPLE
+   #+BEGIN_EXAMPLE
+     {[]}
+     {"xxx":null}
+   #+END_EXAMPLE
 
-    这个行为真的很奇怪，按说一个结果的输出结果和他 json 序列化的值应该是保持一致的。网上对这个讨论也比较多，比如这个 [[https://github.com/golang/go/issues/2278][#issue]]，之前是 =[]= ，后来改成了 null，具体可以看这次 [[https://github.com/golang/go/commit/48c75c5f9c8e97b87fbd8f24dffa73d6b2148691][提交记录]]。
+   这个行为真的很奇怪，按说一个结果的输出结果和他 json 序列化的值应该是保持一致的。网上对这个讨论也比较多，比如这个 [[https://github.com/golang/go/issues/2278][#issue]]，之前是 =[]= ，后来改成了 null，具体可以看这次 [[https://github.com/golang/go/commit/48c75c5f9c8e97b87fbd8f24dffa73d6b2148691][提交记录]]。
 
-    可能是希望刻意的把空指针区分开，上面的例子中 =Xxx= 用 =make([]int, 0)= 初始化就可以了。
+   可能是希望刻意的把空指针区分开，上面的例子中 =Xxx= 用 =make([]int, 0)= 初始化就可以了。
 
-    虽然我觉得这是个糟糕的设计（不过整个 Go 语言的设计思路就让人觉得很刻意，那我还能怎么办呢，当然是怎么设计怎么用啦）。
+   虽然我觉得这是个糟糕的设计（不过整个 Go 语言的设计思路就让人觉得很刻意，那我还能怎么办呢，当然是怎么设计怎么用啦）。
 
-    *2021-01-15 16:58:51 更新：*
+   *2021-01-15 16:58:51 更新：*
 
-    这里的图片很好的说明 Go Slice 的基本原理： https://ueokande.github.io/go-slice-tricks/
+   这里的图片很好的说明 Go Slice 的基本原理： https://ueokande.github.io/go-slice-tricks/
 
-    *2021-10-19 18:49:53 更新：*
+   *2021-10-19 18:49:53 更新：*
 
-    Go Slice 更蛋疼的一个地方是， 在执行 =append= 的时候，一个 =nil= 的 slice 依旧可以被 =append= ，会自动扩容。
-    但是当你对一个 =nil= 的 map 赋值直接就 crash 了，告诉你 =nil= map 不可以直接使用。WTF ？？
+   Go Slice 更蛋疼的一个地方是， 在执行 =append= 的时候，一个 =nil= 的 slice 依旧可以被 =append= ，会自动扩容。
+   但是当你对一个 =nil= 的 map 赋值直接就 crash 了，告诉你 =nil= map 不可以直接使用。WTF ？？
 
-    https://stackoverflow.com/questions/38543825/appending-one-element-to-nil-slice-increases-capacity-by-two
+   https://stackoverflow.com/questions/38543825/appending-one-element-to-nil-slice-increases-capacity-by-two
