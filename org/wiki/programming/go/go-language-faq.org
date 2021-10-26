@@ -33,6 +33,15 @@
 	  并且允许删除一个不存在的 key。
    3. 只有 =map=nil= 才会释放空间
 
+
+* json.marshal
+
+  =[]byte= json marshal 会被自动做个 base64 编码，https://pkg.go.dev/encoding/json#Marshal
+
+  #+begin_quote
+  Array and slice values encode as JSON arrays, *except that []byte encodes as a base64-encoded string*, and a nil slice encodes as the null JSON value.
+  #+end_quote
+
 * Footnotes
 
 [fn:2] https://github.com/golang/go/blob/master/src/runtime/map.go#L685
