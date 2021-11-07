@@ -1,0 +1,9 @@
+#+SETUPFILE: ~/site/tpl/site-tpl.org
+#+TITLE: 刘润《进化的力量》20211030
+#+DATE: 2021-11-07 11:41:43
+
+文字版本：https://mp.weixin.qq.com/s/4P-5dTioGGRVwaHP0qoa-w
+
+#+BEGIN_EXPORT html
+<iframe width="560" height="315" src="https://www.youtube.com/embed/Sqzgi3GBp9M" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+#+END_EXPORT

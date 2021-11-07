@@ -3,9 +3,9 @@
 #+OPTIONS: toc:nil
 #+OPTIONS: num:nil
 
-
 * 2021
 
+  - 10-07: [[file:2021/liurun-jhdll.org][刘润《进化的力量》20211030]] 值得深思
   - 02-26: [[file:2021/container-runtime.org][{译} 容器运行时]]
     了解容器和容器标准化发展历史，以及当前容器的现状，2020/06/10 的文章
   - 02-08: [[file:2021/kubernetes-vs-docker.org][{译} Kubernetes vs Docker: 了解 2021 的容器]]
