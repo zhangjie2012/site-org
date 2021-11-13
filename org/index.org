@@ -3,30 +3,10 @@
 #+OPTIONS: toc:nil
 #+OPTIONS: num:nil
 
-* Entry
-
-  - [[file:blog/index.org][Blog]] :: 网络日志，偏技术和思考
-  - [[file:wiki/index.org][Wiki]] :: 偏向于工具化，比较散的知识点
-  - Topic :: 技术专题，比较聚集的知识面
-	+ [[file:topic/cloud-native/index.org][云原生]] 容器、Docker、Kubernetes 等 /持续更新中，差的很远/
-    + [[file:topic/go-project/index.org][Go]] 构建 Go 项目的最佳实践（项目结构，技术选型，思考等） /持续更新中/
-	+ [[file:topic/emacs/index.org][Emacs]] 使用 Emacs 是一种信仰 /核心已完结/
-	+ [[file:topic/grpc/index.org][gRPC]] /核心已完结/
-  - [[file:reading/read-books.org][Read]]、[[file:reading/unread-books.org][Unread]] :: 读过的和打算读的书，包括电子书
-  - [[file:other/resume.org][Resume]] :: 简历
-  - Contact ::
-    + twitter [[https://twitter.com/duzhuoyizui][@duzhuoyizui]]
-    + github https://github.com/zhangjie2012
-    + [[https://music.163.com/#/user/home?id=30239300][网易云音乐]]
-    + [[mailto:me@zhangjiee.com][email]]
-
-* 开源项目
-
-  | 项目地址                   | 语言 | 说明                                            | 状态   |
-  |----------------------------+------+-------------------------------------------------+--------|
-  | [[https://github.com/zhangjie2012/_emacs.d][_emacs.d]]                   | LISP | Emacs 配置                                      | 稳定   |
-  | [[https://github.com/zhangjie2012/cbl-go][cbl-go]]                     | Go   | 的常用基础库封装（标准库中没有的）              | 迭代中 |
-  | [[https://github.com/zhangjie2012/logrus-hook][logrus-hook]]                | Go   | 日志包 logrus 的 hook 集合，目前支持 Redis LIST | 迭代中 |
-  | [[https://github.com/zhangjie2012/yinyang][yinyang]]                    | Go   | 中国公历和农历转换服务，支持农历日历            | 稳定   |
-  | [[https://github.com/zhangjie2012/promclient-go][promclient-go]]              | Go   | Prometheus HTTP API 封装                        | 迭代   |
-  | [[https://github.com/zhangjie2012/go-project-layout-template][go-project-layout-template]] | Go   | go project layout template                      | 迭代   |
+- [[file:blog/index.org][Blog]] :: 网络日志，偏技术和思考
+- [[file:wiki/index.org][Wiki]] :: 偏向于工具化，比较散的知识点
+- Topic :: 技术专题，比较聚集的知识面
+  + [[file:topic/cloud-native/index.org][云原生]] 容器、Docker、Kubernetes 等 /持续更新中，差的很远/
+  + [[file:topic/go-project/index.org][Go]] 构建 Go 项目的最佳实践（项目结构，技术选型，思考等） /持续更新中/
+  + [[file:topic/emacs/index.org][Emacs]] 使用 Emacs 是一种信仰 /核心已完结/
+  + [[file:topic/grpc/index.org][gRPC]] /核心已完结/
