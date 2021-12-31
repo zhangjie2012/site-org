@@ -17,3 +17,34 @@ Data Warehouse，简写为 DW，数据仓库。一整套的理论体系。专门
 数据服务层/应用层（ADS）：提供产品和数据分析使用的数据。最上层。
 
 ETL：Extract-Transform-Load，用于描述将数据从来源端经过抽取、转换、加载到目的端的过程。
+
+--------------------
+
+HDFS 和 HBase 的关系？
+
+- HDFS 是 Hadoop 分布式文件系统的简称
+- HBase 是 Hadoop database
+
+HDFS 是文件系统；HBase 是数据库，底层也是 HDFS。
+
+Hive 是 Hadoop 数据仓库，严格来说，不是数据库，主要是让开发人员能够通过 SQL 来计算和处理 HDFS 上的结构化数据，适用于离线的批量数据计算。
+可以理解成 Hive 用于离线场景，HBase 用户实时。
+
+1. Hive 用于批处理，HBase 用户事务处理。 /粒度不同/
+2. Hive 是查询引擎，HBase 是非结构化数据的数据存储
+3. Hive 运行的是 MapReduce 作业的类似 SQL 的引擎，而 HBase 是 Hadoop 上的 NoSQL key-value 数据库
+
+Hive 底层可以是 HBase 或者 HDFS 上存储的文件。
+
+HBase 和 Hive 是协作关系，Hive 清洗、处理和计算原始数据，将计算后的结果写入到 HBase 中，数据应用从 HBase 查询数据。
+
+Hive 解决了什么问题？将 Hive QL 翻译成 MapReduce 程序，分析人员不需要写冗长的 Java 程序，因此也无法作为 web 后端的数据库使用。
+
+--------------------
+
+大数据框架：
+
+- 批处理框架：Hadoop
+- 流计算框架：Storm
+- 混合式框架：Spark
+- 混合式框架：Flink
