@@ -3,6 +3,10 @@
 #+OPTIONS: toc:nil
 #+OPTIONS: num:nil
 
+* 2022
+
+  - 01-03：[[file:2022/every-treasure-tells-a-story.org][如果国宝会说话]] 央视纪录片，文案太美
+
 * 2021
 
   - 10-07: [[file:2021/liurun-jhdll.org][刘润《进化的力量》20211030]] 值得深思
