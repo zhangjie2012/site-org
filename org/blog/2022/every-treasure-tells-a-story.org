@@ -1,6 +1,7 @@
 #+SETUPFILE: ~/site/tpl/site-tpl.org
 #+TITLE: 如果国宝会说话
 #+DATE: 2022-01-02 20:49:11
+#+OPTIONS: toc:nil num:nil
 
 * 第一季
 ** 1 人头壶 最初的凝望
