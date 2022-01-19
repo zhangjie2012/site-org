@@ -53,3 +53,9 @@
    #+end_src
 
 ** TODO Python
+
+   https://emacs-lsp.github.io/lsp-mode/page/lsp-pylsp/
+
+   #+begin_src sh
+     pip install 'python-lsp-server[all]'
+   #+end_src
