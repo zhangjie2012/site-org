@@ -194,7 +194,6 @@
 
    默认情况下，InfluxDB 存储和返回 UTC 时间戳。
 
-
 * 监控
 
 ** InfluxDB _internal 1.x 表和字段
@@ -232,6 +231,21 @@
     4. Prometheus 新增 Target
 
 * FAQ
+
+** InfluxDB 写入时，tag 和 field 的 values 不支持换行符。
+
+   https://docs.influxdata.com/influxdb/v1.8/write_protocols/line_protocol_reference/
+
+   #+begin_src
+   <measurement>[,<tag_key>=<tag_value>[,<tag_key>=<tag_value>]] <field_key>=<field_value>[,<field_key>=<field_value>] [<timestamp>]
+   #+end_src
+
+   Line protocol 对于 =\n= 和空格比较敏感：
+
+   - 空格用来分隔 tag、field 和 timestamp；
+   - 换行符用来分隔两个 point（在批量写入的时候），所以当 fields 中出现换行符时，会分隔当前的 point 数据；
+
+   https://github.com/influxdata/influxdb/issues/9966 这个帖子中也有。
 
 ** [[https://docs.influxdata.com/influxdb/v1.8/troubleshooting/frequently-asked-questions/#how-does-influxdb-handle-duplicate-points][InfluxDB 如何处理重复的点？]]
 

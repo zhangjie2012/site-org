@@ -27,3 +27,7 @@
 + 字符串插入字符：将文本中每行内容（ABCDEF） 转换为 ABC/DEF: ~sed 's/^.\{3\}/&\//g' file~
 
 官方文档: https://www.gnu.org/software/sed/manual/sed.html
+
+Mac 的 sed 和 Linux 不同，直接安装 gnu-sed =brew install gnu-sed= 然后 =alias sed=gsed= 。
+
+配合 find : =find ./ -name "*.go" sed -i 's/aaa/bbb/g' {} \;=

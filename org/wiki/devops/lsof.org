@@ -2,4 +2,8 @@
 #+TITLE: lsof
 #+DATE: 2021-05-26 10:45:44
 
-=lsof -p <pid>= 查看进程打开的 fd
+- =lsof -p <pid>= 查看进程打开的 fd；
+- =lsof <filename>= 查看文件被哪些进程打开；
+- =lsof -p <pid>= 查看 pid 打开了哪些文件；
+- =lsof -i:8080= 查看 8080 被谁在使用；
+- =lsof +d <dir>= 查看某个目录下被打开文件的信息；
