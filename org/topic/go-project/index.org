@@ -34,6 +34,7 @@
 
 * 编码规范
 
+  - 使用 [[https://golangci-lint.run/usage/configuration/][golangci-lint]] 作为 linter，[[https://gitlab.com/JerryZhang2012/dotfiles/-/blob/master/_golangci.yaml][我的配置]]，macOS 下添加软链到 =~/.golangci.yaml=
   - [[https://github.com/uber-go/guide][uber go guide]]
 
 * 服务质量
