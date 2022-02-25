@@ -18,6 +18,7 @@
     + [[file:../blog/2018/consistent-hashing.org][一致性 hash 指南]]：翻译的一篇文章，虽然核心是一致性 hash，但对 hash 基础也有介绍
     + [[file:../blog/2018/redis-cluster-hash.org][Redis 集群中的 hash 算法]]
     + [[file:data-structure-and-algorithm/hash.org][一些资料]]
+  - [[file:data-structure-and-algorithm/encrypt-decrypt.org][加解密算法]]：常见对称、非对称加解密算法
 
 * 数据库
 

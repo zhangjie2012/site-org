@@ -29,21 +29,21 @@
 
   Go 1.11 之后官方支持包管理工具 =go mod= 。
 
-  #+BEGIN_SRC
-Usage:
+  #+BEGIN_SRC sh
+    Usage:
 
-	go mod <command> [arguments]
+        go mod <command> [arguments]
 
-The commands are:
+    The commands are:
 
-	download    download modules to local cache
-	edit        edit go.mod from tools or scripts
-	graph       print module requirement graph
-	init        initialize new module in current directory
-	tidy        add missing and remove unused modules
-	vendor      make vendored copy of dependencies
-	verify      verify dependencies have expected content
-	why         explain why packages or modules are needed
+        download    download modules to local cache
+        edit        edit go.mod from tools or scripts
+        graph       print module requirement graph
+        init        initialize new module in current directory
+        tidy        add missing and remove unused modules
+        vendor      make vendored copy of dependencies
+        verify      verify dependencies have expected content
+        why         explain why packages or modules are needed
   #+END_SRC
 
 ** 常见场景
@@ -80,17 +80,14 @@ The commands are:
 ** go mod 使用私有库
 
    不使用 go mod 私有库直接手动拷贝到 =$GOPATH/src= 下面就可以用了，使用 go mod 之后，依赖库的位置放在了 =$GOPATH/pkg/mod= 下面，并且还有 go.sum 校验，
-   所以直接拷贝的方式不可用了，可以用下面的方法来解决。假设 git 仓库的地址为： =git.zhangjiee.com= 。
+   所以直接拷贝的方式不可用了，可以用下面的方法来解决。Go 使用 gitlab 私有 repo：
 
-   1. =go env -w GOPRIVATE=git.zhangjiee.com=
-   2. =.gitconfig= 中添加：
+   1. =.gitconfig= 中添加：
 	  #+BEGIN_SRC
-	  [url "ssh://git@git.zhangjiee.com/"]
-		  insteadOf = http://git.zhangjiee.com/
+      [url "git@gitlab.com:"]
+      insteadOf = https://gitlab.com/
 	  #+END_SRC
-   3. =go get -u -v -insecure git.zhangjiee.com/group/project= 非 https 在 go get 时需要加上 =-insecure=
-
-   然后在 =$GOPATH/pkg/mod= 中就会出现 =git.zhangjiee.com/group/project@vx.y.z= 目录了，并且添加到了 go.mod 和 go.sum 文件中。
+   2. ~GOPRIVATE="gitlab.com/c3441" go get -u gitlab.com/c3441/cbl-go@master~
 
    *<2021-08-16 Mon 15:45> UPDATE*
 
@@ -107,8 +104,6 @@ The commands are:
 
    - https://github.com/golang/go/issues/37519
    - https://github.com/golang/go/issues/32966
-
-   也就是说，之前的使用方式是 =go get -u -v -insecure git.zhangjiee.com/group/project= 现在改成了 =GOINSECURE=git.zhangjiee.com go get git.zhangjiee.com/group/project= 。
 
 ** go get proxy
 
