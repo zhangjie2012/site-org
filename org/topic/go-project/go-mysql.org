@@ -80,3 +80,7 @@ goqu 和 squirrel 是社区比较出名的两个 SQL 构建器。我自己使用
 MySQL 连接是时区和 =time= 解析问题，需要设置 DSL 参数： =parseTime=true&loc=Asia%2FShanghai= ，否则 time 解析不了，而且时区有可能是错的。
 
 DSL 全路径 =`${username}:${password}@tcp(${address})/${dbname}`= 。
+
+<2022-03-03 Thu 11:04>
+
+Facebook 开源的 [[https://entgo.io/][ent]] 框架，类似 ORM，做到 entity 到数据表 scheme 的映射。使用起来比较简单，推荐。

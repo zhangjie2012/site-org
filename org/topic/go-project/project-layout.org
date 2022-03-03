@@ -12,7 +12,7 @@
     就不太适合扁平结构。
 
   我的很多项目都是参考 [[https://github.com/golang-standards/project-layout][project-layout]] 来做的，但是他的粒度比较大，不够细致，而且不一定适合私有项目。
-  [[https://github.com/zhangjie2012/go-project-layout-template][go-project-layout-template]] 是我建的一个针对 Web 服务通常场景下的模板项目（可能会不定期的更新），本文介绍每个目录（模块）的职责。
+  [[https://gitlab.com/JerryZhang2012/go-http-server-template][go-http-server-template]] 是我建的一个针对 Web 服务通常场景下的模板项目（可能会不定期的更新），本文介绍每个目录（模块）的职责。
 
 * Go 目录
 

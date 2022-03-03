@@ -12,7 +12,7 @@
   来说，还是太过宽泛了。所以我根据自己的经验，在 Go project layout 的基础上整理了一套属于自己的规范。
 
   - [[file:project-layout.org][Go 项目目录结构]]
-  - [[https://github.com/zhangjie2012/go-project-layout-template][go-project-layout-template]] github 上的项目模板。
+  - [[https://gitlab.com/JerryZhang2012/go-http-server-template][go-http-server-template]] 针对 http 服务器模板，涉及：
 
 * 包管理
 
@@ -29,8 +29,9 @@
   - [[file:go-web-framework.org][Web 框架选择]]
   - [[file:redis.org][Redis]]
   - [[file:log.org][Go logger packages]]
-  - [[file:go-mysql.org][Go MySQL]]
+  - [[file:go-mysql.org][Go MySQL]]，还是使用 ent 吧
   - [[file:go-mongodb.org][Go MongoDB]]
+  - http client：[[https://github.com/go-resty/resty][resty]]
 
 * 编码规范
 

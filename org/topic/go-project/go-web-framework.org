@@ -2,7 +2,6 @@
 #+TITLE: Go Web 框架
 #+DATE: 2020-03-17 16:32:37
 
-
 * 原生
 
   Go 的 =net/http= 库比较丰富，借助 [[https://github.com/gorilla/mux][mux]] 即可自己完成一个 server 基本需求。
