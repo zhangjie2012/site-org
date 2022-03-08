@@ -4,201 +4,210 @@
 
 * 定义
 
-  #+begin_quote
-  云原生技术有利于各组织在公有云、私有云和混合云等新型动态环境中，构建和运行可弹性扩展的应用。云原生的代表技术包括容器、服务网格、微服务、不可变基础设施和声明式API。
+2015 ~ 2018 年，CNCF 对于云原生的定义主要包含三个方面：
 
-  这些技术能够构建容错性好、易于管理和便于观察的松耦合系统。结合可靠的自动化手段，云原生技术使工程师能够轻松地对系统作出频繁和可预测的重大变更。
+- 面向微服务架构
+- 应用容器化部署
+- 基于容器的编排和调度（Kubernetes）
 
-  云原生计算基金会（CNCF）致力于培育和维护一个厂商中立的开源生态系统，来推广云原生技术。我们通过将最前沿的模式民主化，让这些创新为大众所用。
-  #+end_quote
+2018 年后，CNCF 对于云原生的定义改为：
 
-  来自 https://github.com/cncf/toc/blob/master/DEFINITION.md
+#+begin_quote
+云原生技术有利于各组织在公有云、私有云和混合云等新型动态环境中，构建和运行可弹性扩展的应用。云原生的代表技术包括容器、服务网格、微服务、不可变基础设施和声明式 API。
+
+这些技术能够构建容错性好、易于管理和便于观察的松耦合系统。结合可靠的自动化手段，云原生技术使工程师能够轻松地对系统作出频繁和可预测的重大变更。
+
+云原生计算基金会（CNCF）致力于培育和维护一个厂商中立的开源生态系统，来推广云原生技术。我们通过将最前沿的模式民主化，让这些创新为大众所用。
+#+end_quote
+
+来自 https://github.com/cncf/toc/blob/master/DEFINITION.md
+
+云原生代表技术：不可变的基础设施、声明式 API。容器、服务网格、微服务。
 
 * 常见的术语
 
-  - [[https://www.cncf.io/][CNCF]] The Cloud Native Computing Foundation，云原生计算基金会。
-  - [[https://opencontainers.org/][OCI]] Open Container Initiative，开放容器标准。
-    是一个轻量级的，开放的治理结构（项目），在 Linux 基金会的支持下成立，旨在围绕容器格式和运行时创建的开放行业标准。
-    OCI 于 2015 年 6 月由 Docker，CoreOS 和其他容器行业领导者成立。当前包含两种规范：
-    + [[https://github.com/opencontainers/runtime-spec][runtime-spec]] 运行时规范
-    + [[https://github.com/opencontainers/image-spec][image-spec]] 镜像规范
-  - [[https://kubernetes.io/blog/2016/12/container-runtime-interface-cri-in-kubernetes/][CRI]] Container Runtime Interface，由 protocol buffers 和 gRPC API 和一些库组成。
-    是 Kubernetes 提出的给 kubelet 来管理节点的容器来用的。符合 CRI 的容器，Kubernetes 就可以直接使用。
-    目前 CRI 的实现有 Containerd，CRI-O，Docker 不符合 CRI，所以 Kubernetes 写了 [[https://github.com/kubernetes/kubernetes/tree/release-1.5/pkg/kubelet/dockershim][dockershim]] 来做协议转换
-    （这也是 Kubernetes v1.20 之后废弃 Docker 的原因， =kubelet->dockershim->dockerd->containerd= 这个链路太长，
-    废弃之后改成了 =kubelet->containerd= ）。
+- [[https://www.cncf.io/][CNCF]] The Cloud Native Computing Foundation，云原生计算基金会。
+- [[https://opencontainers.org/][OCI]] Open Container Initiative，开放容器标准。
+  是一个轻量级的，开放的治理结构（项目），在 Linux 基金会的支持下成立，旨在围绕容器格式和运行时创建的开放行业标准。
+  OCI 于 2015 年 6 月由 Docker，CoreOS 和其他容器行业领导者成立。当前包含两种规范：
+  + [[https://github.com/opencontainers/runtime-spec][runtime-spec]] 运行时规范
+  + [[https://github.com/opencontainers/image-spec][image-spec]] 镜像规范
+- [[https://kubernetes.io/blog/2016/12/container-runtime-interface-cri-in-kubernetes/][CRI]] Container Runtime Interface，由 protocol buffers 和 gRPC API 和一些库组成。
+  是 Kubernetes 提出的给 kubelet 来管理节点的容器来用的。符合 CRI 的容器，Kubernetes 就可以直接使用。
+  目前 CRI 的实现有 Containerd，CRI-O，Docker 不符合 CRI，所以 Kubernetes 写了 [[https://github.com/kubernetes/kubernetes/tree/release-1.5/pkg/kubelet/dockershim][dockershim]] 来做协议转换
+  （这也是 Kubernetes v1.20 之后废弃 Docker 的原因， =kubelet->dockershim->dockerd->containerd= 这个链路太长，
+  废弃之后改成了 =kubelet->containerd= ）。
 
 * TODO 容器
 * TODO Docker
 * Kubernetes
 
-  Kubernetes 是开源的微服务或者容器化应用的编排工具，是谷歌开发的集群管理工具（前身是谷歌内部运行十几年的集群管理工具 Borg[fn:2]，
-  Kubernetes 吸取 Borg 的经验，然后针对社区定制的开源版本[fn:1]），现已捐赠给 CNCF[fn:4]。
+Kubernetes 是开源的微服务或者容器化应用的编排工具，是谷歌开发的集群管理工具（前身是谷歌内部运行十几年的集群管理工具 Borg[fn:2]，
+Kubernetes 吸取 Borg 的经验，然后针对社区定制的开源版本[fn:1]），现已捐赠给 CNCF[fn:4]。
 
-  Kubernetes 提供了服务发现和负载均衡、自动部署和回滚、弹性伸缩、健康检测和服务自愈等特性。它的主要目标是通过提供一组 REST APIS
-  来隐藏管理容器的复杂性[fn:3]。
+Kubernetes 提供了服务发现和负载均衡、自动部署和回滚、弹性伸缩、健康检测和服务自愈等特性。它的主要目标是通过提供一组 REST APIS
+来隐藏管理容器的复杂性[fn:3]。
 
 ** 概念（Concepts）
 
-   以下文档大都来自 Kubernetes 官方文档 [[https://kubernetes.io/docs/concepts/][Concepts]]，加上自己的理解。
+以下文档大都来自 Kubernetes 官方文档 [[https://kubernetes.io/docs/concepts/][Concepts]]，加上自己的理解。
 
-   - 概览
-     + [[file:kubernetes/what-is-kubernetes.org][什么是 Kubernetes?]]:  Kubernetes 是一个用于管理容器化的工作负载和服务的可移植的、可扩展的、开源平台，便于声明式配置和自动化。
-       它拥有庞大且快速增长的生态系统。Kubernetes 的服务，支持和工具广泛可用。
-     + [[file:kubernetes/components.org][Kubernetes 组件]]: Kubernetes 集群由代表控制平面（control pane）的组件和一组称之为节点的机器组成。
-     + [[file:kubernetes/kubernetes-api.org][Kubernetes API]]: Kubernetes API 允许你查询和操作 Kubernetes 集群中的对象状态。Kubernetes 控制平面的核心是它的
-       API server 和它暴露的 HTTP API。用户和集群的不同组件以及外部组件都是通过 API server 进行通信。
-     + 与 Kubernetes 对象一起工作: Kubernetes 对象是 Kubernetes 系统中的持久化实体。Kubernetes 使用这些实体来表示集群的状态。
-       - [[file:kubernetes/kubernetes-objects.org][理解 Kubernetes 对象]]
-       - [[file:kubernetes/object-management.org][Kubernetes 对象管理]]
-       - [[file:kubernetes/object-name-and-id.org][对象名称和 IDs]]
-       - [[file:kubernetes/object-namespace.org][命名空间（Namespaces）]]
-       - [[file:kubernetes/label-and-selector.org][Labels 和 Selectors]]
-       - [[file:kubernetes/object-annotation.org][注解（Annotations）]]
-       - [[file:kubernetes/object-field-selectors.org][字段选择器（Field Selectors）]]
-       - [[file:kubernetes/object-common-label.org][推荐的 Labels]]
-   - [[file:kubernetes/architecture.org][集群架构]]: kubernetes 架构与组件概览
-     + [[file:kubernetes/architecture-nodes.org][节点]]
-     + [[file:kubernetes/architecture-control-plane-node-communication.org][控制平面节点通信]]
-     + [[file:kubernetes/architecture-controller.org][控制器]]
-     + [[file:kubernetes/architecture-cloud-controller.org][云控制器管理器]]
-   - [[file:kubernetes/container.org][容器]]
-     + [[file:kubernetes/containers-images.org][镜像]]
-     + [[file:kubernetes/containers-container-environment.org][容器环境]]
-     + [[file:kubernetes/containers-runtime-class.org][运行时类]] RuntimeClass
-     + [[file:kubernetes/containers-container-lifycycle-hooks.org][容器生命周期 Hooks]]
-   - [[file:kubernetes/workloads.org][工作负载（workloads）]]
-     + [[file:kubernetes/workloads-pods.org][Pods]] [3/6]
-       - [X] [[file:kubernetes/pod.org][Pod]]: 概念、为什么需要 Pod、状态标识、健康检查、生命周期等
-       - [X] [[file:kubernetes/workloads-pods-pod-lifecycle.org][Pod Lifecyle]]
-       - [X] [[file:kubernetes/workloads-pods-init-containers.org][Init Containers]]
-       - [ ] [[https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/][Pod 拓扑扩展约束]]
-       - [ ] [[https://kubernetes.io/docs/concepts/workloads/pods/disruptions/][中断]]
-       - [ ] [[https://kubernetes.io/docs/concepts/workloads/pods/ephemeral-containers/][临时容器]]
-     + 工作负载资源
-       + [[file:kubernetes/controller-deployments.org][Deployments]]: 用于无状态服务部署，在 ReplicaSet 基础上提供了更新策略等
-       + [[file:kubernetes/controller-replicaset.org][ReplicaSet]]: 保证一组 Pod 副本在集群的正常运行
-       + [[file:kubernetes/controller-statefulsets.org][StatefulSets]]: 用于部署无状态应用（ZooKeeper，Kafka，Redis 等）
-       + [[file:kubernetes/controller-daemonset.org][DaemonSet]]: 每个节点上跑一个 Pod，用作类似日志收集、系统监控等功能
-       + [[file:kubernetes/controller-job.org][Jobs]] 一次性的任务
-       + [[file:kubernetes/controller-ttlafterfinished.org][TTL Controller for Finished Resources]]: 在对象执行完成后 TTL 秒，回收资源（目前仅用于 Job）
-       + [[file:kubernetes/controller-cronjobs.org][CronJobs]] 定时任务
-       + +ReplicationController+: ReplicaSet 是下一代的 RC（支持新的基于集合的标签选择器），建议使用 RS
-       + [[file:kubernetes/controller-gc.org][Garbage Collection]]: 负责集群资源回收
-   - [[file:kubernetes/services-networking.org][Services、负载均衡和集群网络]] [2/11]
-     + [X] [[file:kubernetes/service.org][Service]] 集群内部的服务暴露抽象，提供虚拟 IP，然后通过负载均衡策略，将流量转发到 Endpoints。
-       底层实现是 kube-proxy，它支持三种模式（用户空间，iptables，IPVS），主流都是使用 IPVS
-     + [ ] [[file:kubernetes/service-topology.org][服务拓扑]] 实现基于 Service 的亲和性
-     + [X] [[file:kubernetes/service-networking-dns-pod-service.org][Services 和 Pod 的 DNS]]
-     + [ ] [[https://kubernetes.io/docs/concepts/services-networking/connect-applications-service/][使用 Services 连接应用]]
-     + [ ] [[https://kubernetes.io/docs/concepts/services-networking/ingress/][Ingress]]
-     + [ ] [[https://kubernetes.io/docs/concepts/services-networking/ingress-controllers/][Ingress Controllers]]
-     + [ ] [[https://kubernetes.io/docs/concepts/services-networking/endpoint-slices/][EndpointSlices]]
-     + [ ] [[https://kubernetes.io/docs/concepts/services-networking/service-traffic-policy/][Service 内部流量策略]]
-     + [ ] [[https://kubernetes.io/docs/concepts/services-networking/topology-aware-hints/][拓扑感知提示]]
-     + [ ] [[https://kubernetes.io/docs/concepts/services-networking/network-policies/][网络策略]]
-     + [ ] [[https://kubernetes.io/docs/concepts/services-networking/dual-stack/][IPv4/IPv6 双栈]]
-   - 存储: Volumes, Persistent Volumes, Storage Class 等 [1/11]
-     + [ ] [[https://kubernetes.io/docs/concepts/storage/volumes/][Volumes]]
-     + [ ] [[https://kubernetes.io/docs/concepts/storage/persistent-volumes/][持久化卷]]
-     + [ ] [[https://kubernetes.io/docs/concepts/storage/volume-snapshots/][卷快照]]
-     + [ ] [[https://kubernetes.io/docs/concepts/storage/volume-pvc-datasource/][CSI 卷克隆]]
-     + [ ] [[https://kubernetes.io/docs/concepts/storage/storage-classes/][Storage Classes]]
-     + [ ] [[https://kubernetes.io/docs/concepts/storage/volume-snapshot-classes/][Volume Snapshot Classes]]
-     + [ ] [[https://kubernetes.io/docs/concepts/storage/dynamic-provisioning/][Dynamic Volume Provisioning]]
-     + [ ] [[https://kubernetes.io/docs/concepts/storage/storage-capacity/][Storage Capacity]]
-     + [X] [[file:kubernetes/storage-ephemeral-volumes.org][临时卷]]
-     + [ ] [[https://kubernetes.io/docs/concepts/storage/storage-limits/][Node-specific Volume Limits]]
-     + [ ] [[https://kubernetes.io/docs/concepts/storage/volume-health-monitoring/][Volume Health Monitoring]]
-   - 配置 [0/5]
-     + [ ] [[https://kubernetes.io/docs/concepts/configuration/overview/][配置最佳实践]]
-     + [ ] [[https://kubernetes.io/docs/concepts/configuration/configmap/][ConfigMaps]]
-     + [ ] [[https://kubernetes.io/docs/concepts/configuration/secret/][Secrets]]
-     + [ ] [[https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/][为容器管理资源]]
-     + [ ] [[https://kubernetes.io/docs/concepts/configuration/organize-cluster-access-kubeconfig/][Organizing Cluster Access Using kubeconfig Files]]
-   - 安全 [0/3]
-     - [ ] [[https://kubernetes.io/docs/concepts/security/overview/][云原生安全概览]]
-     - [ ] [[https://kubernetes.io/docs/concepts/security/pod-security-standards/][Pod 安全标准]]
-     - [ ] [[https://kubernetes.io/docs/concepts/security/controlling-access/][控制 Kubernetes API 访问]]
-   - 策略（Policies） [0/5]
-     - [ ] [[https://kubernetes.io/docs/concepts/policy/limit-range/][Limit Ranges]]
-     - [ ] [[https://kubernetes.io/docs/concepts/policy/resource-quotas/][Resource Quotas]]
-     - [ ] [[https://kubernetes.io/docs/concepts/policy/pod-security-policy/][Pod 安全策略]]
-     - [ ] [[https://kubernetes.io/docs/concepts/policy/pid-limiting/][进程 ID 限制和保留]]
-     - [ ] [[https://kubernetes.io/docs/concepts/policy/node-resource-managers/][节点资源管理器]]
-   - [[https://kubernetes.io/docs/concepts/scheduling-eviction/][调度，抢占（Preemption）和驱逐（Eviction）]] [0/10]
-     - [ ] [[https://kubernetes.io/docs/concepts/scheduling-eviction/kube-scheduler/][Kubernetes 调度器]]
-     - [ ] [[https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/][把 Pods 分配给节点]]
-     - [ ] [[https://kubernetes.io/docs/concepts/scheduling-eviction/pod-overhead/][Pod 开销]]
-     - [ ] [[https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/][污点和容忍]]
-     - [ ] [[https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/][Pod 优先级和抢占（Pod Priority and Preeemption）]]
-     - [ ] [[https://kubernetes.io/docs/concepts/scheduling-eviction/node-pressure-eviction/][节点压力驱逐]]
-     - [ ] [[https://kubernetes.io/docs/concepts/scheduling-eviction/api-eviction/][API 发起的驱逐]]
-     - [ ] [[https://kubernetes.io/docs/concepts/scheduling-eviction/resource-bin-packing/][Resource Bin Packing for Extended Resources]]
-     - [ ] [[https://kubernetes.io/docs/concepts/scheduling-eviction/scheduling-framework/][调度框架]]
-     - [ ] [[https://kubernetes.io/docs/concepts/scheduling-eviction/scheduler-perf-tuning/][调度器性能调优]]
-   - [ ] [[https://kubernetes.io/docs/concepts/cluster-administration/][集群管理]] [0/9]
-     - [ ] [[https://kubernetes.io/docs/concepts/cluster-administration/certificates/][证书]]
-     - [ ] [[https://kubernetes.io/docs/concepts/cluster-administration/manage-deployment/][管理资源]]
-     - [ ] [[https://kubernetes.io/docs/concepts/cluster-administration/networking/][集群网络]]
-     - [ ] [[https://kubernetes.io/docs/concepts/cluster-administration/logging/][日志架构]]
-     - [ ] [[https://kubernetes.io/docs/concepts/cluster-administration/system-metrics/][Kubernetes 系统组件指标]]
-     - [ ] [[https://kubernetes.io/docs/concepts/cluster-administration/system-logs/][系统日志]]
-     - [ ] [[https://kubernetes.io/docs/concepts/cluster-administration/proxies/][Kubernetes 中的代理]]
-     - [ ] [[https://kubernetes.io/docs/concepts/cluster-administration/flow-control/][API Priority and Fairness]]
-     - [ ] [[https://kubernetes.io/docs/concepts/cluster-administration/addons/][安装插件]]
-   - [ ] 扩展 Kubernetes [0/4]
-     - [ ] [[https://kubernetes.io/docs/concepts/extend-kubernetes/api-extension/][扩展 Kubernetes API]]
-       - [ ] [[https://kubernetes.io/docs/concepts/extend-kubernetes/api-extension/custom-resources/][自定义资源]]
-       - [ ] [[https://kubernetes.io/docs/concepts/extend-kubernetes/api-extension/apiserver-aggregation/][Extending the Kubernetes API with the aggregation layer]]
-     - [ ] 计算，存储和网络扩展
-       - [ ] [[https://kubernetes.io/docs/concepts/extend-kubernetes/compute-storage-net/network-plugins/][网络插件]]
-       - [ ] [[https://kubernetes.io/docs/concepts/extend-kubernetes/compute-storage-net/device-plugins/][设备插件]]
-     - [ ] [[https://kubernetes.io/docs/concepts/extend-kubernetes/operator/][Operator 模式]]
-     - [ ] [[https://kubernetes.io/docs/concepts/extend-kubernetes/service-catalog/][Service Catalog]]
-
+- 概览
+  + [[file:kubernetes/what-is-kubernetes.org][什么是 Kubernetes?]]:  Kubernetes 是一个用于管理容器化的工作负载和服务的可移植的、可扩展的、开源平台，便于声明式配置和自动化。
+    它拥有庞大且快速增长的生态系统。Kubernetes 的服务，支持和工具广泛可用。
+  + [[file:kubernetes/components.org][Kubernetes 组件]]: Kubernetes 集群由代表控制平面（control pane）的组件和一组称之为节点的机器组成。
+  + [[file:kubernetes/kubernetes-api.org][Kubernetes API]]: Kubernetes API 允许你查询和操作 Kubernetes 集群中的对象状态。Kubernetes 控制平面的核心是它的
+    API server 和它暴露的 HTTP API。用户和集群的不同组件以及外部组件都是通过 API server 进行通信。
+  + 与 Kubernetes 对象一起工作: Kubernetes 对象是 Kubernetes 系统中的持久化实体。Kubernetes 使用这些实体来表示集群的状态。
+    - [[file:kubernetes/kubernetes-objects.org][理解 Kubernetes 对象]]
+    - [[file:kubernetes/object-management.org][Kubernetes 对象管理]]
+    - [[file:kubernetes/object-name-and-id.org][对象名称和 IDs]]
+    - [[file:kubernetes/object-namespace.org][命名空间（Namespaces）]]
+    - [[file:kubernetes/label-and-selector.org][Labels 和 Selectors]]
+    - [[file:kubernetes/object-annotation.org][注解（Annotations）]]
+    - [[file:kubernetes/object-field-selectors.org][字段选择器（Field Selectors）]]
+    - [[file:kubernetes/object-common-label.org][推荐的 Labels]]
+- [[file:kubernetes/architecture.org][集群架构]]: kubernetes 架构与组件概览
+  + [[file:kubernetes/architecture-nodes.org][节点]]
+  + [[file:kubernetes/architecture-control-plane-node-communication.org][控制平面节点通信]]
+  + [[file:kubernetes/architecture-controller.org][控制器]]
+  + [[file:kubernetes/architecture-cloud-controller.org][云控制器管理器]]
+- [[file:kubernetes/container.org][容器]]
+  + [[file:kubernetes/containers-images.org][镜像]]
+  + [[file:kubernetes/containers-container-environment.org][容器环境]]
+  + [[file:kubernetes/containers-runtime-class.org][运行时类]] RuntimeClass
+  + [[file:kubernetes/containers-container-lifycycle-hooks.org][容器生命周期 Hooks]]
+- [[file:kubernetes/workloads.org][工作负载（workloads）]]
+  + [[file:kubernetes/workloads-pods.org][Pods]] [3/6]
+    - [X] [[file:kubernetes/pod.org][Pod]]: 概念、为什么需要 Pod、状态标识、健康检查、生命周期等
+    - [X] [[file:kubernetes/workloads-pods-pod-lifecycle.org][Pod Lifecyle]]
+    - [X] [[file:kubernetes/workloads-pods-init-containers.org][Init Containers]]
+    - [ ] [[https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/][Pod 拓扑扩展约束]]
+    - [ ] [[https://kubernetes.io/docs/concepts/workloads/pods/disruptions/][中断]]
+    - [ ] [[https://kubernetes.io/docs/concepts/workloads/pods/ephemeral-containers/][临时容器]]
+  + 工作负载资源
+    + [[file:kubernetes/controller-deployments.org][Deployments]]: 用于无状态服务部署，在 ReplicaSet 基础上提供了更新策略等
+    + [[file:kubernetes/controller-replicaset.org][ReplicaSet]]: 保证一组 Pod 副本在集群的正常运行
+    + [[file:kubernetes/controller-statefulsets.org][StatefulSets]]: 用于部署无状态应用（ZooKeeper，Kafka，Redis 等）
+    + [[file:kubernetes/controller-daemonset.org][DaemonSet]]: 每个节点上跑一个 Pod，用作类似日志收集、系统监控等功能
+    + [[file:kubernetes/controller-job.org][Jobs]] 一次性的任务
+    + [[file:kubernetes/controller-ttlafterfinished.org][TTL Controller for Finished Resources]]: 在对象执行完成后 TTL 秒，回收资源（目前仅用于 Job）
+    + [[file:kubernetes/controller-cronjobs.org][CronJobs]] 定时任务
+    + +ReplicationController+: ReplicaSet 是下一代的 RC（支持新的基于集合的标签选择器），建议使用 RS
+    + [[file:kubernetes/controller-gc.org][Garbage Collection]]: 负责集群资源回收
+- [[file:kubernetes/services-networking.org][Services、负载均衡和集群网络]] [2/11]
+  + [X] [[file:kubernetes/service.org][Service]] 集群内部的服务暴露抽象，提供虚拟 IP，然后通过负载均衡策略，将流量转发到 Endpoints。
+    底层实现是 kube-proxy，它支持三种模式（用户空间，iptables，IPVS），主流都是使用 IPVS
+  + [ ] [[file:kubernetes/service-topology.org][服务拓扑]] 实现基于 Service 的亲和性
+  + [X] [[file:kubernetes/service-networking-dns-pod-service.org][Services 和 Pod 的 DNS]]
+  + [ ] [[https://kubernetes.io/docs/concepts/services-networking/connect-applications-service/][使用 Services 连接应用]]
+  + [ ] [[https://kubernetes.io/docs/concepts/services-networking/ingress/][Ingress]]
+  + [ ] [[https://kubernetes.io/docs/concepts/services-networking/ingress-controllers/][Ingress Controllers]]
+  + [ ] [[https://kubernetes.io/docs/concepts/services-networking/endpoint-slices/][EndpointSlices]]
+  + [ ] [[https://kubernetes.io/docs/concepts/services-networking/service-traffic-policy/][Service 内部流量策略]]
+  + [ ] [[https://kubernetes.io/docs/concepts/services-networking/topology-aware-hints/][拓扑感知提示]]
+  + [ ] [[https://kubernetes.io/docs/concepts/services-networking/network-policies/][网络策略]]
+  + [ ] [[https://kubernetes.io/docs/concepts/services-networking/dual-stack/][IPv4/IPv6 双栈]]
+- 存储: Volumes, Persistent Volumes, Storage Class 等 [1/11]
+  + [ ] [[https://kubernetes.io/docs/concepts/storage/volumes/][Volumes]]
+  + [ ] [[https://kubernetes.io/docs/concepts/storage/persistent-volumes/][持久化卷]]
+  + [ ] [[https://kubernetes.io/docs/concepts/storage/volume-snapshots/][卷快照]]
+  + [ ] [[https://kubernetes.io/docs/concepts/storage/volume-pvc-datasource/][CSI 卷克隆]]
+  + [ ] [[https://kubernetes.io/docs/concepts/storage/storage-classes/][Storage Classes]]
+  + [ ] [[https://kubernetes.io/docs/concepts/storage/volume-snapshot-classes/][Volume Snapshot Classes]]
+  + [ ] [[https://kubernetes.io/docs/concepts/storage/dynamic-provisioning/][Dynamic Volume Provisioning]]
+  + [ ] [[https://kubernetes.io/docs/concepts/storage/storage-capacity/][Storage Capacity]]
+  + [X] [[file:kubernetes/storage-ephemeral-volumes.org][临时卷]]
+  + [ ] [[https://kubernetes.io/docs/concepts/storage/storage-limits/][Node-specific Volume Limits]]
+  + [ ] [[https://kubernetes.io/docs/concepts/storage/volume-health-monitoring/][Volume Health Monitoring]]
+- 配置 [0/5]
+  + [ ] [[https://kubernetes.io/docs/concepts/configuration/overview/][配置最佳实践]]
+  + [ ] [[https://kubernetes.io/docs/concepts/configuration/configmap/][ConfigMaps]]
+  + [ ] [[https://kubernetes.io/docs/concepts/configuration/secret/][Secrets]]
+  + [ ] [[https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/][为容器管理资源]]
+  + [ ] [[https://kubernetes.io/docs/concepts/configuration/organize-cluster-access-kubeconfig/][Organizing Cluster Access Using kubeconfig Files]]
+- 安全 [0/3]
+  - [ ] [[https://kubernetes.io/docs/concepts/security/overview/][云原生安全概览]]
+  - [ ] [[https://kubernetes.io/docs/concepts/security/pod-security-standards/][Pod 安全标准]]
+  - [ ] [[https://kubernetes.io/docs/concepts/security/controlling-access/][控制 Kubernetes API 访问]]
+- 策略（Policies） [0/5]
+  - [ ] [[https://kubernetes.io/docs/concepts/policy/limit-range/][Limit Ranges]]
+  - [ ] [[https://kubernetes.io/docs/concepts/policy/resource-quotas/][Resource Quotas]]
+  - [ ] [[https://kubernetes.io/docs/concepts/policy/pod-security-policy/][Pod 安全策略]]
+  - [ ] [[https://kubernetes.io/docs/concepts/policy/pid-limiting/][进程 ID 限制和保留]]
+  - [ ] [[https://kubernetes.io/docs/concepts/policy/node-resource-managers/][节点资源管理器]]
+- [[https://kubernetes.io/docs/concepts/scheduling-eviction/][调度，抢占（Preemption）和驱逐（Eviction）]] [0/10]
+  - [ ] [[https://kubernetes.io/docs/concepts/scheduling-eviction/kube-scheduler/][Kubernetes 调度器]]
+  - [ ] [[https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/][把 Pods 分配给节点]]
+  - [ ] [[https://kubernetes.io/docs/concepts/scheduling-eviction/pod-overhead/][Pod 开销]]
+  - [ ] [[https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/][污点和容忍]]
+  - [ ] [[https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/][Pod 优先级和抢占（Pod Priority and Preeemption）]]
+  - [ ] [[https://kubernetes.io/docs/concepts/scheduling-eviction/node-pressure-eviction/][节点压力驱逐]]
+  - [ ] [[https://kubernetes.io/docs/concepts/scheduling-eviction/api-eviction/][API 发起的驱逐]]
+  - [ ] [[https://kubernetes.io/docs/concepts/scheduling-eviction/resource-bin-packing/][Resource Bin Packing for Extended Resources]]
+  - [ ] [[https://kubernetes.io/docs/concepts/scheduling-eviction/scheduling-framework/][调度框架]]
+  - [ ] [[https://kubernetes.io/docs/concepts/scheduling-eviction/scheduler-perf-tuning/][调度器性能调优]]
+- [ ] [[https://kubernetes.io/docs/concepts/cluster-administration/][集群管理]] [0/9]
+  - [ ] [[https://kubernetes.io/docs/concepts/cluster-administration/certificates/][证书]]
+  - [ ] [[https://kubernetes.io/docs/concepts/cluster-administration/manage-deployment/][管理资源]]
+  - [ ] [[https://kubernetes.io/docs/concepts/cluster-administration/networking/][集群网络]]
+  - [ ] [[https://kubernetes.io/docs/concepts/cluster-administration/logging/][日志架构]]
+  - [ ] [[https://kubernetes.io/docs/concepts/cluster-administration/system-metrics/][Kubernetes 系统组件指标]]
+  - [ ] [[https://kubernetes.io/docs/concepts/cluster-administration/system-logs/][系统日志]]
+  - [ ] [[https://kubernetes.io/docs/concepts/cluster-administration/proxies/][Kubernetes 中的代理]]
+  - [ ] [[https://kubernetes.io/docs/concepts/cluster-administration/flow-control/][API Priority and Fairness]]
+  - [ ] [[https://kubernetes.io/docs/concepts/cluster-administration/addons/][安装插件]]
+- [ ] 扩展 Kubernetes [0/4]
+  - [ ] [[https://kubernetes.io/docs/concepts/extend-kubernetes/api-extension/][扩展 Kubernetes API]]
+    - [ ] [[https://kubernetes.io/docs/concepts/extend-kubernetes/api-extension/custom-resources/][自定义资源]]
+    - [ ] [[https://kubernetes.io/docs/concepts/extend-kubernetes/api-extension/apiserver-aggregation/][Extending the Kubernetes API with the aggregation layer]]
+  - [ ] 计算，存储和网络扩展
+    - [ ] [[https://kubernetes.io/docs/concepts/extend-kubernetes/compute-storage-net/network-plugins/][网络插件]]
+    - [ ] [[https://kubernetes.io/docs/concepts/extend-kubernetes/compute-storage-net/device-plugins/][设备插件]]
+  - [ ] [[https://kubernetes.io/docs/concepts/extend-kubernetes/operator/][Operator 模式]]
+  - [ ] [[https://kubernetes.io/docs/concepts/extend-kubernetes/service-catalog/][Service Catalog]]
 
 ** 监控告警
 
-   - [[file:kubernetes/monitor.org][监控]]: 通过 kube-state-metrics 和 cAdvisor 暴露指标
+- [[file:kubernetes/monitor.org][监控]]: 通过 kube-state-metrics 和 cAdvisor 暴露指标
 
 ** kubectl CLI
 
-   kubectl 是用来管理 Kubernetes 集群的命令行工具。
+kubectl 是用来管理 Kubernetes 集群的命令行工具。
 
-   - [[file:kubernetes/kubectl-official.org][官方说明]]
-   - [[file:kubernetes/kubectl-common.org][常用命令集合]]
+- [[file:kubernetes/kubectl-official.org][官方说明]]
+- [[file:kubernetes/kubectl-common.org][常用命令集合]]
 
 * Resources
 
-  - [[file:../../blog/2018/an-overall-view-on-docker-ecosystem-containers-moby-swarm-linuxkit-containerd-kubernete.org][Docker 生态系统一览]] 翻译的文章，较为详细的说明了 Docker 的前世今生
-  - [[file:../../blog/2021/kubernetes-vs-docker.org][Kubernetes vs Docker]] 2021 翻译的文章，容器、Docker、Kubernetes 之间的关系，
-    Kubernetes v1.20 开始废弃了 Dockershim 之后，对于研发人员、管理员以及 CI/CD 流程上会有哪些影响？
-  - [[https://12factor.net/zh_cn/][12-Factor]] 构建 SaaS 应用方法论
-  - [[https://kubernetesreadme.com/][kubernetes README]] Kubernetes 书籍、教程和其它资源列表
-  - [[https://events19.linuxfoundation.org/wp-content/uploads/2017/11/How-Container-Runtime-Matters-in-Kubernetes_-OSS-Kunal-Kushwaha.pdf][How Container Runtimes matter in Kubernetes?]] PPT，Kubernetes 中的运行时
-  - [[https://object-storage-ca-ymq-1.vexxhost.net/swift/v1/6e4619c416ff4bd19e1c087f27a43eea/www-assets-prod/presentation-media/hyper-kata-frakti-cri2.pdf][Unified Kubernetes CRI runtimes based on Kata Containers]] PPT，理解 Kubernetes 中的运行时
-  - [[https://brennerm.github.io/posts/kubernetes-overview-diagrams.html][Kubernetes Overview Diagrams]] Kubernetes 概述图（很帅），涵盖架构，工作负载，网络存储，RBAC，资源 requests 和 limits 等
-  - [[file:kubernetes/gce-kubernetes-best-practive-series.org][GCE Kubernetes 最佳实践系列]]
-  - [[https://jimmysong.io/kubernetes-handbook/concepts/pause-container.html][Pause 容器]]，也称之为 Infra 容器，Pause 即暂停，但并不是停止状态，而是启动之后就会把自己阻塞住，什么都不干
-    + 目标是为了解决多个容器之间最高效的共享某些资源和数据（打破 Linux Namespace/cgroups 隔离），
-      Pause 是为了解决网络问题（如何共享网络）；
-    + Pod 中的其他容器 Join namespace 的方式加入到 Pause 容器的 Network namespace。所以其他容器所看到的网络设备、IP 地址、
-      Mac 地址等网络信息都是 Pause 容器的；
-    + Pause 容器为业务容器提供：
-      1. Linux namespace 的基础；
-      2. 启用 pid 命名空间，开启 init 进程。
-  - [[file:kubernetes/minreadyseconds-and-readiness.org][minReadySeconds 与 Readiness Probe]] 更好的理解 Pod 启动
+- [[file:../../blog/2018/an-overall-view-on-docker-ecosystem-containers-moby-swarm-linuxkit-containerd-kubernete.org][Docker 生态系统一览]] 翻译的文章，较为详细的说明了 Docker 的前世今生
+- [[file:../../blog/2021/kubernetes-vs-docker.org][Kubernetes vs Docker]] 2021 翻译的文章，容器、Docker、Kubernetes 之间的关系，
+  Kubernetes v1.20 开始废弃了 Dockershim 之后，对于研发人员、管理员以及 CI/CD 流程上会有哪些影响？
+- [[https://12factor.net/zh_cn/][12-Factor]] 构建 SaaS 应用方法论
+- [[https://kubernetesreadme.com/][kubernetes README]] Kubernetes 书籍、教程和其它资源列表
+- [[https://events19.linuxfoundation.org/wp-content/uploads/2017/11/How-Container-Runtime-Matters-in-Kubernetes_-OSS-Kunal-Kushwaha.pdf][How Container Runtimes matter in Kubernetes?]] PPT，Kubernetes 中的运行时
+- [[https://object-storage-ca-ymq-1.vexxhost.net/swift/v1/6e4619c416ff4bd19e1c087f27a43eea/www-assets-prod/presentation-media/hyper-kata-frakti-cri2.pdf][Unified Kubernetes CRI runtimes based on Kata Containers]] PPT，理解 Kubernetes 中的运行时
+- [[https://brennerm.github.io/posts/kubernetes-overview-diagrams.html][Kubernetes Overview Diagrams]] Kubernetes 概述图（很帅），涵盖架构，工作负载，网络存储，RBAC，资源 requests 和 limits 等
+- [[file:kubernetes/gce-kubernetes-best-practive-series.org][GCE Kubernetes 最佳实践系列]]
+- [[https://jimmysong.io/kubernetes-handbook/concepts/pause-container.html][Pause 容器]]，也称之为 Infra 容器，Pause 即暂停，但并不是停止状态，而是启动之后就会把自己阻塞住，什么都不干
+  + 目标是为了解决多个容器之间最高效的共享某些资源和数据（打破 Linux Namespace/cgroups 隔离），
+    Pause 是为了解决网络问题（如何共享网络）；
+  + Pod 中的其他容器 Join namespace 的方式加入到 Pause 容器的 Network namespace。所以其他容器所看到的网络设备、IP 地址、
+    Mac 地址等网络信息都是 Pause 容器的；
+  + Pause 容器为业务容器提供：
+    1. Linux namespace 的基础；
+    2. 启用 pid 命名空间，开启 init 进程。
+- [[file:kubernetes/minreadyseconds-and-readiness.org][minReadySeconds 与 Readiness Probe]] 更好的理解 Pod 启动
 
 ** 书籍
 
-   - [ ] Kubernetes: Up and Running
-   - [ ] Kubernetes in Action
-   - [ ] Kubernetes Patterns
-   - [ ] Kubernetes Best Practices
-   - [ ] Cloud Native Patterns
-   - [ ] Kubernetes Patterns
-   - [ ] The Kubernetes Book 这本书每年都会更新一次，以跟上最新的 Kubernetes 生态
+- [ ] Kubernetes: Up and Running
+- [ ] Kubernetes in Action
+- [ ] Kubernetes Patterns
+- [ ] Kubernetes Best Practices
+- [ ] Cloud Native Patterns
+- [ ] Kubernetes Patterns
+- [ ] The Kubernetes Book 这本书每年都会更新一次，以跟上最新的 Kubernetes 生态
 
 * Footnotes
 
