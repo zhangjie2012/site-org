@@ -5,27 +5,69 @@
 
 * 微服务定义
 
-  [[https://microservices.io/index.html][microservices]] 的定义：
+[[https://microservices.io/index.html][microservices]] 的定义：
 
-  #+begin_quote
-  微服务 - 也称为微服务架构（microservice architecture） - 是一种架构风格，将应用程序构建为服务的集合，这些服务：
+#+begin_quote
+微服务 - 也称为微服务架构（microservice architecture） - 是一种架构风格，将应用程序构建为服务的集合，这些服务：
 
-  - 高度可维护和可测试
-  - 低耦合
-  - 可独立部署
-  - 围绕业务能力组织
-  - 由一个小团队拥有
+- 高度可维护和可测试
+- 低耦合
+- 可独立部署
+- 围绕业务能力组织
+- 由一个小团队拥有
 
-  微服务架构支持快速、频繁和可靠地交付大型、复杂的应用程序。它还使组织能够发展其技术堆栈。
-  #+end_quote
+微服务架构支持快速、频繁和可靠地交付大型、复杂的应用程序。它还使组织能够发展其技术堆栈。
+#+end_quote
 
-  martinfowler 定义：
+martinfowler 定义：
 
-  - 英文版本：https://martinfowler.com/articles/microservices.html
-  - 中文版本：https://blog.cuicc.com/blog/2015/07/22/microservices/
-  - 别人的笔记：https://skyao.gitbooks.io/learning-microservice/content/definition/Martin-Fowler/microservices.html
+- 英文版本：https://martinfowler.com/articles/microservices.html
+- 中文版本：https://blog.cuicc.com/blog/2015/07/22/microservices/
+- 别人的笔记：https://skyao.gitbooks.io/learning-microservice/content/definition/Martin-Fowler/microservices.html
 
-  #+begin_quote
-  微服务架构风格是一种将一个单一应用程序开发为一组小型服务的方法，每个服务运行在自己的进程中，服务间通信采用轻量级通信机制（通常用 HTTP 资源 API）。
-  这些服务围绕业务能力构建并且可通过全自动部署机制独立部署。这些服务共用一个最小型的集中式的管理，服务可用不同的语言开发，使用不同的数据存储技术。
-  #+end_quote
+#+begin_quote
+微服务架构风格是一种将一个单一应用程序开发为一组小型服务的方法，每个服务运行在自己的进程中，服务间通信采用轻量级通信机制（通常用 HTTP 资源 API）。
+这些服务围绕业务能力构建并且可通过全自动部署机制独立部署。这些服务共用一个最小型的集中式的管理，服务可用不同的语言开发，使用不同的数据存储技术。
+#+end_quote
+
+* 构建分布式应用
+
+** [[https://dapr.io/][DAPR]] 用于构建可移植且可靠的微服务的 API
+
+什么是 DAPR？The Distributed Application Runtime。Dapr 是一个可移植的、事件驱动的运行时，它使任何开发人员都可以轻松构建
+弹性的、无状态和有状态的应用程序（在云和边缘上运行，并包含语言和开发人员框架的多样性）。利用 sideccar 的架构优势，Dapr
+可帮助您应对构建微服务带来的挑战，并使您的代码平台与平台无关。
+
+项目背景：微软开源，CNCF 项目（孵化，Dapr 是一个可移植的、事件驱动的运行时，用于构建跨云和边缘的分布式应用程序）。
+
+特性：
+
+1. 更快的构建可连接（connected）的分布式应用程序。=> DAPR 是个 sidecar
+2. 用于解决分布式应用程序挑战的 API
+3. 行业内部可靠性最佳实践
+4. 构建便携式应用程序
+5. 已有应用程序增量使用
+
+Dapr 和服务网格技术（Linkerd，istio 和） 相比如何？
+
+- Dapr 使用 sidecar 架构，单独的进程与应用进程相伴（特性涵盖：服务调用、网络安全、分布式跟踪）。与服务网格有些功能重叠，
+  但是 Dapr 不是服务网格，服务网格定义是网络服务网格。Dapr 的关注点是让开发人员更容易构建微服务。Dapr 面向的是开发人员，
+  服务网格面向的是基础设施
+- Dapr 提供服务发现和通过名称调用的能力，这是开发人员关注的问题。服务网格提供的事网络概念，比如 IP 和 DNS。Dapr 不提供
+  路由或者分流能流量行为能力。流量路由通过应用入口层面解决，不使用服务网格
+- 在可观测性的却别。服务网格在网络级上运行并跟踪服务之间的网络调用。Dapr 是通过服务调用来实现。Dapr 使用 Cloud Event 来跟踪。
+  对于服务调用和 pub/sub 服务，Dapr 的指标跟踪比服务网格更广泛
+- Dapr 可以与服务网格一起来使用
+
+[[https://docs.dapr.io/images/service-mesh.png]]
+
+理解：
+
+- 提供了 dapr 的 cli 工具，类似 docker cli，应用程序使用 dapr 的 SDK 之后，dapr 作为一个 runtime 工具，直接运行应用程序
+- 像是在 http/gRPC 的基础上封装一层（sidecar），这些 sidecar 跟 Redis、zipkin 等集成。总体上提供了一层便捷的服务调用、状态
+  管理、pub/sub、监控等 API
+- 应用的进程伴随 dapr 的 sidecar，所有的请求都要经过 dapr 的 sidecar
+
+看完之后，我才发现 Dapr 是每个开发者梦寐以求的东西（或者你已经在往这条路上走了）。
+
+* 服务治理
