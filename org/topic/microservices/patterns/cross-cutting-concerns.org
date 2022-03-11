@@ -1,0 +1,26 @@
+#+TITLE: 横向关注（cross-cutting concerns）
+
+* 微服务底座（Microservice chassis）
+
+当开始开发应用程序的时候，通常会花费大量的精力来编写并建立机制来处理一些横向的事情。比如说自动化打包构建测试等脚本。表面
+上看简单，其实很有挑战性。
+
+除了构建之外，你还要处理的横向事情，跨领域的例子包括：
+
+- 安全 - 比如，REST APIs 安全需要 Access Token
+- 外部配置化 - 包括证书，以及外部服务的网络位置，比如数据库和消息代理
+- 日志 - 日志框架配置，比如 log4j 和 logback
+- 健康检测 - ping url 来判定服务健康
+- 指标（Metrics） - 服务运行情况的度量
+- 分布式跟踪 - 为每一次外部请求分配一个服务之间传递的唯一标识符来检测服务
+
+一种解决方法是创建一个服务模板（Service Template），每次都从这份模板拷贝一份代码。不足是：不太方便，每次要做一些更改。
+
+另外一种方法是创建一个微服务底座框架：
+
+- 构建和测试服务的可重用构建逻辑。例如，这包括 Gradle 插件
+- 处理好横向问题，底座通常组装和配置实现此功能的框架和库的集合
+
+底座范例：
+- Java：SpringBoot 和 SprintCloud，[[https://www.dropwizard.io/en/latest/][Dropwizard]]
+- Go：[[https://github.com/nytimes/gizmo][gizmo]]（2021 年进入维护状态）、[[https://micro.dev/][micro]]、[[https://github.com/go-kit/kit][go-kit]]
