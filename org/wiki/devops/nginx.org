@@ -4,46 +4,46 @@
 
 * Basic Auth
 
-  一些服务没有认证模块，比如 [[https://prometheus.io/][Prometheus]]，NGINX 的 [[http://nginx.org/en/docs/http/ngx_http_auth_basic_module.html][ngx_http_auth_basic_module]] ，
-  使用「HTTP Basic Authentication」协议做简单的账户名和密码认证。配置如下：
+一些服务没有认证模块，比如 [[https://prometheus.io/][Prometheus]]，NGINX 的 [[http://nginx.org/en/docs/http/ngx_http_auth_basic_module.html][ngx_http_auth_basic_module]] ，
+使用「HTTP Basic Authentication」协议做简单的账户名和密码认证。配置如下：
 
-  #+BEGIN_EXAMPLE
-	location / {
-		auth_basic           "closed site";
-		auth_basic_user_file conf/htpasswd;
-	}
-  #+END_EXAMPLE
+#+BEGIN_EXAMPLE
+  location / {
+      auth_basic           "closed site";
+      auth_basic_user_file conf/htpasswd;
+  }
+#+END_EXAMPLE
 
-  =auth_basic= 用来指定认证打开或者关闭，特殊值的 =off= 表示关闭状态，设置为字符串时，一般做为认证标题。
+=auth_basic= 用来指定认证打开或者关闭，特殊值的 =off= 表示关闭状态，设置为字符串时，一般做为认证标题。
 
-  =auth_basic_user_file= 指定保存用户名和密码的文件，可以使用 htpasswd 工具来生成账号名和密码文件。
+=auth_basic_user_file= 指定保存用户名和密码的文件，可以使用 htpasswd 工具来生成账号名和密码文件。
 
-  htpasswd 是 HTTPD 工具集的一部分，所以要先安装：
+htpasswd 是 HTTPD 工具集的一部分，所以要先安装：
 
-  #+BEGIN_EXAMPLE
-	yum install -y httpd-tools
-  #+END_EXAMPLE
+#+BEGIN_EXAMPLE
+  yum install -y httpd-tools
+#+END_EXAMPLE
 
-  生成认证凭据，
+生成认证凭据，
 
-  #+BEGIN_EXAMPLE
-	htpasswd -c /etc/nginx/.htpasswd admin
-  #+END_EXAMPLE
+#+BEGIN_EXAMPLE
+  htpasswd -c /etc/nginx/.htpasswd admin
+#+END_EXAMPLE
 
-  =/etc/nginx/.htpasswd= 是凭据文件位置， =admin= 是用户名，执行时会提示输入密码，文件内容类似这样：
+=/etc/nginx/.htpasswd= 是凭据文件位置， =admin= 是用户名，执行时会提示输入密码，文件内容类似这样：
 
-  #+BEGIN_EXAMPLE
-	# /etc/nginx/.htpasswd
-	admin:$apr1$z2.a8U.c$DGsdj6MGmnfnQOwF3mWaE0
-  #+END_EXAMPLE
+#+BEGIN_EXAMPLE
+  # /etc/nginx/.htpasswd
+  admin:$apr1$z2.a8U.c$DGsdj6MGmnfnQOwF3mWaE0
+#+END_EXAMPLE
 
-  密码是经过加密的，最后将 nginx 配置中的 =auth_basic_user_file= 指向凭据文件即可。
+密码是经过加密的，最后将 nginx 配置中的 =auth_basic_user_file= 指向凭据文件即可。
 
 * FAQ
 
 ** http header 包含下划线会被忽略？
 
-   有效的 http Header 命名规范是英文字母，数字和中划线，可能包含下划线。下划线被 =underscores_in_headers= 控制，默认是关闭的状态。[fn:1]
+有效的 http Header 命名规范是英文字母，数字和中划线，可能包含下划线。下划线被 =underscores_in_headers= 控制，默认是关闭的状态。[fn:1]
 
 * Footnotes
 
