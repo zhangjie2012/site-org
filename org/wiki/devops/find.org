@@ -8,85 +8,85 @@
 
 * 查找规则
 
-  1、根据文件名
+1、根据文件名
 
-  - =-name= 根据文件名精确查找
-  - =-iname= 忽略大小写查找，也算是精确查找
-  - 通配符：
-    + =*= 匹配任意字符
-    + =?= 匹配任意的单个字符
-    + =[]= 匹配括号里面的任意一个字符
+- =-name= 根据文件名精确查找
+- =-iname= 忽略大小写查找，也算是精确查找
+- 通配符：
+  + =*= 匹配任意字符
+  + =?= 匹配任意的单个字符
+  + =[]= 匹配括号里面的任意一个字符
 
-  2、根据文件所属用户和组
+2、根据文件所属用户和组
 
-  - =-user= 根据所属用户来查找
-  - =-group= 根据所属组来查找
+- =-user= 根据所属用户来查找
+- =-group= 根据所属组来查找
 
-  同时也可以用 =uid= 和 =gid= 来查找
+同时也可以用 =uid= 和 =gid= 来查找
 
-  3、条件匹配
+3、条件匹配
 
-  - =-a= 必须同时满足两个条件
-  - =-o= 满足其中的一个条件
-  - =-not= 取反
+- =-a= 必须同时满足两个条件
+- =-o= 满足其中的一个条件
+- =-not= 取反
 
-  4、文件属性
+4、文件属性
 
-  - =-atime= =-mtime= =-ctime= ：最新一次访问时间、最近一次内容修改、最近一次属性修改，单位是天
-  - =-amin= =-mmin= =-cmin= ：同上，单位是分钟
+- =-atime= =-mtime= =-ctime= ：最新一次访问时间、最近一次内容修改、最近一次属性修改，单位是天
+- =-amin= =-mmin= =-cmin= ：同上，单位是分钟
 
-  比如：
+比如：
 
-  - =find /data/log -atime +30= 30 天内没有访问过的日志文件
-  - =find /data/log -atime -30= 30 天内访问过的日志文件
+- =find /data/log -atime +30= 30 天内没有访问过的日志文件
+- =find /data/log -atime -30= 30 天内访问过的日志文件
 
-  5、根据文件类型来查找文件
+5、根据文件类型来查找文件
 
-  =-type=
+=-type=
 
-  - =f= 普通文件
-  - =d= 目录
-  - =l= 链接
-  - =b= 块设备
-  - =c= 字符设备
-  - =p= 管道
-  - =s= socket
+- =f= 普通文件
+- =d= 目录
+- =l= 链接
+- =b= 块设备
+- =c= 字符设备
+- =p= 管道
+- =s= socket
 
-  比如： =find /tmp -type s=
+比如： =find /tmp -type s=
 
-  6、根据文件大小来查找
+6、根据文件大小来查找
 
-  =-size=
+=-size=
 
-  比如：
+比如：
 
-  - =find /tmp -size 2M= 查找等于 2M 的文件
-  - =find /tmp -size +2M= 查找大于 2M 的文件
-  - =find /tmp -size -2M= 查找小于 2M 的文件
+- =find /tmp -size 2M= 查找等于 2M 的文件
+- =find /tmp -size +2M= 查找大于 2M 的文件
+- =find /tmp -size -2M= 查找小于 2M 的文件
 
-  7、根据文件权限查找
+7、根据文件权限查找
 
-  =-perm=
+=-perm=
 
 * 执行 action
 
-  - =-print= 默认执行的动作
-  - =-ls= 查找后用 ls 显示出来
-  - =-ok [command]= 查找后执行命令的时候询问用户是否要执行
-  - =-exec [command]= 查找后执行命令（不询问，直接执行）
+- =-print= 默认执行的动作
+- =-ls= 查找后用 ls 显示出来
+- =-ok [command]= 查找后执行命令的时候询问用户是否要执行
+- =-exec [command]= 查找后执行命令（不询问，直接执行）
 
 * 最佳实践
 
-  查找 30 天未使用的日志文件并删除: =find /data/log -type f -atime +30 -exec rm -rf {} \;=
+查找 30 天未使用的日志文件并删除: =find /data/log -type f -atime +30 -exec rm -rf {} \;=
 
-  如何在 Linux 中查找最大 10 个文件[fn:1]：
+如何在 Linux 中查找最大 10 个文件[fn:1]：
 
-  #+begin_src sh
-    find / -type f -print0 | xargs -0 du -h | sort -rh | head -n 10
-    find / -type f -exec du -Sh {} + | sort -rh | head -n 10
-    find / -type f -print0 | xargs -0 du | sort -n | tail -10 | cut -f2 | xargs -I{} du -sh {}
-    find / -type f -ls | sort -k 7 -r -n | head -10 | column -t | awk '{print $7,$11}'
-  #+end_src
+#+begin_src sh
+  find / -type f -print0 | xargs -0 du -h | sort -rh | head -n 10
+  find / -type f -exec du -Sh {} + | sort -rh | head -n 10
+  find / -type f -print0 | xargs -0 du | sort -n | tail -10 | cut -f2 | xargs -I{} du -sh {}
+  find / -type f -ls | sort -k 7 -r -n | head -10 | column -t | awk '{print $7,$11}'
+#+end_src
 
 * Footnotes
 
