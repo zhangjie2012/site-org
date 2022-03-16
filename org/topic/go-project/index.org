@@ -29,9 +29,10 @@ Go 目前没有一个权威性质的 Web framework（类似 Python 的 Django/Fl
 - [[file:go-web-framework.org][Web 框架选择]]
 - [[file:redis.org][Redis]]
 - [[file:log.org][Go logger packages]]
-- [[file:go-mysql.org][Go MySQL]]，还是使用 ent 吧
+- [[file:go-mysql.org][Go MySQL]]，还m是使用 ent 吧
 - [[file:go-mongodb.org][Go MongoDB]]
 - http client：[[https://github.com/go-resty/resty][resty]]
+- 序列化：[[https://github.com/vmihailenco/msgpack][msgpack]] 说是比 JSON 的效率高五六倍，文档 https://msgpack.uptrace.dev/
 
 * 编码规范
 
