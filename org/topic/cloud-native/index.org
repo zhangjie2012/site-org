@@ -178,6 +178,24 @@ kubectl 是用来管理 Kubernetes 集群的命令行工具。
 - [[file:kubernetes/kubectl-official.org][官方说明]]
 - [[file:kubernetes/kubectl-common.org][常用命令集合]]
 
+** 最佳实践
+
+大规模集群注意事项，Kubernetes 旨在适应满足一下标准的配置环境：
+
+- 单节点不超过 110 个 Pods
+- 单集群不超过 5000 个节点
+- 单集群总 Pods 数量不超过 15000 个
+- 单集群总容器不超过 30000 个
+
+* CI/CD  项目
+
+- [[https://argoproj.github.io/][argo]] Get More Done with Kubernetes
+- [[https://fluxcd.io/][flux]] 云原生体系下的持续部署，GitOps
+
+* Serverless
+
+- [[https://knative.dev/docs/][Knative]]
+
 * Resources
 
 - [[file:../../blog/2018/an-overall-view-on-docker-ecosystem-containers-moby-swarm-linuxkit-containerd-kubernete.org][Docker 生态系统一览]] 翻译的文章，较为详细的说明了 Docker 的前世今生

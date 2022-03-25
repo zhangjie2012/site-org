@@ -4,120 +4,121 @@
 
 * 办公硬件
 
-  + 耳机
-    - [[https://gradolabs.com/][Grado]] SR325e：纯手工制作耳机，长相帅的一B，就是包装丑了一点，当初是为了听摇滚买的。
-    - 你也可以买森海塞尔，比较中庸（听什么都 OK），我后来买了 [[https://item.jd.com/2184483.html][森海塞尔（Sennheiser）MOMENTUM In-Ear I Black Chrome]]，只能说电子产品一分钱一分货，相比 Grado 还是有一定差距的
-  + 机械键盘
-    - Cherry MX2.0 G80-3800 性价比超级高，不喜欢机械键盘的朋友也可以尝试这款的低键位
-    - FILCO 87 圣手二代 茶轴，千元左右
-    - DURGOD 杜伽 K320 茶轴，五六百，支持无线和蓝牙，目前在用这款
-  + 显示器
-    - DELL U2718Q 27 英寸 4K
-    - 非 MacOS，2K 屏幕也可
-  + 鼠标
-    - [[https://item.jd.com/1201624.html][Logitech M558 无线鼠标]]：小巧好用的蓝牙无线鼠标，支持简单的快捷键定制
-  + 笔记本
-    - [[https://item.jd.com/4250271.html][NVV N-W1]]：非常好用的笔记本支架，折叠完了之后跟扇子差不多大小
++ 耳机
+  - [[https://gradolabs.com/][Grado]] SR325e：纯手工制作耳机，长相帅的一B，就是包装丑了一点，当初是为了听摇滚买的。
+  - 你也可以买森海塞尔，比较中庸（听什么都 OK），我后来买了 [[https://item.jd.com/2184483.html][森海塞尔（Sennheiser）MOMENTUM In-Ear I Black Chrome]]，只能说电子产品一分钱一分货，相比 Grado 还是有一定差距的
+  - 森海塞尔 CX True Wireless 蓝牙耳机：蓝牙音质果然差很多，这款耳机带着不怎么舒服，很闷；但好处是隔音，我睡觉当耳塞用
++ 机械键盘
+  - Cherry MX2.0 G80-3800 性价比超级高，不喜欢机械键盘的朋友也可以尝试这款的低键位
+  - FILCO 87 圣手二代 茶轴，千元左右
+  - DURGOD 杜伽 K320 茶轴，五六百，支持无线和蓝牙，目前在用这款
++ 显示器
+  - DELL U2718Q 27 英寸 4K
+  - 非 MacOS，2K 屏幕也可
++ 鼠标
+  - [[https://item.jd.com/1201624.html][Logitech M558 无线鼠标]]：小巧好用的蓝牙无线鼠标，支持简单的快捷键定制
++ 笔记本
+  - [[https://item.jd.com/4250271.html][NVV N-W1]]：非常好用的笔记本支架，折叠完了之后跟扇子差不多大小
 
-  说明：
+说明：
 
-  - 对于耳机，入耳式和头戴式看个人喜好，两个切换着用效果更佳；蓝牙耳机，会有一定的音质损伤，看怎么权衡了
-  - 对于显示器，我自己测试下来，Mac mini 刷新率跟不上 4K，所以只能买 2K；但是对于笔记本，最新的系统 =10.15.1= 2K 与 4K 的差距还挺大的，10.15 之前没这种感觉
-  - 对于机械键盘，我买过 2 个 Cherry 的，2 个 Filco 的，还有一个 [[https://item.jd.com/3491224.html][IKBC]] 的。轴用过青轴和茶轴，还有朋友的红轴。结论供参考：
-    1. 原厂轴太重要了，IKBC 算是国内做的比较好的了，用的时间长了，轴跟 Filco 的还是有一定差距的（按着手指头累）
-    2. Cherry 键盘普遍比 Filco 丑，真的丑
-    3. 键盘不建议买奶白色，漂亮是绝对漂亮，就是太不禁脏了，别听信洗键帽之说，我有两个键盘洗过键帽，装回去之后总感觉怪怪的
-    4. 推荐茶轴，青轴不适合写代码，一来太吵，而来确实累；红轴太轻了，几乎没有任何机械键盘的快感，还是算了
-    5. 机械键盘用的时间长了，还是会比较累（难道是因为年龄大了？），后面准备低键位的红轴了
+- 对于耳机，入耳式和头戴式看个人喜好，两个切换着用效果更佳；蓝牙耳机，会有一定的音质损伤，看怎么权衡了
+- 对于显示器，我自己测试下来，Mac mini 刷新率跟不上 4K，所以只能买 2K；但是对于笔记本，最新的系统 =10.15.1= 2K 与 4K 的差距还挺大的，10.15 之前没这种感觉
+- 对于机械键盘，我买过 2 个 Cherry 的，2 个 Filco 的，还有一个 [[https://item.jd.com/3491224.html][IKBC]] 的。轴用过青轴和茶轴，还有朋友的红轴。结论供参考：
+  1. 原厂轴太重要了，IKBC 算是国内做的比较好的了，用的时间长了，轴跟 Filco 的还是有一定差距的（按着手指头累）
+  2. Cherry 键盘普遍比 Filco 丑，真的丑
+  3. 键盘不建议买奶白色，漂亮是绝对漂亮，就是太不禁脏了，别听信洗键帽之说，我有两个键盘洗过键帽，装回去之后总感觉怪怪的
+  4. 推荐茶轴，青轴不适合写代码，一来太吵，而来确实累；红轴太轻了，几乎没有任何机械键盘的快感，还是算了
+  5. 机械键盘用的时间长了，还是会比较累（难道是因为年龄大了？），后面准备低键位的红轴了
 
 * 编码与环境
 
-  + IDE/Editor /我不用 IDE/
-    + [[https://www.gnu.org/software/emacs/][Emacs]]，主力编辑器，[[file:../../topic/emacs/index.org][我的 Wiki]]
-    + [[https://www.vim.org/][Vim]]，没办法，服务器只有 Vi/Vim
-  + 编码字体（当然是等宽字体）：
-    - 英文等宽 [[https://github.com/tonsky/FiraCode][Fira Code]]、 [[https://github.com/adobe-fonts/source-code-pro][Source Code Pro]]、[[https://www.jetbrains.com/lp/mono/][Jetbrains Mono]]（官方推荐 13 号字体和 1.20 倍行号，可是太小了）、[[https://github.com/supercomputra/SF-Mono-Font][SF Mono]] 苹果官方出的，目前在用
-    - 中英文等宽等高：[[https://github.com/be5invis/Sarasa-Gothic][更纱黑体]] 一般的字体中英文等宽但是不等高，这款字体等宽又等高，但是总体略丑
-  + 包管理工具
-    - [[https://brew.sh/][Homebrew]]：The missing package manager for macOS
-  + 版本管理
-    - git
-  + 命令行使用优化
-    - [[https://github.com/BurntSushi/ripgrep][rg]] grep 替代工具，以前用 [[https://github.com/ggreer/the_silver_searcher][ag]] ，听说 rg 更快
-    - [[https://github.com/wting/autojump][autojump]]：目录快捷跳转
-    - [[https://github.com/tmux/tmux][tmux]]：终端复用
-    - [[https://github.com/junegunn/fzf][fzf]]：命令行模糊查找，zsh [[https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/fzf][设置]]
-  + SSH 连接工具 & 终端模拟器
-    - [[https://www.iterm2.com/][iterm2]]
-    - zsh + [[https://github.com/robbyrussell/oh-my-zsh][oh-my-zsh]]
-    - [[https://www.netsarang.com/products/xsh_overview.html][XShell]]：可惜只支持 Windows 环境
-  + Chrome 插件
-    - [[https://www.getpostman.com/][Postman]]：也可独立于 Chrome 运行
-    - FireShot：网页截图
-    - [[https://github.com/FelisCatus/SwitchyOmega][SwitchyOmega]]：你懂的
-  + 代码生成图片
-    - [[https://dawnlabs.io/carbon][carbon]]
-  + 文本比较
-    - [[https://www.scootersoftware.com/][Beyond Compare]]，跨平台，[[https://blog-1252349778.cos.ap-beijing.myqcloud.com/2018/keygen.exe][注册机]]
-  + 版本号约定
-    - [[https://semver.org/lang/zh-CN/][semver]]: =<MAJORL>.<MINOR>.<PATCH>= ，大部分软件发布都是用的这种规则
-    - [[https://calver.org/][calver]]: =YY.mm.<patch>= ，基于日历的版本发布，适用于对时间敏感的项目，目前使用这种规则的有 Docker、Ubuntu 等
-  + 思维导图
-    - [[https://www.xmind.cn/][XMind]]，WPS 也不错（但是 Linux 下的 WPS 不支持）
-  + UML
-    - Mac 平台下的 WPS 支持画图，很好用
-    - Windows 下当然是 Visio 啦，各种在线的都感觉不好用
-  + Docker
++ IDE/Editor /我不用 IDE/
+  + [[https://www.gnu.org/software/emacs/][Emacs]]，主力编辑器，[[file:../../topic/emacs/index.org][我的 Wiki]]
+  + [[https://www.vim.org/][Vim]]，没办法，服务器只有 Vi/Vim
++ 编码字体（当然是等宽字体）：
+  - 英文等宽 [[https://github.com/tonsky/FiraCode][Fira Code]]、 [[https://github.com/adobe-fonts/source-code-pro][Source Code Pro]]、[[https://www.jetbrains.com/lp/mono/][Jetbrains Mono]]（官方推荐 13 号字体和 1.20 倍行号，可是太小了）、[[https://github.com/supercomputra/SF-Mono-Font][SF Mono]] 苹果官方出的，目前在用
+  - 中英文等宽等高：[[https://github.com/be5invis/Sarasa-Gothic][更纱黑体]] 一般的字体中英文等宽但是不等高，这款字体等宽又等高，但是总体略丑
++ 包管理工具
+  - [[https://brew.sh/][Homebrew]]：The missing package manager for macOS
++ 版本管理
+  - git
++ 命令行使用优化
+  - [[https://github.com/BurntSushi/ripgrep][rg]] grep 替代工具，以前用 [[https://github.com/ggreer/the_silver_searcher][ag]] ，听说 rg 更快
+  - [[https://github.com/wting/autojump][autojump]]：目录快捷跳转
+  - [[https://github.com/tmux/tmux][tmux]]：终端复用
+  - [[https://github.com/junegunn/fzf][fzf]]：命令行模糊查找，zsh [[https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/fzf][设置]]
++ SSH 连接工具 & 终端模拟器
+  - [[https://www.iterm2.com/][iterm2]]
+  - zsh + [[https://github.com/robbyrussell/oh-my-zsh][oh-my-zsh]]
+  - [[https://www.netsarang.com/products/xsh_overview.html][XShell]]：可惜只支持 Windows 环境
++ Chrome 插件
+  - [[https://www.getpostman.com/][Postman]]：也可独立于 Chrome 运行
+  - FireShot：网页截图
+  - [[https://github.com/FelisCatus/SwitchyOmega][SwitchyOmega]]：你懂的
++ 代码生成图片
+  - [[https://dawnlabs.io/carbon][carbon]]
++ 文本比较
+  - [[https://www.scootersoftware.com/][Beyond Compare]]，跨平台，[[https://blog-1252349778.cos.ap-beijing.myqcloud.com/2018/keygen.exe][注册机]]
++ 版本号约定
+  - [[https://semver.org/lang/zh-CN/][semver]]: =<MAJORL>.<MINOR>.<PATCH>= ，大部分软件发布都是用的这种规则
+  - [[https://calver.org/][calver]]: =YY.mm.<patch>= ，基于日历的版本发布，适用于对时间敏感的项目，目前使用这种规则的有 Docker、Ubuntu 等
++ 思维导图
+  - [[https://www.xmind.cn/][XMind]]，WPS 也不错（但是 Linux 下的 WPS 不支持）
++ UML
+  - Mac 平台下的 WPS 支持画图，很好用
+  - Windows 下当然是 Visio 啦，各种在线的都感觉不好用
++ Docker
 
 * 工具软件
 
 ** 公有云
 
-   目前只推荐腾讯云，UCloud 也还不错毕竟小厂。阿里云就算了，坑太多了。
+目前只推荐腾讯云，UCloud 也还不错毕竟小厂。阿里云就算了，坑太多了。
 
 ** 记录
 
-   + 云笔记
-     - [[https://note.youdao.com/][有道云笔记]]，支持 Windows 和 Mac 平台，Mac 体验优于印象笔记，不支持 Ubuntu，手机上广告很多
-       开始使用 org-mode 之后，云笔记也不咋用了
-     - 印象笔记，相比有道云笔记，印象笔记支持团队空间
-   + TODO
-     - +[[https://www.wunderlist.com/zh/][Wunderlist]]：支持 Windows 和 Mac 平台，[[https://github.com/edipox/wunderlistux][Ubuntu]]+ ，部分功能用 org-mode 代替了。 gtd 是一个很艰难的事，与工具无关。
++ 云笔记
+  - [[https://note.youdao.com/][有道云笔记]]，支持 Windows 和 Mac 平台，Mac 体验优于印象笔记，不支持 Ubuntu，手机上广告很多
+    开始使用 org-mode 之后，云笔记也不咋用了
+  - 印象笔记，相比有道云笔记，印象笔记支持团队空间
++ TODO
+  - +[[https://www.wunderlist.com/zh/][Wunderlist]]：支持 Windows 和 Mac 平台，[[https://github.com/edipox/wunderlistux][Ubuntu]]+ ，部分功能用 org-mode 代替了。 gtd 是一个很艰难的事，与工具无关。
 
 ** 邮箱客户端
 
-   - [[https://mail.163.com/dashi/][网易邮箱大师]]：支持 Mac 和 Windows，不支持 Linux
+- [[https://mail.163.com/dashi/][网易邮箱大师]]：支持 Mac 和 Windows，不支持 Linux
 
-   说明：
+说明：
 
-   - 用了 Foxmail 几年时间，最后弃了，主要原因是现在已经没人维护了，MacOS 下邮件接收太猛的时候（告警邮件），邮件会掉线，再登录一直提示密码错误，这个问题很严重
-   - [[https://getmailspring.com/][Mailspring]]：长相不错，跨全平台（Windows/MacOS/Linux），轻量级，就是 Bug 有点多
+- 用了 Foxmail 几年时间，最后弃了，主要原因是现在已经没人维护了，MacOS 下邮件接收太猛的时候（告警邮件），邮件会掉线，再登录一直提示密码错误，这个问题很严重
+- [[https://getmailspring.com/][Mailspring]]：长相不错，跨全平台（Windows/MacOS/Linux），轻量级，就是 Bug 有点多
 
 ** 写作
 
-   + 工具：Emacs [[https://orgmode.org/][org-mode]]，站点生成也是直接用 org-mode 的
-   + 资源：
-     - [[https://unsplash.com/][upsplash]]：免费的图片素材
++ 工具：Emacs [[https://orgmode.org/][org-mode]]，站点生成也是直接用 org-mode 的
++ 资源：
+  - [[https://unsplash.com/][upsplash]]：免费的图片素材
 
 ** 其它
 
-   + 科学上网
-     - VPN 如何选择可以上 [[https://www.duyaoss.com/][duyaoss]] 找
-     - [[https://github.com/shadowsocks/ShadowsocksX-NG][ShadowsocksX-NG]]，没有稳定的梯子，现在都改成了 [[https://github.com/paradiseduo/ShadowsocksX-NG-R8][ShadowsocksX-NG-R8]] 了
-       很多人推荐 [[https://github.com/yichengchen/clashX][clashX]] ，支持很多平台，配置比较强大，但是用起来发现很多不该走代理的全部都走代理了（比如说 QQ 音乐和网易云音乐），就没用
-     - iOS：Potatso Lite
-   + 刻录
-     - [[https://unetbootin.github.io/][UNetbootin]]：Windows、MacOS、Linux
-   + 录屏
-     - [[https://www.cockos.com/licecap/][LICEcap]]：Windows、MacOS
++ 科学上网
+  - VPN 如何选择可以上 [[https://www.duyaoss.com/][duyaoss]] 找
+  - [[https://github.com/shadowsocks/ShadowsocksX-NG][ShadowsocksX-NG]]，没有稳定的梯子，现在都改成了 [[https://github.com/paradiseduo/ShadowsocksX-NG-R8][ShadowsocksX-NG-R8]] 了
+    很多人推荐 [[https://github.com/yichengchen/clashX][clashX]] ，支持很多平台，配置比较强大，但是用起来发现很多不该走代理的全部都走代理了（比如说 QQ 音乐和网易云音乐），就没用
+  - iOS：Potatso Lite
++ 刻录
+  - [[https://unetbootin.github.io/][UNetbootin]]：Windows、MacOS、Linux
++ 录屏
+  - [[https://www.cockos.com/licecap/][LICEcap]]：Windows、MacOS
 
 * FAQ
 
 ** 解除腾讯企业邮箱定期修改密码
 
-   定期的间隔是可以修改的，但是只有花了钱才可以。有一种解决办法： *网页版登录企业邮箱 -> 邮箱设置 -> 邮箱绑定 -> 开启安全登录*
+定期的间隔是可以修改的，但是只有花了钱才可以。有一种解决办法： *网页版登录企业邮箱 -> 邮箱设置 -> 邮箱绑定 -> 开启安全登录*
 
-   1. 开启之后，网页版登录只能用微信扫码；
-   2. 点击生成密码，新密码可用于客户端登录；
+1. 开启之后，网页版登录只能用微信扫码；
+2. 点击生成密码，新密码可用于客户端登录；
 
-   这种生成的密码是不会失效的，不过只能在客户端使用，大部分场景可以满足了。另外，在手机端 QQ 邮箱可以直接通过微信登录，也不需要输入账号和密码。
+这种生成的密码是不会失效的，不过只能在客户端使用，大部分场景可以满足了。另外，在手机端 QQ 邮箱可以直接通过微信登录，也不需要输入账号和密码。
