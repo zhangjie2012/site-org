@@ -6,6 +6,7 @@
 
 - 通过标签过滤节点 ~kubectl get nodes -l "aaa=bbb"~
 - 自定义列： ~kubectl get node -o=custom-columns='NAME:.metadata.name,CPU:.status.capacity.cpu,MEMORY:.status.capacity.memory'~
+- 按照创建时间排序： ~kubectl get nodes -o wide --sort-by=.metadata.creationTimestamp~
 
 * 日志
 

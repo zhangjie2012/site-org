@@ -1,0 +1,25 @@
+#+SETUPFILE: ~/site/tpl/wiki-tpl.org
+#+TITLE: podman 使用笔记
+#+DATE: 2022-04-12 15:36:10
+
+* 安装和启动
+
+Mac 客户端：
+
+1. 安装 podman =brew install podman=
+2. 安装虚拟机 =podman machine init=
+3. 启动虚拟机 =podman machine start=
+4. 验证 podman 是否可用 =podman info=
+
+* 配置
+
+#+begin_quote
+Mac 系统上是通过虚拟机来使用 podman 的，所以实际的配置文件是在虚拟机中的，好在提供了 =podman machine ssh= 命令可以 SSH
+进去后修改配置（如果是 Linux 没有这个中间层，简单许多）。
+#+end_quote
+
+Docker 也是同样的原理，不过把这一层给简化了（使用无感知）。
+
+* 使用
+
+基本上 Docker 的命令 podman 都可以直接使用，但是有个致命的问题 Mac 下挂载不了本机目录（或者再加一层从 mac 到虚拟机的映射）。

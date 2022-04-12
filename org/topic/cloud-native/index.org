@@ -40,6 +40,32 @@
 
 * TODO 容器
 * TODO Docker
+* Container Tools（podman、buildah、skopeo）：Docker CLI 替代品
+
+#+begin_quote
+Docker CLI 真的越来越臃肿了（啥都不干，内存好几 G 没了），集合了 compose、swarm、Kubernetes。而且很明显现在整个云原生生态
+有种不带 Docker 玩的感觉（这也不能全怪 CNCF，毕竟曾经人家抛了橄榄枝，他非要自己玩），再加上国内网络原因，Docker 的每次升
+级慢的令人发指。
+#+end_quote
+
+容器官方提供了 [[https://github.com/containers][Container Tools]]，工具集合，其中包含了覆盖 Docker 不同场景的工具。Docker CLI 被拆分成了 3 个工具：
+
+|---------+---------------------------------------+-------------------------+--------|
+| 官网    | github                                | 说明                    | 笔记   |
+|---------+---------------------------------------+-------------------------+--------|
+| [[https://podman.io/][podman]]  | https://github.com/containers/podman  | OCI 容器和 Pod 管理工具 | [[file:container-tools/podman.org][podman]] |
+| [[https://github.com/containers/buildah][buildah]] | https://github.com/containers/buildah | 构建 OCI 镜像工具       |        |
+| [[https://github.com/containers/skopeo][skopeo]]  | https://github.com/containers/skopeo  | 镜像仓库工具            |        |
+|---------+---------------------------------------+-------------------------+--------|
+
+整个理念来说，打的是无守护进程，无需 root 的招牌，但实际上，这些东西我并不关心。拆分成 3 个工具，会加大学习成本，所以我只
+关注 podman 一个替代日常的 Docker CLI 操作。
+
+Mac 不是纯正的 Linux 系统，所以不管是 Docker 还是 podman 都需要引入一个中间层的 Linux 虚拟机。这块 Docker 做的还是不错的，
+但是 podman 不行（配置要进入虚拟机，而且主机目录挂载也是个问题）。
+
+结论是：听起来很好，Mac 下实际可行性较差。
+
 * Kubernetes
 
 Kubernetes 是开源的微服务或者容器化应用的编排工具，是谷歌开发的集群管理工具（前身是谷歌内部运行十几年的集群管理工具 Borg[fn:2]，
@@ -199,6 +225,7 @@ kubectl 是用来管理 Kubernetes 集群的命令行工具。
 * Resources
 
 - [[file:../../blog/2018/an-overall-view-on-docker-ecosystem-containers-moby-swarm-linuxkit-containerd-kubernete.org][Docker 生态系统一览]] 翻译的文章，较为详细的说明了 Docker 的前世今生
+- [[https://www.qikqiak.com/post/containerd-usage/][一文搞懂容器运行时 Containerd]] <2021-08-12 Thu> 搞清楚 libcontainer, runc, containerd, CRI, OCI 之间的关系
 - [[file:../../blog/2021/kubernetes-vs-docker.org][Kubernetes vs Docker]] 2021 翻译的文章，容器、Docker、Kubernetes 之间的关系，
   Kubernetes v1.20 开始废弃了 Dockershim 之后，对于研发人员、管理员以及 CI/CD 流程上会有哪些影响？
 - [[https://12factor.net/zh_cn/][12-Factor]] 构建 SaaS 应用方法论
