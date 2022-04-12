@@ -94,6 +94,14 @@
 
 ** 监控告警
 
+APM：Application Performance Management。一般会分为三大块：
+
+| 分类            | 主流方案                        |
+|-----------------+---------------------------------|
+| Logs（日志）    | EFK，小场景使用：Loki + Grafana |
+| Traces（链路）  | Jaeger、SkyWalking              |
+| Metrics（指标） | Prometheus + Grafana            |
+
 *** Prometheus
 
 - [[file:devops/prometheus-transforming-monitoring-over-years.org][Prometheus-多年来的监控转型]] 翻译自 CoreOS 文章，写于 2018.8.9，介绍了 Prometheus 的历史和未来。
