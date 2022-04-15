@@ -218,9 +218,13 @@ kubectl 是用来管理 Kubernetes 集群的命令行工具。
 - [[https://argoproj.github.io/][argo]] Get More Done with Kubernetes
 - [[https://fluxcd.io/][flux]] 云原生体系下的持续部署，GitOps
 
+* Service Mash
+
+- [[https://cloudnative.to/blog/jimmy-service-mesh-talk/][都 2021 年了，对于服务网格，社区到底在讨论什么？]] 2021年11月24日，“Istio 架构已经稳定，生产可用，生态正处于萌芽中”
+
 * Serverless
 
-- [[https://knative.dev/docs/][Knative]]
+- [[https://knative.dev/docs/][Knative]] “2018.07 首次发布 Knative，2021.11 发布 1.0 版本”
 
 * Resources
 
