@@ -126,6 +126,13 @@ APM：Application Performance Management。一般会分为三大块：
 - [[file:devops/elk.org][ELK 技术栈]]
 - [[file:devops/grafana-loki.org][Loki 技术栈]]
 
+** 网络
+
++ [[https://cloudnative.to/blog/bpf-intro/][eBPF 技术简介]] eBPF 是我见过的 Linux 中最神奇的技术，没有之一，已成为 Linux 内核中顶级子模块，从 tcpdump 中用作网络包过
+  滤的经典 cbpf，到成为通用 Linux 内核技术的 eBPF，已经完成华丽蜕变，为应用与神奇的内核打造了一座桥梁，在系统跟踪、观测、
+  性能调优、安全和网络等领域发挥重要的角色。为 Service Mesh 打造了具备 API 感知和安全高效的容器网络方案 Cilium，其底层正
+  是基于 eBPF 技术
+
 * 程序设计
 
 ** 前端
