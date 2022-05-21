@@ -1,0 +1,81 @@
+#+SETUPFILE: ~/site/tpl/wiki-tpl.org
+#+TITLE: Prometheus 运维
+#+DATE: 2022-05-06 16:07:26
+
+* 安装
+
+** CentOS 7
+
+下载页面，找最新稳定版：https://prometheus.io/download/
+
+#+begin_src sh
+  wget https://github.com/prometheus/prometheus/releases/download/v2.35.0/prometheus-2.35.0.linux-amd64.tar.gz
+  tar zxvf prometheus-2.35.0.linux-amd64.tar.gz
+#+end_src
+
+验证： =./prometheus -h=
+
+启动命令：
+
+#+begin_src sh
+  /data/opt/prometheus-2.35.0.linux-amd64/prometheus \
+      --config.file=/data/opt/prometheus-2.35.0.linux-amd64/prometheus.yml \
+      --web.listen-address="127.0.0.1:9090" \
+      --web.enable-lifecycle \
+      --storage.tsdb.path="/data/storage/prometheus/"
+#+end_src
+
+systemctl 配置文件： =/usr/lib/systemd/system/prometheus.service=
+
+#+begin_src text
+  [Unit]
+  Description=Promethues
+
+  [Service]
+  Restart=on-failure
+  ExecStart=/data/opt/prometheus-2.35.0.linux-amd64/prometheus --config.file=/data/opt/prometheus-2.35.0.linux-amd64/prometheus.yml --web.listen-address=127.0.0.1:9090 --web.enable-lifecycle --storage.tsdb.path=/data/storage/prometheus/
+
+  [Install]
+  WantedBy=multi-user.target
+#+end_src
+
+启动： =systemctl start promethues=
+
+查看运行状态： =systemctl status prometheus=
+
+nginx 配置：
+
+#+begin_src conf
+  server {
+          listen       80;
+          server_name  _;
+
+          location / {
+                  proxy_pass http://127.0.0.1:9090/;
+                  root   html;
+                  index  index.html index.htm;
+          }
+
+          #error_page  404              /404.html;
+
+          # redirect server error pages to the static page /50x.html
+          #
+          error_page   500 502 503 504  /50x.html;
+          location = /50x.html {
+                  root   html;
+          }
+  }
+#+end_src
+
+访问绑定域名即可。
+
+* 常用参数
+
+- ~--config.file="prometheus.yml"~ 指定配置文件
+- ~--web.listen-address="0.0.0.0:9090"~ 监听端口
+- ~--web.enable-lifecycle~ 启动后，可以通过 http 接口热加载配置文件
+- ~--storage.tsdb.path="data/"~ 指定存储位置
+
+* 配置
+
+热加载配置： =curl -X POST http://localhost:9090/-/reload=

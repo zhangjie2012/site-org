@@ -3,6 +3,7 @@
 #+DATE: 2020-02-24 11:00:19
 
 * 安装
+
 ** 使用 Docker
 
 #+begin_src shell
@@ -12,3 +13,144 @@ docker run -d -p 3000:3000 grafana/grafana
 
 然后浏览器访问 =localhost:3000= 就可以了，默认的登录账号和密码都是 =admin= ，首次登录需要修改密码。
 也可以在配置文件 =/etc/grafana/grafana.ini= 中查看或者修改认证信息。
+
+** Centos 7
+
+https://grafana.com/docs/grafana/latest/installation/rpm/
+
+按照文档来即可，默认暴露端口为 3000。
+
+查看运行状态： =systemctl status grafana-server=
+
+* 配置
+
+配置文件位置： =/etc/grafana/grafana.ini=
+
+* MySQL 报表
+
+** 查询 SQL
+
+*** FROM：指定数据表，时间列和指标（Metric）列
+
+时间列字段指向你时间序列对应的字段。指标列的值是可选的。如果选择之后，指标列的值将作为系列名称（series name）。
+
+指标列建议只包含文本数据类型。如果想使用不同数据类型作为你的指标列，你可能需要进行列表转换： =CAST(numericColumn as CHAR)= 。
+你也可以输入任意的 SQL 表达式只要最终计算出来的结果是文本即可 =CONCAT(column1, " ", CAST(numericColumn as CHAR))= 。
+
+*** SELECT：列和聚合函数
+
+如果使用聚合函数，则需要对结果进行分组操作 =GROUP BY= 。
+
+*** WHERE：过滤数据
+
+*** GROUP BY：分组
+
+*** Gap Filling：数据填充
+
+按时间分组的时候，你可以指定确实数据列的值。
+
+** 宏（Macros）
+
+=$__time(dateColumn)= =$__timeEpoch(dateColumn)=
+
+时间列转换成 UNIX 时间戳，然后重命名为 =time_sec= ，如 =UNIX_TIMESTAMP(dateColumn) as time_sec= 。
+
+=$__timeFilter(dateColumn)=
+
+指定时间列名的时间范围过滤器替换。如 =dateColumn BETWEEN FROM_UNIXTIME(1494410783) AND FROM_UNIXTIME(1494410983)=
+
+=$__timeFrom()=
+
+替换为当前选择时间范围的开始时间。
+
+=$__timeTo()=
+
+替换为当前时间范围的结束时间。
+
+=$__timeGroup(dateColumn,'5m')=
+
+=$__timeGroup(dateColumn,'5m', 0)=
+
+=$__timeGroup(dateColumn,'5m', NULL)=
+
+=$__timeGroup(dateColumn,'5m', previous)=
+
+** 时间序列查询
+
+如果你的格式是 =Time series= ，那么查询中必须包含一个名为 =time= 的列，要么是 SQL 的日期时间或者是任何可以表达 Unix 时间秒数。
+此外，查询结果必须按照 time 排序，以便于可视化展示。
+
+时间序列的查询结果都是宽数据格式[fn:1]。非时间或者字符串之外的列转为为值。字符串字段转换为查询结果的 label。
+
+*=metric= 列示例：*
+
+#+begin_src sql
+  SELECT
+    $__timeGroup(time_date_time,'5m'),
+    min(value_double),
+    'min' as metric
+  FROM test_data
+  WHERE $__timeFilter(time_date_time)
+  GROUP BY time
+  ORDER BY time
+#+end_src
+
+结果：
+
+#+begin_src
++---------------------+-----------------+
+| Name: time          | Name: min       |
+| Labels:             | Labels:         |
+| Type: []time.Time   | Type: []float64 |
++---------------------+-----------------+
+| 2020-01-02 03:05:00 | 3               |
+| 2020-01-02 03:10:00 | 6               |
++---------------------+-----------------+
+#+end_src
+
+*多个列数据：*
+
+#+begin_src sql
+SELECT
+  $__timeGroup(time_date_time,'5m'),
+  min(value_double) as min_value,
+  max(value_double) as max_value
+FROM test_data
+WHERE $__timeFilter(time_date_time)
+GROUP BY time
+ORDER BY time
+#+end_src
+
+结果：
+
+#+begin_example
++---------------------+-----------------+-----------------+
+| Name: time          | Name: min_value | Name: max_value |
+| Labels:             | Labels:         | Labels:         |
+| Type: []time.Time   | Type: []float64 | Type: []float64 |
++---------------------+-----------------+-----------------+
+| 2020-01-02 03:04:00 | 3               | 4               |
+| 2020-01-02 03:05:00 | 6               | 7               |
++---------------------+-----------------+-----------------+
+#+end_example
+
+* Footnotes
+
+[fn:1] https://grafana.com/docs/grafana/latest/developers/plugins/data-frames/#wide-format
+
+即，第一行数据为时间表达（名称：时间、label：空、时间序列），第二列开始为 series 数据（名称、Label、数值）的标准化结果。
+
+如下：
+
+#+begin_src
+Name: Wide
+Dimensions: 3 fields by 2 rows
++---------------------+-----------------+-----------------+
+| Name: time          | Name: cpu       | Name: cpu       |
+| Labels:             | Labels: host=a  | Labels: host=b  |
+| Type: []time.Time   | Type: []float64 | Type: []float64 |
++---------------------+-----------------+-----------------+
+| 2020-01-02 03:04:00 | 3               | 4               |
+| 2020-01-02 03:05:00 | 6               | 7               |
++---------------------+-----------------+-----------------+
+#+end_src

@@ -111,6 +111,7 @@ APM：Application Performance Management。一般会分为三大块：
 - [[file:devops/prometheus.org][Prometheus 文档（非官方）]] 官方文档笔记
 - [[file:devops/monitor-based-on-prometheus.org][基于 Prometheus 的监控告警]]
 - [[https://particule.io/en/blog/thanos-monitoring/][Multi-Cluster Monitoring with Thanos]] 使用 Thanos 解决 Prometheus 的单点问题
+- [[file:devops/prometheus-ops.org][运维]]：安装、配置参数、常见运维问题等
 
 *** Grafana
 
