@@ -37,13 +37,14 @@ sudo apt install emacs27
   brew install emacs
 #+END_SRC
 
-** Windows 10
+** Windows 10 & 11
 
 下载 Emacs: https://mirrors.ustc.edu.cn/gnu/emacs/windows/ ，然后 runemacs.exe 运行 emacs。
 
 配置文件位置在： =/c/Users/me/AppData/Roaming= 用户主目录在这里。
 
-Windows 下 Projectile 报错 =’tr’ is not recognized as an internal or external command, operable program or batch file./")= ，设置 =(setq projectile-git-submodule-command nil)= 即可[fn:4]。
+Windows 下 Projectile 报错 =’tr’ is not recognized as an internal or external command, operable program or batch file./")= ，
+设置 =(setq projectile-git-submodule-command nil)= 即可[fn:4]。
 
 * 终端使用
 

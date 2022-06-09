@@ -172,6 +172,19 @@ http.https 协议：
   ProxyCommand nc -X 5 -x 127.0.0.1:1080 %h %p
 #+END_SRC
 
+** 编码自动转换
+
+#+begin_src sh
+  # commit 时转换为 LF, checkout 转换为 CRLF
+  git config --global core.autocrlf true
+  # commit 时转换为 LF, checkout 不转换
+  git config --global core.autocrlf input
+  # commit/checkout 都不做处理
+  git config --global core.autocrlf false
+#+end_src
+
+一般选择 =input= 最合理。
+
 * 知识点
 
 基本命令让你快速的上手使用 Git，知识点能让你更好的理解 Git。
