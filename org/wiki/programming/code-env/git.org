@@ -46,8 +46,6 @@
   - ~--since, --after, --until, --before~ ：仅显示指定时间之后、之前的提交
 - =git shortlog -sn= 提交统计[fn:1]
 
-
-
 ** 分支
 
 + ~git branch~: 查看所有本地分支
@@ -156,9 +154,16 @@ _远端分支被别人删除，自己本地 git br -a 还是能看到怎么办�
 http.https 协议：
 
 #+BEGIN_SRC shell
-  git config --global http.https://github.com.proxy socks5://127.0.0.1:1080
-  git config --global --unset http.https://github.com.proxy // 取消代理
+  git config http.proxy http://127.0.0.1:7890
+  git config https.proxy http://127.0.0.1:7890
 #+END_SRC
+
+取消代理：
+
+#+begin_src shell
+  git config --unset http.proxy
+  git config --unset https.proxy
+#+end_src
 
 对于 ssh 协议，在 ~~/.ssh/config~ 中添加：
 
