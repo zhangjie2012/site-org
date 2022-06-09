@@ -2,209 +2,228 @@
 #+TITLE: Ubuntu
 #+DATE: 2018-09-10 21:39:56
 
-以下也适合 Linux mint，目前一直在用。
++以下也适合 Linux mint，目前一直在用。+
+
+目前使用 WSL 下的 Ubuntu 20.04 TLS。
 
 * 设置国内源
 
-  *自动选择*
+*自动选择*
 
-  软件和更新 -> Ubuntu 软件 -> 下载自 -> 选一个国内的镜像源
+软件和更新 -> Ubuntu 软件 -> 下载自 -> 选一个国内的镜像源
 
-  *手动设置*
+*手动设置*
 
-  1. [[https://mirror.tuna.tsinghua.edu.cn/help/ubuntu/]]
-  2. =apt update=
-  3. =apt upgrade=
+1. [[https://mirror.tuna.tsinghua.edu.cn/help/ubuntu/]]
+2. =apt update=
+3. =apt upgrade=
+
+阿里源：
+
+#+begin_src
+deb http://mirrors.aliyun.com/ubuntu/ focal main restricted universe multiverse
+deb http://mirrors.aliyun.com/ubuntu/ focal-security main restricted universe multiverse
+deb http://mirrors.aliyun.com/ubuntu/ focal-updates main restricted universe multiverse
+deb http://mirrors.aliyun.com/ubuntu/ focal-proposed main restricted universe multiverse
+deb http://mirrors.aliyun.com/ubuntu/ focal-backports main restricted universe multiverse
+deb-src http://mirrors.aliyun.com/ubuntu/ focal main restricted universe multiverse
+deb-src http://mirrors.aliyun.com/ubuntu/ focal-security main restricted universe multiverse
+deb-src http://mirrors.aliyun.com/ubuntu/ focal-updates main restricted universe multiverse
+deb-src http://mirrors.aliyun.com/ubuntu/ focal-proposed main restricted universe multiverse
+deb-src http://mirrors.aliyun.com/ubuntu/ focal-backports main restricted universe multiverse focal
+#+end_src
 
 * 代理
+
 ** +Ubuntu Server+
 
-   安装 shadowsock-libev, =apt install shadowsocks-libev= ，客户端连接只需要 =ss-local= 。先停掉无关的服务：
+安装 shadowsock-libev, =apt install shadowsocks-libev= ，客户端连接只需要 =ss-local= 。先停掉无关的服务：
 
-   #+begin_src shell
+#+begin_src shell
      systemctl disable shadowsocks-libev.service
      systemctl stop shadowsocks-libev.service
-   #+end_src
+#+end_src
 
-   配置文件在 =/etc/shadowsocks-libev= 目录下。文件内容改为：
+配置文件在 =/etc/shadowsocks-libev= 目录下。文件内容改为：
 
-   #+BEGIN_SRC js
-     {
-       "server":"",
-       "server_port": xx,
-       "local_port":1080,
-       "password":"",
-       "timeout":60,
-       "method":"chacha20-ietf-poly1305"
-     }
+#+BEGIN_SRC js
+  {
+    "server":"",
+    "server_port": xx,
+    "local_port":1080,
+    "password":"",
+    "timeout":60,
+    "method":"chacha20-ietf-poly1305"
+  }
+#+END_SRC
+
+systemd unit 文件是： =shadowsocks-libev-local@.service= ，把其中的配置文件路径修改成实际的配置文件。
+
+- 重启 ss-local =systemctl restart shadowsocks-libev-local@.=
+- 查看服务运行状态 =systemctl status shadowsocks-libev-local@.=
+- 查询运行日志 =journalctl -f -u shadowsocks-libev-local@.=
+- 设置开机启动 =systemctl enable shadowsocks-libev-local@.=
+
+shadowsocks 是一个 socks5 代理，想用 http 代理需要做一层转换。
+
+Sock5 proxy：[[https://www.irif.fr/~jch/software/polipo/][Polipo]]
+
+1. 安装: =apt install polipo=
+2. 修改配置文件: =/etc/polipo/config= ，添加：
+   #+BEGIN_SRC yaml
+     proxyAddress = "0.0.0.0"
+     proxyPort = 8123
+     socksParentProxy = "127.0.0.1:1080"
+     socksProxyType = socks5
    #+END_SRC
+3. 重启: =systemctl restart polipo=
 
-   systemd unit 文件是： =shadowsocks-libev-local@.service= ，把其中的配置文件路径修改成实际的配置文件。
+设置代理（polipo 的端口是 8123，可以换成其他的）：
 
-   - 重启 ss-local =systemctl restart shadowsocks-libev-local@.=
-   - 查看服务运行状态 =systemctl status shadowsocks-libev-local@.=
-   - 查询运行日志 =journalctl -f -u shadowsocks-libev-local@.=
-   - 设置开机启动 =systemctl enable shadowsocks-libev-local@.=
+#+BEGIN_SRC sh
+   export http_proxy="http://127.0.0.1:8123" && export https_proxy="http://127.0.0.1:8123"
+#+END_SRC
 
-   shadowsocks 是一个 socks5 代理，想用 http 代理需要做一层转换。
-
-   Sock5 proxy：[[https://www.irif.fr/~jch/software/polipo/][Polipo]]
-
-   1. 安装: =apt install polipo=
-   2. 修改配置文件: =/etc/polipo/config= ，添加：
-      #+BEGIN_SRC yaml
-        proxyAddress = "0.0.0.0"
-        proxyPort = 8123
-        socksParentProxy = "127.0.0.1:1080"
-        socksProxyType = socks5
-      #+END_SRC
-   3. 重启: =systemctl restart polipo=
-
-   设置代理（polipo 的端口是 8123，可以换成其他的）：
-
-   #+BEGIN_SRC sh
-     export http_proxy="http://127.0.0.1:8123" && export https_proxy="http://127.0.0.1:8123"
-   #+END_SRC
-
-   测试是否生效: =curl ip.gs=
+测试是否生效: =curl ip.gs=
 
 ** SSR *推荐*
 
-   1. https://github.com/shadowsocksrr/electron-ssr 设置订阅源，然后更新
-   2. 开启全局代理
-   3. Chrome 安装 SwitchyOmega 并设置，规则列表网址： =https://raw.githubusercontent.com/gfwlist/gfwlist/master/gfwlist.txt=
-   4. 关闭全局代理
+1. https://github.com/shadowsocksrr/electron-ssr 设置订阅源，然后更新
+2. 开启全局代理
+3. Chrome 安装 SwitchyOmega 并设置，规则列表网址： =https://raw.githubusercontent.com/gfwlist/gfwlist/master/gfwlist.txt=
+4. 关闭全局代理
 
-   *注意* ：electron-ssr 是用 Python 写的，但一些较新的系统默认只安装了 Python3，所以需要手动安装一下，否则将无法正常使用。
+*注意* ：electron-ssr 是用 Python 写的，但一些较新的系统默认只安装了 Python3，所以需要手动安装一下，否则将无法正常使用。
 
-   可以参考这个安装教程：https://github.com/qingshuisiyuan/electron-ssr-backup/blob/master/Ubuntu.md， 较新版本的 Linux 发行版，systemd 自己运行了一个
-   DNS server（127.0.0.53, =systemd-resolved= 这个服务），这会导致全局代理不生效（PAC 也更新不了），参考文档中的“系统设置”修改之后即可解决这个问题。
+可以参考这个安装教程：https://github.com/qingshuisiyuan/electron-ssr-backup/blob/master/Ubuntu.md， 较新版本的 Linux 发行版，systemd 自己运行了一个
+DNS server（127.0.0.53, =systemd-resolved= 这个服务），这会导致全局代理不生效（PAC 也更新不了），参考文档中的“系统设置”修改之后即可解决这个问题。
 
 * 软件列表
 
-  - +搜狗输入法+
-    + 先安装 fcitx =apt install fcitx=
-    + 安装 [[https://pinyin.sogou.com/linux/?r=pinyin][搜狗拼音输入法]]
-    + 重启电脑即可生效，如果没生效，通过 fctix 配置，添加搜狗输入法
-  - rime 输入法
-    + 安装： =sudo apt-get install fcitx-rime=
-    + 默认是繁体的，设置成简体：
-      - =~/.config/fcitx/rime/build/luna_pinyin.schema.yaml=
-      - 找到 =switches= 在 =simplification= 下添加 =reset: 1= 即可
-  - 邮箱客户端：Thunderbird，说他丑，说他重度，可是只有他最稳定啊
-  - 截图工具：[[https://github.com/lupoDharkael/flameshot][flameshot]]
-    1. =apt install flameshot= 安装
-    2. 将 =flameshot gui= 绑定到 =Ctrl+Alt+A= 快捷键上
-  - 视频播放器：[[https://www.videolan.org/vlc/download-ubuntu.html][VLC]] =apt install vlc=
-  - gif 录屏：[[https://github.com/phw/peek][Peek]]，这个很好用，视频录制也有人推荐 [[https://github.com/hzbd/kazam][Kazam]]，就我个人而言 Peek 满足需求了
-  - SNS
-    + Telegram =apt install telegram-desktop=
-  - 思维导图 =sudo snap install xmind=
-  - [[https://albertlauncher.github.io/][albert]] Linux 下最好的 Laucher 工具，类似 macOS 下的 alfred
+- +搜狗输入法+
+  + 先安装 fcitx =apt install fcitx=
+  + 安装 [[https://pinyin.sogou.com/linux/?r=pinyin][搜狗拼音输入法]]
+  + 重启电脑即可生效，如果没生效，通过 fctix 配置，添加搜狗输入法
+- rime 输入法
+  + 安装： =sudo apt-get install fcitx-rime=
+  + 默认是繁体的，设置成简体：
+    - =~/.config/fcitx/rime/build/luna_pinyin.schema.yaml=
+    - 找到 =switches= 在 =simplification= 下添加 =reset: 1= 即可
+- 邮箱客户端：Thunderbird，说他丑，说他重度，可是只有他最稳定啊
+- 截图工具：[[https://github.com/lupoDharkael/flameshot][flameshot]]
+  1. =apt install flameshot= 安装
+  2. 将 =flameshot gui= 绑定到 =Ctrl+Alt+A= 快捷键上
+- 视频播放器：[[https://www.videolan.org/vlc/download-ubuntu.html][VLC]] =apt install vlc=
+- gif 录屏：[[https://github.com/phw/peek][Peek]]，这个很好用，视频录制也有人推荐 [[https://github.com/hzbd/kazam][Kazam]]，就我个人而言 Peek 满足需求了
+- SNS
+  + Telegram =apt install telegram-desktop=
+- 思维导图 =sudo snap install xmind=
+- [[https://albertlauncher.github.io/][albert]] Linux 下最好的 Laucher 工具，类似 macOS 下的 alfred
 
-  [[file:~/site/org/wiki/growing/programmer.org][技术人]] 有补充，重复的软件没有在这里体现。
+[[file:~/site/org/wiki/growing/programmer.org][技术人]] 有补充，重复的软件没有在这里体现。
 
 * 几种桌面对比
-  :PROPERTIES:
-  :CUSTOM_ID: 几种桌面对比
-  :END:
+:PROPERTIES:
+:CUSTOM_ID: 几种桌面对比
+:END:
 
-  常见的 4 种桌面：
+常见的 4 种桌面：
 
-  - GNOME 3，Ubuntu 18.04 之后默认的
-  - [[https://kde.org/][KDE]]
-  - [[https://www.xfce.org/][Xfce]]
-  - [[https://lxqt.org/][LXQT]]
+- GNOME 3，Ubuntu 18.04 之后默认的
+- [[https://kde.org/][KDE]]
+- [[https://www.xfce.org/][Xfce]]
+- [[https://lxqt.org/][LXQT]]
 
-  资源消耗和 UI 体验成正比，GNOME 3 和 KDE 差不太多，其次是 LXQT，Xfce 体验最差，但是占用资源的确少，而且快。
+资源消耗和 UI 体验成正比，GNOME 3 和 KDE 差不太多，其次是 LXQT，Xfce 体验最差，但是占用资源的确少，而且快。
 
-  <2020-03-08 13:13:22 日>
+<2020-03-08 Sun 13:13>
 
-  GNOME 太不稳定了，换到了 Xubuntu，世界顿时清净了。
+GNOME 太不稳定了，换到了 Xubuntu，世界顿时清净了。
 
-  <2020-04-19 13:32:41>
+<2020-04-19 13:32:41>
 
-  迫于 Ubuntu 20.04 的诱惑，升级到了 20.04。
+迫于 Ubuntu 20.04 的诱惑，升级到了 20.04。
 
 * Xfce
 
-  快捷键：
+快捷键：
 
-  |------------------+----------|
-  | 快捷键           | 描述     |
-  | =Ctrl + Alt + D= | 显示桌面 |
-  | =Alt + F4=       | 关闭窗口 |
-  | =Ctrl + ESC=     | 打开菜单 |
-  |------------------+----------|
+|------------------+----------|
+| 快捷键           | 描述     |
+| =Ctrl + Alt + D= | 显示桌面 |
+| =Alt + F4=       | 关闭窗口 |
+| =Ctrl + ESC=     | 打开菜单 |
+|------------------+----------|
 
-  http://xahlee.info/linux/linux_xfce_keyboard_shortcuts.html
+http://xahlee.info/linux/linux_xfce_keyboard_shortcuts.html
 
-  如何移动 panel：https://forum.xfce.org/viewtopic.php?id=7310
+如何移动 panel：https://forum.xfce.org/viewtopic.php?id=7310
 
 * FAQ
+
 ** Dell 安装 Ubuntu 找不到硬盘问题
 
-   进 BIOS 设置硬盘，将 raid on 改为 ahci。
+进 BIOS 设置硬盘，将 raid on 改为 ahci。
 
 ** 安装 xfce 之后，卸载不干净怎么办？
 
-   - 卸载 =xfce4-*=
-   - 卸载 =xubuntu-*=
+- 卸载 =xfce4-*=
+- 卸载 =xubuntu-*=
 
-   网上教程很多，但是有一点要注意：zsh 不支持 =apt remove xfce4-*= 这种语法，要切换到 bash 才行。
+  网上教程很多，但是有一点要注意：zsh 不支持 =apt remove xfce4-*= 这种语法，要切换到 bash 才行。
 
 ** 系统设置被卸载掉了，如何安装回来？
 
-   #+BEGIN_EXAMPLE
-     sudo apt-get install gnome-control-center
-   #+END_EXAMPLE
+#+BEGIN_EXAMPLE
+  sudo apt-get install gnome-control-center
+#+END_EXAMPLE
 
 ** 如何启动 ROOT 用户
 
-   默认的 root 是被锁定的，要先指定一个密码： =sudo passwd root= ，Ubuntu 默认禁用 root ssh，需要打开：
+默认的 root 是被锁定的，要先指定一个密码： =sudo passwd root= ，Ubuntu 默认禁用 root ssh，需要打开：
 
-   1. =vim /etc/ssh/sshd_config= 将 =PermitRootLogin= 的 =without-password= 改为 =yes=
-   2. =restart ssh=
+1. =vim /etc/ssh/sshd_config= 将 =PermitRootLogin= 的 =without-password= 改为 =yes=
+2. =restart ssh=
 
 ** 启动速度慢调试
 
-   - =systemd-analyze=
-   - =systemd-analyze critical-chain=
+- =systemd-analyze=
+- =systemd-analyze critical-chain=
 
-   via: [[https://www.dedoimedo.com/computers/ubuntu-beaver-slow-boot.html]]
+via: [[https://www.dedoimedo.com/computers/ubuntu-beaver-slow-boot.html]]
 
 ** 18.04 蓝牙每次重启之后不会自动连接
 
-   使用 bluetoothctl 添加设备 TRUST：
+使用 bluetoothctl 添加设备 TRUST：
 
-   控制台输入 bluetoothctl， =devices= 查看设备列表，找到蓝牙对应的 MAC 地址，然后 =trush <mac-addr>= 即可。
+控制台输入 bluetoothctl， =devices= 查看设备列表，找到蓝牙对应的 MAC 地址，然后 =trush <mac-addr>= 即可。
 
 ** fcitx + 搜狗拼音经常会出现某一个核 CPU 占 100 的情况
 
-   网上说在 fctix 输入法配置 -> 附加组件 -> 高级 -> 然后把 "搜狗云拼音" 去掉就可以了。
+网上说在 fctix 输入法配置 -> 附加组件 -> 高级 -> 然后把 "搜狗云拼音" 去掉就可以了。
 
-   不确定是否可行，先试试。后面不行的话就不用搜狗拼音了。<2020-03-21 13:46:58 六> 确定可行。
+不确定是否可行，先试试。后面不行的话就不用搜狗拼音了。<2020-03-21 13:46:58 六> 确定可行。
 
-   <2021-07-17 六 10:34> 建议使用 rime。
+<2021-07-17 六 10:34> 建议使用 rime。
 
 ** 重启 fcitx 之后，Emacs GUI 无法进行输入法切换
 
-   =Ctrl+Space= 默认被认为了 Emacs 中的文本 Mark Active，解决办法是重启 Emacs 。
+=Ctrl+Space= 默认被认为了 Emacs 中的文本 Mark Active，解决办法是重启 Emacs 。
 
 ** 使用 wine 安装微信、企业微信等
 
-   deepin-wine 确实可行，但是问题挺多的，体验很差，还是算了。
+deepin-wine 确实可行，但是问题挺多的，体验很差，还是算了。
 
 ** 笔记本合屏之后，阻止自动休眠
 
-   =/etc/systemd/logind.conf= 中的 =HandleLidSwitch= 打开，并且值修改为 =ignore= 。然后 =service systemd-logind restart= 。
+=/etc/systemd/logind.conf= 中的 =HandleLidSwitch= 打开，并且值修改为 =ignore= 。然后 =service systemd-logind restart= 。
 
 ** Dell 笔记本 Ubuntu 触摸板右键
 
-   触摸板双击等于右键，点击右下角还是相当于左键点击。解决办法，命令行执行：
+触摸板双击等于右键，点击右下角还是相当于左键点击。解决办法，命令行执行：
 
-   #+begin_src
+#+begin_src
    gsettings set org.gnome.desktop.peripherals.touchpad click-method areas
-   #+end_src
+#+end_src
 
-   via [[https://www.dell.com/support/article/zh-cn/sln316799/ubuntu-%e5%9c%a8-ubuntu-18-04-lts-%e5%ae%89%e8%a3%85%e5%90%8e-%e8%a7%a6%e6%91%b8%e6%9d%bf%e5%8f%b3%e9%94%ae%e5%8d%95%e5%87%bb%e5%81%9c%e6%ad%a2%e5%b7%a5%e4%bd%9c][Ubuntu：在 Ubuntu ® 18.04 LTS 安装后，触摸板右键单击停止工作]]
+via [[https://www.dell.com/support/article/zh-cn/sln316799/ubuntu-%e5%9c%a8-ubuntu-18-04-lts-%e5%ae%89%e8%a3%85%e5%90%8e-%e8%a7%a6%e6%91%b8%e6%9d%bf%e5%8f%b3%e9%94%ae%e5%8d%95%e5%87%bb%e5%81%9c%e6%ad%a2%e5%b7%a5%e4%bd%9c][Ubuntu：在 Ubuntu ® 18.04 LTS 安装后，触摸板右键单击停止工作]]

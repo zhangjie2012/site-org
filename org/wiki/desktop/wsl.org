@@ -4,104 +4,140 @@
 
 * 简介
 
-  WSL[fn:3]，Windows Subsystem for Linux。允许开发人员在 Windows 下运行 GNU/Linux 环境。
-  包括大多数命令行工具，实用程序和引用程序。
+WSL[fn:3]，Windows Subsystem for Linux。允许开发人员在 Windows 下运行 GNU/Linux 环境。
+包括大多数命令行工具，实用程序和引用程序。
 
-  比较牛逼的一个点在于，安装一个 Linux 发行版跟安装普通软件一样，但却能拥有近乎原生的 Linux 系统
-  （真正的 Linux 内核），而不需要安装虚拟机。
+比较牛逼的一个点在于，安装一个 Linux 发行版跟安装普通软件一样，但却能拥有近乎原生的 Linux 系统
+（真正的 Linux 内核），而不需要安装虚拟机。
 
 * 安装指引
 
-  https://docs.microsoft.com/zh-cn/windows/wsl/install-win10
+https://docs.microsoft.com/zh-cn/windows/wsl/install-win10
+
+安装报错[fn:4]：
+
+#+begin_src sh
+  Installing, this may take a few minutes...
+  WslRegisterDistribution failed with error: 0x800701bc
+  Error: 0x800701bc WSL 2 ?????????????????? https://aka.ms/wsl2kernel
+
+  Press any key to continue...
+#+end_src
+
+[[https://docs.microsoft.com/zh-cn/windows/wsl/install-manual#step-4---download-the-linux-kernel-update-package][下载 Linux 内核包]]，安装即可解决。
 
 * Windows Terminal
 
-  https://docs.microsoft.com/zh-cn/windows/terminal/get-started
+https://docs.microsoft.com/zh-cn/windows/terminal/get-started ，直接在商店搜索 Perviews 版本使用。
 
-  配置文件位置:
+Windows terminal 快捷键跟 Emacs 快捷键冲突很多，索性直接禁用掉：
 
-  =C:\Users\me\AppData\Local\Packages\Microsoft.WindowsTerminal_8wekyb3d8bbwe\LocalState\setting.json=
+#+begin_src js
+  {
+      "command": "unbound",
+      "keys": "ctrl+v"
+  },
+  {
+      "command": "unbound",
+      "keys": "ctrl+c"
+  },
+  {
+      "command": "unbound",
+      "keys": "ctrl+shift+f"
+  },
+  {
+      "command": "unbound",
+      "keys": "alt+shift+d"
+  },
+  {
+      "command": "unbound",
+      "keys": "ctrl+shift+space"
+  },
+  {
+      "command": "unbound",
+      "keys": "ctrl+comma"
+  },
+  {
+      "command": "unbound",
+      "keys": "ctrl+shift+comma"
+  },
+  {
+      "command": "unbound",
+      "keys": "ctrl+alt+comma"
+  },
+  {
+      "command": "unbound",
+      "keys": "alt+space"
+  },
+  {
+      "command": "unbound",
+      "keys": "alt+enter"
+  },
+#+end_src
 
-  部分配置：
+重新绑定页签切换快捷键：
 
-  #+begin_src js
-	{
-		"copyOnSelect": true,
-		"copyFormatting": true,
-		"launchMode": "maximized",
-		"profiles": {
-			"defaults": {
-				"cursorShape": "filledBox",
-				"fontFace": "Cascadia Mono",
-				"fontSize": 11,
-				"colorScheme": "One Half Light",
-				"cursorColor": "#00AA00",
-				"scrollbarState": "hidden"
-			},
-		}
+#+begin_src js
+  {
+      "command":
+      {
+          "action": "switchToTab",
+          "index": 2
+      },
+      "keys": "alt+3"
+  },
+  {
+      "command":
+      {
+          "action": "switchToTab",
+          "index": 0
+      },
+      "keys": "alt+1"
+  },
+  {
+      "command":
+      {
+          "action": "switchToTab",
+          "index": 1
+      },
+      "keys": "alt+2"
+  },
+  {
+      "command":
+      {
+          "action": "switchToTab",
+          "index": 3
+      },
+      "keys": "alt+4"
+  }
+#+end_src
 
-		"actions": [
-			// Copy and paste are bound to Ctrl+Shift+C and Ctrl+Shift+V in your defaults.json.
-			// These two lines additionally bind them to Ctrl+C and Ctrl+V.
-			// To learn more about selection, visit https://aka.ms/terminal-selection
-			{ "command": {"action": "copy", "singleLine": false }, "keys": "ctrl+c" },
-			{ "command": "paste", "keys": "ctrl+v" },
+* 使用
 
-			{ "command": "newTab", "keys": "ctrl+shift+t" },
-			{ "command": null, "keys": "ctrl+shift+1" },
-			{ "command": null, "keys": "ctrl+shift+2" },
-			{ "command": null, "keys": "ctrl+shift+3" },
-			{ "command": null, "keys": "ctrl+shift+4" },
-			{ "command": null, "keys": "ctrl+shift+5" },
-			{ "command": null, "keys": "ctrl+shift+6" },
-			{ "command": null, "keys": "ctrl+shift+7" },
-			{ "command": null, "keys": "ctrl+shift+8" },
-			{ "command": null, "keys": "ctrl+shift+9" },
+*禁用光标闪烁* 配置没有办法直接禁用，只能在系统全局设置。 ~控制面板 => 键盘 => 更改光标闪烁速率~
+这个设定有点坑，估计后面会优化。
 
-			{ "command": { "action": "switchToTab", "index": 0 }, "keys": "alt+1" },
-			{ "command": { "action": "switchToTab", "index": 1 }, "keys": "alt+2" },
-			{ "command": { "action": "switchToTab", "index": 2 }, "keys": "alt+3" },
-			{ "command": { "action": "switchToTab", "index": 3 }, "keys": "alt+4" },
-			{ "command": { "action": "switchToTab", "index": 4 }, "keys": "alt+5" },
-			{ "command": { "action": "switchToTab", "index": 5 }, "keys": "alt+6" },
-			{ "command": { "action": "switchToTab", "index": 6 }, "keys": "alt+7" },
-			{ "command": { "action": "switchToTab", "index": 7 }, "keys": "alt+8" },
-			{ "command": { "action": "switchToTab", "index": 8 }, "keys": "alt+9" },
+在 WSL 系统中使用宿主 Windows 系统的代理：
 
-			// Press Ctrl+Shift+F to open the search box
-			{ "command": "find", "keys": "ctrl+shift+f" },
+#+begin_src sh
+  export ALL_PROXY="http://$(cat /etc/resolv.conf |grep "nameserver" |cut -f 2 -d " "):7890"
+#+end_src
 
-			{ "command": null, "keys": "alt+enter" },
-			{ "command": "toggleFullscreen", "keys": "f11" },
+取消代理： =unset ALL_PROXY= 。
 
-			// disable copy and parse
-			{ "command": null, "keys": "ctrl+c" },
-			{ "command": null, "keys": "ctrl+v" }
-		]
-	}
-  #+end_src
+主机使用 ClashX 作为代理时，注意打开 =Allow LAN= 选项。
 
-  *禁用光标闪烁* 配置没有办法直接禁用，只能在系统全局设置。 ~控制面板 => 键盘 => 更改光标闪烁速率~
-  这个设定有点坑，估计后面会优化。
+*远程连接到服务器上，中文乱码* =/etc/default/locale= 中 LANG 改为 =zh_CN.UTF-8= 。
 
-  在 WSL 系统中使用宿主 Windows 系统的代理，
+*WSL 不支持 systemd* ，那就严重依赖 Docker 安装服务了。好在 Docker 和 WSL2 融合的似乎很完美[fn:1]。
+只要安装 Windows 版本的 Desktop 之后，开启 WSL2 即可。
 
-  #+begin_src sh
-	#!/bin/bash
-	host_ip=$(cat /etc/resolv.conf |grep "nameserver" |cut -f 2 -d " ")
-	export ALL_PROXY="http://$host_ip:1080"
-  #+end_src
+*设置启动目录* ="startingDirectory" : "//wsl$/Ubuntu-18.04/home/<Your Ubuntu Username>"= [fn:2]。
 
-  如果访问不了，注意查看 Windows 系统防火墙。
-
-  *远程连接到服务器上，中文乱码* =/etc/default/locale= 中 LANG 改为 =zh_CN.UTF-8= 。
-
-  *WSL 不支持 systemd* ，那就严重依赖 Docker 安装服务了。好在 Docker 和 WSL2 融合的似乎很完美[fn:1]。
-  只要安装 Windows 版本的 Desktop 之后，开启 WSL2 即可。
-
-  *设置启动目录* ="startingDirectory" : "//wsl$/Ubuntu-18.04/home/<Your Ubuntu Username>"= [fn:2]。
+*ssh-add 报错： =eval $(ssh-agent -s)=* 根源是 ssh-agent 没起来，使用： ~eval $(ssh-agent -s)~ 解决。
 
 * Footnotes
+[fn:4] https://github.com/microsoft/WSL/issues/5393
 
 [fn:3] https://docs.microsoft.com/en-us/windows/wsl/
 

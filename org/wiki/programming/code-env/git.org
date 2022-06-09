@@ -3,207 +3,209 @@
 #+DATE: 2014-04-05 00:00
 
 * Git 基础
+
 ** 环境配置
 
-   + ~git config user.name your_name~ : 设置你的用户名, 提交会显示
-   + ~git config user.email your_email~ : 设置你的邮箱
-   + ~git config core.quotepath false~ : 解决中文文件名显示为数字问题
-   + ~git config --list~ : 查看现有的配置
-   + ~git config color.ui always~ 设置 color，Emacs eshell 中 git diff 高亮
++ ~git config user.name your_name~ : 设置你的用户名, 提交会显示
++ ~git config user.email your_email~ : 设置你的邮箱
++ ~git config core.quotepath false~ : 解决中文文件名显示为数字问题
++ ~git config --list~ : 查看现有的配置
++ ~git config color.ui always~ 设置 color，Emacs eshell 中 git diff 高亮
 
-   几个 alias 方便操作:
+几个 alias 方便操作:
 
-   #+BEGIN_SRC shell
-     git config --global alias.co checkout
-     git config --global alias.br branch
-     git config --global alias.ci commit
-     git config --global alias.st status
-   #+END_SRC
+#+BEGIN_SRC shell
+  git config --global alias.co checkout
+  git config --global alias.br branch
+  git config --global alias.ci commit
+  git config --global alias.st status
+#+END_SRC
 
-   ~git config~ 加上 ~--global~ 表示全局配置，如果不加的话则会被认为是当前仓库的。
+~git config~ 加上 ~--global~ 表示全局配置，如果不加的话则会被认为是当前仓库的。
 
 ** 基本操作
 
-   + ~git init~: 初始化一个 git 仓库
-   + ~git add <filename>~ : 添加一个文件到 git 仓库中
-   + ~git commit -m "commit message"~: 提交到本地
-   + ~git push [remote-name] [branch-name]~ : 把本地的提交记录推送到远端分支
-   + ~git pull~: 更新仓库 ~git pull = git fetch + git merge~
-   + ~git pull --rebase~: 更新仓库 ~git pull = git fetch + git rebase~ ，You should use ~git pull --rebase~ when your changes do not deserve a separate branch [fn:git-pull-rebase]
-   + ~git checkout -- <file>~ : 还原未暂存（staged）的文件
-   + ~git reset HEAD <file>...~ : 取消暂存，那么还原一个暂存文件，应该是先 ~reset~ 后 ~checkout~
-   + ~git stash~ : 隐藏本地提交记录, 恢复的时候 ~git stash pop~ 。这样可以在本地和远程有冲突的情况下，更新其他文件
-   + ~git stash --list~: 查看储藏文件状态
-   + ~git log~: 查看提交日志
-     - ~--stat~ ：显示每次更新的文件修改统计信息
-     - ~--shortstat~ ：只显示 --stat 中最后的行数修改添加移除统计
-     - ~--name-status~: 查看改动文件
-     - ~--online~ ：只显示一行， ~--pretty=online~ 的简写
-     - ~--pretty=format:"xxx"~ ：设置日志输出格式
-     - ~-p~: 显示更多提交记录详情（类似 ~git diff~ ），~git log -p -2~ 显示最近两次
-     - ~--author~ ：仅显示指定作者相关的提交
-     - ~--since, --after, --until, --before~ ：仅显示指定时间之后、之前的提交
-   - =git shortlog -sn= 提交统计[fn:1]
++ ~git init~: 初始化一个 git 仓库
++ ~git add <filename>~ : 添加一个文件到 git 仓库中
++ ~git commit -m "commit message"~: 提交到本地
++ ~git push [remote-name] [branch-name]~ : 把本地的提交记录推送到远端分支
++ ~git pull~: 更新仓库 ~git pull = git fetch + git merge~
++ ~git pull --rebase~: 更新仓库 ~git pull = git fetch + git rebase~ ，You should use ~git pull --rebase~ when your changes do not deserve a separate branch [fn:git-pull-rebase]
++ ~git checkout -- <file>~ : 还原未暂存（staged）的文件
++ ~git reset HEAD <file>...~ : 取消暂存，那么还原一个暂存文件，应该是先 ~reset~ 后 ~checkout~
++ ~git stash~ : 隐藏本地提交记录, 恢复的时候 ~git stash pop~ 。这样可以在本地和远程有冲突的情况下，更新其他文件
++ ~git stash --list~: 查看储藏文件状态
++ ~git log~: 查看提交日志
+  - ~--stat~ ：显示每次更新的文件修改统计信息
+  - ~--shortstat~ ：只显示 --stat 中最后的行数修改添加移除统计
+  - ~--name-status~: 查看改动文件
+  - ~--online~ ：只显示一行， ~--pretty=online~ 的简写
+  - ~--pretty=format:"xxx"~ ：设置日志输出格式
+  - ~-p~: 显示更多提交记录详情（类似 ~git diff~ ），~git log -p -2~ 显示最近两次
+  - ~--author~ ：仅显示指定作者相关的提交
+  - ~--since, --after, --until, --before~ ：仅显示指定时间之后、之前的提交
+- =git shortlog -sn= 提交统计[fn:1]
+
+
 
 ** 分支
 
-   + ~git branch~: 查看所有本地分支
-     - ~-v~ 显示更多信息
-     - ~-a~ 查看本地和远端分支
-     - ~<branch-name>~ : 基于当前 commit 新建一个分支，但是不切换到新分支
-   + ~git checkout <branch-name>~ ：切换分支
-     - ~-b <branch-name>~ ：新建并切换分支
-     - ~-d <branch -name>~ ：删除本地分支
-     - ~-b <local-branch-name> origin/<origin-branch-name>~ : 基于某个远程分支新建一个分支开发
-     + ~--track origin/<origin-branch-name>~ : 跟踪远程分支（创建跟踪远程分支，Git 在 ~git push~ 的时候不需要指定 ~origin~ 和 ~branch-name~ ，其实当我们 ~clone~ 一个 repo 到本地的时候， ~master~ 分支就是 origin/master 的跟踪分支，所以提交的时候直接 ~git push~ ）。
-   + ~git push origin <branch-name>~ : 推送本地分支
-   + ~git push origin :<origin-branch-name>~ : 删除远程分支
++ ~git branch~: 查看所有本地分支
+  - ~-v~ 显示更多信息
+  - ~-a~ 查看本地和远端分支
+  - ~<branch-name>~ : 基于当前 commit 新建一个分支，但是不切换到新分支
++ ~git checkout <branch-name>~ ：切换分支
+  - ~-b <branch-name>~ ：新建并切换分支
+  - ~-d <branch -name>~ ：删除本地分支
+  - ~-b <local-branch-name> origin/<origin-branch-name>~ : 基于某个远程分支新建一个分支开发
+  + ~--track origin/<origin-branch-name>~ : 跟踪远程分支（创建跟踪远程分支，Git 在 ~git push~ 的时候不需要指定 ~origin~ 和 ~branch-name~ ，其实当我们 ~clone~ 一个 repo 到本地的时候， ~master~ 分支就是 origin/master 的跟踪分支，所以提交的时候直接 ~git push~ ）。
++ ~git push origin <branch-name>~ : 推送本地分支
++ ~git push origin :<origin-branch-name>~ : 删除远程分支
 
-   _如何放弃所有本地提交/改动，强制更新？_
+_如何放弃所有本地提交/改动，强制更新？_
 
-   #+BEGIN_SRC shell
-     git fetch --all
-     git reset --hard origin/master
-     git pull
-   #+END_SRC
+#+BEGIN_SRC shell
+  git fetch --all
+  git reset --hard origin/master
+  git pull
+#+END_SRC
 
-   _远端分支被别人删除，自己本地 git br -a 还是能看到怎么办？_
+_远端分支被别人删除，自己本地 git br -a 还是能看到怎么办？_
 
-   ~git remote prune origin~ [fn:git-prune]。
+~git remote prune origin~ [fn:git-prune]。
 
 ** 标签
 
 *** 查看标签
 
-    + ~git tag~ 列出所有标签，标签多时可模糊匹配， ~git tag -l 'v0.1.*'~
-    + ~git show v0.1~ 可查看标签明细，对于轻量标签只是指向某次提交记录的引用，而附注标签则会显示附注等相关信息
-    + 查看标签对应的 hash 值（提交记录）：
-      - ~git show-ref --tags~
-      - ~git log --oneline --decorate --tags --no-walk~
-      - ~git log --tags --no-walk --date=iso-local --pretty='%C(auto)%h %cd%d %s~ 在上面的基础上显示创建时间
++ ~git tag~ 列出所有标签，标签多时可模糊匹配， ~git tag -l 'v0.1.*'~
++ ~git show v0.1~ 可查看标签明细，对于轻量标签只是指向某次提交记录的引用，而附注标签则会显示附注等相关信息
++ 查看标签对应的 hash 值（提交记录）：
+  - ~git show-ref --tags~
+  - ~git log --oneline --decorate --tags --no-walk~
+  - ~git log --tags --no-walk --date=iso-local --pretty='%C(auto)%h %cd%d %s~ 在上面的基础上显示创建时间
 
 *** 创建标签
 
-    标签分两种：轻量标签和附注标签，轻量标签是不会改变的标签，只是一个特定提交的引用。而附注标签是一个提交记录，包含附注信息和提交人的信息（名字、电子邮件、日志等）。
+标签分两种：轻量标签和附注标签，轻量标签是不会改变的标签，只是一个特定提交的引用。而附注标签是一个提交记录，包含附注信息和提交人的信息（名字、电子邮件、日志等）。
 
-    + ~git tag v1.0~ ：创建轻量标签
-    + ~git tag -a v1.0 -m 'tag remark info'~ ：创建附注标签，和提交更改类似，指定 ~tag~ 命令的 ~-a~ 选项
++ ~git tag v1.0~ ：创建轻量标签
++ ~git tag -a v1.0 -m 'tag remark info'~ ：创建附注标签，和提交更改类似，指定 ~tag~ 命令的 ~-a~ 选项
 
-    标签可以相对于最新的提交创建，也可以相对于某次提交记录，只需要在创建标签时添加提交记录的校验值（ ~git log --pretty=oneline~ 快速查看提交记录）。
+标签可以相对于最新的提交创建，也可以相对于某次提交记录，只需要在创建标签时添加提交记录的校验值（ ~git log --pretty=oneline~ 快速查看提交记录）。
 
 *** 推送标签
 
-    ~git tag~ 设置的标签只是在本地有效，如果想要和别人共享的话（版本发布），需要推送到远端分支。
+~git tag~ 设置的标签只是在本地有效，如果想要和别人共享的话（版本发布），需要推送到远端分支。
 
-    ~git push origin v1.0~ 会把 ~v1.0~ 推送到远端服务器。带有 ~--tags~ 的 ~git push~ 命令会将所有本地的 tag 推送到远端。
+~git push origin v1.0~ 会把 ~v1.0~ 推送到远端服务器。带有 ~--tags~ 的 ~git push~ 命令会将所有本地的 tag 推送到远端。
 
 *** 创建分支
 
-    可以基于某个 tag 创建分支， ~git checkout -b branch_name v0.1~ 。
+可以基于某个 tag 创建分支， ~git checkout -b branch_name v0.1~ 。
 
-    其实这个很好理解，不管是轻量标签还是附注标签，本质上对应的都是某一次的提交记录。既然可以通过提交记录创建分支，自然就可以通过某个 tag 创建分支。
+其实这个很好理解，不管是轻量标签还是附注标签，本质上对应的都是某一次的提交记录。既然可以通过提交记录创建分支，自然就可以通过某个 tag 创建分支。
 
 *** 删除标签
 
-    + ~git tag -d v0.1~ ：删除本地标签
-    + ~git push origin :v0.1~ ：删除远端标签
++ ~git tag -d v0.1~ ：删除本地标签
++ ~git push origin :v0.1~ ：删除远端标签
 
-    可以看到分支和标签非常类似，一些操作命令也很像，那么分支和标签的区别是什么？[[https://stackoverflow.com/questions/1457103/how-is-a-tag-different-from-a-branch-in-git-which-should-i-use-here][How is a tag different from a branch in Git? Which should I use, here?]]：一句话，tag 一般代表发布节点，不会被修改；branch 一般针对不同功能的开发分支，这更像是一种约定。
+可以看到分支和标签非常类似，一些操作命令也很像，那么分支和标签的区别是什么？[[https://stackoverflow.com/questions/1457103/how-is-a-tag-different-from-a-branch-in-git-which-should-i-use-here][How is a tag different from a branch in Git? Which should I use, here?]]：一句话，tag 一般代表发布节点，不会被修改；branch 一般针对不同功能的开发分支，这更像是一种约定。
 
 ** 代码回退
 
-   1) 使用 ~git log~ 查看提交的 hash 值
-   2) ~git reset --hard hash~
+1) 使用 ~git log~ 查看提交的 hash 值
+2) ~git reset --hard hash~
 
-   可在本地回退到某一次提交，撤掉回退 ~git pull~ 即可。
+可在本地回退到某一次提交，撤掉回退 ~git pull~ 即可。
 
-   如果想回退到远端分支的某一次提交，需要强制推送到远端分支: ~git push origin master -f~ 。
+如果想回退到远端分支的某一次提交，需要强制推送到远端分支: ~git push origin master -f~ 。
 
-   回退未纳入版本管理的文件和目录： =git clean -fd=, =f= 表示文件， =d= 表示目录[fn:remove-local-untracked-files]。
+回退未纳入版本管理的文件和目录： =git clean -fd=, =f= 表示文件， =d= 表示目录[fn:remove-local-untracked-files]。
 
 ** 子模块
 
-   当一个项目引用另外一个 Git 项目时，你又不想只直接把另外一个项目的代码作为本项目的一部分（这样的话，就没法实时更新依赖项目了），Git 为此提供了 submodule 工具。
+当一个项目引用另外一个 Git 项目时，你又不想只直接把另外一个项目的代码作为本项目的一部分（这样的话，就没法实时更新依赖项目了），Git 为此提供了 submodule 工具。
 
-   将 xxx 项目添加到 yyy 目录下: ~git submodule add git://xxx.git yyy/xxx~
+将 xxx 项目添加到 yyy 目录下: ~git submodule add git://xxx.git yyy/xxx~
 
-   添加完之后，在本项目目录下会新增一个 ~.gitmodules~ 文件，用来记录本地子项目目录和远端 url 的对应关系。之后你需要将子模块映射关系提交到本项目远端。
+添加完之后，在本项目目录下会新增一个 ~.gitmodules~ 文件，用来记录本地子项目目录和远端 url 的对应关系。之后你需要将子模块映射关系提交到本项目远端。
 
-   克隆一个带子模块的项目时，得到的是一个空项目，你需要运行两个命令：
+克隆一个带子模块的项目时，得到的是一个空项目，你需要运行两个命令：
 
-   + ~git submodule init~ ：初始化本地配置文件
-   + ~git submodule update~ ：拉取子模块
-   + ~git submodule update --remote --merge~ ：更新 submodule
++ ~git submodule init~ ：初始化本地配置文件
++ ~git submodule update~ ：拉取子模块
++ ~git submodule update --remote --merge~ ：更新 submodule
 
 ** 合并改动
 
-   - 切换到接受合并的分支上： ~git checkout master~
-   - 执行合并命令： ~git merge dev1~
+- 切换到接受合并的分支上： ~git checkout master~
+- 执行合并命令： ~git merge dev1~
 
-   *冲突处理*
+*冲突处理*
 
-   撤销合并: ~git merge --abort~
+撤销合并: ~git merge --abort~
 
-   *合并单次提交*
+*合并单次提交*
 
-   ~git cherry-pick commit-id~
+~git cherry-pick commit-id~
 
 ** 代理
 
-   http.https 协议：
+http.https 协议：
 
-   #+BEGIN_SRC shell
-     git config --global http.https://github.com.proxy socks5://127.0.0.1:1080
-     git config --global --unset http.https://github.com.proxy // 取消代理
-   #+END_SRC
+#+BEGIN_SRC shell
+  git config --global http.https://github.com.proxy socks5://127.0.0.1:1080
+  git config --global --unset http.https://github.com.proxy // 取消代理
+#+END_SRC
 
-   对于 ssh 协议，在 ~~/.ssh/config~ 中添加：
+对于 ssh 协议，在 ~~/.ssh/config~ 中添加：
 
-   #+BEGIN_SRC
-   Host github.com
-   ProxyCommand nc -X 5 -x 127.0.0.1:1080 %h %p
-   #+END_SRC
+#+BEGIN_SRC sh
+  Host github.com
+  ProxyCommand nc -X 5 -x 127.0.0.1:1080 %h %p
+#+END_SRC
 
 * 知识点
 
-  基本命令让你快速的上手使用 Git，知识点能让你更好的理解 Git。
+基本命令让你快速的上手使用 Git，知识点能让你更好的理解 Git。
 
 ** 文件的几种状态
 
-   + untracked：未被跟踪的，没有纳入 Git 版本控制，使用 ~git add <filename>~ 纳入版本控制
-   + unmodified：未修改的，已经纳入版本控制，但是没有修改过的文件
-   + modified：对纳入版本控制的文件做了修改，git 将标记为 modified
-   + staged：暂存的文件，简单理解: 暂存文件就是 add 之后，commit 之前的文件状态
++ untracked：未被跟踪的，没有纳入 Git 版本控制，使用 ~git add <filename>~ 纳入版本控制
++ unmodified：未修改的，已经纳入版本控制，但是没有修改过的文件
++ modified：对纳入版本控制的文件做了修改，git 将标记为 modified
++ staged：暂存的文件，简单理解: 暂存文件就是 add 之后，commit 之前的文件状态
 
-   理解这几种文件状态对于理解 Git 是非常关键的（至少可以看懂一些错误提示了）。
+理解这几种文件状态对于理解 Git 是非常关键的（至少可以看懂一些错误提示了）。
 
 ** 快照和差异
 
-   详细可看：[[http://iissnan.com/progit/html/zh/ch1_3.html][Pro Git: Git基础]] 中有讲到 *直接记录快照，而非差异比较* ，这里只讲我个人的理解。
+详细可看：[[http://iissnan.com/progit/html/zh/ch1_3.html][Pro Git: Git基础]] 中有讲到 *直接记录快照，而非差异比较* ，这里只讲我个人的理解。
 
-   Git 关心的是文件数据整体的变化，其他版本管理系统（以 svn 为例）关心的某个具体文件的*差异*。这个差异是好理解的，也就是两个版本具体文件的不同点，比如某一行的某个字符发生了改变。
+Git 关心的是文件数据整体的变化，其他版本管理系统（以 svn 为例）关心的某个具体文件的*差异*。这个差异是好理解的，也就是两个版本具体文件的不同点，比如某一行的某个字符发生了改变。
 
-   Git 不保存文件提交前后的差异，不变的文件不会发生任何改变，对于变化的文件，前后两次提交则保存两个文件。举个例子：
+Git 不保存文件提交前后的差异，不变的文件不会发生任何改变，对于变化的文件，前后两次提交则保存两个文件。举个例子：
 
-   SVN:
+SVN:
 
-   1. 新建 3 个文件 a, b, c，做第一次提交 ->  ~version1 : file_a file_b file_c~
-   2. 修改文件 b， 做第二次提交(真正提交的是 修改后的文件 b 和修改前的 ~file_b~ 的 diff) -> ~version2: diff_b_2_1~
-   3. 当我要 checkout version2 的时候，实际上得到的是 ~file_a file_b+diff_b_2_1 file_c~
+1. 新建 3 个文件 a, b, c，做第一次提交 ->  ~version1 : file_a file_b file_c~
+2. 修改文件 b， 做第二次提交(真正提交的是 修改后的文件 b 和修改前的 ~file_b~ 的 diff) -> ~version2: diff_b_2_1~
+3. 当我要 checkout version2 的时候，实际上得到的是 ~file_a file_b+diff_b_2_1 file_c~
 
-   Git:
+Git:
 
-   1. 新建 3 个文件 a, b, c，做第一次提交 ->  ~version1 : file_a file_b file_c~
-   2. 修改文件 b (得到~file_b1~), 做第二次提交 -> ~version2: file_a file_b1 file_c~
-   3. 当我要用 version2 的时候，实际上得到的是 ~file_a file_b1 file_c~
+1. 新建 3 个文件 a, b, c，做第一次提交 ->  ~version1 : file_a file_b file_c~
+2. 修改文件 b (得到~file_b1~), 做第二次提交 -> ~version2: file_a file_b1 file_c~
+3. 当我要用 version2 的时候，实际上得到的是 ~file_a file_b1 file_c~
 
-   上面的 ~file_a file_b1 file_c~ 就是 version2 的 *快照* 。
+上面的 ~file_a file_b1 file_c~ 就是 version2 的 *快照* 。
 
 * 学习资源
 
-  - [[http://iissnan.com/progit/][Pro Git]]
-  - [[https://github.com/aseaday/git-style-guide][Git 风格指南]]
-
+- [[http://iissnan.com/progit/][Pro Git]]
+- [[https://github.com/aseaday/git-style-guide][Git 风格指南]]
 
 * Footnotes
 

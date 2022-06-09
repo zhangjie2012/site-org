@@ -6,86 +6,84 @@
 
 ** 源码安装
 
-   直接使用系统的包管理工具安装的 Emacs 版本都很低，推荐使用源码安装， +当前最新稳定版本是 26.3。[fn:2]+
-   推荐使用 Emacs 27，性能更好，我的配置已经同步到 Emacs 27，以下安装办法可能已经滞后。
+直接使用系统的包管理工具安装的 Emacs 版本都很低，推荐使用源码安装， +当前最新稳定版本是 26.3。[fn:2]+
+推荐使用 Emacs 27，性能更好，我的配置已经同步到 Emacs 27，以下安装办法可能已经滞后。
 
-   下载源码：[[http://mirrors.ustc.edu.cn/gnu/emacs/][http://mirrors.ustc.edu.cn/gnu/emacs/]]
+下载源码：[[http://mirrors.ustc.edu.cn/gnu/emacs/][http://mirrors.ustc.edu.cn/gnu/emacs/]]
 
-   #+BEGIN_SRC shell
-	apt install make gcc g++ autoconf
-	apt-get install build-essential texinfo libx11-dev libxpm-dev libjpeg-dev libpng-dev libgif-dev libtiff-dev libgtk2.0-dev libncurses-dev
-	./autogen.sh
-	./configure
-	make -j4
-	sudo make install
-   #+END_SRC
+#+BEGIN_SRC shell
+  apt install make gcc g++ autoconf
+  apt-get install build-essential texinfo libx11-dev libxpm-dev libjpeg-dev libpng-dev libgif-dev libtiff-dev libgtk2.0-dev libncurses-dev
+  ./autogen.sh
+  ./configure
+  make -j4
+  sudo make install
+#+END_SRC
 
-   *注意* ：如果编译提示 =configure: error: The following required libraries were not found: gnutls= 需要安装 =gnutls= 开发包，
-   使用 =apt-cache search 'libgnutls.*-dev'= 找到对应的包，然后安装 [fn:1]。
+*注意* ：如果编译提示 =configure: error: The following required libraries were not found: gnutls= 需要安装 =gnutls= 开发包，
+使用 =apt-cache search 'libgnutls.*-dev'= 找到对应的包，然后安装 [fn:1]。
 
-** Ubuntu 18.04 & Ubuntu 20.04
+** Ubuntu 20.04
 
-   #+begin_src sh
-	sudo add-apt-repository ppa:kelleyk/emacs
-	sudo apt update
-	sudo apt install emacs27
-   #+end_src
+#+begin_src sh
+sudo add-apt-repository ppa:kelleyk/emacs
+sudo apt update
+sudo apt install emacs27
+#+end_src
 
 ** MacOS
 
-   #+BEGIN_SRC shell
-	brew install emacs
-   #+END_SRC
+#+BEGIN_SRC shell
+  brew install emacs
+#+END_SRC
 
 ** Windows 10
 
-   下载 Emacs: https://mirrors.ustc.edu.cn/gnu/emacs/windows/ ，然后 runemacs.exe 运行 emacs。
+下载 Emacs: https://mirrors.ustc.edu.cn/gnu/emacs/windows/ ，然后 runemacs.exe 运行 emacs。
 
-   配置文件位置在： =/c/Users/me/AppData/Roaming= 用户主目录在这里。
+配置文件位置在： =/c/Users/me/AppData/Roaming= 用户主目录在这里。
 
-   /Win10 比以前更好用了一些，我不在 Win10 下写代码，但是会写文档。/
-
-   Windows 下 Projectile 报错 =’tr’ is not recognized as an internal or external command, operable program or batch file./")= ，设置 =(setq projectile-git-submodule-command nil)= 即可[fn:4]。
+Windows 下 Projectile 报错 =’tr’ is not recognized as an internal or external command, operable program or batch file./")= ，设置 =(setq projectile-git-submodule-command nil)= 即可[fn:4]。
 
 * 终端使用
 
-   打开 =.bashrc= 添加两行 alias：
+打开 =.bashrc= 添加两行 alias：
 
-   #+BEGIN_SRC shell
-	alias em="env TERM=xterm-256color emacs -nw"
-   #+END_SRC
+#+BEGIN_SRC shell
+alias em="env TERM=xterm-256color emacs -nw"
+#+END_SRC
 
 * 键位约定
 
-  Emacs 快捷键约定，所有的快捷键基本都是从这些前缀开始的，如下：
+Emacs 快捷键约定，所有的快捷键基本都是从这些前缀开始的，如下：
 
-  |-------+--------------------------------------------|
-  | 前缀  | 说明                                       |
-  | ~C-~  | Ctrl 键                                    |
-  | ~M-~  | Meta 键（键盘上的 Alt）                    |
-  | ~S-~  | Super 键（非 Mac 键盘上的 Win 键）         |
-  | ~s-~  | Shift 键                                   |
-  | ~DEL~ | 退格键，而不是实际的 DELETE 键             |
-  | ~SPC~ | 空格键                                     |
-  |-------+--------------------------------------------|
+|-------+------------------------------------|
+| 前缀  | 说明                               |
+| ~C-~  | Ctrl 键                            |
+| ~M-~  | Meta 键（键盘上的 Alt）            |
+| ~S-~  | Super 键（非 Mac 键盘上的 Win 键） |
+| ~s-~  | Shift 键                           |
+| ~DEL~ | 退格键，而不是实际的 DELETE 键     |
+| ~SPC~ | 空格键                             |
+|-------+------------------------------------|
 
-  Emacs 几乎所有的快捷键都是以 ~C-~ 开始的，也是 Emacs 令人诟病的一部分（伤小拇指，还好我的小拇指健在）。
-  系统默认的绑定键都是 ~C-x~ 开始的，用户自定义的大多是 ~C-c~ 开始的。
+Emacs 几乎所有的快捷键都是以 ~C-~ 开始的，也是 Emacs 令人诟病的一部分（伤小拇指，还好我的小拇指健在）。
+系统默认的绑定键都是 ~C-x~ 开始的，用户自定义的大多是 ~C-c~ 开始的。
 
-  另外 Super 键大部分时候都是冲突的，有关 Super 的我都重新映射了。[fn:3]
+另外 Super 键大部分时候都是冲突的，有关 Super 的我都重新映射了。[fn:3]
 
-  每个初学者建议先阅读 Emacs 的 ~help-with-tutorial~ （ =C-h t= ）。走一遍，基本上就可以流畅的操作 Emacs 了。
+每个初学者建议先阅读 Emacs 的 ~help-with-tutorial~ （ =C-h t= ）。走一遍，基本上就可以流畅的操作 Emacs 了。
 
-  我的配置中除了 Emacs 默认的 =C= 和 =M= 之外，额外约定了两个 Leader Key：
+我的配置中除了 Emacs 默认的 =C= 和 =M= 之外，额外约定了两个 Leader Key：
 
-  - =F8= project 管理
-  - =F9= 其他
+- =F8= project 管理
+- =F9= 其他
 
 * 包安装与管理
 
-  因为某些原因官方的 elpa 源无法使用怎么办？ 可使用清华大学提供了 elpa 镜像源：[[https://mirror.tuna.tsinghua.edu.cn/help/elpa/][https://mirror.tuna.tsinghua.edu.cn/help/elpa/]] 。替代下面的：
+因为某些原因官方的 elpa 源无法使用怎么办？ 可使用清华大学提供了 elpa 镜像源：[[https://mirror.tuna.tsinghua.edu.cn/help/elpa/][https://mirror.tuna.tsinghua.edu.cn/help/elpa/]] 。替代下面的：
 
-  #+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp
 	(setq package-archives
 		  '(
 			("gnu" . "https://elpa.gnu.org/packages/")
@@ -93,36 +91,36 @@
 			("melpa-stable" . "https://stable.melpa.org/packages/")
 			("org" . "https://orgmode.org/elpa/")
 			))
-  #+END_SRC
+#+END_SRC
 
-  =melpa= 一般是最新的（daily build），支持最新的特性当然也不稳定； =melpa-stable= 对应的是正式版，如果没有很大的折腾劲的话，建议使用 stable。
+=melpa= 一般是最新的（daily build），支持最新的特性当然也不稳定； =melpa-stable= 对应的是正式版，如果没有很大的折腾劲的话，建议使用 stable。
 
-  如果有代理的话，可以设置 HTTP 代理：
+如果有代理的话，可以设置 HTTP 代理：
 
-  #+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp
 	(setq url-proxy-services
 		  '(
 			("http" . "127.0.0.1:1080")
 			("https" . "127.0.0.1:1080")
 			))
-  #+END_SRC
+#+END_SRC
 
-  或者 Emacs 启动时添加 =http_proxy= 。比如 =http_proxy=http://127.0.0.1:1080 emacs= 。
+或者 Emacs 启动时添加 =http_proxy= 。比如 =http_proxy=http://127.0.0.1:1080 emacs= 。
 
-  我使用 [[https://github.com/jwiegley/use-package][use-package]] 来简化和规范包的配置，因为源不统一（当然这只是其中的一个小原因，use-package 还提供了更多使用的特性，比如懒加载），
-  经常会遇到包依赖问题，比如 [[https://github.com/abo-abo/swiper/issues/2087][issues#2087]]；还有时会遇到有的包想用稳定版本，有的包想用最新版本的情况。所以在配置的时候，通过
-  =(setq use-package-always-pin t)= 规范 use-package，强制显式指定源，这样可以满足更多的个性化需求。比如：
+我使用 [[https://github.com/jwiegley/use-package][use-package]] 来简化和规范包的配置，因为源不统一（当然这只是其中的一个小原因，use-package 还提供了更多使用的特性，比如懒加载），
+经常会遇到包依赖问题，比如 [[https://github.com/abo-abo/swiper/issues/2087][issues#2087]]；还有时会遇到有的包想用稳定版本，有的包想用最新版本的情况。所以在配置的时候，通过
+=(setq use-package-always-pin t)= 规范 use-package，强制显式指定源，这样可以满足更多的个性化需求。比如：
 
-  #+begin_src emacs-lisp
+#+begin_src emacs-lisp
 	(use-package swiper
 	  :pin melpa
 	  :ensure t
 	  :bind (("C-s" . swiper)
 			 ("M-s ." . swiper-isearch-thing-at-point))
 	  )
-  #+end_src
+#+end_src
 
-  上面的 =pin= 可以设置为 =package-archives= 列表中的值。
+上面的 =pin= 可以设置为 =package-archives= 列表中的值。
 
 * Footnotes
 
