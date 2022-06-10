@@ -48,8 +48,7 @@ Registry => Repositories => Tags = Image
 
 直接用系统的包管理器安装的版本一般比较低，推荐设置源之后，手动安装，具体可以查看 Docker 官方说明：
 
-- Ubuntu：https://docs.docker.com/install/linux/docker-ce/ubuntu/
-- CentOS：https://docs.docker.com/install/linux/docker-ce/centos/
+- Ubuntu：https://docs.docker.com/engine/install/ubuntu/
 
 ** 设置加速器
 
