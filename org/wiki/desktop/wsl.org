@@ -136,6 +136,8 @@ Windows terminal 快捷键跟 Emacs 快捷键冲突很多，索性直接禁用�
 
 *ssh-add 报错： =eval $(ssh-agent -s)=* 根源是 ssh-agent 没起来，使用： ~eval $(ssh-agent -s)~ 解决。
 
+*与宿主机（Windows）之间相互拷贝文件：* Windows 系统目录被挂载在 Linux 的 =/mnt/= 目录下，拷贝文件超级方便。
+
 * Footnotes
 [fn:4] https://github.com/microsoft/WSL/issues/5393
 
