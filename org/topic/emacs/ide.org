@@ -28,6 +28,8 @@
 
 ** Web 开发
 
+/适用于 React 开发。/
+
 安装 eslint =npm install -g eslint= 。如果没启动可通过 =flycheck-verify-setup= 和 =flycheck-verify-checker= 两个指令进行调试。
 
 ** Go
@@ -35,21 +37,21 @@
 按照 [[https://golang.org/doc/install][官方说明]] 安装 Go，LSP server 用的是 [[https://github.com/golang/tools/tree/master/gopls][gopls]]。
 
 #+begin_src sh
-     GO111MODULE=on go get golang.org/x/tools/gopls@latest
+  GO111MODULE=on go get golang.org/x/tools/gopls@latest
 #+end_src
 
 lint 工具：
 
 #+begin_src sh
-     curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin v1.41.1
+  curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin v1.46.1
 #+end_src
 
-配置文件在：https://github.com/zhangjie2012/dotfiles/blob/master/_golangci.yaml
+配置文件在：https://gitlab.com/JerryZhang2012/dotfiles/-/blob/master/_golangci.yaml
 
 另外安装 [[https://github.com/fatih/gomodifytags][gomodifytags]]。
 
 #+begin_src sh
-     GO111MODULE=on go get github.com/fatih/gomodifytags
+  go install github.com/fatih/gomodifytags@latest
 #+end_src
 
 ** TODO Python

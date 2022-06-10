@@ -2,4 +2,27 @@
 #+TITLE: nodejs
 #+DATE: 2020-06-17 20:17:44
 
+* 安装 14.x
+
+** Ubuntu
+
+#+begin_src sh
+  curl -sL https://deb.nodesource.com/setup_14.x | sudo bash -
+  sudo apt install nodejs
+#+end_src
+
+如果 update 时报错 =NO_PUBLIC= 在 sources.list 中对应的 deb 后面新增 ~[trusted=yes]~  [fn:1]。
+
+* 源
+
+#+begin_src sh
+  npm --registry https://registry.npm.taobao.org/ install xxx
+#+end_src
+
+* 其他
+
 - https://stackoverflow.com/questions/31472755/sudo-npm-command-not-found
+
+* Footnotes
+
+[fn:1] https://stackoverflow.com/questions/69701205/unable-to-install-nodejs-14-or-16-on-ubuntu-18-04-5-lts-due-to-no-pubkey-not-fou

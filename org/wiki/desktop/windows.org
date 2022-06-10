@@ -2,4 +2,6 @@
 #+TITLE: Windows
 #+DATE: 2022-06-08 11:07:11
 
-* 编码环境
+* 修改 hosts
+
+=C:\Windows\System32\drivers\etc\hosts= 文件。

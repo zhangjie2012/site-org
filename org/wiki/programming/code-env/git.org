@@ -169,7 +169,8 @@ http.https 协议：
 
 #+BEGIN_SRC sh
   Host github.com
-  ProxyCommand nc -X 5 -x 127.0.0.1:1080 %h %p
+  ProxyCommand nc -X 5 -x 127.0.0.1:1080 %h %p  # socket5
+  ProxyCommand socat - PROXY:127.0.0.1:%h:%p,proxyport=8080  # http
 #+END_SRC
 
 ** 编码自动转换

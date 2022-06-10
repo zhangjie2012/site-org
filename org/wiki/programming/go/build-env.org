@@ -6,64 +6,64 @@
 
 ** Linux, macOS, and FreeBSD tarballs
 
-   #+BEGIN_SRC shell
-     wget https://golang.org/dl/go1.15.13.linux-amd64.tar.gz
-     sudo tar -C /usr/local -xzf go1.13.6.darwin-amd64.tar.gz
-   #+END_SRC
+#+BEGIN_SRC shell
+  wget https://go.dev/dl/go1.17.11.linux-amd64.tar.gz
+  sudo tar -C /usr/local -xzf go1.17.11.linux-amd64.tar.gz
+#+END_SRC
 
-   将 =/usr/local/go/bin= 添加到系统 =PATH= 环境变量，在 =/etc/profile= 或者 =$HOME/.profile= 中添加
+将 =/usr/local/go/bin= 添加到系统 =PATH= 环境变量，在 =/etc/profile= 或者 =$HOME/.profile= 中添加：
 
-   #+BEGIN_SRC shell
-     export PATH=$PATH:/usr/local/go/bin
-   #+END_SRC
+#+BEGIN_SRC shell
+  export PATH=$PATH:/usr/local/go/bin
+#+END_SRC
 
-   默认的工作目录是 =$HOME/go= ，如果是不同的目录需要 [[https://github.com/golang/go/wiki/SettingGOPATH][设置一下 GOPATH 环境变量]]。
+默认的工作目录是 =$HOME/go= ，如果是不同的目录需要 [[https://github.com/golang/go/wiki/SettingGOPATH][设置一下 GOPATH 环境变量]]。
 
-   =go get= 安装的二进制包会放到 =$HOME/go/bin= 下面。所以，还要在 =.bashrc/.zshrc= 中添加路径：
+=go get= 安装的二进制包会放到 =$HOME/go/bin= 下面。所以，还要在 =.bashrc/.zshrc= 中添加路径：
 
-   #+begin_src shell
-   export PATH=$PATH:$(go env GOPATH)/bin
-   #+end_src
+#+begin_src shell
+  export PATH=$PATH:$(go env GOPATH)/bin
+#+end_src
 
 ** 检测是否安装成功
 
-   在工作目录下创建 =src/hello= 目录，然后创建 =hello.go= ：
+在工作目录下创建 =src/hello= 目录，然后创建 =hello.go= ：
 
-   #+BEGIN_SRC go
-     package main
+#+BEGIN_SRC go
+  package main
 
-     import "fmt"
+  import "fmt"
 
-     func main() {
-         fmt.Printf("hello, world\n")
-     }
-   #+END_SRC
+  func main() {
+      fmt.Printf("hello, world\n")
+  }
+#+END_SRC
 
-   =go run hello.go= 看到 =hello, world= 表示安装成功。
+=go run hello.go= 看到 =hello, world= 表示安装成功。
 
-   *注意* 如果存在旧版本的 Go 需要先卸载才行。
+*注意* 如果存在旧版本的 Go 需要先卸载才行。
 
 * 卸载
 
-  1) 删除 ~/usr/local/go~ 目录
-  3) 编辑 ~/etc/profile~ 或者 ~$HOME/profile~ 移除 ~PATH~ 环境变量中的 go bin 路径
-  2) 删除工作目录
+1) 删除 ~/usr/local/go~ 目录
+3) 编辑 ~/etc/profile~ 或者 ~$HOME/profile~ 移除 ~PATH~ 环境变量中的 go bin 路径
+2) 删除工作目录
 
 * 插件和 IDE
 
-  见 [[file:../../../topic/emacs/ide.org][Emacs IDE]] 内容。
+见 [[file:../../../topic/emacs/ide.org][Emacs IDE]] 内容。
 
 * 跨平台编译
 
-  1.5 版本之后，Go 支持跨平台编译（碉堡的一个功能），在编译之前指定 ~$GOOS~ 和 ~$GOARCH~ 两个环境变量即可。这两个环境变量分别表示的目标的操作系统和编译体系架构的名称。常用的值：
+1.5 版本之后，Go 支持跨平台编译（碉堡的一个功能），在编译之前指定 ~$GOOS~ 和 ~$GOARCH~ 两个环境变量即可。这两个环境变量分别表示的目标的操作系统和编译体系架构的名称。常用的值：
 
-  + ~GOOS~: ~android~ ~darwin~ ~freebsd~ ~linux~ ~windows~
-  + ~GOARCH~: ~arm~ ~amd64~ ~386~
++ ~GOOS~: ~android~ ~darwin~ ~freebsd~ ~linux~ ~windows~
++ ~GOARCH~: ~arm~ ~amd64~ ~386~
 
-  完整的可选值在 [[https://golang.org/doc/install/source#environment][Optional environment variables]]。
+完整的可选值在 [[https://golang.org/doc/install/source#environment][Optional environment variables]]。
 
-  比如在 MacOS 上编译 CentOS7 下的二进制包:  ~GOOS=linux GOARCH=amd64 go build main~ 。
+比如在 MacOS 上编译 CentOS7 下的二进制包:  ~GOOS=linux GOARCH=amd64 go build main~ 。
 
-  相关的 Stackoverflow 帖子：[[https://stackoverflow.com/questions/20728767/all-possible-goos-value][All possible GOOS value?]] 中说明在 Go 1.7 之后，可以使用 ~go tool dist list -json~ 来显示可选的值（不加 =-json= 参数将显示为文本）。
+相关的 Stackoverflow 帖子：[[https://stackoverflow.com/questions/20728767/all-possible-goos-value][All possible GOOS value?]] 中说明在 Go 1.7 之后，可以使用 ~go tool dist list -json~ 来显示可选的值（不加 =-json= 参数将显示为文本）。
 
 [fn:1] https://github.com/golang/go/wiki/SettingGOPATH
