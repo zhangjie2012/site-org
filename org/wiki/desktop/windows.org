@@ -1,7 +1,25 @@
 #+SETUPFILE: ~/site/tpl/wiki-tpl.org
-#+TITLE: Windows
+#+TITLE: Windows 11
 #+DATE: 2022-06-08 11:07:11
 
-* 修改 hosts
+* 系统使用
+
+** 修改 hosts
 
 =C:\Windows\System32\drivers\etc\hosts= 文件。
+
+** Alt + Tab 不显示预览[fn:1]
+
+一般切换应用的时候是看图标，而不是看内容。默认显示预览反而会导致不清晰。
+
+Windows 11 无法在 setting 中直接修改，办法为修改注册表：
+
+1. =Win + R= 输入 =regedit= 打开注册表
+2. =HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer=
+3. 任意地方新增变量 =32-bit DWORD= 重命名为 =AltTabSettings=
+4. 右键修改值为 =1=
+5. 注销系统后，即可显示传统的切换界面了
+
+* Footnotes
+
+[fn:1] https://winaero.com/enable-classic-alttab-dialog-in-windows-11/
