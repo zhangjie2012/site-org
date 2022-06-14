@@ -6,11 +6,12 @@
 
 ** 环境配置
 
-+ ~git config user.name your_name~ : 设置你的用户名, 提交会显示
-+ ~git config user.email your_email~ : 设置你的邮箱
-+ ~git config core.quotepath false~ : 解决中文文件名显示为数字问题
++ ~git config --global core.editor "vim"~ : 设置默认编辑器为 vim
 + ~git config --list~ : 查看现有的配置
 + ~git config color.ui always~ 设置 color，Emacs eshell 中 git diff 高亮
++ ~git config core.quotepath false~ : 解决中文文件名显示为数字问题
++ ~git config user.email your_email~ : 设置你的邮箱
++ ~git config user.name your_name~ : 设置你的用户名, 提交会显示
 
 几个 alias 方便操作:
 
@@ -44,7 +45,8 @@
   - ~-p~: 显示更多提交记录详情（类似 ~git diff~ ），~git log -p -2~ 显示最近两次
   - ~--author~ ：仅显示指定作者相关的提交
   - ~--since, --after, --until, --before~ ：仅显示指定时间之后、之前的提交
-- =git shortlog -sn= 提交统计[fn:1]
++ =git shortlog -sn= 提交统计[fn:1]
++ =git commit --amend= 修改最后一条提交
 
 ** 分支
 
