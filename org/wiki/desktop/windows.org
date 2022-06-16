@@ -4,11 +4,19 @@
 
 * Windows Terminal / Powershell
 
-** 中文乱码
+** cat 中文乱码
 
+#+begin_quote
 1. 控制面板—>时钟和区域—>区域->管理—>更改系统区域设置
 2. 勾选：使用 Unicode UTF-8 提供全球语音支持
 3. 重启
+#+end_quote
+
+这种方式不靠谱，会让其他软件也混乱的。
+
+第二种方法： =cat file.md -Encoding UTF8= ，有点麻烦。
+
+第三种方法：修改注册表，https://www.lovesofttech.com/windows/win10CmdCharacter.html
 
 * 系统使用
 
