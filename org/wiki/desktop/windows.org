@@ -2,6 +2,14 @@
 #+TITLE: Windows 11
 #+DATE: 2022-06-08 11:07:11
 
+* Windows Terminal / Powershell
+
+** 中文乱码
+
+1. 控制面板—>时钟和区域—>区域->管理—>更改系统区域设置
+2. 勾选：使用 Unicode UTF-8 提供全球语音支持
+3. 重启
+
 * 系统使用
 
 ** 修改 hosts
