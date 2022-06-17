@@ -48,7 +48,7 @@
   - git
 + 命令行使用优化
   - [[https://github.com/BurntSushi/ripgrep][rg]] grep 替代工具，以前用 [[https://github.com/ggreer/the_silver_searcher][ag]] ，听说 rg 更快
-  - [[https://github.com/wting/autojump][autojump]]：目录快捷跳转
+  - [[https://github.com/wting/autojump][autojump]]：目录快捷跳转，Windows 也支持
   - [[https://github.com/tmux/tmux][tmux]]：终端复用
   - [[https://github.com/junegunn/fzf][fzf]]：命令行模糊查找，zsh [[https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/fzf][设置]]
 + SSH 连接工具 & 终端模拟器

@@ -21,6 +21,7 @@
 - [[file:data-structure-and-algorithm/encrypt-decrypt.org][加解密算法]]：常见对称、非对称加解密算法
 - 缓存淘汰算法，最常用 LRU（最近最少使用）
   + [[https://melonshell.github.io/2020/02/07/ds_cache_eli/][常用缓存淘汰算法LFU/LRU/ARC/FIFO/MRU]]
+- [[file:data-structure-and-algorithm/lsm.org][LSM]]
 
 * 数据库
 

@@ -1,0 +1,12 @@
+#+SETUPFILE: ~/site/tpl/wiki-tpl.org
+#+TITLE: LSM
+#+DATE: 2022-06-17 11:10:31
+
+LSM-Tree，即 Log Structured Merge Tree。
+
+用于读少于写，对写性能要求很高的场景。LSM 是利用磁盘的顺序写性能原高于随机写的特性，写完之后再合并。
+
+* 拓展资料
+
+- [[https://wingsxdu.com/posts/database/leveldb/][LSM-Tree 与 LevelDB 的原理和实现 · Analyze]]
+- [[https://segmentfault.com/a/1190000039269078][理解 LSM Tree : 是什么让数据库这么能写？]]
