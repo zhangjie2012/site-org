@@ -8,7 +8,7 @@
 ** Docker
 
 1. =docker pull mysql:5.7=
-2. =docker run --name mysql-5 -d --restart=always -e MYSQL_ROOT_PASSWORD==<password> -p 127.0.0.1:3306:3306 mysql:5.7=
+2. =docker run --name mysql-5 -d --restart=always -e MYSQL_ROOT_PASSWORD=<password> -p 127.0.0.1:3306:3306 mysql:5.7=
 3. =docker exec -it mysql-5 mysql -uroot -p<password>=
 
 * Command
