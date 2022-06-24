@@ -377,6 +377,5 @@
 - [[http://blog.opskumu.com/mysql-rep.html][MySQL 复制备忘]]
 
 * Footnotes
-
-- [fn:set-utf8mb4] https://www.zhangjiee.com/blog/2017/mysql-utf8-to-utf8mb4.html
-- [fn:kill-process] https://superuser.com/questions/159486/how-to-kill-process-in-mac-os-x-and-not-have-it-restart-on-its-own
+[fn:set-utf8mb4] https://www.zhangjiee.com/blog/2017/mysql-utf8-to-utf8mb4.html
+[fn:kill-process] https://superuser.com/questions/159486/how-to-kill-process-in-mac-os-x-and-not-have-it-restart-on-its-own
