@@ -4,11 +4,14 @@
 
 * 安装 Go
 
+官方下载地址：https://go.dev/dl/
+
 ** Linux, macOS, and FreeBSD tarballs
 
 #+BEGIN_SRC shell
-  wget https://go.dev/dl/go1.17.11.linux-amd64.tar.gz
-  sudo tar -C /usr/local -xzf go1.17.11.linux-amd64.tar.gz
+  wget https://go.dev/dl/go1.18.3.linux-amd64.tar.gz
+  sudo tar -C /usr/local -xzf go1.18.3.linux-amd64.tar.gz
+
 #+END_SRC
 
 将 =/usr/local/go/bin= 添加到系统 =PATH= 环境变量，在 =/etc/profile= 或者 =$HOME/.profile= 中添加：
@@ -45,9 +48,9 @@
 
 * 卸载
 
-1) 删除 ~/usr/local/go~ 目录
-3) 编辑 ~/etc/profile~ 或者 ~$HOME/profile~ 移除 ~PATH~ 环境变量中的 go bin 路径
-2) 删除工作目录
+1. 删除 ~/usr/local/go~ 目录
+2. 编辑 ~/etc/profile~ 或者 ~$HOME/profile~ 移除 ~PATH~ 环境变量中的 go bin 路径
+3. 删除工作目录
 
 * 插件和 IDE
 

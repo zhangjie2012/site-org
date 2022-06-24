@@ -37,7 +37,7 @@
 按照 [[https://golang.org/doc/install][官方说明]] 安装 Go，LSP server 用的是 [[https://github.com/golang/tools/tree/master/gopls][gopls]]。
 
 #+begin_src sh
-  GO111MODULE=on go get golang.org/x/tools/gopls@latest
+  GO111MODULE=on go install golang.org/x/tools/gopls@latest
 #+end_src
 
 lint 工具：
