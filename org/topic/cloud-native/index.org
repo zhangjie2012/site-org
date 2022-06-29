@@ -1,5 +1,5 @@
 #+SETUPFILE: ~/site/tpl/wiki-tpl.org
-#+TITLE:  云原生
+#+TITLE: 云原生
 #+DATE: 2020-02-01 09:30:20
 
 * 定义
@@ -37,6 +37,44 @@
   目前 CRI 的实现有 Containerd，CRI-O，Docker 不符合 CRI，所以 Kubernetes 写了 [[https://github.com/kubernetes/kubernetes/tree/release-1.5/pkg/kubelet/dockershim][dockershim]] 来做协议转换
   （这也是 Kubernetes v1.20 之后废弃 Docker 的原因， =kubelet->dockershim->dockerd->containerd= 这个链路太长，
   废弃之后改成了 =kubelet->containerd= ）。
+
+* 服务可用性定义
+
+谷歌 SRE 对服务的可用性进行了如下三个维度的定义。[fn:6]
+
+** SLA(Service-Level Agreement)：服务级别协议
+
+#+begin_quote
+是服务提供商与客户之间定义的正式承诺，SLO 是 SLA 的基础。
+#+end_quote
+
+注意：是官方的承诺，是协议、合同。出了问题是要承担责任的。
+
+我们经常说的 N 个 9，对应的宕机容忍（计算器[fn:7]）：
+
+|       x | 一年   | 一月  | 一周  | 一日    |
+|   99.9% | 8h45m  | 43m   | 10m5s | 1m26s   |
+|  99.99% | 52m34s | 4m19s | 1m    | 9s      |
+| 99.995% | 26m17s | 2m10s | 30s   | 4s      |
+| 99.999% | 5m15s  | 26s   | 6s    | 不足 1s |
+
+阿里云、AWS 等主机的 SLA 是每月 99.95%，即超过 5 分钟主机不可用（可获得赔偿）。
+
+** SLO(Service-Level Objective)：服务级别目标
+
+#+begin_quote
+指服务提供者向客户作出的服务保证的量化指标。
+#+end_quote
+
+注意：是可量化的目标，目标可以包含很多的 SLA。
+
+** SLI (Service-Level Indicator)：服务级别指标
+
+#+begin_quote
+是对服务提供商提供给客户的服务级别的度量。是 SLO 的基础，通用性的度量指标，比如：延迟、吞吐量、可用性、错误率。
+#+end_quote
+
+延迟、吞吐量、可用性、错误率也是目前最常用来度量服务的四个维度（很多监控都是这四个维度的范畴和延伸）。
 
 * TODO 容器
 * TODO Docker
@@ -259,6 +297,10 @@ kubectl 是用来管理 Kubernetes 集群的命令行工具。
 - [ ] The Kubernetes Book 这本书每年都会更新一次，以跟上最新的 Kubernetes 生态
 
 * Footnotes
+
+[fn:7] http://www.slatools.com/sla-uptime-calculator
+
+[fn:6] https://cloud.google.com/blog/products/devops-sre/sre-fundamentals-slis-slas-and-slos
 
 [fn:5] https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
 

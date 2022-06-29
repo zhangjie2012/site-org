@@ -26,6 +26,16 @@ https://docs.microsoft.com/zh-cn/windows/wsl/install-win10
 
 [[https://docs.microsoft.com/zh-cn/windows/wsl/install-manual#step-4---download-the-linux-kernel-update-package][下载 Linux 内核包]]，安装即可解决。
 
+vmmem 进程很占内存，[fn:5]
+
+1. 关闭 wsl =wsl --shutdown=
+2. 修改配置文件 =notepad "$env:USERPROFILE/.wslconfig"= 设置
+   #+begin_src
+   [wsl2]
+   guiApplications=false
+   memory=4GB
+   #+end_src
+
 * 命令
 
 - =wsl -l -v= 查看当前运行的发行版
@@ -146,6 +156,9 @@ Windows terminal 快捷键跟 Emacs 快捷键冲突很多，索性直接禁用�
 *光标颜色* 在配置文件 =profiles -> defaults= 下面添加 ="cursorColor": "#ec0"= 。
 
 * Footnotes
+
+[fn:5] https://superuser.com/questions/1559170/how-can-i-reduce-the-consumption-of-the-vmmem-process
+
 [fn:4] https://github.com/microsoft/WSL/issues/5393
 
 [fn:3] https://docs.microsoft.com/en-us/windows/wsl/
