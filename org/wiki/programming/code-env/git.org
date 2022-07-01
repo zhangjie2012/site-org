@@ -1,3 +1,4 @@
+
 #+SETUPFILE: ~/site/tpl/wiki-tpl.org
 #+TITLE: Git
 #+DATE: 2014-04-05 00:00
@@ -47,6 +48,26 @@
   - ~--since, --after, --until, --before~ ：仅显示指定时间之后、之前的提交
 + =git shortlog -sn= 提交统计[fn:1]
 + =git commit --amend= 修改最后一条提交
+
+git clone 提示[fn:2]：
+
+#+begin_quote
+Cloning into 'project'...
+Unable to negotiate with 192.168.4.100 port 22: no matching host key type found. Their offer: ssh-rsa,ssh-dss
+fatal: Could not read from remote repository.
+
+Please make sure you have the correct access rights
+and the repository exists.
+#+end_quote
+
+解决办法：在 =~/.ssh/config= 中添加：
+
+#+begin_src
+Host git.xxx.com
+    User git
+    PubkeyAcceptedAlgorithms +ssh-rsa
+    HostkeyAlgorithms +ssh-rsa
+#+end_src
 
 ** 分支
 
@@ -229,6 +250,8 @@ Git:
 - [[https://github.com/aseaday/git-style-guide][Git 风格指南]]
 
 * Footnotes
+
+[fn:2] https://stackoverflow.com/questions/69875520/unable-to-negotiate-with-40-74-28-9-port-22-no-matching-host-key-type-found-th
 
 [fn:git-pull-rebase] https://stackoverflow.com/questions/2472254/when-should-i-use-git-pull-rebase
 
