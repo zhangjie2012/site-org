@@ -78,7 +78,7 @@
 
 * TODO 容器
 * TODO Docker
-* Container Tools（podman、buildah、skopeo）：Docker CLI 替代品
+** Docker CLI 替代品：Container Tools（podman、buildah、skopeo）
 
 #+begin_quote
 Docker CLI 真的越来越臃肿了（啥都不干，内存好几 G 没了），集合了 compose、swarm、Kubernetes。而且很明显现在整个云原生生态
@@ -103,6 +103,11 @@ Mac 不是纯正的 Linux 系统，所以不管是 Docker 还是 podman 都需�
 但是 podman 不行（配置要进入虚拟机，而且主机目录挂载也是个问题）。
 
 结论是：听起来很好，Mac 下实际可行性较差。
+
+* CI/CD 项目
+
+- [[https://argoproj.github.io/][argo]] Get More Done with Kubernetes
+- [[https://fluxcd.io/][flux]] 云原生体系下的持续部署，GitOps
 
 * Kubernetes
 
@@ -231,6 +236,19 @@ Kubernetes 提供了服务发现和负载均衡、自动部署和回滚、弹性
   - [ ] [[https://kubernetes.io/docs/concepts/extend-kubernetes/operator/][Operator 模式]]
   - [ ] [[https://kubernetes.io/docs/concepts/extend-kubernetes/service-catalog/][Service Catalog]]
 
+** 搭建本地 Kubernetes
+
+一般用于 K8s 学习和应用程序开发人员。
+
+- [[https://minikube.sigs.k8s.io/docs/][minikube]]
+- [[https://kind.sigs.k8s.io/][kind]]：全称：”Kubernetes In Docker“，集群节点运行于 Docker 中，很快
+- [[https://k3s.io/][K3S]]：轻量级的 K8s，旨在资源匮乏的位于边缘的物联网和边缘设备上运行 K8s，可以在 VMWare 和 VirtualBox 等虚拟机环境下运行
+  简单、安全、优化的 K8s 环境
+- [[https://microk8s.io/][MicroK8s]] 如其名，微小的 K8s
+
+minikube 和 kind 的定位是完全相同的：避免 K8s 安装复杂，用于开发人员本地学习，K3s 和 MicroK8s 也可以实现相同的效果，不过
+他们的定位是提供生产级别的 IoT 和边缘场景下的 K8s 需求。
+
 ** 监控告警
 
 - [[file:kubernetes/monitor.org][监控]]: 通过 kube-state-metrics 和 cAdvisor 暴露指标
@@ -251,10 +269,29 @@ kubectl 是用来管理 Kubernetes 集群的命令行工具。
 - 单集群总 Pods 数量不超过 15000 个
 - 单集群总容器不超过 30000 个
 
-* CI/CD  项目
+** 管理平台
 
-- [[https://argoproj.github.io/][argo]] Get More Done with Kubernetes
-- [[https://fluxcd.io/][flux]] 云原生体系下的持续部署，GitOps
+Kubernetes 管理平台一般是对 K8s 能力平台化，降低运维管理成本（标准化化、自动化，DevOps），覆盖应用研发迭代生命周期（CI、CD、告警、日志等）。
+
+- [[https://www.okd.io/][OKR]] OpenShift 的社区版本，红帽 OpenShift 应该是业内做的比较早的的企业级混合云（PaaS），算是行业标杆吧
+- [[https://docs.rancher.cn/][rancher]] 2016 Rancher Labs 发布 1.0 rancher，2020年12月1日，公司被 [[https://www.suse.com/zh-cn/][suse]] 收购
+- [[https://kubesphere.io/zh/][KubeSphere]] 全栈的 Kubernetes 容器云 PaaS 解决方案，如他的描述。KubeSphere 适合作为小企业的私有云，常用的功能比较完备，开箱即用
+- [[https://github.com/portainer/portainer][portainer]] 轻量级的 Docker、Docker swarm、Kubernetes 集群管理工具（可以算成一个界面化管理工具）
+
+如果没有一定的容器化、DevOps 人员储备不太敢用 K8s，即便开箱急用的管理平台在生产环境使用大家也不太敢用。那换过来，有人员储
+备之后，用原生的开源的各组件方案自研一套难度也不大（而且可以根据业务所需选择合适的技术体系，灵活性高，也易于接受）。所以，
+很多企业是不太会用类似的管理平台的（或者有一种场景，有强力的 K8s 运维能力，但是无平台研发能力可以选择）。另外，如果企业直
+接使用云服务，云厂商也都提供了简易的 UI 界面来操作 K8s。
+
+* 日志体系
+
+** 数据收集 agent
+
+- [[https://www.fluentd.org/][fluentd]]：开源的数据收集器，2011 年至今，2016.11.8 被 CNCF 所录取，2019 年成为毕业项目。
+  + 数据统一结构化为 JSON
+  + 可插拔，支持多种上游数据源（data sources）和下游输出（data output）
+  + 低资源消耗：使用 C，Ruby 混合编码
+  + 数据可靠：支持内存和文件缓冲，防止数据丢失，还只是故障转移（高可用）；2000+ 数据驱动公司背书
 
 * Service Mash
 
