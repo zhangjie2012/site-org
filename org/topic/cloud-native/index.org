@@ -249,9 +249,21 @@ Kubernetes 提供了服务发现和负载均衡、自动部署和回滚、弹性
 minikube 和 kind 的定位是完全相同的：避免 K8s 安装复杂，用于开发人员本地学习，K3s 和 MicroK8s 也可以实现相同的效果，不过
 他们的定位是提供生产级别的 IoT 和边缘场景下的 K8s 需求。
 
-** 监控告警
+** 构建部署
 
-- [[file:kubernetes/monitor.org][监控]]: 通过 kube-state-metrics 和 cAdvisor 暴露指标
+- [[https://helm.sh/zh/][Helm]] Kubernetes 包管理器，用于项目的（含多个微服务，以及每个服务的依赖配置）打包、部署、回滚等生命周期管理
+- [[https://kubernetes.io/docs/concepts/extend-kubernetes/operator/][operator]] CRD + Controller = Operator，可以认为 Operator 是自定义资源的控制器。Operator 用来对 K8s API 进行扩展，用来创建
+  配置和管理复杂的应用（数据库、消息中间件、缓存等）。
+
+Helm 一般用于无状态应用的部署，类似中间件的服务也有开源的 charts，但是一般中间件的场景都需要更细粒度的控制，大厂都是用
+Operator 来做的。
+
+当然 Helm 要比 Operator 要简单多了，毕竟只是一个工具。好在官方提供了 [[https://github.com/kubernetes-sigs/kubebuilder][kubebuilder]] 和 [[https://github.com/kubernetes/code-generator][code generator]] 等工具可自动生成代码。
+
+目前社区已经开源了很多 helm charts 和 operators：
+
+- https://artifacthub.io/
+- https://operatorhub.io/
 
 ** kubectl CLI
 
@@ -268,6 +280,10 @@ kubectl 是用来管理 Kubernetes 集群的命令行工具。
 - 单集群不超过 5000 个节点
 - 单集群总 Pods 数量不超过 15000 个
 - 单集群总容器不超过 30000 个
+
+** 监控告警
+
+- [[file:kubernetes/monitor.org][监控]]: 通过 kube-state-metrics 和 cAdvisor 暴露指标
 
 ** 管理平台
 
@@ -295,7 +311,12 @@ Kubernetes 管理平台一般是对 K8s 能力平台化，降低运维管理成�
 
 * Service Mash
 
+*Istio*
+
+2017年5月，Google、IBM 和 Lyft [[https://istio.io/latest/news/releases/0.x/announcing-0.1/][宣布]] Istio 开源。
+
 - [[https://cloudnative.to/blog/jimmy-service-mesh-talk/][都 2021 年了，对于服务网格，社区到底在讨论什么？]] 2021年11月24日，“Istio 架构已经稳定，生产可用，生态正处于萌芽中”
+
 
 * Serverless
 
@@ -322,6 +343,8 @@ Kubernetes 管理平台一般是对 K8s 能力平台化，降低运维管理成�
     1. Linux namespace 的基础；
     2. 启用 pid 命名空间，开启 init 进程。
 - [[file:kubernetes/minreadyseconds-and-readiness.org][minReadySeconds 与 Readiness Probe]] 更好的理解 Pod 启动
+- [[https://lib.jimmysong.io/][云原生资料库]]
+- [[https://ossinsight.io/][OSSInsight]] Github 项目洞察，某种程度可以看到开源趋势，但是社区毕竟是社区，只可以参考
 
 ** 书籍
 
