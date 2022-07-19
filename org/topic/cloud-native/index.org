@@ -330,8 +330,6 @@ Kubernetes 管理平台一般是对 K8s 能力平台化，降低运维管理成�
 
 - [[https://knative.dev/docs/][Knative]] “2018.07 首次发布 Knative，2021.11 发布 1.0 版本”
 
-* 边缘计算
-
 * Resources
 
 - [[file:../../blog/2018/an-overall-view-on-docker-ecosystem-containers-moby-swarm-linuxkit-containerd-kubernete.org][Docker 生态系统一览]] 翻译的文章，较为详细的说明了 Docker 的前世今生
