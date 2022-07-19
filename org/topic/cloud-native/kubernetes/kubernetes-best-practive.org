@@ -1,0 +1,36 @@
+#+SETUPFILE: ~/site/tpl/wiki-tpl.org
+#+TITLE: Kubernetes 业内最佳实践合集
+#+DATE: 2022-07-15 14:22:11
+
+* 基础知识
+
+** [[https://mp.weixin.qq.com/s?__biz=Mzg5Mjc3MjIyMA==&mid=2247543827&idx=1&sn=ca6202812a8d51b557159957df1f6d8f][以图形化的方式了解 Kubernetes]]
+
+* DevOps
+
+** [[https://mp.weixin.qq.com/s?__biz=Mzg5Mjc3MjIyMA==&mid=2247543771&idx=1&sn=24919d94af211e2ff70d1cc6b08f85b5][Kubernetes 工程师必懂的 10 种 Ingress 控制器]]
+
+涉及 Ingress 选型考虑的点，以及常见的 ingress-controller。
+
+* 企业级实践
+
+** [[https://mp.weixin.qq.com/s?__biz=MzUxMDQxMDMyNg==&mid=2247486439&idx=1&sn=f905f5966bf25a8e8bac5ba4708908e6][小米Redis的K8s容器化部署实践]]
+** [[https://mp.weixin.qq.com/s?__biz=MzI0MjczMjM2NA==&mid=2247486371&idx=1&sn=3d5c15fb99c45c0eb1701090e1a0a6df][爱奇艺在日志实时数据监控的探索与实践]]
+** [[https://mp.weixin.qq.com/s?__biz=Mzg5Mjc3MjIyMA==&mid=2247543754&idx=1&sn=d86b264ef26e156213502dbb4941def7&source=41#wechat_redirect][微博云原生技术的思考与实践]]
+
+* Service Mesh
+
+** [[https://mp.weixin.qq.com/s?__biz=Mzg5Mjc3MjIyMA==&mid=2247543964&idx=1&sn=dabe66cb77aff97373fc2a792ba04e4f&source=41#wechat_redirect][Service Mesh 和 API Gateway 关系深度探讨]]
+
+* 使用技巧
+
+** [[https://mp.weixin.qq.com/s?__biz=Mzg5Mjc3MjIyMA==&mid=2247544008&idx=1&sn=0bbe00a46109e9dbd50903611d62174c][使用 Kubernetes 最常犯的错误]]
+
+1、Liveness 和 Readiness 探针：
+
+1. Liveness 探针失败，自动杀掉重新启动
+2. Readiness 探针失败，从负载均衡器的 endpoints 中移出
+
+慎用 Liveness，有时候 Pod 在处理任务 hang 住是比较正常的。Readiness 在一个服务包含多个 pods 时建议用起来。
+
+2、不要使用镜像的 =latest= 标签
