@@ -127,6 +127,10 @@ Windows terminal 快捷键跟 Emacs 快捷键冲突很多，索性直接禁用�
   }
 #+end_src
 
+* Xshell
+
+=sudo apt autoremove --purge openssh-server -y && sudo apt install openssh-server -y=
+
 * 使用
 
 *禁用光标闪烁* 配置没有办法直接禁用，只能在系统全局设置。 ~控制面板 => 键盘 => 更改光标闪烁速率~
