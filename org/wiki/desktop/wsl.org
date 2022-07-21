@@ -129,7 +129,13 @@ Windows terminal 快捷键跟 Emacs 快捷键冲突很多，索性直接禁用�
 
 * Xshell
 
-=sudo apt autoremove --purge openssh-server -y && sudo apt install openssh-server -y=
+Windows Terminal 很卡。直接使用 ssh 的方式连接。
+
+1. =sudo apt autoremove --purge openssh-server -y && sudo apt install openssh-server -y=
+2. 修改 sshd 配置 =/etc/ssh/sshd_config= ：
+   - 端口： =Port 2222=
+   - 密码登录： =PasswordAuthentication yes=
+3. =sudo service ssh --full-restart=
 
 * 使用
 
