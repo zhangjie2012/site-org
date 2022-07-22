@@ -71,6 +71,22 @@ Registry => Repositories => Tags = Image
 - 中科大：https://mirrors.ustc.edu.cn/help/dockerhub.html
 - daocloud: https://www.daocloud.io/mirror
 
+
+=WSL Ubuntu 22.04= 启动 docker 报错：
+
+#+begin_src
+failed to start daemon: Error initializing network controller: error obtaining controller instance: unable to add return
+rule in DOCKER-ISOLATION-STAGE-1 chain:  (iptables failed: iptables --wait -A DOCKER-ISOLATION-STAGE-1 -j RETURN:
+iptables v1.8.7     (nf_tables):  RULE_APPEND failed (No such file or directory): rule in chain DOCKER-ISOLATION-STAGE-1
+#+end_src
+
+解决办法[fn:1]：
+
+#+begin_src
+sudo update-alternatives --set iptables /usr/sbin/iptables-legacy
+sudo update-alternatives --set ip6tables /usr/sbin/ip6tables-legacy
+#+end_src
+
 * 镜像操作
 
 + 获取镜像: ~docker pull~
@@ -411,3 +427,7 @@ docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' con
 
 + [[https://yeasy.gitbooks.io/docker_practice][Docker - 从入门到实践]]：本文主要以这本书为参考骨架，然后根据其它资料扩展
 + [[https://blog.lab99.org/post/docker-2016-07-14-faq.html][Docker 问答录（100 问）]]
+
+* Footnotes
+
+[fn:1] https://github.com/microsoft/WSL/issues/6655
