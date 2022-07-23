@@ -11,22 +11,14 @@
 #+BEGIN_SRC shell
   wget https://go.dev/dl/go1.18.3.linux-amd64.tar.gz
   sudo tar -C /usr/local -xzf go1.18.3.linux-amd64.tar.gz
-
 #+END_SRC
 
-将 =/usr/local/go/bin= 添加到系统 =PATH= 环境变量，在 =/etc/profile= 或者 =$HOME/.profile= 中添加：
+将 =/usr/local/go/bin= 添加到系统 =PATH= 环境变量，另外，默认的工作目录是 =$HOME/go= ，如果是不同的目录需要 [[https://github.com/golang/go/wiki/SettingGOPATH][设置一下 GOPATH 环境变量]]。
+=go get= 安装的二进制包会放到 =$HOME/go/bin= 下面。所以，汇总后 =.bashrc/.zshrc= 中添加路径：
 
 #+BEGIN_SRC shell
-  export PATH=$PATH:/usr/local/go/bin
+  export PATH=$PATH:/usr/local/go/bin:$(go env GOPATH)/bin
 #+END_SRC
-
-默认的工作目录是 =$HOME/go= ，如果是不同的目录需要 [[https://github.com/golang/go/wiki/SettingGOPATH][设置一下 GOPATH 环境变量]]。
-
-=go get= 安装的二进制包会放到 =$HOME/go/bin= 下面。所以，还要在 =.bashrc/.zshrc= 中添加路径：
-
-#+begin_src shell
-  export PATH=$PATH:$(go env GOPATH)/bin
-#+end_src
 
 ** 检测是否安装成功
 
