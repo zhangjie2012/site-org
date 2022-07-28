@@ -38,25 +38,21 @@
 + IDE/Editor /我不用 IDE/
   + [[https://www.gnu.org/software/emacs/][Emacs]]，主力编辑器，[[file:../../topic/emacs/index.org][我的 Wiki]]，跨 Mac/Windows/Linux 三个平台
   + [[https://www.vim.org/][Vim]]，没办法，服务器只有 Vi/Vim
-+ 编码字体（当然是等宽字体）：
-  - 英文等宽 [[https://github.com/tonsky/FiraCode][Fira Code]]、 [[https://github.com/adobe-fonts/source-code-pro][Source Code Pro]]、[[https://www.jetbrains.com/lp/mono/][Jetbrains Mono]]（官方推荐 13 号字体和 1.20 倍行号，可是太小了）、[[https://github.com/supercomputra/SF-Mono-Font][SF Mono]] 苹果官方出的
-  - 中英文等宽等高：[[https://github.com/be5invis/Sarasa-Gothic][更纱黑体]] 一般的字体中英文等宽但是不等高，这款字体等宽又等高，但是总体略丑 [[https://mirrors.tuna.tsinghua.edu.cn/github-release/be5invis/Sarasa-Gothic/][清华下载镜像]]
-  - 不折腾字体了，英文 [[https://github.com/microsoft/cascadia-code][cascadia-code]]，中文更纱黑体，Emacs 使用 [[https://github.com/tumashu/cnfonts][cnfonts]] 实现中英文混排
++ 编码字体：见下方【字体】
 + 包管理工具
   - [[https://brew.sh/][Homebrew]]：The missing package manager for macOS
-+ 版本管理
-  - git
-+ 命令行使用优化
++ 版本管理：[[https://git-scm.com/][git]]
++ 命令行工具（效率提升）：
   - [[https://github.com/BurntSushi/ripgrep][rg]] grep 替代工具，以前用 [[https://github.com/ggreer/the_silver_searcher][ag]] ，听说 rg 更快
   - [[https://github.com/wting/autojump][autojump]]：目录快捷跳转，Windows 也支持
   - [[https://github.com/tmux/tmux][tmux]]：终端复用，目前主流的发行版默认都安装了
   - [[https://github.com/junegunn/fzf][fzf]]：命令行模糊查找，zsh [[https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/fzf][设置]]
 + SSH 连接工具 & 终端模拟器
-  - [[https://www.iterm2.com/][iterm2]]
+  - [[https://www.iterm2.com/][iterm2]]：MacOS
   - zsh + [[https://github.com/robbyrussell/oh-my-zsh][oh-my-zsh]]
-  - [[https://www.netsarang.com/products/xsh_overview.html][XShell]]：可惜只支持 Windows 环境
+  - [[https://www.netsarang.com/products/xsh_overview.html][XShell]]：Windows
 + Chrome 插件
-  - [[https://www.getpostman.com/][Postman]]：也可独立于 Chrome 运行
+  - [[https://www.getpostman.com/][Postman]]：插件，还需安装 App（独立于 Chrome）
   - FireShot：网页截图
   - [[https://github.com/FelisCatus/SwitchyOmega][SwitchyOmega]]：你懂的
 + 代码生成图片
@@ -72,13 +68,33 @@
 + UML
   - Mac 平台下的 WPS 支持画图，很好用
   - Windows 下当然是 Visio 啦，各种在线的都感觉不好用
-+ Docker
++ [[https://www.docker.com/][Docker]] 容器 CLI，也有 podman 等替代品，但就目前发展来看比 Docker 还是有差距
+
+* 字体
+
+** 中文
+
+- [[https://github.com/lxgw/LxgwWenKai][霞鹜文楷]] 我的 Emacs 中文字体
+- 思源系列：[[https://github.com/adobe-fonts/source-han-sans][思源黑体]] 、[[https://github.com/adobe-fonts/source-han-serif][思源宋体]]
+- [[https://www.foundertype.com/index.php/FontInfo/index/id/394][方正悠宋]]：PPT 中文字体，要购买版权
+- [[https://github.com/be5invis/Sarasa-Gothic][更纱黑体]]：最大的好处是，中英文等宽
+
+** 英文
+
+- 等宽 [[https://github.com/tonsky/FiraCode][Fira Code]]、 [[https://github.com/adobe-fonts/source-code-pro][Source Code Pro]]、[[https://www.jetbrains.com/lp/mono/][Jetbrains Mono]]、[[https://github.com/supercomputra/SF-Mono-Font][SF Mono]] 苹果官方出的
+- 非等宽：[[https://fonts.adobe.com/fonts/open-sans][Open Sans]] PPT 英文字体
+
+** 混排
+
+Emacs 使用 [[https://github.com/tumashu/cnfonts][cnfonts]] 实现中英文混排。
 
 * 工具软件
 
 ** 公有云
 
 目前只推荐腾讯云，UCloud 也还不错毕竟小厂。阿里云就算了，坑太多了。
+
+/注意：公有云并不便宜，体量越大越贵，小公司可以用。/
 
 ** 记录
 
@@ -95,7 +111,8 @@
 
 说明：
 
-- 用了 Foxmail 几年时间，最后弃了，主要原因是现在已经没人维护了，MacOS 下邮件接收太猛的时候（告警邮件），邮件会掉线，再登录一直提示密码错误，这个问题很严重
+- 用了 Foxmail 几年时间，最后弃了，主要原因是现在已经没人维护了，MacOS 下邮件接收太猛的时候（告警邮件），邮件会掉线，
+  再登录一直提示密码错误，这个问题很严重
 - [[https://getmailspring.com/][Mailspring]]：长相不错，跨全平台（Windows/MacOS/Linux），轻量级，就是 Bug 有点多
 
 ** 写作
@@ -109,7 +126,7 @@
 + 科学上网
   - VPN 如何选择可以上 [[https://www.duyaoss.com/][duyaoss]] 找
   - [[https://github.com/shadowsocks/ShadowsocksX-NG][ShadowsocksX-NG]]，没有稳定的梯子，现在都改成了 [[https://github.com/paradiseduo/ShadowsocksX-NG-R8][ShadowsocksX-NG-R8]] 了
-    很多人推荐 [[https://github.com/yichengchen/clashX][clashX]] ，支持很多平台，配置比较强大，但是用起来发现很多不该走代理的全部都走代理了（比如说 QQ 音乐和网易云音乐），就没用
+  - [[https://github.com/Fndroid/clash_for_windows_pkg][clash]]：比 SSR 更好用
   - iOS：Potatso Lite
 + 刻录
   - [[https://unetbootin.github.io/][UNetbootin]]：Windows、MacOS、Linux
