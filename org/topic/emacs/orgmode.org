@@ -67,6 +67,13 @@ orgmode 中 =_= 和 =^= 会被输出成下标和上标语法，可以在 =+OPTIO
 
 全局在 org 配置中打开 =org-startup-fold= [fn:1]。
 
+<2022-08-02 Tue 10:12>
+
+作为 GTD 使用时：
+
+1. 任务可以分优先级 =[#A], [#B], [#C]= 三种。使用 =<shift> + <up/down>= 进行切换
+2. =org-sort-entris= 对任务进行排序（很有用），选择按照权重 =[p]riority= 排序
+
 * 扩展资料
 
 - [[https://devhints.io/org-mode][org-mode cheatsheet]]
