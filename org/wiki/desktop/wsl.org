@@ -137,6 +137,11 @@ Windows Terminal 很卡。直接使用 ssh 的方式连接。
    - 密码登录： =PasswordAuthentication yes=
 3. =sudo service ssh --full-restart=
 
+关闭声音提示：
+
+1. Xshell 7 选项高级里没有入口可以设置了
+2. =C:\Users\系统用户名\Documents\NetSarang Computer\7\Xshell\Sessions\default= 中的 =BellMode= 值设置为 0。
+
 * 使用
 
 *禁用光标闪烁* 配置没有办法直接禁用，只能在系统全局设置。 ~控制面板 => 键盘 => 更改光标闪烁速率~
