@@ -140,8 +140,10 @@ APM：Application Performance Management。一般会分为三大块：
 ** 前端
 
 - 样式：[[file:programming/frontend/css.org][CSS]]，[[file:programming/frontend/less.org][less]]
-- 脚手架：[[file:programming/frontend/umi.org][umi]]
-- UI 组件：[[file:programming/frontend/antd.org][antd]]
+- umi.js 体系：
+  - [[file:programming/frontend/antd.org][antd]]：UI 组件库
+  - [[file:programming/frontend/umi.org][Umi]]：使用教程
+  - [[file:programming/frontend/umi-and-pro.org][umi 和 pro]] 从 Pro 到 umi 的发展历程（不再更新）
 - React 全家桶：
   + [[file:programming/frontend/react.org][React]]
   + [[file:programming/frontend/react-router.org][React-Router]]
