@@ -29,7 +29,7 @@
 
 + ~git init~: 初始化一个 git 仓库
 + ~git add <filename>~ : 添加一个文件到 git 仓库中
-+ ~git commit -m "commit message"~: 提交到本地
++ ~git commit -m "commit message"~: 提交到本地。 [[../../../blog/2018/git-commit-message-style-guide.org][Git 提交信息规范指南]]
 + ~git push [remote-name] [branch-name]~ : 把本地的提交记录推送到远端分支
 + ~git pull~: 更新仓库 ~git pull = git fetch + git merge~
 + ~git pull --rebase~: 更新仓库 ~git pull = git fetch + git rebase~ ，You should use ~git pull --rebase~ when your changes do not deserve a separate branch [fn:git-pull-rebase]

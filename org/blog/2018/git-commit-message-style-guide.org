@@ -2,9 +2,10 @@
 #+TITLE: Git 提交信息格式指南
 #+DATE: 2018-07-09 20:35:44
 
-不知道你有没有这样的感觉，不管是 SVN 还是 Git，提交代码的时候 commit
-格式总是不好拿捏，不知道应该以什么样的格式提交才「算好」。今天看到一篇文章，总结了
-Git 提交信息指南，觉得还不错。因为是英文的，就翻译了一下，意译非直译。
+不知道你有没有这样的感觉，不管是 SVN 还是 Git，提交代码的时候 commit 格式总是不好拿捏，不知道应该以什么样的格式提交才「算好」。
+今天看到一篇文章，总结了 Git 提交信息指南，觉得还不错。因为是英文的，就翻译了一下，意译非直译。
+
+译者注：[[https://www.udacity.com/][Udacity]] 好像是一家国际化的培训教育公司。
 
 --------------
 
@@ -12,28 +13,21 @@ Git 提交信息指南，觉得还不错。因为是英文的，就翻译了一�
 
 原文链接：[[https://udacity.github.io/git-styleguide/]]
 
-** 消息格式（Message Structure）
-   :PROPERTIES:
-   :CUSTOM_ID: 消息格式message-structure
-   :END:
+* 消息格式（Message Structure）
 
-提交消息由用空行分割的三部分组成：标题、可选的 body 、可选的
-footer。布局看起来像这样：
+提交消息由用空行分割的三部分组成：标题、可选的 body 、可选的 footer。布局看起来像这样：
 
-#+BEGIN_EXAMPLE
+#+begin_src
   type: subject
 
   body
 
   footer
-#+END_EXAMPLE
+#+end_src
 
 标题由消息类型和主题两部分组成。
 
-** 类型（The Type）
-   :PROPERTIES:
-   :CUSTOM_ID: 类型the-type
-   :END:
+* 类型（The Type）
 
 类型是标题的一部分，可是是下面的几种类型之一：
 
@@ -41,42 +35,29 @@ footer。布局看起来像这样：
 - *fix*：Bug 修复
 - *docs*：修改文档
 - *style*：格式化，缺少冒号，等等，没有代码的修改
-- *refactor*：重构生产代码
+- *refactor*：生产代码重构
 - *test*：添加测试用例，重构测试代码，没有生产代码的修改
 - *chore*：更新构建任务、包管理工具配置等等；没有生产代码修改
 
-** 主题（The Body）
-   :PROPERTIES:
-   :CUSTOM_ID: 主题the-body
-   :END:
+* 主题（The Body）
 
 主题不应该超过 50 个字符，以大写字母单词开始，不要以句号结束。
 
-精简的描述提交做的事情，而不是做了什么。比如使用 /change/，而不是
-/changed/ 或者 /changes/。
+精简的描述提交做的事情，而不是做了什么。比如使用 *change* ，而不是 changed 或者 changes
 
-** 内容（The Body）
-   :PROPERTIES:
-   :CUSTOM_ID: 内容the-body
-   :END:
+* 内容（The Body）
 
-不是所有的提交都需要写丰富的
-body，只有提交内容需要解释和有上下文的时候才需要写，所以是可选的。使用
-body 是用来解释提交的 *what* 和 *why*，而不是 *how*。
+不是所有的提交都需要写丰富的 body，只有提交内容需要解释和有上下文的时候才需要写，所以是可选的。使用 body 是用来解释提交的
+*what* 和 *why* ，而不是 *how* 。
 
 当写 body 的时候，在标题和 body 之间留一个空行，每行不能超过 72 个字符。
 
-** 页脚（The Footer）
-   :PROPERTIES:
-   :CUSTOM_ID: 页脚the-footer
-   :END:
+* 页脚（The Footer）
 
 footer 是可选的，用来写 issue 的跟踪 IDs。
 
-** 提交消息举例
-   :PROPERTIES:
-   :CUSTOM_ID: 提交消息举例
-   :END:
+* 提交消息举例
+
 
 #+BEGIN_EXAMPLE
   feat: Summarize changes in around 50 characters or less
@@ -107,6 +88,3 @@ footer 是可选的，用来写 issue 的跟踪 IDs。
   Resolves: #123
   See also: #456, #789
 #+END_EXAMPLE
-
-译者注：[[https://www.udacity.com/][Udacity]]
-好像是一家国际化的培训教育公司。
