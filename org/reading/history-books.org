@@ -1,7 +1,6 @@
 #+SETUPFILE: ~/site/tpl/link-tpl.org
 #+TITLE: 历史书
-#+OPTIONS: toc:t
-#+OPTIONS: num:n
+#+OPTIONS: toc:t nu:nil
 
 * 背景
 
