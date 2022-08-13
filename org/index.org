@@ -12,3 +12,5 @@
   + [[file:topic/emacs/index.org][Emacs]] 使用 Emacs 是一种信仰 /核心已完结/
   + [[file:topic/grpc/index.org][gRPC]] /核心已完结/
   + [[file:topic/miniapp/index.org][小程序开发系列]] /持续更新中/
+- 读书 :: [[file:reading/read-books.org][2016 年前读过的书]] 偏技术类，不再更新；现在按照历史类书籍和其他类保持 1:1 的时间分派阅读
+  + [[file:reading/history-books.org][历史书]]
