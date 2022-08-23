@@ -147,20 +147,13 @@ Windows Terminal 很卡。直接使用 ssh 的方式连接。
 *禁用光标闪烁* 配置没有办法直接禁用，只能在系统全局设置。 ~控制面板 => 键盘 => 更改光标闪烁速率~
 这个设定有点坑，估计后面会优化。
 
-在 WSL 系统中使用宿主 Windows 系统的代理：
-
-#+begin_src sh
-  export ALL_PROXY="http://$(cat /etc/resolv.conf |grep "nameserver" |cut -f 2 -d " "):7890"
-#+end_src
-
-取消代理： =unset ALL_PROXY= 。
+设置代理：https://gitlab.com/JerryZhang2012/dotfiles
 
 主机使用 ClashX 作为代理时，注意打开 =Allow LAN= 选项。
 
 *远程连接到服务器上，中文乱码* =/etc/default/locale= 中 LANG 改为 =zh_CN.UTF-8= 。
 
 *WSL 不支持 systemd* ，那就严重依赖 Docker 安装服务了。好在 Docker 和 WSL2 融合的似乎很完美[fn:1]。
-只要安装 Windows 版本的 Desktop 之后，开启 WSL2 即可。
 
 *设置启动目录* ="startingDirectory" : "//wsl$/Ubuntu-18.04/home/<Your Ubuntu Username>"= [fn:2]。
 
