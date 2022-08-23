@@ -2,18 +2,27 @@
 #+TITLE: pip
 #+DATE: 2017-12-04 11:34:03
 
-** MacOS 安装
+* 安装
 
-#+BEGIN_SRC shell
-sudo easy_install pip
-#+END_SRC
+https://pip.pypa.io/en/stable/getting-started/
 
-** 全局指定源
+#+begin_src sh
+wget https://bootstrap.pypa.io/get-pip.py
+python3 get-pip.py
+#+end_src
+
+使用：
+
+#+begin_src
+python3 -m pip install sampleproject-1.0.tar.gz
+python3 -m pip uninstall sampleproject
+#+end_src
+
+* 配置
+
+配置文件位置： =$HOME/.config/pip/pip.conf=
 
 #+BEGIN_SRC
-touch ~/.pip/pip.conf
-
-# pip.conf
 [global]
 timeout = 60
 index-url = http://pypi.douban.com/simple
@@ -21,9 +30,3 @@ trusted-host = pypi.douban.com
 #+END_SRC
 
 单次安装可以在命令行指定: ~pip install tornado -i https://pypi.douban.com/simple~
-
-** 指定用户
-
-#+BEGIN_SRC shell
-pip install --user mysql-python
-#+END_SRC
