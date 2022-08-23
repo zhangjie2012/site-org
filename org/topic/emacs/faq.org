@@ -3,6 +3,10 @@
 #+DATE: 2020-03-28 20:44:09
 
 * FAQ
+** 我可不可以用 Emacs 完成 XXX 能做的事情？
+
+没有银弹！纵然 Emacs 可能「可以做任何事情」，比如收发邮件、GTD、阅读 pdf、打开图片等等。然而我以为用合适的工具做合适的事情才是重要的.
+
 ** Emacs 启动速度太慢怎么办？
 
 ~M-x emacs-init-time~ 可以查看 Emacs 启动耗费时间。
@@ -120,10 +124,6 @@ Emacs 的快捷键非常多，但是除了基本的编辑操作快捷键之外�
 
 因人而异，如果之前你曾是 Vim 用户，建议你用 Evil。因为我一开始就用的是 Emacs，而不是 Vim，所以我一直用的是 Emacs 的键映射。
 
-** 我可不可以用 Emacs 完成 XXX 能做的事情？
-
-没有银弹！纵然 Emacs 可能「可以做任何事情」，比如收发邮件、GTD、阅读 pdf、打开图片等等。然而我以为用合适的工具做合适的事情才是重要的.
-
 ** 跨平台换行符统一
 
 - Unix/Linux 用的是 =LF=
@@ -138,6 +138,11 @@ Emacs 的快捷键非常多，但是除了基本的编辑操作快捷键之外�
 
 如果当前 buffer 是 CRLF，也可以使用 =M-x set-buffer-file-coding-system= 选择 =utf-8-unix= 进行转换。
 
+** tab 和空格转换？[fn:1]
+
+- =tabify= 空格转 tab
+- =untabify= tab 转空格
+
 * Troubleshooting
 
 ** 安装 lsp-mode 报错 spinner-1.7.3 is unavailable？
@@ -150,6 +155,8 @@ spinner 在 =gnu= 中，确保 =package-archives= 中包含 =https://elpa.gnu.or
 flycheck 最新稳定的版本还停留在 =Flycheck 31= 支持到 go1.11 。解决办法是要么升级 flycheck，使用 =melpa= 源，不要用 =melpa-stable= 即可 [fn:2]。
 
 * Footnotes
+
+[fn:1] https://www.masteringemacs.org/article/converting-tabs-whitespace
 
 [fn:md-to-org] https://emacs.stackexchange.com/questions/5465/how-to-migrate-markdown-files-to-emacs-org-mode-format
 
