@@ -36,100 +36,14 @@ vmmem 进程很占内存，[fn:5]
    memory=4GB
    #+end_src
 
+/在 Windows 下使用 WSL 做开发，系统内存至少 16G，否则再怎么缩减内存也不够用。/
+
 * 命令
 
 - =wsl -l -v= 查看当前运行的发行版
 - =wsl --shutdown= 关闭所有
 
-* Windows Terminal
-
-https://docs.microsoft.com/zh-cn/windows/terminal/get-started ，直接在商店搜索 Perviews 版本使用。
-
-Windows terminal 快捷键跟 Emacs 快捷键冲突很多，索性直接禁用掉：
-
-#+begin_src js
-  {
-      "command": "unbound",
-      "keys": "ctrl+v"
-  },
-  {
-      "command": "unbound",
-      "keys": "ctrl+c"
-  },
-  {
-      "command": "unbound",
-      "keys": "ctrl+shift+f"
-  },
-  {
-      "command": "unbound",
-      "keys": "alt+shift+d"
-  },
-  {
-      "command": "unbound",
-      "keys": "ctrl+shift+space"
-  },
-  {
-      "command": "unbound",
-      "keys": "ctrl+comma"
-  },
-  {
-      "command": "unbound",
-      "keys": "ctrl+shift+comma"
-  },
-  {
-      "command": "unbound",
-      "keys": "ctrl+alt+comma"
-  },
-  {
-      "command": "unbound",
-      "keys": "alt+space"
-  },
-  {
-      "command": "unbound",
-      "keys": "alt+enter"
-  },
-#+end_src
-
-重新绑定页签切换快捷键：
-
-#+begin_src js
-  {
-      "command":
-      {
-          "action": "switchToTab",
-          "index": 2
-      },
-      "keys": "alt+3"
-  },
-  {
-      "command":
-      {
-          "action": "switchToTab",
-          "index": 0
-      },
-      "keys": "alt+1"
-  },
-  {
-      "command":
-      {
-          "action": "switchToTab",
-          "index": 1
-      },
-      "keys": "alt+2"
-  },
-  {
-      "command":
-      {
-          "action": "switchToTab",
-          "index": 3
-      },
-      "keys": "alt+4"
-  }
-#+end_src
-
-* Xshell
-
-Windows Terminal 很卡。直接使用 ssh 的方式连接。
+* 使用 SSH 连接
 
 1. =sudo apt autoremove --purge openssh-server -y && sudo apt install openssh-server -y=
 2. 修改 sshd 配置 =/etc/ssh/sshd_config= ：
@@ -137,31 +51,43 @@ Windows Terminal 很卡。直接使用 ssh 的方式连接。
    - 密码登录： =PasswordAuthentication yes=
 3. =sudo service ssh --full-restart=
 
-关闭声音提示：
+* FAQ
 
-1. Xshell 7 选项高级里没有入口可以设置了
-2. =C:\Users\系统用户名\Documents\NetSarang Computer\7\Xshell\Sessions\default= 中的 =BellMode= 值设置为 0。
+** 如何禁用光标闪烁
 
-* 使用
+配置没有办法直接禁用，只能在系统全局设置。 ~控制面板 => 键盘 => 更改光标闪烁速率~
 
-*禁用光标闪烁* 配置没有办法直接禁用，只能在系统全局设置。 ~控制面板 => 键盘 => 更改光标闪烁速率~
-这个设定有点坑，估计后面会优化。
+/这个设定有点坑，估计后面会优化。/
 
-设置代理：https://gitlab.com/JerryZhang2012/dotfiles
+** 如何使用系统代理
+
+https://gitlab.com/JerryZhang2012/dotfiles
 
 主机使用 ClashX 作为代理时，注意打开 =Allow LAN= 选项。
 
-*远程连接到服务器上，中文乱码* =/etc/default/locale= 中 LANG 改为 =zh_CN.UTF-8= 。
+** 远程连接服务器，中文乱码
 
-*WSL 不支持 systemd* ，那就严重依赖 Docker 安装服务了。好在 Docker 和 WSL2 融合的似乎很完美[fn:1]。
+=/etc/default/locale= 中 LANG 改为 =zh_CN.UTF-8= 。
 
-*设置启动目录* ="startingDirectory" : "//wsl$/Ubuntu-18.04/home/<Your Ubuntu Username>"= [fn:2]。
+** 系统如何使用 systemd？
 
-*ssh-add 报错： =Could not open a connection to your authentication agent.=* 根源是 ssh-agent 没起来，使用： ~eval $(ssh-agent -s)~ 解决。
+不支持 systemd，安装服务、自启动等使用 Docker。
 
-*与宿主机（Windows）之间相互拷贝文件：* Windows 系统目录被挂载在 Linux 的 =/mnt/= 目录下，拷贝文件超级方便。
+** Windows Dockers 开启 WSL2 还是在 WSL2 中安装 Docker？
 
-*光标颜色* 在配置文件 =profiles -> defaults= 下面添加 ="cursorColor": "#ec0"= 。
+后者。所有带 GUI 的 Docker 都是垃圾（MacOS 和 Windows 下都一样）。
+
+** 如何设置启动目录
+
+="startingDirectory" : "//wsl$/Ubuntu-18.04/home/<Your Ubuntu Username>"= [fn:2]
+
+** ssh-add 报错：Could not open a connection to your authentication agent
+
+根源是 ssh-agent 没起来，使用： ~eval $(ssh-agent -s)~ 解决。
+
+** 与宿主机文件系统互通
+
+Windows 系统目录被挂载在 Linux 的 =/mnt/= 目录下，拷贝文件超级方便。
 
 * Footnotes
 
@@ -172,5 +98,3 @@ Windows Terminal 很卡。直接使用 ssh 的方式连接。
 [fn:3] https://docs.microsoft.com/en-us/windows/wsl/
 
 [fn:2] https://docs.microsoft.com/en-us/windows/terminal/troubleshooting#set-your-wsl-distribution-to-start-in-the-home--directory-when-launched
-
-[fn:1] https://docs.docker.com/docker-for-windows/wsl/
