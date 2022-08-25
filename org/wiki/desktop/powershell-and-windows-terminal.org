@@ -1,6 +1,14 @@
 #+SETUPFILE: ~/site/tpl/wiki-tpl.org
 #+TITLE: Powershell 与 Windows Terminal
 
+* Powershell
+
+** Commands Cheat Sheet
+
+| 命令                                  | 说明     |
+|---------------------------------------+----------|
+| =Remove-Item -Recurse -Force <path> = | 强制删除 |
+
 * Windows Terminal
 
 https://docs.microsoft.com/zh-cn/windows/terminal/get-started ，直接在商店搜索 Perviews 版本使用。
