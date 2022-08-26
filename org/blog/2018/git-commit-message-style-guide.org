@@ -31,13 +31,13 @@
 
 类型是标题的一部分，可是是下面的几种类型之一：
 
-- *feat*：新特性
-- *fix*：Bug 修复
-- *docs*：修改文档
-- *style*：格式化，缺少冒号，等等，没有代码的修改
-- *refactor*：生产代码重构
-- *test*：添加测试用例，重构测试代码，没有生产代码的修改
-- *chore*：更新构建任务、包管理工具配置等等；没有生产代码修改
+- *feat*: 新特性
+- *fix*: Bug 修复
+- *docs*: 修改文档
+- *style*: 格式化，缺少冒号，等等，没有代码的修改
+- *refactor*: 生产代码重构
+- *test*: 添加测试用例，重构测试代码，没有生产代码的修改
+- *chore*: 更新构建任务、包管理工具配置等等；没有生产代码修改
 
 * 主题（The Body）
 
@@ -57,7 +57,6 @@
 footer 是可选的，用来写 issue 的跟踪 IDs。
 
 * 提交消息举例
-
 
 #+BEGIN_EXAMPLE
   feat: Summarize changes in around 50 characters or less
