@@ -9,7 +9,7 @@
   - 你也可以买森海塞尔，比较中庸（听什么都 OK），我后来买了 [[https://item.jd.com/2184483.html][森海塞尔（Sennheiser）MOMENTUM In-Ear I Black Chrome]]，只能说电子产品一分钱一分货，相比 Grado 还是有一定差距的
   - 森海塞尔 CX True Wireless 蓝牙耳机：蓝牙音质果然差很多，这款耳机带着不怎么舒服，很闷；但好处是隔音，我睡觉当耳塞用
 + 机械键盘
-  - +Cherry MX2.0 G80-3800+ 性价比超级高，不喜欢机械键盘的朋友也可以尝试这款的低键位，快 10 年了，完好无损，现在不用有线了，基本不用
+  - +Cherry MX2.0 G80-3800+ 性价比超级高，不喜欢机械键盘的朋友也可以尝试这款的低键位，快 10 年完好无损，现在只用蓝牙了，已退役
   - +FILCO 87 圣手二代+ 茶轴，千元左右，主力用了 8 年，在我各种折腾下终于坏了
   - DURGOD 杜伽 K320 茶轴，五六百，支持蓝牙，目前公司在用
   - 京东京造 - 纪元系列国潮机械键盘，五六百，支持蓝牙、RGB 背光，目前家里在用
@@ -24,6 +24,7 @@
 说明：
 
 - 对于耳机，入耳式和头戴式看个人喜好，两个切换着用效果更佳；蓝牙耳机，会有一定的音质损伤，看怎么权衡了
+  1. 现在买只买蓝牙的，真香（如果你不打游戏的话）
 - 对于显示器，我自己测试下来，Mac mini 刷新率跟不上 4K，所以只能买 2K；但是对于笔记本，最新的系统 =10.15.1= 2K 与 4K 的差距还挺大的，10.15 之前没这种感觉
 - 对于机械键盘，我买过 2 个 Cherry 的，2 个 Filco 的，还有一个 [[https://item.jd.com/3491224.html][IKBC]] 的。轴用过青轴和茶轴，还有朋友的红轴。结论供参考：
   1. 原厂轴太重要了，IKBC 算是国内做的比较好的了，用的时间长了，轴跟 Filco 的还是有一定差距的（按着手指头累）
@@ -31,7 +32,7 @@
   3. 键盘不建议买奶白色，漂亮是绝对漂亮，就是太不禁脏了，别听信洗键帽之说，我有两个键盘洗过键帽，装回去之后总感觉怪怪的
   4. 推荐茶轴，青轴不适合写代码，一来太吵，而来确实累；红轴太轻了，几乎没有任何机械键盘的快感，还是算了
   5. 机械键盘用的时间长了，还是会比较累（难道是因为年龄大了？），后面准备低键位的红轴了
-  6. 现在买只买支持蓝牙的，真香（如果你不打游戏的话）
+  6. 再次强调一分钱一分货，DURGOD 不到两年，回车按着就有点问题了，而之前的 filco 用到死（还洗过几次）按键一点问题没有
 
 * 编码与环境
 
@@ -92,9 +93,13 @@ Emacs 使用 [[https://github.com/tumashu/cnfonts][cnfonts]] 实现中英文混�
 
 ** 公有云
 
-目前只推荐腾讯云，UCloud 也还不错毕竟小厂。阿里云就算了，坑太多了。
+计算场景腾讯云、阿里云、华为云都可以。存储可选七牛、又拍。
 
-/注意：公有云并不便宜，体量越大越贵，小公司可以用。/
+#+begin_quote
+无论公有云还是基于 IDC 自建，价格都等于：硬件成本+人力成本。所以并不存在公有云就便宜一说，只是对于微小公司资源占用小可以
+与其他公司匀掉人力成本（看起来便宜），而且体量越大公有云的成本要逐步高于自建云，因为人力的建设成本增长与资源的规模增长并
+不是一个系数。对于运维来说 100 台物理机和 1000 台物理机的管理成本可能是相同的（或者相差不大）。
+#+end_quote
 
 ** 记录
 
@@ -103,7 +108,7 @@ Emacs 使用 [[https://github.com/tumashu/cnfonts][cnfonts]] 实现中英文混�
     开始使用 org-mode 之后，云笔记也不咋用了
   - 印象笔记，相比有道云笔记，印象笔记支持团队空间
 + TODO
-  - +[[https://www.wunderlist.com/zh/][Wunderlist]]：支持 Windows 和 Mac 平台，[[https://github.com/edipox/wunderlistux][Ubuntu]]+ ，部分功能用 org-mode 代替了。 gtd 是一个很艰难的事，与工具无关。
+  - +[[https://www.wunderlist.com/zh/][Wunderlist]]：支持 Windows 和 Mac 平台，[[https://github.com/edipox/wunderlistux][Ubuntu]]+ ，部分功能用 org-mode 代替了。 gtd 是一个很艰难的事，与工具无关
 
 ** 邮箱客户端
 
@@ -132,6 +137,9 @@ Emacs 使用 [[https://github.com/tumashu/cnfonts][cnfonts]] 实现中英文混�
   - [[https://unetbootin.github.io/][UNetbootin]]：Windows、MacOS、Linux
 + 录屏
   - [[https://www.cockos.com/licecap/][LICEcap]]：Windows、MacOS
++ 截图：
+  + Windows 自带截图， =Win + Shift + s= 一般场景也足够了
+  + [[https://zh.snipaste.com/index.html][snipaste]]：支持 Windows/MacOS，好用
 
 * FAQ
 
