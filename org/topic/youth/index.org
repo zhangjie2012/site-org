@@ -1,0 +1,72 @@
+#+SETUPFILE: ~/site/tpl/youth-tpl.org
+#+TITLE: 绝版青春
+
+* DONE 在西农
+  CLOSED: [2015-01-06]
+
+/2008~2012 在西北农林科技大学上学的经历，2015 年写的这一个系列，所以日期是 2015。已完结。/
+
+- 2015-12-13: [[file:ultimate-youth-start.org][绝版青春-序]]
+- 2015-12-14: [[file:in-xinong-s1.org][第一个选择]]
+- 2015-12-15: [[file:in-xinong-s2.org][宿舍]]
+- 2015-12-16: [[file:in-xinong-s3.org][迷茫的大一]]
+- 2015-12-17: [[file:in-xinong-s4.org][胖子的音乐]]
+- 2015-12-19: [[file:in-xinong-s5.org][技术入门]]
+- 2015-12-20: [[file:in-xinong-s6.org][技术、论坛、博客、社交(上)]]
+- 2015-12-21: [[file:in-xinong-s7.org][技术、论坛、博客、社交(中)]]
+- 2015-12-23: [[file:in-xinong-s8.org][技术、论坛、博客、社交(下)]]
+- 2015-12-24: [[file:in-xinong-s9.org][摇滚(1)]]
+- 2015-12-25: [[file:in-xinong-s10.org][摇滚(2)]]
+- 2015-01-12: [[file:in-xinong-s11.org][摇滚(3)]]
+- 2015-01-13: [[file:in-xinong-s12.org][陈东坡]]
+- 2015-01-14: [[file:in-xinong-s13.org][WXYZ]]
+- 2015-01-15: [[file:in-xinong-s14.org][freespace]]
+- 2015-01-16: [[file:in-xinong-s15.org][找工作]]
+- 2012-07-01: [[file:in-xinong-s16.org][毕业碎语]]
+
+* TODO 在北京
+
+/2013 ~ 2014 在北京的经历。部分是在北京时候写的文章，部分是回忆。/
+
+- 2013-03-30: [[file:../blog/2013/about-recently-life.org][写写最近]]
+- 2014-03-03: [[file:../blog/2014/leave-beijing.org][离开北京，去上海]]
+
+* TODO 在上海
+
+/2014.3 ~ 2015.10 在上海的经历。部分是在上海写的文章，部分是回忆。/
+
+- 2014-03-10: [[file:../blog/2014/a-week-in-shanghai.org][上海一周，一切顺利]]
+- 2014-05-06: [[file:../blog/2014/new-start.org][新的开始]]：文章一部分丢了..
+- 2014-07-02: [[file:../blog/2014/about-dream.org][关于理想]]
+- 2014-10-29: [[file:../blog/2014/recently-two-month.org][最近这两个月..]]
+- 2015-07-21: [[file:../blog/2015/Smells-Like-Teen-Spirit.org][少年心气]]
+- 2015-08-16: [[file:../blog/2015/weekend-chat.org][周末闲聊]]
+- 2015-09-27: [[file:../blog/2015/quit-hot.org][离开热血]]
+
+* DONE 在合肥
+  CLOSED: [2019-01-26]
+
+/2015.10 ~ 2018.2 到合肥之后的经历，这一个系列是从那个时候开始的，所以并不是追忆。/
+
+- 2015-10-12: [[file:in-hefei-s0.org][在合肥-序]]
+- 2015-11-02: [[file:in-hefei-s1.org][在合肥-S1]]
+- 2015-11-23: [[file:in-hefei-s2.org][在合肥-S2]]
+- 2015-12-08: [[file:in-hefei-s3.org][在合肥-S3]]
+- 2015-12-22: [[file:in-hefei-s4.org][在合肥-S4]]
+- 2016-01-30: [[file:in-hefei-s5.org][在合肥-S5]]
+- 2016-03-27: [[file:in-hefei-s6.org][在合肥-S6]]
+- 2016-11-23: [[file:in-hefei-s7.org][在合肥-S7: 这一年多(上)]]
+- 2016-12-06: [[file:in-hefei-s8.org][在合肥-S8: 这一年多(下)]]
+- 2016-12-19: [[file:in-hefei-s9.org][在合肥-S9: 生活]]
+- 2017-04-02: [[file:in-hefei-10.org][在合肥-S10: 年后]]
+- 2017-06-18: [[file:in-hefei-11.org][在合肥-S11: 聊聊]]
+- 2017-07-08: [[file:in-hefei-12.org][在合肥-S12: 意义在哪里]]
+- 2017-09-26: [[file:in-hefei-13.org][在合肥-S13: 七月、八月、九月]]
+- 2017-10-02: [[file:in-hefei-S14.org][在合肥-S14: 两年]]
+- 2018-01-26: [[file:in-hefei-s15.org][在合肥-S15: 再见七行]]
+
+* TODO 在杭州
+
+/2018.2 之后，当时当下。/
+
+- 2018-03-04: [[file:in-hangzhou-s0.org][在杭州-S0：序]]
