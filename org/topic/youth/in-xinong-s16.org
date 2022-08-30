@@ -1,4 +1,4 @@
-#+SETUPFILE: ~/site/tpl/youth-tpl.org
+#+SETUPFILE: ~/site/tpl/site-tpl.org
 #+TITLE: 在西农-S16: 毕业碎语
 
 以前承诺要一天更新一篇把这一系列写完，然而过程没有我想的那么简单，回忆并不是一件让人很痛快的事情。不管怎么说吧，总算是把在学校的这段经历写完了，这篇 [[http://www.cnblogs.com/chinazhangjie/archive/2012/07/01/2572092.html][文章]] 是我毕业的时候写的，全文引用。

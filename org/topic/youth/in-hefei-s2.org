@@ -1,4 +1,4 @@
-#+SETUPFILE: ~/site/tpl/youth-tpl.org
+#+SETUPFILE: ~/site/tpl/site-tpl.org
 #+TITLE: 在合肥-S2
 #+DATE: 2015-11-23 00:00:00
 

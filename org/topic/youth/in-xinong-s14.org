@@ -1,4 +1,4 @@
-#+SETUPFILE: ~/site/tpl/youth-tpl.org
+#+SETUPFILE: ~/site/tpl/site-tpl.org
 #+TITLE: 在西农-S14: freespace
 
 前两天看到 [[http://zuimeia.com/][最美应用]] 上推荐了一款时间管理 App: UBhind，其主要功能是统计你在手机上的各种时间消耗。让我想起了我在大学组团队一起做的一款"软件"。

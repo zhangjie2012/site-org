@@ -1,4 +1,4 @@
-#+SETUPFILE: ~/site/tpl/youth-tpl.org
+#+SETUPFILE: ~/site/tpl/site-tpl.org
 #+TITLE: 在合肥-S9: 生活
 #+DATE: 2016-12-19 00:00:00
 

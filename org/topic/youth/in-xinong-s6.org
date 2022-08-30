@@ -1,4 +1,4 @@
-#+SETUPFILE: ~/site/tpl/youth-tpl.org
+#+SETUPFILE: ~/site/tpl/site-tpl.org
 #+TITLE: 在西农-S6: 技术、论坛、博客、社交(上)
 
 大二寒假的时候，我看了一本 C++ 模板相关的书：[[http://book.douban.com/subject/1144020/][C++ templates]]（现在估计买不到了，许多C++的经典书目都买不到了）。在整个 C/C++ 学习过程中，模板绝对是我当时遇到最难的一块，这本书一共由三部分组成，我只看了前两部分，

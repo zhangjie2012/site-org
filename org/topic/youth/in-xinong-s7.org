@@ -1,4 +1,4 @@
-#+SETUPFILE: ~/site/tpl/youth-tpl.org
+#+SETUPFILE: ~/site/tpl/site-tpl.org
 #+TITLE: 在西农-S7: 技术、论坛、博客、社交(中)
 
 接上文，2010 年下半年（大三上），我在找各种技术相关的论坛，Tanky 正在卖力的推广他的论坛。我看到了他的推广帖子就去看了看，没什么人气，就是几个搞 ACM 的人在疯狂刷题，菜鸡互啄。
