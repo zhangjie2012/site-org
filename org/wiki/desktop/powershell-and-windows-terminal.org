@@ -3,6 +3,36 @@
 
 * Powershell
 
+找到 Profile 位置[fn:2]： =code $Home\Documents\PowerShell\Profile.ps1=
+
+** PSColor：目录、文件支持 color
+
+https://github.com/Davlind/PSColor
+
+1. 安装 =Install-Module PSColor -Proxy "http://127.0.0.1:7890"=
+2. Profile 中添加 =Import-Module PSColor=
+
+** PowerLine - Beautiful, Powerful, PowerShell prompts
+
+https://github.com/Jaykul/PowerLine
+
+1. 安装
+   #+begin_src
+   Install-Module PANSIES -AllowClobber -Proxy "http://127.0.0.1:7890"
+   Install-Module PowerLine -Proxy "http://127.0.0.1:7890"
+   #+end_src
+2. Profile 中添加 =Import-Module PowerLine=
+3. 首次执行使用 =Set-PowerLinePrompt -SetCurrentDirectory -RestoreVirtualTerminal -Newline -Timestamp -Colors "#FFDD00", "#FF6600"=
+
+** posh-git：git 命令行增强
+
+https://github.com/dahlbyk/posh-git
+
+1. 安装 =Install-Module posh-git -Scope CurrentUser -Force -Proxy "http:/127.0.0.1:7890"=
+2. Profile 中添加 =Import-Module posh-git=
+
+*注意 posh-git 和 PowerLine 只能用一个。*
+
 ** Commands Cheat Sheet
 
 | 命令                                  | 说明     |
@@ -104,5 +134,6 @@ Windows terminal 快捷键跟 Emacs 快捷键冲突很多，索性直接禁用�
 需要加上 =-Encoding UTF8= ，即 =cat .\xxx.txt -Encoding UTF8=[fn:1]
 
 * Footnotes
+[fn:2] https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_profiles
 
 [fn:1] https://answers.microsoft.com/zh-hans/windows/forum/all/windows-terminal/20f53f69-5893-4595-8b9f-f3695fe8a048
