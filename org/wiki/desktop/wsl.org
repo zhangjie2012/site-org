@@ -41,7 +41,10 @@ vmmem 进程很占内存，[fn:5]
 * 命令
 
 - =wsl -l -v= 查看当前运行的发行版
-- =wsl --shutdown= 关闭所有
+- =wsl --shutdown= 关闭所有，不可以在 WSL 中使用 =sudo reboot= 命令实现重启
+  - =wsl -t <distro-name>= 关闭指定发行版
+- =wsl= 启动所有
+  - =wsl -d <distro-name>= 启动指定发行版
 
 * 使用 SSH 连接
 
@@ -65,9 +68,16 @@ https://gitlab.com/JerryZhang2012/dotfiles
 
 主机使用 ClashX 作为代理时，注意打开 =Allow LAN= 选项。
 
-** 远程连接服务器，中文乱码
+** locale 设置为 en_US.UTF-8
 
-=/etc/default/locale= 中 LANG 改为 =zh_CN.UTF-8= 。
+很多种方法，大部分都是直接修改 =/etc/default/locale= 加上 =.bashrc= 比较麻烦。
+
+简单的方法：
+
+#+begin_src sh
+  sudo locale-gen "en_US.UTF-8"
+  sudo dpkg-reconfigure locales
+#+end_src
 
 ** 系统如何使用 systemd？
 
