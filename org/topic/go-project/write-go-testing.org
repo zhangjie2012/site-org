@@ -76,4 +76,4 @@ func TestMain(m *testing.M) {
 
 - 运行所有测试用例： ~go test -count=1 -v ./...~
 - 运行单个模块： ~go test -count=1 -v module_name~
-- 运行单个模块的单个 case：  ~go test -count=1 -v module_name -run.test funcName~
+- 运行单个模块的单个 case： ~go test -count=1 -v module_name -test.run funcName~
