@@ -4,6 +4,10 @@
 
 * 办公硬件
 
++ 电脑选购
+  + 笔记本：
+    - [[https://zhuanlan.zhihu.com/p/64273719][2022年笔记本电脑选购指南]]
+    - [[https://zhuanlan.zhihu.com/p/109163245][【史上最全】主流品牌笔记本型号汇总点评（持续更新ing）]]
 + 耳机
   - [[https://gradolabs.com/][Grado]] SR325e：纯手工制作耳机，长相帅的一 B，就是包装丑了一点，当初是为了听摇滚买的
   - 你也可以买森海塞尔，比较中庸（听什么都 OK），我后来买了 [[https://item.jd.com/2184483.html][森海塞尔（Sennheiser）MOMENTUM In-Ear I Black Chrome]]，只能说电子产品一分钱一分货，相比 Grado 还是有一定差距的
@@ -18,8 +22,8 @@
   - 非 MacOS，2K 屏幕也可
 + 鼠标
   - [[https://item.jd.com/1201624.html][Logitech M558 无线鼠标]]：小巧好用的蓝牙无线鼠标，支持简单的快捷键定制
-+ 笔记本
-  - [[https://item.jd.com/4250271.html][NVV N-W1]]：非常好用的笔记本支架，折叠完了之后跟扇子差不多大小
++ 其他配件
+  + [[https://item.jd.com/4250271.html][NVV N-W1]]：非常好用的笔记本支架，折叠完了之后跟扇子差不多大小
 
 说明：
 
