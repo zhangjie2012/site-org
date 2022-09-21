@@ -12,7 +12,7 @@
   + [[file:topic/microservices/index.org][微服务]] 理念、架构和治理 /持续更新中，差的很远/
   + [[file:topic/miniapp/index.org][小程序开发系列]] /持续更新中/
   + [[https://github.com/zhangjie2012/emacs.d][Emacs]] 使用 Emacs 是一种信仰 /稳定/
-- 读书
+- 读书 ::
   + [[file:reading/history-books.org][历史书]]
   + [[file:reading/read-books.org][2016 年前读过的书]] 偏技术类，不再更新
 - 其他 ::
