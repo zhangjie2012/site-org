@@ -13,6 +13,35 @@
 
 docker MySQL 连接终端不能输入中文，指定 =LANG= 登录 =docker exec -it mysql-5 env LANG=C.UTF-8 bash= 。
 
+*Docker MySQL 设置 utf8mb4 编码*
+
+[[https://hub.docker.com/_/mysql/]]
+
+#+BEGIN_EXAMPLE
+  docker run -it -d --name xxx --restart=always --network qwerty -e MYSQL_ROOT_PASSWORD=xxx  -p 3306:3306 mysql:5.7 --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+#+END_EXAMPLE
+
+官方文档说设置 =--character-set-server=utf8mb4= 和 =--collation-server=utf8mb4_unicode_ci= 即可，但事实上是不够的，还需要修改配置：在宿主机上，添加配置文件 =mysql.cnf= ：
+
+#+BEGIN_SRC yaml
+  [client]
+  default-character-set=utf8mb4
+
+  [mysqld]
+  character-set-client-handshake = FALSE
+  character-set-server = utf8mb4
+  collation-server = utf8mb4_unicode_ci
+
+  [mysql]
+  default-character-set=utf8mb4
+#+END_SRC
+
+然后将配置 =docker cp= 到 docker 容器的 =/etc/mysql/conf.d= ，重启容器（启动时会自动加载 =conf.d= 下的 =*.cnf= ）。 这样才能正常的支持 =utf8mb4= 编码。
+
+还有一种办法是基于官方镜像，重新制作镜像，在 Dockerfile 中将配置 =CP= 到镜像中。
+
+但是导入的数据库，emoji 表情显示为 =?= ，字符也都没有问题，具体原因还没找到。
+
 * Command
 
 ** Database
@@ -282,35 +311,6 @@ docker MySQL 连接终端不能输入中文，指定 =LANG= 登录 =docker exec 
 分析工具二：mysqlsla（第三方）
 
 [[https://github.com/daniel-nichter/hackmysql.com/tree/master/mysqlsla]]
-
-** Docker MySQL 设置 utf8mb4 编码
-
-[[https://hub.docker.com/_/mysql/]]
-
-#+BEGIN_EXAMPLE
-  docker run -it -d --name xxx --restart=always --network qwerty -e MYSQL_ROOT_PASSWORD=xxx  -p 3306:3306 mysql:5.7 --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
-#+END_EXAMPLE
-
-官方文档说设置 =--character-set-server=utf8mb4= 和 =--collation-server=utf8mb4_unicode_ci= 即可，但事实上是不够的，还需要修改配置：在宿主机上，添加配置文件 =mysql.cnf= ：
-
-#+BEGIN_SRC yaml
-  [client]
-  default-character-set=utf8mb4
-
-  [mysqld]
-  character-set-client-handshake = FALSE
-  character-set-server = utf8mb4
-  collation-server = utf8mb4_unicode_ci
-
-  [mysql]
-  default-character-set=utf8mb4
-#+END_SRC
-
-然后将配置 =docker cp= 到 docker 容器的 =/etc/mysql/conf.d= ，重启容器（启动时会自动加载 =conf.d= 下的 =*.cnf= ）。 这样才能正常的支持 =utf8mb4= 编码。
-
-还有一种办法是基于官方镜像，重新制作镜像，在 Dockerfile 中将配置 =CP= 到镜像中。
-
-但是导入的数据库，emoji 表情显示为 =?= ，字符也都没有问题，具体原因还没找到。
 
 * Best Practices
 
