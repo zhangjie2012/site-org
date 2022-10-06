@@ -4,48 +4,64 @@
 
 * 发布到 go.dev
 
-  以 =github.com/zhangjie2012/cbl-go= 为例，Go 项目使用了 module 是前提。
+以 =github.com/zhangjie2012/cbl-go= 为例，Go 项目使用了 module 是前提。
 
-  在有一下两种情况下：
+在有一下两种情况下：
 
-  1. 网站的数据是从 [[https://proxy.golang.org/][https://proxy.golang.org/]] 下载的
-  2. 使用过 =go get github.com/zhangjie2012/cbl-go=
+1. 网站的数据是从 [[https://proxy.golang.org/][https://proxy.golang.org/]] 下载的
+2. 使用过 =go get github.com/zhangjie2012/cbl-go=
 
-  会自动将 package 收录到 [[https://pkg.go.dev/][pkg.go.dev]] 中，比如 =cbl-go= 的地址为：https://pkg.go.dev/github.com/zhangjie2012/cbl-go
+会自动将 package 收录到 [[https://pkg.go.dev/][pkg.go.dev]] 中，比如 =cbl-go= 的地址为：https://pkg.go.dev/github.com/zhangjie2012/cbl-go
 
-  如果你的项目没有添加 LICENSE，将不会自动生成文档内容。Github 项目有两种方式创建 LICENSE：
+如果你的项目没有添加 LICENSE，将不会自动生成文档内容。Github 项目有两种方式创建 LICENSE：
 
-  1. 初始化项目的时候，会提示你选择一个 LICENSE 文件；
-  2. 项目已经创建的情况下， =Add files= -> =Create new file= 如果将文件名输入成 =LICENSE= 会自动出现选项 =Choose a license template=
-     按需选择一个即可（我选择的是 MIT）；
+1. 初始化项目的时候，会提示你选择一个 LICENSE 文件；
+2. 项目已经创建的情况下， =Add files= -> =Create new file= 如果将文件名输入成 =LICENSE= 会自动出现选项 =Choose a license template= 按需选择一个即可；
 
-  发布：
+发布：
 
-  1. 新建 tag
-  2. 推送到 github
+1. 新建 tag
+2. 推送到 github
 
-  pkg.go.dev 的更新机制是 =go get= 的时候，所以只有 =go get= 才会刷新（延迟一段时间）。
+pkg.go.dev 的更新机制是 =go get= 的时候，所以只有 =go get= 才会刷新（延迟一段时间）。
+
+*LICENSE 如何选择？*
+
+1. https://docs.github.com/cn/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/licensing-a-repository
+2. https://www.ruanyifeng.com/blog/2011/05/how_to_choose_free_software_licenses.html
+
+我一般选择 MIT 或者 Apache。
+
+*proxy.golang.org 的说明*
+
+Go 模块的全局镜像。当然国内有七牛的 https://goproxy.cn/ 官方的 https://goproxy.io/zh/ 可用，是不是直接把 proxy.golang.org 作为上游镜像，我不太确定。
+
+为什么提交了新的改动，但是 =go get -u= 或者 =go list -m --version= 中没有出现呢？
+
+1. 有缓存，正常情况 30 分钟左右后生效
+2. 如果想要快速生效（1分钟左右），需要做一个版本发布（新建一个语义化的版本号，然后在 get 后面指定）
+3. 如果不想使用 GOPROXY，package 本身是公开的，则可以通过设置 ~GOPROXY=direct~ 来跳过 PROXY，直接从 repo 拉取
 
 * 优雅
 
 ** 书写文档规范
 
-   https://blog.golang.org/godoc
+https://blog.golang.org/godoc
 
-   有一定的规范，但又没有明确的规范。有疑惑的地方，可以参考标准库。
+有一定的规范，但又没有明确的规范。有疑惑的地方，可以参考标准库。
 
 ** 自动构建
 
-   Github Actions 中添加一个 workflow，其实是个 git hook，在每次提交的时候会触发自动构建。
+Github Actions 中添加一个 workflow，其实是个 git hook，在每次提交的时候会触发自动构建。
 
-   构建成功的会有一个徽标，你可以放到 readme 中，看起来酷酷的。
+构建成功的会有一个徽标，你可以放到 readme 中，看起来酷酷的。
 
 ** go.dev 的徽标
 
-   看讨论，https://github.com/golang/go/issues/36982 目前是不支持的。
+看讨论，https://github.com/golang/go/issues/36982 目前是不支持的。
 
-   可以用第三方的 https://shields.io 来替代：
+可以用第三方的 https://shields.io 来替代：
 
-   #+begin_src
+#+begin_src
 [![go.dev reference](https://img.shields.io/badge/go.dev-reference-007d9c?logo=go&logoColor=white&style=flat-square)](https://pkg.go.dev/url/of/your-module)
-   #+end_src
+#+end_src
