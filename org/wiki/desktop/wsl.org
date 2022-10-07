@@ -10,6 +10,8 @@ WSL[fn:3]，Windows Subsystem for Linux。允许开发人员在 Windows 下运�
 比较牛逼的一个点在于，安装一个 Linux 发行版跟安装普通软件一样，但却能拥有近乎原生的 Linux 系统
 （真正的 Linux 内核），而不需要安装虚拟机。
 
+/如无特殊说明以下 WSL 都表示 WSL2。/
+
 * 安装指引
 
 https://docs.microsoft.com/zh-cn/windows/wsl/install-win10
@@ -45,6 +47,33 @@ vmmem 进程很占内存，[fn:5]
   - =wsl -t <distro-name>= 关闭指定发行版
 - =wsl= 启动所有
   - =wsl -d <distro-name>= 启动指定发行版
+
+* 外部访问 WSL 中的服务
+
+如果在宿主机中访问 WSL 中的某个端口服务，直接通过 =localhost= 即可。但如果是在宿主机外部（如手机浏览器），则需要一层转发：
+
+#+begin_src
+netsh interface portproxy add v4tov4 listenaddress=0.0.0.0 listenport=4000 connectaddress=171.21.112.1 connectport=8080
+#+end_src
+
+说明：
+
+- =connectaddress= =connectport= WSL 的 IP 地址和服务暴露端口
+- =listenaddress= =listenport= 映射到宿主机的地址和端口
+
+查看当前所有映射： =netsh interface portproxy show all= 。
+
+删除某个映射： =netsh interface portproxy delete v4tov4 listenaddress=0.0.0.0 listenport=4000= 。
+
+其他说明：
+
+- 执行以上命令都需要管理员权限
+- 获取 WSL 的 IP 地址，Ubuntu =ip a= ，还有其他方法：[[https://superuser.com/questions/1586386/how-to-find-wsl2-machines-ip-address-from-windows][How to find WSL2 machine's IP address from windows]]
+- 如果外部无法访问，需要检查下 Windows 防火墙放行规则
+
+* 从 WSL 访问宿主机的服务
+
+宿主机对于 WSL IP 作为 =/etc/resolv.conf= 的 nameserver，另外也可以在 Windows 上执行 =ipconfig= 查看 =以太网适配器 vEthernet (WSL)= 中的值。
 
 * 使用 SSH 连接
 
