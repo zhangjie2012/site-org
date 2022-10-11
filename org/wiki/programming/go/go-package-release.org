@@ -2,35 +2,16 @@
 #+TITLE: Go package 发布
 #+DATE: 2020-07-22 10:51:56
 
-* 发布到 go.dev
+* 发布到 pkg.go.dev [fn:1]
 
-以 =github.com/zhangjie2012/cbl-go= 为例，Go 项目使用了 module 是前提。
+pkg.go.dev 的数据是从 [[https://proxy.golang.org/][proxy.golang.org]] 下载的，定期监控 [[https://index.golang.org/index][Go Module Index]] 然后添加到 pkg.go.dev。
+如果没有更新，以 =github.com/zhangjie2012/yo-kit= 为例，以下三种方法均可，第一种更快：
 
-在有一下两种情况下：
+1. 打开 =https://pkg.go.dev/github.com/zhangjie2012/yo-kit= 然后点击 =Request "github.com/zhangjie2012/yo-kit"= 按钮
+2. 向 proxy.golang.org 发出模块版本请求，比如 =https://proxy.golang.org/github.com/zhangjie2012/yo-kit/@v/main.info=
+3. 通过命令行下载该 pacakge ~GOPROXY=https://proxy.golang.org GO111MODULE=on go get github.com/zhangjie2012/yo-kit@main~
 
-1. 网站的数据是从 [[https://proxy.golang.org/][https://proxy.golang.org/]] 下载的
-2. 使用过 =go get github.com/zhangjie2012/cbl-go=
-
-会自动将 package 收录到 [[https://pkg.go.dev/][pkg.go.dev]] 中，比如 =cbl-go= 的地址为：https://pkg.go.dev/github.com/zhangjie2012/cbl-go
-
-如果你的项目没有添加 LICENSE，将不会自动生成文档内容。Github 项目有两种方式创建 LICENSE：
-
-1. 初始化项目的时候，会提示你选择一个 LICENSE 文件；
-2. 项目已经创建的情况下， =Add files= -> =Create new file= 如果将文件名输入成 =LICENSE= 会自动出现选项 =Choose a license template= 按需选择一个即可；
-
-发布：
-
-1. 新建 tag
-2. 推送到 github
-
-pkg.go.dev 的更新机制是 =go get= 的时候，所以只有 =go get= 才会刷新（延迟一段时间）。
-
-*LICENSE 如何选择？*
-
-1. https://docs.github.com/cn/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/licensing-a-repository
-2. https://www.ruanyifeng.com/blog/2011/05/how_to_choose_free_software_licenses.html
-
-我一般选择 MIT 或者 Apache。
+然后就可以在 https://pkg.go.dev/github.com/zhangjie2012/yo-kit 中看到文档了。
 
 *proxy.golang.org 的说明*
 
@@ -42,26 +23,50 @@ Go 模块的全局镜像。当然国内有七牛的 https://goproxy.cn/ 官方�
 2. 如果想要快速生效（1分钟左右），需要做一个版本发布（新建一个语义化的版本号，然后在 get 后面指定）
 3. 如果不想使用 GOPROXY，package 本身是公开的，则可以通过设置 ~GOPROXY=direct~ 来跳过 PROXY，直接从 repo 拉取
 
-* 优雅
+* 从 go.dev 移除
 
-** 书写文档规范
+1. 在 go.mod 中添加 =retract= 指令，查看 https://go.dev/blog/go116-module-changes 文档中的 *Module retraction* 小节
+2. 向 Go 开发团队提出 [[https://go.dev/s/pkgsite-package-removal][request]]
 
-https://blog.golang.org/godoc
+/两种方式其实都挺麻烦的。/
 
-有一定的规范，但又没有明确的规范。有疑惑的地方，可以参考标准库。
+* 文档
 
-** 自动构建
+pkg.go.dev 是根据代码中的文档（注释）自动生成的（godoc 工具自动提取），书写规范：[[https://go.dev/doc/comment][Go Doc Comments]]。
+
+TODO：翻译一份文档规范。
+
+* 最佳实践
+
+- *拥有一个 =go.mod= 文件* Go 1.11 后引入了官方的模块管理工具 =go mod=
+- *可分发 LICENSE* 使用少三方使用限制的开源协议，你的项目中根目录下需要有一个 =LICENSE= 文件
+- *Tagged 版本* 解析 package 时，优先使用 tag 标记的版本，如果没有 tag，则会寻找最新的提交记录（可读性差）
+  - 版本号定义规范：https://semver.org/
+- *Stable 版本* =v0= 是实验性版本，v1 或已上会被认为是个稳定版本，破坏性的更新会在大版本中；稳定版本之后的次要版本
+  通常认为是兼容的。
+
+*LICENSE 如何选择？*
+
+1. https://docs.github.com/cn/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/licensing-a-repository
+2. https://www.ruanyifeng.com/blog/2011/05/how_to_choose_free_software_licenses.html
+
+我一般选择 MIT 或者 Apache。
+
+*对于版本管理？*
+
+我的理解是，如果是自己使用没太必要用 tag 来维护，比较麻烦，全部推 main 分支即可。但如果考虑开源或者存在不兼容的情况，
+是需要严格的版本管理机制的。
+
+* 自动构建
 
 Github Actions 中添加一个 workflow，其实是个 git hook，在每次提交的时候会触发自动构建。
 
-构建成功的会有一个徽标，你可以放到 readme 中，看起来酷酷的。
+构建成功的会有一个徽标，你可以放到 README.md 中，看起来酷酷的。
 
-** go.dev 的徽标
+* go.dev 的徽标
 
-看讨论，https://github.com/golang/go/issues/36982 目前是不支持的。
+以前 https://github.com/golang/go/issues/36982 不支持，用第三方的 https://shields.io 来替代。目前已经支持了：https://pkg.go.dev/badge/
 
-可以用第三方的 https://shields.io 来替代：
+* Footnotes
 
-#+begin_src
-[![go.dev reference](https://img.shields.io/badge/go.dev-reference-007d9c?logo=go&logoColor=white&style=flat-square)](https://pkg.go.dev/url/of/your-module)
-#+end_src
+[fn:1] https://pkg.go.dev/about#adding-a-package
