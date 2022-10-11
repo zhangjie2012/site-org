@@ -26,29 +26,33 @@
 
 ** 基本操作
 
-+ ~git init~: 初始化一个 git 仓库
 + ~git add <filename>~ : 添加一个文件到 git 仓库中
-+ ~git commit -m "commit message"~: 提交到本地。 [[../../../blog/2018/git-commit-message-style-guide.org][Git 提交信息规范指南]]
-+ ~git push [remote-name] [branch-name]~ : 把本地的提交记录推送到远端分支
-+ ~git pull~: 更新仓库 ~git pull = git fetch + git merge~
-+ ~git pull --rebase~: 更新仓库 ~git pull = git fetch + git rebase~ ，You should use ~git pull --rebase~ when your
-  changes do not deserve a separate branch [fn:git-pull-rebase]
 + ~git checkout -- <file>~ : 还原未暂存（staged）的文件
-+ ~git reset HEAD <file>...~ : 取消暂存，那么还原一个暂存文件，应该是先 ~reset~ 后 ~checkout~
-+ ~git stash~ : 隐藏本地提交记录, 恢复的时候 ~git stash pop~ 。这样可以在本地和远程有冲突的情况下，更新其他文件
-+ ~git stash --list~: 查看储藏文件状态
++ =git commit --amend= 修改最后一条提交
++ ~git commit -m "commit message"~: 提交到本地。 [[../../../blog/2018/git-commit-message-style-guide.org][Git 提交信息规范指南]]
++ ~git init~: 初始化一个 git 仓库
 + ~git log~: 查看提交日志
   - ~--stat~ ：显示每次更新的文件修改统计信息
   - ~--shortstat~ ：只显示 --stat 中最后的行数修改添加移除统计
   - ~--name-status~: 查看改动文件
-  - ~--online~ ：只显示一行， ~--pretty=online~ 的简写
-  - ~--pretty=format:"xxx"~ ：设置日志输出格式
+  - ~--pretty=~ ：设置日志输出格式
+    - =oneline= 只展示一行
+    - =short= =medium= =full= =fuller= =email= 展示不同程度的信息（不太实用）
+    - =raw= 原始日志数据
+    - =format= 格式化，比如 ~git log --pretty=format:"%h %ad | %s %d [%an]" --date=short~
   - ~-p~: 显示更多提交记录详情（类似 ~git diff~ ），~git log -p -2~ 显示最近两次
   - ~--author~ ：仅显示指定作者相关的提交
   - ~--since, --after, --until, --before~ ：仅显示指定时间之后、之前的提交
-+ =git shortlog -sn= 提交统计[fn:1]
-+ =git commit --amend= 修改最后一条提交
+  - ~--date=~ 指定日期格式， =relative= 相对时间，更多参数命令行补全查看
++ ~git pull --rebase~: 更新仓库 ~git pull = git fetch + git rebase~ ，You should use ~git pull --rebase~ when your
+  changes do not deserve a separate branch [fn:git-pull-rebase]
++ ~git pull~: 更新仓库 ~git pull = git fetch + git merge~
++ ~git push [remote-name] [branch-name]~ : 把本地的提交记录推送到远端分支
 + =git remote set-url origin new_repo_addr= 更换远端 repo 地址[fn:3]
++ ~git reset HEAD <file>...~ : 取消暂存，那么还原一个暂存文件，应该是先 ~reset~ 后 ~checkout~
++ =git shortlog -sn= 提交统计[fn:1]
++ ~git stash~ : 隐藏本地提交记录, 恢复的时候 ~git stash pop~ 。这样可以在本地和远程有冲突的情况下，更新其他文件
++ ~git stash --list~: 查看储藏文件状态
 
 git clone 提示[fn:2]：
 
