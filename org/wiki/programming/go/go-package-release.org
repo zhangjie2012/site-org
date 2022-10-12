@@ -34,8 +34,6 @@ Go 模块的全局镜像。当然国内有七牛的 https://goproxy.cn/ 官方�
 
 pkg.go.dev 是根据代码中的文档（注释）自动生成的（godoc 工具自动提取），书写规范：[[https://go.dev/doc/comment][Go Doc Comments]]。
 
-TODO：翻译一份文档规范。
-
 * 最佳实践
 
 - *拥有一个 =go.mod= 文件* Go 1.11 后引入了官方的模块管理工具 =go mod=
