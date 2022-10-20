@@ -13,6 +13,11 @@
 
 原文链接：[[https://udacity.github.io/git-styleguide/]]
 
+<2022-10-20 Thu 17:31> 基于如下内容更新（更加实用些，不再是上面链接的翻译）：
+
+1. https://www.freecodecamp.org/news/how-to-write-better-git-commit-messages/
+2. https://cbea.ms/git-commit/
+
 * 消息格式（Message Structure）
 
 提交消息由用空行分割的三部分组成：标题、可选的 body 、可选的 footer。布局看起来像这样：
@@ -31,13 +36,16 @@
 
 类型是标题的一部分，可是是下面的几种类型之一：
 
-- *feat*: 新特性
-- *fix*: Bug 修复
-- *docs*: 修改文档
-- *style*: 格式化，缺少冒号，等等，没有代码的修改
-- *refactor*: 生产代码重构
+- *build* 构建相关、外部依赖变更
+- *ci* 持续集成依赖
+- *docs* 文档完善
+- *feat* 新特性
+- *fix* Bug 修复
+- *perf* 性能优化
+- *refactor* 生产代码重构
+- *revert* 代码回退
+- *style* 格式化，缺少冒号，等等，没有代码的修改
 - *test*: 添加测试用例，重构测试代码，没有生产代码的修改
-- *chore*: 更新构建任务、包管理工具配置等等；没有生产代码修改
 
 * 主题（The Body）
 
@@ -51,6 +59,14 @@
 *what* 和 *why* ，而不是 *how* 。
 
 当写 body 的时候，在标题和 body 之间留一个空行，每行不能超过 72 个字符。
+
+** 其他书写规范
+
+1. 标题行首字母大写
+2. 标题最多 50 个字符
+3. 不要用句号结束标题行
+4. 段落最多 72 个字符
+5. 用空行分割段落
 
 * 页脚（The Footer）
 
