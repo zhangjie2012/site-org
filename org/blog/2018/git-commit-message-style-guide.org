@@ -42,6 +42,7 @@
 - *feat* 新特性
 - *fix* Bug 修复
 - *perf* 性能优化
+- *project* 工程化相关，git 忽略文件、开发环境配置等
 - *refactor* 生产代码重构
 - *revert* 代码回退
 - *style* 格式化，缺少冒号，等等，没有代码的修改
