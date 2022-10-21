@@ -1,6 +1,6 @@
+#+SETUPFILE: ~/site/tpl/link-tpl.org
 #+TITLE: 张杰的简历
-#+OPTIONS: html-postamble:nil html-style:nil num:t
-#+HTML_HEAD_EXTRA: <link rel="stylesheet" type="text/css" href="/static/site.css"/>
+#+OPTIONS: num:t
 
 * 简介
 
