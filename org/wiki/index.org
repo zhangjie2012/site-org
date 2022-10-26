@@ -121,7 +121,7 @@ APM：Application Performance Management。一般会分为三大块：
 
 *** 开源的监控告警平台
 
-- [[https://n9e.didiyun.com/][Nightingale]]: 夜莺，滴滴开源
+- [[http://n9e.flashcat.cloud/][Nightingale]]: 夜莺，滴滴开源
 - [[https://github.com/Qihoo360/doraemon][Doraemon]]: 哆啦A梦，360 开源
 
 ** 日志
