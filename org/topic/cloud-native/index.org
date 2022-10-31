@@ -299,7 +299,7 @@ kubectl 是用来管理 Kubernetes 集群的命令行工具。
 
 Kubernetes 管理平台一般是对 K8s 能力平台化，降低运维管理成本（标准化化、自动化，DevOps），覆盖应用研发迭代生命周期（CI、CD、告警、日志等）。
 
-- [[https://www.okd.io/][OKR]] OpenShift 的社区版本，红帽 OpenShift 应该是业内做的比较早的的企业级混合云（PaaS），算是行业标杆吧
+- [[https://www.okd.io/][OKD]] OpenShift 的社区版本，红帽 OpenShift 应该是业内做的比较早的的企业级混合云（PaaS），算是行业标杆吧
 - [[https://docs.rancher.cn/][rancher]] 2016 Rancher Labs 发布 1.0 rancher，2020年12月1日，公司被 [[https://www.suse.com/zh-cn/][suse]] 收购
 - [[https://kubesphere.io/zh/][KubeSphere]] 全栈的 Kubernetes 容器云 PaaS 解决方案，如他的描述。KubeSphere 适合作为小企业的私有云，常用的功能比较完备，开箱即用
 - [[https://github.com/portainer/portainer][portainer]] 轻量级的 Docker、Docker swarm、Kubernetes 集群管理工具（可以算成一个界面化管理工具）

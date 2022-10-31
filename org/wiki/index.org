@@ -189,7 +189,7 @@ APM：Application Performance Management。一般会分为三大块：
 
 ** 编码环境
 
-- [[file:../topic/emacs/index.org][Emacs]]：神之编辑器
+- [[https://github.com/zhangjie2012/emacs.d][Emacs]]：神之编辑器
 - [[file:programming/code-env/git.org][git]] | [[file:programming/code-env/svn.org][svn]]：版本管理器
 - [[file:programming/code-env/pip.org][pip]]：Python 的包管理器
 - [[file:programming/code-env/iterm2.org][iterm2]]

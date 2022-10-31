@@ -45,7 +45,7 @@
 * 编码与环境
 
 + IDE/Editor /我不用 IDE/
-  + [[https://www.gnu.org/software/emacs/][Emacs]]，主力编辑器，[[file:../../topic/emacs/index.org][我的 Wiki]]，跨 Mac/Windows/Linux 三个平台
+  + [[https://www.gnu.org/software/emacs/][Emacs]]，主力编辑器，[[https://github.com/zhangjie2012/emacs.d][我的配置]]，跨 Mac/Windows/Linux 三个平台
   + [[https://www.vim.org/][Vim]]，没办法，服务器只有 Vi/Vim
 + 编码字体：见下方【字体】
 + 包管理工具
