@@ -1,6 +1,6 @@
 #+SETUPFILE: ~/site/tpl/link-tpl.org
 #+TITLE: 张杰的简历
-#+OPTIONS: num:t
+#+OPTIONS: num:t toc:t
 
 * 基本信息
 
