@@ -63,6 +63,7 @@
 + Chrome 插件
   - [[https://www.getpostman.com/][Postman]]：插件，还需安装 App（独立于 Chrome）
   - FireShot：网页截图
+  - [[https://tinysnap.app/][TinySnap]]：功能比 FireShot 强大一些，试用中
   - [[https://github.com/FelisCatus/SwitchyOmega][SwitchyOmega]]：你懂的
 + 代码生成图片
   - [[https://dawnlabs.io/carbon][carbon]]
