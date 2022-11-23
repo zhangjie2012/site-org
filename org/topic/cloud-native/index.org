@@ -352,6 +352,7 @@ Kubernetes 管理平台一般是对 K8s 能力平台化，降低运维管理成�
     1. Linux namespace 的基础；
     2. 启用 pid 命名空间，开启 init 进程。
 - [[file:kubernetes/minreadyseconds-and-readiness.org][minReadySeconds 与 Readiness Probe]] 更好的理解 Pod 启动
+- [[https://tencentcloudcontainerteam.github.io/2019/12/15/no-route-to-host/][Kubernetes 疑难杂症排查分享: 诡异的 No route to host]] Deployment 滚动更新的时候偶尔会报“No Route to host”
 - [[https://stackoverflow.com/questions/53534553/kubernetes-cni-vs-kube-proxy][cni 和 kube-proxy 的区别]]
   - CNI：保证每个 Pod 都有一个独立的 IP，而且他们之间可以相互通信，确保 Pod 可以向集群外部通讯
   - kube-proxy：是 service 的实现，拥有一个虚拟的 IP，在下游的 endpoints 之间做负载均衡
