@@ -345,6 +345,7 @@ Kubernetes 管理平台一般是对 K8s 能力平台化，降低运维管理成�
 - [[https://object-storage-ca-ymq-1.vexxhost.net/swift/v1/6e4619c416ff4bd19e1c087f27a43eea/www-assets-prod/presentation-media/hyper-kata-frakti-cri2.pdf][Unified Kubernetes CRI runtimes based on Kata Containers]] PPT，理解 Kubernetes 中的运行时
 - [[https://brennerm.github.io/posts/kubernetes-overview-diagrams.html][Kubernetes Overview Diagrams]] Kubernetes 概述图（很帅），涵盖架构，工作负载，网络存储，RBAC，资源 requests 和 limits 等
 - [[file:kubernetes/gce-kubernetes-best-practive-series.org][GCE Kubernetes 最佳实践系列]]
+- [[https://mrkaran.dev/posts/ndots-kubernetes/][DNS Lookups in Kubernetes]] 主要介绍 ndots 的作用，也是 nslookup 的关键
 - [[https://jimmysong.io/kubernetes-handbook/concepts/pause-container.html][Pause 容器]]，也称之为 Infra 容器，Pause 即暂停，但并不是停止状态，而是启动之后就会把自己阻塞住，什么都不干
   + 目标是为了解决多个容器之间最高效的共享某些资源和数据（打破 Linux Namespace/cgroups 隔离），
     Pause 是为了解决网络问题（如何共享网络）；
