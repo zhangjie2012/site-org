@@ -241,3 +241,43 @@ Pod 的 DNS 配置和 DNS 策略 =None= 可用性如下所示：
 |        1.14 | Stable              |
 |        1.10 | Beta(on by default) |
 |         1.9 | Alpha               |
+
+* 实践
+
+** =/etc/resolv.conf= 中的 ndots
+
+如上，每个集群中 Pod 的 =/etc/resolv.conf= 中的内容大概为
+
+#+begin_src
+nameserver 10.32.0.10
+search <namespace>.svc.cluster.local svc.cluster.local cluster.local
+options ndots:5
+#+end_src
+
+其中 nameserver 和 search 分别表示 DNS 地址和搜索域。
+
+比较关键的是 =ndots= 的含义。他表示请求域名的中的 =.= 的数量，当域名的 =.= 数量小于 =5= 时，会从 search 从依次填充后
+缀再从 DNS 服务器中查找。当大于等于 5 时，会直接对域名本身进行解析，然后再在搜索域列表中搜索。什么意思呢？
+
+假设你要访问 =api.github.com= ，点数小于 5， 那他的查找顺序为
+
+1. =api.github.com.<namespace>.svc.cluster.local=
+2. =api.github.com.svc.cluster.local=
+3. =api.github.com.cluster.local=
+4. =api.github.com=
+
+在这种情况下，访问外部域名会有大量的无效查询导致 dnslookup 变慢，也会增加 CoreDNS 的压力。
+
+优化的办法是改小 ndots 的值， =ndots:2= 可能是一个好的选择。为什么呢？search 域在 K8s 集群中是为了做服务发现，上面文章内
+容里有说明原理。在实际使用集群时，会用到的基本就两种情况：
+
+- 本空间短域名访问 =svc:port=
+- 跨空间短域名访问 =svc.namespace:port=
+
+所以 ndots 为 2 时，足够覆盖这两种场景。如何实现自动修改呢？
+
+1. pod 的 yaml 中 =dnsConfig= 可以修改 resolv 的内容；
+2. K8s 提供了 adminssion controller，用于在 Pod 的创建中做一些额外的事情。可以利用 adminession controller 的机制，
+   来自动化完成 dns 的注入。具体可见 [[https://blog.opskumu.com/kubernetes-mutating-webhook.html][自定义 Kubernetes 准入控制器]]。
+
+更多：https://pracucci.com/kubernetes-dns-resolution-ndots-options-and-why-it-may-affect-application-performances.html

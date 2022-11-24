@@ -284,6 +284,8 @@ kubectl 是用来管理 Kubernetes 集群的命令行工具。
 
 ** 最佳实践
 
+https://kubernetes.io/docs/setup/best-practices/cluster-large/
+
 大规模集群注意事项，Kubernetes 旨在适应满足一下标准的配置环境：
 
 - 单节点不超过 110 个 Pods
