@@ -16,3 +16,5 @@
   + [[file:reading/read-books.org][2016 年前读过的书]] 偏技术类，不再更新
 - 其他 ::
   + [[file:topic/youth/index.org][回忆录系列]] /没写完，不写了/
+  + [[file:wiki/growing/programmer.org][Setup]] 日常办公软硬件
+  + [[/sitemap.html][站点地图]]
