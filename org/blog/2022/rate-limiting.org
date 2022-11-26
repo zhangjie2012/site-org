@@ -101,7 +101,6 @@ https://github.com/zhangjie2012/yo-ratelimit
 分别实现了 token-bucket 和 sliding-window 两种算法。我的场景是需要针对单个 IP 或者用户请求进行限流，
 所以额外加了一个 =RateLimitPool= 的实现。
 
-
 * 总评
 
 - 漏桶的好处是任何时候流量都是非常均匀的，问题是无法处理流量不均匀或者突发（burst）情况（会被阻塞），特定场景才会使用；
