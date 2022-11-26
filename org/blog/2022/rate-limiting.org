@@ -48,7 +48,7 @@ rate limiting，通常叫做“速率限制”，“流量限制”。用于控�
 #+CAPTION: image via https://betterprogramming.pub/4-rate-limit-algorithms-every-developer-should-know-7472cb482f48
 [[https://blog-1252349778.cos.ap-beijing.myqcloud.com/2022/leaky_bucket.png]]
 
-想想有一个桶，桶中放着所有要处理的请求。水滴的速度用来控制请求什么时候被处理。
+想象有一个桶，桶中放着所有要处理的请求。水滴的速度用来控制请求什么时候被处理。
 
 1. 桶可以类比成一个 FIFO 的队列
 2. 新的流量进来之后，先入队
@@ -72,14 +72,14 @@ rate limiting，通常叫做“速率限制”，“流量限制”。用于控�
 
 ** 滑动窗口（Sliding Window）
 
-#+CAPTION: image via https://blog-1252349778.cos.ap-beijing.myqcloud.com/2022/sliding_window.png
+#+CAPTION: image via https://dev.to/satrobit/rate-limiting-using-the-sliding-window-algorithm-5fjn
 [[https://blog-1252349778.cos.ap-beijing.myqcloud.com/2022/sliding_window.png]]
 
 滑动窗口是固定窗口的一种改进，为了解决固定窗口在窗口边缘突发流量是无法检测的问题。
 
 解决的思路是如果没到达当前窗口的结束，则按照差的比例，从前一个窗口的加权补充到当前窗口。讲起来有点绕，但其实很好理解。
 
-如上图，假设一分钟总的限制是 50，当前时间为 =01:20= ，已经计数了 20 。
+如上图，假设一分钟消耗为 50，当前时间为 =01:20= ，已经计数了 20 。
 
 1. 当前时间未到达 =2:00= 占了当前 2 分钟窗口的 ~20/60 = 1/3~ ；
 2. 从前一分钟补偿 =2/3= 的时间，凑够 1 分钟。也就是 =50 * (2/3)= ；
@@ -93,6 +93,14 @@ rate limiting，通常叫做“速率限制”，“流量限制”。用于控�
 - 漏桶：uber 开源的 [[https://github.com/uber-go/ratelimit][ratelimit]]
 - 滑动窗口：https://github.com/RussellLuo/slidingwindow
 - 固定窗口和滑动日志用的比较少，知名的开源实现也少
+
+* 我自己的实现
+
+https://github.com/zhangjie2012/yo-ratelimit
+
+分别实现了 token-bucket 和 sliding-window 两种算法。我的场景是需要针对单个 IP 或者用户请求进行限流，
+所以额外加了一个 =RateLimitPool= 的实现。
+
 
 * 总评
 
