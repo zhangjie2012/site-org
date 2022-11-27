@@ -2,9 +2,7 @@
 #+TITLE: Ubuntu
 #+DATE: 2018-09-10 21:39:56
 
-+以下也适合 Linux mint，目前一直在用。+
-
-目前使用 WSL 下的 Ubuntu 20.04 TLS。
+目前再用 Ubuntu 22.04 LTS 版本。
 
 * 设置国内源
 
@@ -88,23 +86,27 @@ Sock5 proxy：[[https://www.irif.fr/~jch/software/polipo/][Polipo]]
 
 ** SSR *推荐*
 
-1. https://github.com/shadowsocksrr/electron-ssr 设置订阅源，然后更新
+1. https://github.com/shadowsocksrr/electron-ssr 设置订阅源，然后更新（没代理可能无法打开 github，最好平时自己缓存一份）。
 2. 开启全局代理
 3. Chrome 安装 SwitchyOmega 并设置，规则列表网址： =https://raw.githubusercontent.com/gfwlist/gfwlist/master/gfwlist.txt=
 4. 关闭全局代理
 
-*注意* ：electron-ssr 是用 Python 写的，但一些较新的系统默认只安装了 Python3，所以需要手动安装一下，否则将无法正常使用。
+*注意* ：electron-ssr 是用 Python 写的，最近几个版本的 Ubuntu 发行版默认只安装了 Python3，所以需要手动安装一下，否则将无法正常使用。
+具体操作：
 
-可以参考这个安装教程：https://github.com/qingshuisiyuan/electron-ssr-backup/blob/master/Ubuntu.md， 较新版本的 Linux 发行版，systemd 自己运行了一个
-DNS server（127.0.0.53, =systemd-resolved= 这个服务），这会导致全局代理不生效（PAC 也更新不了），参考文档中的“系统设置”修改之后即可解决这个问题。
+#+begin_src sh
+  sudo apt install python2
+  sudo ln -s /usr/bin/python2 /usr/bin/python
+#+end_src
+
+可以参考这个安装教程：https://github.com/qingshuisiyuan/electron-ssr-backup/blob/master/Ubuntu.md， 较新版本的 Linux 发行版，
+systemd 自己运行了一个 DNS server（127.0.0.53, =systemd-resolved= 这个服务），这会导致全局代理不生效（PAC 也更新不了），
+参考文档中的“系统设置”修改之后即可解决这个问题。
 
 * 软件列表
 
-- +搜狗输入法+
-  + 先安装 fcitx =apt install fcitx=
-  + 安装 [[https://pinyin.sogou.com/linux/?r=pinyin][搜狗拼音输入法]]
-  + 重启电脑即可生效，如果没生效，通过 fctix 配置，添加搜狗输入法
-- rime 输入法
+- 搜狗输入法，按照官方的 [[https://shurufa.sogou.com/linux/guide][安装指南]] 即可
+- +rime 输入法+
   + 安装： =sudo apt-get install fcitx-rime=
   + 默认是繁体的，设置成简体：
     - =~/.config/fcitx/rime/build/luna_pinyin.schema.yaml=
@@ -112,7 +114,7 @@ DNS server（127.0.0.53, =systemd-resolved= 这个服务），这会导致全局
 - 邮箱客户端：Thunderbird，说他丑，说他重度，可是只有他最稳定啊
 - 截图工具：[[https://github.com/lupoDharkael/flameshot][flameshot]]
   1. =apt install flameshot= 安装
-  2. 将 =flameshot gui= 绑定到 =Ctrl+Alt+A= 快捷键上
+  2. 绑定快捷键：将 =flameshot gui= 绑定到 =F1=
 - 视频播放器：[[https://www.videolan.org/vlc/download-ubuntu.html][VLC]] =apt install vlc=
 - gif 录屏：[[https://github.com/phw/peek][Peek]]，这个很好用，视频录制也有人推荐 [[https://github.com/hzbd/kazam][Kazam]]，就我个人而言 Peek 满足需求了
 - SNS
@@ -144,20 +146,9 @@ GNOME 太不稳定了，换到了 Xubuntu，世界顿时清净了。
 
 迫于 Ubuntu 20.04 的诱惑，升级到了 20.04。
 
-* Xfce
+<2022-11-27 Sun 17:17>
 
-快捷键：
-
-|------------------+----------|
-| 快捷键           | 描述     |
-| =Ctrl + Alt + D= | 显示桌面 |
-| =Alt + F4=       | 关闭窗口 |
-| =Ctrl + ESC=     | 打开菜单 |
-|------------------+----------|
-
-http://xahlee.info/linux/linux_xfce_keyboard_shortcuts.html
-
-如何移动 panel：https://forum.xfce.org/viewtopic.php?id=7310
+升级到 22.04 LTS 版本。
 
 * FAQ
 
@@ -204,14 +195,6 @@ via: [[https://www.dedoimedo.com/computers/ubuntu-beaver-slow-boot.html]]
 使用 bluetoothctl 添加设备 TRUST：
 
 控制台输入 bluetoothctl， =devices= 查看设备列表，找到蓝牙对应的 MAC 地址，然后 =trush <mac-addr>= 即可。
-
-** fcitx + 搜狗拼音经常会出现某一个核 CPU 占 100 的情况
-
-网上说在 fctix 输入法配置 -> 附加组件 -> 高级 -> 然后把 "搜狗云拼音" 去掉就可以了。
-
-不确定是否可行，先试试。后面不行的话就不用搜狗拼音了。<2020-03-21 13:46:58 六> 确定可行。
-
-<2021-07-17 六 10:34> 建议使用 rime。
 
 ** 重启 fcitx 之后，Emacs GUI 无法进行输入法切换
 
