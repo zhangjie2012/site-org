@@ -44,9 +44,9 @@
 2. 编辑 ~/etc/profile~ 或者 ~$HOME/profile~ 移除 ~PATH~ 环境变量中的 go bin 路径
 3. 删除工作目录
 
-* 插件和 IDE
+* 开发环境
 
-见 [[file:../../../topic/emacs/ide.org][Emacs IDE]] 内容。
+见 [[https://github.com/zhangjie2012/emacs.d][Emacs->开发环境->Go]] 。
 
 * 跨平台编译
 

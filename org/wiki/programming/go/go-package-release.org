@@ -9,7 +9,7 @@ pkg.go.dev 的数据是从 [[https://proxy.golang.org/][proxy.golang.org]] 下�
 
 1. 打开 =https://pkg.go.dev/github.com/zhangjie2012/yo-kit= 然后点击 =Request "github.com/zhangjie2012/yo-kit"= 按钮
 2. 向 proxy.golang.org 发出模块版本请求，比如 =https://proxy.golang.org/github.com/zhangjie2012/yo-kit/@v/main.info=
-3. 通过命令行下载该 pacakge ~GOPROXY=https://proxy.golang.org GO111MODULE=on go get github.com/zhangjie2012/yo-kit@main~
+3. 通过命令行下载该 package ~GOPROXY=https://proxy.golang.org GO111MODULE=on go get github.com/zhangjie2012/yo-kit@main~
 
 然后就可以在 https://pkg.go.dev/github.com/zhangjie2012/yo-kit 中看到文档了。
 
