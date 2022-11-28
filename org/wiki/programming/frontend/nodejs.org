@@ -3,12 +3,13 @@
 #+TITLE: nodejs
 #+DATE: 2020-06-17 20:17:44
 
-* 安装 14.x
+* 安装
 
 ** Ubuntu
 
 #+begin_src sh
-  curl -sL https://deb.nodesource.com/setup_14.x | sudo bash -
+  curl -sL https://deb.nodesource.com/setup_14.x | sudo bash - # 14.x
+  curl -sL https://deb.nodesource.com/setup_18.x | sudo bash - # 18.x
   sudo apt install nodejs
 #+end_src
 
