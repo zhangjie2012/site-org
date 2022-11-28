@@ -2,6 +2,24 @@
 #+TITLE:  构建 Go 项目最佳实践
 #+DATE: 2021-04-27 15:33:45
 
+* 语言学习
+
+- [[../../blog/2017/gopl-notes.org][Go 语言圣经学习笔记]] 2017 年学习 Go 的笔记，虽然有些内容有些老旧（比如 package 管理），但语言核心的东西是没大变化
+- [[../../blog/2018/effective-go-notes.org][Effective Go 精简版]] 比较基础的用法，教你避“坑”
+- [[../../blog/2018/go-defer-panic-reover.org][Go 的异常处理：defer，panic，recover]]
+- [[../../blog/2018/understand-go-array-and-slice.org][理解 Go 的 Array 和 Slice]]：除了理解之外，主要的记录了使用 Slice 过程中遇到的“坑”，但是 gopher 似乎不认为是个“设计缺陷”
+- [[../../blog/2018/go-http-get-close-body.org][Go http 请求必须要手动 resp.Body.Close]] 基本上每个 gopher 都翻过的错，不关闭 resp.body 导致 fd 飙升
+- [[../../blog/2020/go-mysql-closing-bad-idle-connection.org][Go MySQL 报错 closing bad idle connection: EOF]] 一次问题排查
+- [[../../blog/2021/go-range.org][Go for...range]] 实际上 range 返回的都是浅拷贝，并不是迭代器
+  
+* package 管理和发布
+
+以前用 govender，go 1.11 之后统一使用 module 了。[[file:../../wiki/programming/go/package-manager.org][包管理工具]]。
+
+- [[https://encore.dev/guide/go.mod][Go modules cheat sheet]]
+
+* 工程实践
+
 * 目录结构
 
 Go 目前没有一个权威性质的 Web framework（类似 Python 的 Django/Flask，Java 的 SprintBoot 等），大部分 Web 框架所做的事情
@@ -12,13 +30,6 @@ Go 目前没有一个权威性质的 Web framework（类似 Python 的 Django/Fl
 来说，还是太过宽泛了。所以我根据自己的经验，在 Go project layout 的基础上整理了一套属于自己的规范。
 
 - [[file:project-layout.org][Go 项目目录结构]]
-- [[https://gitlab.com/JerryZhang2012/go-http-server-template][go-http-server-template]] 针对 http 服务器模板，涉及：
-
-* 包管理
-
-以前用 govender，go 1.11 之后统一使用 module 了。[[file:../../wiki/programming/go/package-manager.org][包管理工具]]。
-
-- [[https://encore.dev/guide/go.mod][Go modules cheat sheet]]
 
 * package 发布
 
@@ -29,7 +40,7 @@ Go 目前没有一个权威性质的 Web framework（类似 Python 的 Django/Fl
 - [[file:go-web-framework.org][Web 框架选择]]
 - [[file:redis.org][Redis]]
 - [[file:log.org][Go logger packages]]
-- [[file:go-mysql.org][Go MySQL]]，还m是使用 ent 吧
+- [[file:go-mysql.org][Go MySQL]]，还是使用 ent 吧
 - [[file:go-mongodb.org][Go MongoDB]]
 - http client：[[https://github.com/go-resty/resty][resty]]
 - 序列化：[[https://github.com/vmihailenco/msgpack][msgpack]] 说是比 JSON 的效率高五六倍，文档 https://msgpack.uptrace.dev/

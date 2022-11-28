@@ -57,8 +57,8 @@ body.
   http.Post(url, "application/json", nil)
 #+end_src
 
-我不对返回值进行判断，也不读取 =resp.Body= 就不用手动释放。但实际上并不是这样，只要 Body 中有数据就必须要手动关闭。也就是说，在 Go 中，
-所有的 http 请求必须这样：
+我不对返回值进行判断，也不读取 =resp.Body= 就不用手动释放。但实际上并不是这样，只要 Body 中有数据就必须要手动关闭。也就是说，
+在 Go 中，所有的 http 请求必须这样：
 
 #+begin_src go
   resp, err := http.Post(url, "application/json", nil)
