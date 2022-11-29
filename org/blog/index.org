@@ -44,6 +44,7 @@
 - 02-22: [[file:2019/close-yanjie.org][眼界要关停了]]
 - 02-11: [[file:2019/2019-chun-jie.org][2019 年春节]]
 - 01-28: [[file:2019/javascript-null-vs-undefined.org][Javascript null vs undefined]]
+- 01-18: [[file:2019/golang-date-format.org][Golang 时间格式化与解析]]
 - 01-01: [[file:2019/2018-personal-review.org][2018 个人总结]]
 
 * 2018

@@ -96,10 +96,10 @@ Go modules 的设计之初是想完全放弃 vendor 目录的，但是社区的 
 Go 1.16 之后， =-insecure= 参数将会被逐渐废弃，如果你使用的话，会提示 =deprecated= ，官方的 [[https://golang.org/doc/go1.16][release log]] 里有说明：
 
 #+begin_quote
-   The =go get -insecure= flag is deprecated and will be removed in a future version. This flag permits fetching from repositories and
-   resolving custom domains using insecure schemes such as HTTP, and also bypasses module sum validation using the checksum database.
-   To permit the use of insecure schemes, use the =GOINSECURE= environment variable instead. To bypass module sum validation,
-   use GOPRIVATE or GONOSUMDB. See go help environment for details.
+The =go get -insecure= flag is deprecated and will be removed in a future version. This flag permits fetching from repositories and
+resolving custom domains using insecure schemes such as HTTP, and also bypasses module sum validation using the checksum database.
+To permit the use of insecure schemes, use the =GOINSECURE= environment variable instead. To bypass module sum validation,
+use GOPRIVATE or GONOSUMDB. See go help environment for details.
 #+end_quote
 
 可以看出后续使用 =GOINSECURE= 环境变量来代替。相关的讨论：
@@ -119,6 +119,10 @@ Go 1.16 之后， =-insecure= 参数将会被逐渐废弃，如果你使用的�
 #+end_src
 
 另外，https://goproxy.io/zh/。
+
+** 资源
+
+- [[https://encore.dev/guide/go.mod][Go modules cheat sheet]]
 
 * Footnotes
 

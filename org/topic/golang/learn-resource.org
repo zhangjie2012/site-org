@@ -1,5 +1,5 @@
 #+SETUPFILE: ~/site/tpl/wiki-tpl.org
-#+TITLE: Go 资源
+#+TITLE: Go 外部学习资源
 #+DATE: 2019-03-30 12:13:41
 
 + https://talks.golang.org/2014/go4gophers.slide Go PPT

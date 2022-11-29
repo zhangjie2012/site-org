@@ -2,19 +2,22 @@
 #+TITLE: JerryZhang's Blog
 #+OPTIONS: toc:nil num:nil
 
-- [[file:blog/index.org][Blog]] :: 网络日志，偏技术和思考
-- [[file:wiki/index.org][Wiki]] :: 偏向于工具化，比较散的知识点
-- Topic :: 技术专题，比较聚集的知识面
-  + [[file:topic/cloud-native/index.org][云原生]] 容器、Docker、Kubernetes 等 /持续更新中，差的很远/
-  + [[file:topic/go-project/index.org][Go]] 构建 Go 项目的最佳实践（项目结构，技术选型，思考等） /持续更新中/
-  + [[file:topic/grpc/index.org][gRPC]] /核心已完结/
-  + [[file:topic/microservices/index.org][微服务]] 理念、架构和治理 /持续更新中，差的很远/
-  + [[file:topic/miniapp/index.org][小程序开发系列]] /持续更新中/
-  + [[https://github.com/zhangjie2012/emacs.d][Emacs]] 使用 Emacs 是一种信仰 /稳定/
+- [[file:blog/index.org][Blog]] :: 博客
+- [[file:wiki/index.org][Wiki]] :: 零散的技术，成体系的汇总成 Topic
+- Topic :: 成体系的（技术）
+  1. [[https://github.com/zhangjie2012/emacs.d][Emacs]] 使用 Emacs 是一种信仰
+  2. [[file:topic/grpc/index.org][gRPC]]
+  3. [[file:topic/cloud-native/index.org][云原生]] 容器、Docker、Kubernetes 等 _持续更新中_
+  4. [[file:topic/go-project/index.org][Go]] 学习资料、工程实践 _持续更新中_
+  5. [[file:topic/microservices/index.org][微服务]] 理念、架构和治理 _持续更新中_
+  6. [[file:topic/miniapp/index.org][小程序开发系列]] _持续更新中_
 - 读书 ::
   + [[file:reading/history-books.org][历史书]]
-  + [[file:reading/read-books.org][2016 年前读过的书]] 偏技术类，不再更新
+  + [[file:reading/read-books.org][2016 年前读过的书]] /偏技术，不再更新/
+- 关于 ::
+  + [[file:topic/resume.org][本人]] 简历
+  + [[file:blog/2011/about-blog.org][本站]] 博客的心路历程
 - 其他 ::
-  + [[file:topic/youth/index.org][回忆录系列]] /没写完，不写了/
-  + [[file:wiki/growing/programmer.org][Setup]] 日常办公软硬件
-  + [[/sitemap.html][站点地图]]
+  - [[file:wiki/growing/programmer.org][Setup]] 日常办公软硬件
+  - [[/sitemap.html][站点地图]]
+  - [[file:topic/youth/index.org][回忆录系列]] /没写完，不写了/

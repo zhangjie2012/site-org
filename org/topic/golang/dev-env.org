@@ -1,5 +1,5 @@
 #+SETUPFILE: ~/site/tpl/wiki-tpl.org
-#+TITLE: 构建环境
+#+TITLE: Go 安装和卸载
 #+DATE: 2017-12-07 09:41:24
 
 * 安装 Go
