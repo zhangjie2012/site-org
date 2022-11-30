@@ -69,40 +69,19 @@
 
 ** 容器化
 
-相关文档会逐步迁移至 [[file:../topic/cloud-native/index.org][云原生专题]]。
-
-*** Docker
-
-- [[file:devops/docker-tutorial.org][学习笔记]]
-- [[file:devops/docker-tutorial2.org][官方文档翻译]]
-- [[file:devops/dockerfile-best-practice.org][Dockerfile 最佳实践]]
-- 博客:
-  + [[file:../blog/2018/different-from-docker-and-vm.org][{译} Docker 和 VM 的区别]]
-
-*** Kubernetes
-
-- 官方文档
-  + 架构：[[file:devops/kubernetes-architecture-master-node-communication.org][Master-Node 通信]]
-  + 容器：[[file:devops/kubernetes-containers-images.org][镜像]]、[[file:devops/kubernetes-containers-container-environment-variables.org][容器环境变量]]、[[file:devops/kubernetes-containers-runtime-class.org][运行时类]]、[[file:devops/kubernetes-containers-container-lifecycle-hooks.org][生命周期 Hooks]]
-  + [[file:devops/k8s-ingress.org][Ingress]] 服务暴露
-- 实践
-  + [[file:devops/k8s-deployment-strategies.org][部署策略]] 几种常见的部署策略
-    - https://semaphoreci.com/blog/what-is-canary-deployment
-    - https://semaphoreci.com/blog/continuous-blue-green-deployments-with-kubernetes
-  + [[file:devops/k8s-practice.org][实践]]
-- 书 & 文章
-  + [[https://github.com/mvallim/kubernetes-under-the-hood][kubernetes-under-the-hood]] 侧重运维部署层面，涉及整体技术架构、网络、DNS 等；如果仅是关注 Kubernetes 本身，不推荐看
-- [[file:devops/k8s-resource.org][资源]]：各种帅帅的图，以及 Kubernetes 的资源连接
+相关文档迁移至 [[file:../topic/cloud-native/index.org][云原生专题]]。
 
 ** 监控告警
 
 APM：Application Performance Management。一般会分为三大块：
 
+|-----------------+---------------------------------|
 | 分类            | 主流方案                        |
 |-----------------+---------------------------------|
 | Logs（日志）    | EFK，小场景使用：Loki + Grafana |
 | Traces（链路）  | Jaeger、SkyWalking              |
 | Metrics（指标） | Prometheus + Grafana            |
+|-----------------+---------------------------------|
 
 *** Prometheus
 

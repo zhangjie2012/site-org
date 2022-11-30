@@ -86,8 +86,16 @@ https://segmentfault.com/a/1190000040449782
 
 延迟、吞吐量、可用性、错误率也是目前最常用来度量服务的四个维度（很多监控都是这四个维度的范畴和延伸）。
 
-* TODO 容器
-* TODO Docker
+* Docker
+
+** 基础知识
+
+- [[file:docker/docker-tutorial.org][Docker 学习笔记]]
+- [[file:docker/docker-tutorial2.org][Docker 官方文档]] 翻译
+- [[file:docker/dockerfile-best-practice.org][Dockfile 最佳实践]]
+- [[../../blog/2018/different-from-docker-and-vm.org][Docker 和 VM 的区别]] 翻译
+- [[../../blog/2018/an-overall-view-on-docker-ecosystem-containers-moby-swarm-linuxkit-containerd-kubernete.org][Docker 生态系统一览 - Containers, Moby, Swarm, Linuxkit, containerd, Kubernetes ..]] 翻译
+
 ** Docker CLI 替代品：Container Tools（podman、buildah、skopeo）
 
 #+begin_quote
@@ -114,6 +122,7 @@ Mac 不是纯正的 Linux 系统，所以不管是 Docker 还是 podman 都需�
 
 结论是：听起来很好，Mac 下实际可行性较差。
 
+* TODO 容器
 * CI/CD 项目
 
 - [[https://argoproj.github.io/][argo]] Get More Done with Kubernetes
@@ -174,13 +183,13 @@ Kubernetes 提供了服务发现和负载均衡、自动部署和回滚、弹性
     + [[file:kubernetes/controller-cronjobs.org][CronJobs]] 定时任务
     + +ReplicationController+: ReplicaSet 是下一代的 RC（支持新的基于集合的标签选择器），建议使用 RS
     + [[file:kubernetes/controller-gc.org][Garbage Collection]]: 负责集群资源回收
-- [[file:kubernetes/services-networking.org][Services、负载均衡和集群网络]] [2/11]
+- [[file:kubernetes/services-networking.org][Services、负载均衡和集群网络]] [3/11]
   + [X] [[file:kubernetes/service.org][Service]] 集群内部的服务暴露抽象，提供虚拟 IP，然后通过负载均衡策略，将流量转发到 Endpoints。
     底层实现是 kube-proxy，它支持三种模式（用户空间，iptables，IPVS），主流都是使用 IPVS
   + [ ] [[file:kubernetes/service-topology.org][服务拓扑]] 实现基于 Service 的亲和性
   + [X] [[file:kubernetes/service-networking-dns-pod-service.org][Services 和 Pod 的 DNS]]
   + [ ] [[https://kubernetes.io/docs/concepts/services-networking/connect-applications-service/][使用 Services 连接应用]]
-  + [ ] [[https://kubernetes.io/docs/concepts/services-networking/ingress/][Ingress]]
+  + [X] [[file:kubernetes/k8s-ingress.org][Ingress]]
   + [ ] [[https://kubernetes.io/docs/concepts/services-networking/ingress-controllers/][Ingress Controllers]]
   + [ ] [[https://kubernetes.io/docs/concepts/services-networking/endpoint-slices/][EndpointSlices]]
   + [ ] [[https://kubernetes.io/docs/concepts/services-networking/service-traffic-policy/][Service 内部流量策略]]
@@ -246,6 +255,17 @@ Kubernetes 提供了服务发现和负载均衡、自动部署和回滚、弹性
   - [ ] [[https://kubernetes.io/docs/concepts/extend-kubernetes/operator/][Operator 模式]]
   - [ ] [[https://kubernetes.io/docs/concepts/extend-kubernetes/service-catalog/][Service Catalog]]
 
+** 集群规模
+
+https://kubernetes.io/docs/setup/best-practices/cluster-large/
+
+大规模集群注意事项，Kubernetes 旨在适应满足一下标准的配置环境：
+
+- 单节点不超过 110 个 Pods
+- 单集群不超过 5000 个节点
+- 单集群总 Pods 数量不超过 15000 个
+- 单集群总容器不超过 30000 个
+
 ** 搭建本地 Kubernetes
 
 一般用于 K8s 学习和应用程序开发人员。
@@ -284,14 +304,10 @@ kubectl 是用来管理 Kubernetes 集群的命令行工具。
 
 ** 最佳实践
 
-https://kubernetes.io/docs/setup/best-practices/cluster-large/
-
-大规模集群注意事项，Kubernetes 旨在适应满足一下标准的配置环境：
-
-- 单节点不超过 110 个 Pods
-- 单集群不超过 5000 个节点
-- 单集群总 Pods 数量不超过 15000 个
-- 单集群总容器不超过 30000 个
+- [[file:kubernetes/k8s-practice.org][最佳实践]]
+- [[file:kubernetes/k8s-deployment-strategies.org][部署策略]] 几种常见的部署策略
+  + https://semaphoreci.com/blog/what-is-canary-deployment
+  + https://semaphoreci.com/blog/continuous-blue-green-deployments-with-kubernetes
 
 ** 监控告警
 
@@ -360,6 +376,7 @@ Kubernetes 管理平台一般是对 K8s 能力平台化，降低运维管理成�
   - CNI：保证每个 Pod 都有一个独立的 IP，而且他们之间可以相互通信，确保 Pod 可以向集群外部通讯
   - kube-proxy：是 service 的实现，拥有一个虚拟的 IP，在下游的 endpoints 之间做负载均衡
 - [[https://lib.jimmysong.io/][云原生资料库]]
++ [[https://github.com/mvallim/kubernetes-under-the-hood][kubernetes-under-the-hood]] 侧重运维部署层面，涉及整体技术架构、网络、DNS 等；如果仅是关注 Kubernetes 本身，不推荐看
 - [[https://ossinsight.io/][OSSInsight]] Github 项目洞察，某种程度可以看到开源趋势，但是社区毕竟是社区，只可以参考
 - [[file:kubernetes/kubernetes-best-practive.org][最佳实践系列]] 别人家的最佳实践合集
 

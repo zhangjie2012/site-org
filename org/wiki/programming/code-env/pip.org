@@ -7,15 +7,15 @@
 https://pip.pypa.io/en/stable/getting-started/
 
 #+begin_src sh
-wget https://bootstrap.pypa.io/get-pip.py
-python3 get-pip.py
+  wget https://bootstrap.pypa.io/get-pip.py
+  python3 get-pip.py
 #+end_src
 
 使用：
 
-#+begin_src
-python3 -m pip install sampleproject-1.0.tar.gz
-python3 -m pip uninstall sampleproject
+#+begin_src sh
+  python3 -m pip install sampleproject-1.0.tar.gz
+  python3 -m pip uninstall sampleproject
 #+end_src
 
 * 配置
