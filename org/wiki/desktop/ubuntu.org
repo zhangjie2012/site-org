@@ -2,44 +2,44 @@
 #+TITLE: Ubuntu
 #+DATE: 2018-09-10 21:39:56
 
-目前再用 Ubuntu 22.04 LTS 版本。
+目前在用 Ubuntu 22.04 LTS 版本。
 
-* 设置国内源
+*多次被迫重装的教训告诉我：既然选择了 Ubuntu 就要专注于开发和学习。不要随便升级系统或者库，遇到问题时，不要随便找一段自己不知道干了什么事情的指令就执行了！*
 
-*自动选择*
+* 软件源
 
-软件和更新 -> Ubuntu 软件 -> 下载自 -> 选一个国内的镜像源
-
-*手动设置*
-
-1. [[https://mirror.tuna.tsinghua.edu.cn/help/ubuntu/]]
-2. =apt update=
-3. =apt upgrade=
-
-阿里源：
-
-#+begin_src
-deb http://mirrors.aliyun.com/ubuntu/ focal main restricted universe multiverse
-deb http://mirrors.aliyun.com/ubuntu/ focal-security main restricted universe multiverse
-deb http://mirrors.aliyun.com/ubuntu/ focal-updates main restricted universe multiverse
-deb http://mirrors.aliyun.com/ubuntu/ focal-proposed main restricted universe multiverse
-deb http://mirrors.aliyun.com/ubuntu/ focal-backports main restricted universe multiverse
-deb-src http://mirrors.aliyun.com/ubuntu/ focal main restricted universe multiverse
-deb-src http://mirrors.aliyun.com/ubuntu/ focal-security main restricted universe multiverse
-deb-src http://mirrors.aliyun.com/ubuntu/ focal-updates main restricted universe multiverse
-deb-src http://mirrors.aliyun.com/ubuntu/ focal-proposed main restricted universe multiverse
-deb-src http://mirrors.aliyun.com/ubuntu/ focal-backports main restricted universe multiverse focal
-#+end_src
+- 自动选择：软件和更新（Ubuntu 软件 -> 下载自 -> 选一个国内的镜像源）
+- +手动设置+ 找清华、阿里源替换 =/etc/apt/sources.list=
 
 * 代理
+
+** SSR
+
+1. 安装 [[https://github.com/shadowsocksrr/electron-ssr][electron-ssr]] 设置订阅源，然后更新（没代理可能无法打开 github，最好平时自己缓存一份）
+2. 开启全局代理
+3. 系统设置->网络->网络代理：设置成与 ssr 中相同的 socket 和 http 地址
+4. Chrome 安装 SwitchyOmega 并设置，规则列表网址： =https://raw.githubusercontent.com/gfwlist/gfwlist/master/gfwlist.txt=
+5. 关闭全局代理
+
+*注意* ：electron-ssr 是用 Python 写的，最近几个版本的 Ubuntu 发行版默认只安装了 Python3，所以需要手动安装一下，否则将无法正常使用。
+具体操作：
+
+#+begin_src sh
+  sudo apt install python2
+  sudo ln -s /usr/bin/python2 /usr/bin/python
+#+end_src
+
+可以参考这个安装教程：https://github.com/qingshuisiyuan/electron-ssr-backup/blob/master/Ubuntu.md， 较新版本的 Linux 发行版，
+systemd 自己运行了一个 DNS server（127.0.0.53, =systemd-resolved= 这个服务），这会导致全局代理不生效（PAC 也更新不了），
+参考文档中的“系统设置”修改之后即可解决这个问题。
 
 ** +Ubuntu Server+
 
 安装 shadowsock-libev, =apt install shadowsocks-libev= ，客户端连接只需要 =ss-local= 。先停掉无关的服务：
 
 #+begin_src shell
-     systemctl disable shadowsocks-libev.service
-     systemctl stop shadowsocks-libev.service
+  systemctl disable shadowsocks-libev.service
+  systemctl stop shadowsocks-libev.service
 #+end_src
 
 配置文件在 =/etc/shadowsocks-libev= 目录下。文件内容改为：
@@ -84,71 +84,28 @@ Sock5 proxy：[[https://www.irif.fr/~jch/software/polipo/][Polipo]]
 
 测试是否生效: =curl ip.gs=
 
-** SSR *推荐*
-
-1. https://github.com/shadowsocksrr/electron-ssr 设置订阅源，然后更新（没代理可能无法打开 github，最好平时自己缓存一份）。
-2. 开启全局代理
-3. Chrome 安装 SwitchyOmega 并设置，规则列表网址： =https://raw.githubusercontent.com/gfwlist/gfwlist/master/gfwlist.txt=
-4. 关闭全局代理
-
-*注意* ：electron-ssr 是用 Python 写的，最近几个版本的 Ubuntu 发行版默认只安装了 Python3，所以需要手动安装一下，否则将无法正常使用。
-具体操作：
-
-#+begin_src sh
-  sudo apt install python2
-  sudo ln -s /usr/bin/python2 /usr/bin/python
-#+end_src
-
-可以参考这个安装教程：https://github.com/qingshuisiyuan/electron-ssr-backup/blob/master/Ubuntu.md， 较新版本的 Linux 发行版，
-systemd 自己运行了一个 DNS server（127.0.0.53, =systemd-resolved= 这个服务），这会导致全局代理不生效（PAC 也更新不了），
-参考文档中的“系统设置”修改之后即可解决这个问题。
-
 * 软件列表
 
-- 搜狗输入法，按照官方的 [[https://shurufa.sogou.com/linux/guide][安装指南]] 即可
-- +rime 输入法+
-  + 安装： =sudo apt-get install fcitx-rime=
-  + 默认是繁体的，设置成简体：
-    - =~/.config/fcitx/rime/build/luna_pinyin.schema.yaml=
-    - 找到 =switches= 在 =simplification= 下添加 =reset: 1= 即可
-- 邮箱客户端：Thunderbird，说他丑，说他重度，可是只有他最稳定啊
+- 输入法：
+  + 搜狗输入法，按照官方的 [[https://shurufa.sogou.com/linux/guide][安装指南]] 即可
+  + +rime 输入法+
+    - 安装： =sudo apt-get install fcitx-rime=
+    - 默认是繁体的，设置成简体：
+      - =~/.config/fcitx/rime/build/luna_pinyin.schema.yaml=
+      - 找到 =switches= 在 =simplification= 下添加 =reset: 1= 即可
+- [[https://albertlauncher.github.io/][albert]] Linux 下最好的 Laucher 工具，类似 macOS 下的 alfred
+  - [[https://software.opensuse.org/download.html?project=home:manuelschneid3r&package=albert][下载安装]] =sudo dpkg -i=
+  - 绑定快捷键：将 =albert toggle= 绑定到 =F2=
 - 截图工具：[[https://github.com/lupoDharkael/flameshot][flameshot]]
   1. =apt install flameshot= 安装
   2. 绑定快捷键：将 =flameshot gui= 绑定到 =F1=
+- Telegram =apt install telegram-desktop=
+- 邮箱客户端：Thunderbird
 - 视频播放器：[[https://www.videolan.org/vlc/download-ubuntu.html][VLC]] =apt install vlc=
 - gif 录屏：[[https://github.com/phw/peek][Peek]]，这个很好用，视频录制也有人推荐 [[https://github.com/hzbd/kazam][Kazam]]，就我个人而言 Peek 满足需求了
-- SNS
-  + Telegram =apt install telegram-desktop=
 - 思维导图 =sudo snap install xmind=
-- [[https://albertlauncher.github.io/][albert]] Linux 下最好的 Laucher 工具，类似 macOS 下的 alfred
 
 [[file:~/site/org/wiki/growing/programmer.org][技术人]] 有补充，重复的软件没有在这里体现。
-
-* 几种桌面对比
-:PROPERTIES:
-:CUSTOM_ID: 几种桌面对比
-:END:
-
-常见的 4 种桌面：
-
-- GNOME 3，Ubuntu 18.04 之后默认的
-- [[https://kde.org/][KDE]]
-- [[https://www.xfce.org/][Xfce]]
-- [[https://lxqt.org/][LXQT]]
-
-资源消耗和 UI 体验成正比，GNOME 3 和 KDE 差不太多，其次是 LXQT，Xfce 体验最差，但是占用资源的确少，而且快。
-
-<2020-03-08 Sun 13:13>
-
-GNOME 太不稳定了，换到了 Xubuntu，世界顿时清净了。
-
-<2020-04-19 13:32:41>
-
-迫于 Ubuntu 20.04 的诱惑，升级到了 20.04。
-
-<2022-11-27 Sun 17:17>
-
-升级到 22.04 LTS 版本。
 
 * FAQ
 
