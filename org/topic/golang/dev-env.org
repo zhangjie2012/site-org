@@ -38,6 +38,8 @@
 
 *注意* 如果存在旧版本的 Go 需要先卸载才行。
 
+如果运行报错 =Could not Import C(cgo preprocessing)= 这种错误，可能是主机没有安装 gcc 导致。
+
 * 卸载
 
 1. 删除 ~/usr/local/go~ 目录
