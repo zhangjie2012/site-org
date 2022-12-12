@@ -1,0 +1,15 @@
+#+SETUPFILE: ~/site/tpl/wiki-tpl.org
+#+TITLE: macOS
+#+DATE: 2022-12-12 10:34:11
+
+关闭“LCD平滑字体”[fn:1]：
+
+#+begin_src
+defaults -currentHost write -g AppleFontSmoothing -int 0
+#+end_src
+
+=-int= 表示粗细，0 最细、1 中等、2 原始粗细。
+
+* Footnotes
+
+[fn:1] https://sspai.com/post/63624

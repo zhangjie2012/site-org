@@ -6,6 +6,7 @@
 - [[file:desktop/ubuntu.org][Ubuntu]]
 - [[file:desktop/powershell-and-windows-terminal.org][Powershell 和 Windows Terminal]]
 - [[file:desktop/wsl.org][WSL2]] 目前来看，最完美的开发环境
+- [[file:desktop/macos.org][macOS]]
 
 * 操作系统理论
 
