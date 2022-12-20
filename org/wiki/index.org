@@ -13,6 +13,10 @@
 - [[file:os/linux-net-io.org][Linux IO 模型]]
 - [[file:os/difference-between-multicore-and-multiprocessor.org][多核和多处理器的区别]]: 多核是一个 CPU 有多个处理单元（core），多处理器是多个 CPU。现在计算机支持多个处理器，并且每个处理器有多个核。
 - [[https://plantegg.github.io/2021/06/01/CPU%E7%9A%84%E5%88%B6%E9%80%A0%E5%92%8C%E6%A6%82%E5%BF%B5/][CPU 的制造和概念]]：优秀长文
+- 异构：异构计算（Heterogeneous Computing），主要指不同类型的指令集和体系架构的计算单元组成的系统的计算方式。
+  - 同构与异构：都是多个物体来共同完成一件事情，不过同构是相同类型的，而异构的不同种类的
+  - [[https://imgtec.eetrend.com/blog/2021/100061572.html][异构计算的两大派别，为什么需要异构计算？]]
+  - [[https://draveness.me/heterogeneous-computing/][CPU 和 GPU - 异构计算的演进与发展]]
 - [[file:os/other.org][其他]]
 
 * 数据结构和算法
