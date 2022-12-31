@@ -15,9 +15,32 @@
   + [[../../blog/2019/golang-date-format.org][Go 日期格式化和解析]]
   + [[file:learn-resource.org][外部资源]] 汇总
 - [[file:dev-env.org][安装和卸载]]
-- package
+- package 管理
   + [[file:package-manager.org][包管理工具]] 以前用 govender，go 1.11 之后统一使用 module 了
   + [[file:package-release.org][包的发布]] 将自己的 package 发布成三方包
+- package 推荐
+  + [[https://threedots.tech/post/list-of-recommended-libraries/][The Go libraries that never failed us: 22 libraries you need to know]] 22 个高质量库
+    * Router: Echo, chi
+    * OpenAPI: deepmap/oapi-codegen, openapi-generator-cli
+    * Communication: gRPC, protoc
+    * Messaging: Watermill
+    * Database:
+      - SQL: sqlx, SQLBoiler, Migrations(sql-migrate, goose)
+    * Observability:
+      - Logging: logrus, zap
+      - Metrics and tracing: opencensus-go,
+    * Configuration: caarlos0/env, koanf
+    * Build CLI: urfave/cli
+    * Testing:
+      - Assertions: testify, go-cmp, gofakeit
+      - Mocking:
+    * Misc:
+      - Extra types support: google/uuid, oklog/ulid, shopspring/decimal,
+      - Errors: hashicorp/go-multierror
+      - Useful tools: samber/lo, Task
+      - Live code reloading: reflex
+      - Linter: golangci-lint, go-cleanarch
+      - Formatters: go fmt, goimports, gofumpt
 
 * 工程实践
 
