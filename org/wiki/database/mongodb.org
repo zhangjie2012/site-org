@@ -55,6 +55,8 @@ error connecting to host: could not connect to server: connection() : auth error
 
 加上 ~--authenticationDatabase=admin~ 就可以了，具体原因还未知。
 
+较新版本的 MongoDB 需要指定 URI 连接，比如 =mongorestore "mongodb://<username>:<passwd>@localhost:27017/<dbname>"  --authenticationDatabase=admin --db <dbname> <path>= 。
+
 * FAQ
 
 ** Q: 如何查询嵌套内容？
