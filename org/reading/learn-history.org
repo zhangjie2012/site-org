@@ -170,8 +170,9 @@
 
 /仅限与历史相关。/
 
-- [[https://movie.douban.com/subject/24736278/][河西走廊]] <2020-10-14 Wed>
+- [[https://movie.douban.com/subject/24736278/][河西走廊]] 2020.10-14
 - [[https://v.qq.com/x/cover/621bjy40qw7xjp8/l0025awa8g2.html][玄奘之路]] 2020
+- [[https://v.qq.com/x/cover/fw4hh6seulgqm3k/s0028sls87n.html][西南联大]] 2022.12
 
 * 三方资料
 
