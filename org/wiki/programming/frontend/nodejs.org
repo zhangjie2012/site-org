@@ -1,4 +1,3 @@
-
 #+SETUPFILE: ~/site/tpl/wiki-tpl.org
 #+TITLE: nodejs
 #+DATE: 2020-06-17 20:17:44
@@ -25,12 +24,22 @@
 
 * yarn
 
+~Node.js >= 16.10~
+
 #+begin_src sh
-npm install --global yarn
+  corepack enable
+  corepack prepare yarn@stable --activate
 #+end_src
 
-yarn 和 npm 除了安装包命令不同之外，其他基本相同。 npm 是 =install= ，而 yarn 是 =add= 。
-指定源同样可以通过 =--registry https://registry.npm.taobao.org/= 的方式。
+配置文件：https://yarnpkg.com/configuration/yarnrc
+
+不再支持 =--registry= 这种方式来指定源，需要通过配置文件或者 =yarn set npmRegistryServer= 或者在 [[https://yarnpkg.com/configuration/yarnrc][.yarnrc.yml]] 中指定。
+
+* 环境变量配置
+
+#+begin_src sh
+  export NODE_OPTIONS="--max-old-space-size=8192 --openssl-legacy-provider"
+#+end_src
 
 * 其他
 
