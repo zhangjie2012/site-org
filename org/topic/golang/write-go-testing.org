@@ -21,6 +21,18 @@ Go test 的两种运行模式：
 在第二种情况下，go test 会缓存成成功执行的包的测试结果避免重复执行测试用例，输出结果会以 '(cached)' 标识。
 但是在指定了测试参数，比如 =-cpu=, =-list=, =-parallel=, =-run=, =-short=, =-v= 等将不会被缓存。管用的一种显式禁用缓存的方法是使用 ~-count=1~ 参数。
 
+<2023-03-09 Thu 15:27> update：
+
+在测试用例运行时间较长时，发现 log 库的日志都不是实时输出的，要等完全运行完成之后才会一次性数据，测试起来很不方便，解决办法是 =-p 1= ，
+=-p= 是 =go build= 的参数。
+
+#+begin_quote
+-p n
+  the number of programs, such as build commands or
+  test binaries, that can be run in parallel.
+  The default is GOMAXPROCS, normally the number of CPUs available.
+#+end_quote
+
 *Benchmarks(基准测试)*
 
 - 在 "go test" 命令指定了 bench 标识的情况下，会运行 =func BenchmarkXxx(*testing.B)= 格式的函数。基准测试是按照顺序执行的。
@@ -71,9 +83,3 @@ func TestMain(m *testing.M) {
 #+end_src
 
 /在每一个 test 文件中都可以有一个 TestMain，看起来更适合做初始化和销毁工作。/
-
-* 常用命令
-
-- 运行所有测试用例： ~go test -count=1 -v ./...~
-- 运行单个模块： ~go test -count=1 -v module_name~
-- 运行单个模块的单个 case： ~go test -count=1 -v module_name -test.run funcName~
