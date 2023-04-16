@@ -3,6 +3,14 @@
 #+OPTIONS: ^:nil
 #+DATE: 2017-12-04 10:54:25
 
+* MySQL 8.0
+
+8.0 之后授权时不再支持隐性创建账户。需要先创建账号，然后授权：
+
+- =CREATE USER 'new_user'@'%' IDENTIFIED BY 'new_password'=
+- =GRANT ALL PRIVILEGES ON db_name.* TO new_user=
+- =FLUSH PRIVILEGES=
+
 * 安装
 
 ** Docker
