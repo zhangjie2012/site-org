@@ -10,6 +10,14 @@ defaults -currentHost write -g AppleFontSmoothing -int 0
 
 =-int= 表示粗细，0 最细、1 中等、2 原始粗细。
 
+删除 Mac 启动台中的无效图标：
+
+#+begin_src
+defaults write com.apple.dock ResetLaunchPad -bool true
+
+killall Dock
+#+end_src
+
 * Footnotes
 
 [fn:1] https://sspai.com/post/63624
