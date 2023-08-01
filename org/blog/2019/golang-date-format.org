@@ -85,3 +85,13 @@ StampNano  = "Jan _2 15:04:05.000000000"
 --------------------
 
 总体来看，Go 的这种做法，反倒比 Python，JavaScript 等统一一些。
+
+* 问题
+
+*<2023-08-01 Tue 11:32> UPDATE:*
+
+比秒小的单位格式化输出的时候必须以 =.= 开头，比如 =20060102150405000= 将获取不到毫秒值，格式化之后依然是 =000= [fn:1] 。
+
+* Footnotes
+
+[fn:1] https://stackoverflow.com/questions/66770720/how-can-i-parse-a-time-in-go-with-no-period-separating-seconds-and-milliseconds
