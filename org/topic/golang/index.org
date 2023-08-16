@@ -64,13 +64,16 @@ Go 目前没有一个权威性质的 Web framework（类似 Python 的 Django/Fl
 - [[file:go-mysql.org][MySQL]]，ORM 还是使用 ent 吧
 - http client：[[https://github.com/go-resty/resty][resty]]
 - 序列化：[[https://github.com/vmihailenco/msgpack][msgpack]] 说是比 JSON 的效率高五六倍，文档 https://msgpack.uptrace.dev/
+- 模板渲染：
+  + [[https://pkg.go.dev/text/template][template]] 官方实现
+  + [[http://mustache.github.io/][mustache]] 是一个跨语言的模板定义，Go 的实现 [[https://github.com/hoisie/mustache][https://github.com/hoisie/mustache]]
 
 ** 编码规范
 
 基本上 Go programming language 已经说的挺清楚了，Effective Go 里又有补充，加之 Go 的社区命名都比较统一，日常命名应该没啥疑惑。
 
 如果你还想单独把编码规范抽出来，可以看下 uber 的：[[https://github.com/uber-go/guide][uber go guide]]。
-  
+
 ** 代码质量
 
 - [[file:write-go-testing.org][单元测试]]
