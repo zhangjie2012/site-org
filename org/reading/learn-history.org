@@ -241,9 +241,3 @@
 * 三方资料
 
 - [[https://www.allhistory.com/][全历史]]
-
-* 小程序
-
-为了读书记笔记，我写了个小程序：
-
-[[https://open1-1258639359.cos.ap-shanghai.myqcloud.com/common/gh_book.jpg]]
