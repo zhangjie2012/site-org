@@ -142,7 +142,8 @@ Emacs 使用 [[https://github.com/tumashu/cnfonts][cnfonts]] 实现中英文混�
   - VPN 如何选择可以上 [[https://www.duyaoss.com/][duyaoss]] 找
   - [[https://github.com/shadowsocks/ShadowsocksX-NG][ShadowsocksX-NG]]，没有稳定的梯子，现在都改成了 [[https://github.com/paradiseduo/ShadowsocksX-NG-R8][ShadowsocksX-NG-R8]] 了
   - [[https://github.com/Fndroid/clash_for_windows_pkg][clash]]：比 SSR 更好用
-  - iOS：Potatso Lite
+  - [[https://github.com/yanue/V2rayU][V2rayU]]
+  - iOS：Potatso Lite（免费），Shadowrocket（付费）
 + 刻录
   - [[https://unetbootin.github.io/][UNetbootin]]：Windows、MacOS、Linux
 + 录屏
