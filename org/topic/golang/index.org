@@ -62,6 +62,9 @@ Go 目前没有一个权威性质的 Web framework（类似 Python 的 Django/Fl
 - [[file:log.org][logger packages]]
 - [[file:go-mongodb.org][MongoDB]] 用官方的
 - [[file:go-mysql.org][MySQL]]，ORM 还是使用 ent 吧
+- ORM
+  + [[https://entgo.io/][entgo]] Facebook 开源的，好多年了，还没有到 1.0 版本，体验很好
+  + [[https://gorm.io/zh_CN/][GORM]] 国人开源的，现在是字节内部的推荐方案。跟 ent 手感区别很大，刚开始不太习惯，习惯了觉得还好。
 - http client：[[https://github.com/go-resty/resty][resty]]
 - 序列化：[[https://github.com/vmihailenco/msgpack][msgpack]] 说是比 JSON 的效率高五六倍，文档 https://msgpack.uptrace.dev/
 - 模板渲染：
