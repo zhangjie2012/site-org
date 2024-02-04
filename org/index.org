@@ -11,11 +11,7 @@
   + [[file:topic/golang/index.org][Go]] 学习资料、工程实践 _持续更新中_
   + [[file:topic/grpc/index.org][gRPC]]
   + [[file:topic/miniapp/index.org][小程序开发系列]] _持续更新中_
-- 读书 ::
-  + [[file:reading/learn-history.org][读中国历史]] 进行中（完成度小于 30%）
-  + 读儒释道 _TODO_
-  + [[file:reading/notes.org][读书笔记]] _读完一本，更新一本_
-  + [[file:reading/read-books.org][2016 年前读过的书]] /偏技术，不再更新/
+- [[https://github.com/zhangjie2012/reading][读书]] :: 暂不开放
 - 关于 ::
   + [[file:topic/resume.org][本人]] 简历
   + [[file:blog/2011/about-blog.org][本站]] 博客的心路历程
