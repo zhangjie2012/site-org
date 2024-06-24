@@ -65,7 +65,7 @@ Go 目前没有一个权威性质的 Web framework（类似 Python 的 Django/Fl
   + =info= 业务预期内导致了数据变更的操作，如 Create/Update/Delete 等
   + =warn= 非业务预期行为，但对业务本身无任何影响，如客户端参数格式、枚举值错误等
   + =error= 非业务预期行为，对业务造成影响，如写入数据库、cache、MQ 等失败
-  + =fatal= 非业务预期行为，影响整体业务运营，如 DB 初始化失败
+  + =fatal= 非业务预期行为，影响整体业务运行，如 DB 初始化失败
 - [[file:go-mongodb.org][MongoDB]] 用官方的
 - [[file:go-mysql.org][MySQL]]，ORM 还是使用 ent 吧
 - ORM
