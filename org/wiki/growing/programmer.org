@@ -19,8 +19,9 @@
 + 机械键盘
   - +Cherry MX2.0 G80-3800+ 性价比超级高，不喜欢机械键盘的朋友也可以尝试这款的低键位，快 10 年完好无损，现在只用蓝牙了，已退役
   - +FILCO 87 圣手二代+ 茶轴，千元左右，主力用了 8 年，在我各种折腾下终于坏了
-  - DURGOD 杜伽 K320 茶轴，五六百，支持蓝牙，目前公司在用
+  - +DURGOD 杜伽 K320+ 茶轴，五六百，支持蓝牙 手感一般，已退役
   - 京东京造 - 纪元系列国潮机械键盘，五六百，支持蓝牙、RGB 背光，目前家里在用
+  - Keydous NJ80 六七百，支持蓝牙。主力键盘，也是手感最好的一款
 + 显示器
   - DELL U2718Q 27 英寸 4K
   - 非 MacOS，2K 屏幕也可
@@ -84,10 +85,10 @@
 
 ** 中文
 
-- [[https://github.com/lxgw/LxgwWenKai][霞鹜文楷]] 我的 Emacs 中文字体
+- [[https://github.com/lxgw/LxgwWenKai][霞鹜文楷]] +我的 Emacs 中文字体+
 - 思源系列：[[https://github.com/adobe-fonts/source-han-sans][思源黑体]] 、[[https://github.com/adobe-fonts/source-han-serif][思源宋体]]
 - [[https://www.foundertype.com/index.php/FontInfo/index/id/394][方正悠宋]]：PPT 中文字体，要购买版权
-- [[https://github.com/be5invis/Sarasa-Gothic][更纱黑体]]：最大的好处是，中英文等宽
+- [[https://github.com/be5invis/Sarasa-Gothic][更纱黑体]]：中英文等宽，所有环境 ALL IN
 
 ** 英文
 
