@@ -255,6 +255,13 @@ Kubernetes 提供了服务发现和负载均衡、自动部署和回滚、弹性
   - [ ] [[https://kubernetes.io/docs/concepts/extend-kubernetes/operator/][Operator 模式]]
   - [ ] [[https://kubernetes.io/docs/concepts/extend-kubernetes/service-catalog/][Service Catalog]]
 
+** API 对接
+
+- 概念：https://kubernetes.io/zh-cn/docs/reference/using-api/api-concepts/
+- 精确到资源的 API 说明 https://kubernetes.io/zh-cn/docs/reference/kubernetes-api/
+- 资源定义 https://github.com/kubernetes/api 代码中直接引用
+- 在线x文档：https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.30/#api-overview
+
 ** 集群规模
 
 https://kubernetes.io/docs/setup/best-practices/cluster-large/
