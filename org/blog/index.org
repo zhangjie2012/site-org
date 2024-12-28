@@ -5,6 +5,7 @@
 
 * 2024
 
+- 12-28: [[file:2025/2024-personal-review.org][2024 读书总结]]
 - 01-01: [[file:2024/2023-personal-review.org][2023 个人总结]]
 
 * 2023
