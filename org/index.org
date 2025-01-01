@@ -11,7 +11,7 @@
   + [[file:topic/golang/index.org][Go]] 学习资料、工程实践 _持续更新中_
   + [[file:topic/grpc/index.org][gRPC]]
   + [[file:topic/miniapp/index.org][小程序开发系列]] _持续更新中_
-- [[https://github.com/zhangjie2012/reading][读书]]
+- [[https://github.com/zhangjie2012/reading][读书]] :: 阅读记录
 - 关于 ::
   + [[file:topic/resume.org][本人]] 简历
   + [[file:blog/2011/about-blog.org][本站]] 博客的心路历程
