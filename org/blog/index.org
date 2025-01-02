@@ -3,6 +3,10 @@
 #+OPTIONS: toc:nil
 #+OPTIONS: num:nil
 
+* 2025
+
+- 01-01: [[file:2025/stop-personal-review.org][不再写年终总结]]
+
 * 2024
 
 - 12-28: [[file:2025/2024-reading-review.org][2024 读书总结]]
