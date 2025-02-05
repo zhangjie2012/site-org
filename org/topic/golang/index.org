@@ -76,6 +76,7 @@ Go 目前没有一个权威性质的 Web framework（类似 Python 的 Django/Fl
 - 模板渲染：
   + [[https://pkg.go.dev/text/template][template]] 官方实现
   + [[http://mustache.github.io/][mustache]] 是一个跨语言的模板定义，Go 的实现 [[https://github.com/hoisie/mustache][https://github.com/hoisie/mustache]]
+- [[https://expr-lang.org/][expr]] 表达式执行
 
 ** 编码规范
 
