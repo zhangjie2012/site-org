@@ -1,0 +1,82 @@
+#+SETUPFILE: ~/site/tpl/wiki-tpl.org
+#+TITLE: LLM
+#+DATE: 2025-02-05 21:27:15
+
+#+begin_quote
+个人理解，不保证正确
+#+end_quote
+
+* 目标
+
+工程化学习 LLM 中上下游链路知识，了解涉及到的技术解决了什么问题（应用），而不是怎么解决的（原理）。
+
+* 大模型三要素
+
+- 算法
+- 算力（GPU 卡）
+- 数据（训练）
+
+* 术语 & 基础知识
+
+- LLM，Large Language Model 大语言模型
+- TTFT Time to First Token，首 token 到达的时间，问问题第一字蹦出来的时间
+- TPOT Time Per-Output Token，Per token，之后每一个 token 蹦出来的时间
+- batchsize：推理引擎能够同时并行处理的请求数
+- 32k/64k/128k：模型能够接收输入的最大文本数
+- 输入输出比：模型 Input 和 Output 的 token 比值
+- prefill 和 decode，对应推理的两个阶段，分别负责输入（Prompt phase）和输出（Token generation phase）。prefill 对于算力要求较高（大模型计算并存储原始输入 token 的 KV Cache，并生成第一个输出 token）；decode 对于内存和带宽要求较高（因为 KV Cache，需要一级一级的判断）
+  + prefill 预填充，在任务处理处理之前，提供一些初始数据和信息，以便模型更好地开始工作或更快地收敛到一个较好的结果。它主要是 *对输入进行初步处理和分析* ，为后续的操作奠定基础
+  + decode 解码，通常是在模型经过一系列计算后，根据模型输出的概率分布等信息， *生成具体的输出结果* ，比如文本生成任务中的逐个生成后续的词元以形成完整的文本
+- CUDA：CUDA（Compute Unified Device Architecture，统一计算架构）是由 NVIDIA 公司推出的一种并行计算平台和编程模型。它允许开发者使用 NVIDIA 的 GPU（图形处理单元）进行通用计算，
+  即所谓的 GPGPU（General-Purpose computing on Graphics Processing Units，图形处理单元上的通用计算）。 *我的理解：GPU 原本的设计是处理图形的，基于 CUDA 可以用来做通用计算。*
+- MoE（Mixture of Experts，专家混合）是一种深度学习模型架构。主要解决了 *大模型的计算效率和可扩展性问题* ，使得超大规模 Transformer 结构在计算资源受限的情况下仍然可以高效训练和推理。
+  + *计算更高效* 稀疏计算减少计算需求，提升训练和推理速度
+  + *大规模训练可行* 允许超大规模模型（万亿参数级）在有限计算资源下训练
+  + *任务泛化更强* 不同专家专注不同任务，提高多任务和多模态性能
+  + *负载均衡优化* 确保计算资源合理分配，避免专家过载或闲置
+
+* 基础知识
+
+** 训练（Training）和推理（Inference）
+
+练是“教模型怎么做”的过程；推理是“让模型去做”的过程。 训练是学习，推理的应用。训练所需要的时间与参数量相关，小模型几小时、几天；中模型几天到几周；大模型数周和数月。
+
+| 属性     | 训练（Training）                   | 推理（Inference）    |
+|----------+------------------------------------+----------------------|
+| 目的     | 学习输入输出映射关系，调整模型参数 | 利用模型生成预测结果 |
+| 数据需求 | 输入 + 标签                        | 输入即可             |
+| 计算需求 | 高（前向 + 反向传播）              | 低（仅前向传播）     |
+| 时间消耗 | 长                                 | 短                   |
+| 参数状态 | 动态调整                           | 固定                 |
+| 硬件需求 | 高性能 GPU/TPU                     | GPU/CPU/边缘设备均可 |
+| 典型场景 | 模型训练、微调                     | 实时推理、批量预测   |
+
+** 分布式推理
+
+将推理按照阶段拆分，然后把各个阶段的结果组合到一起，以提高效率。 *因为 prefill 和 decode 对与算力的要求不同，放在一起会出现拖累。* 分布式就是把 prefill 和 decode 分成两类服务。简单来说：
+
+- 非分布式，是同一个服务来实现推理
+- 分布式，分 prefill 和 decode 两个服务协作完成推理
+
+为什么 LLM 做 benchmark 难？个人理解：对于传统的服务做压测是简单的，因为输出相对明确，输出也是相对明确的（输出是一次性给出的）。
+反观 LLM 一次推理过程，返回的 Token 是连续给出的，推理耗时不光会受 Input Token, Output Token 长度的影响，而且也会受 Input/Output 比例影响。因此在实验室环境下，只能人为约定一个 Input/Output Ratio 来压测，但实际上用户的使用场景是千差万别的。
+
+** GPU 的利用率
+
+- Tensor Core Utility 是衡量 GPU 中 Tensor Cores 使用效率的指标，用于评估矩阵运算（如深度学习任务）是否充分利用了这些专用硬件单元的性能。
+- SMActivity：Streaming Multiprocessor (SM) Activity，是衡量 GPU 利用率的重要指标。SM (Streaming Multiprocessor) 是 NVIDIA GPU 架构中的核心计算单元，每个 SM 包含若干个 CUDA 核心、纹理单元和其他硬件资源，用于并行处理任务。
+- GPU Util：GPU 利用率是 GPU 的整体视图，除了了 SM（计算核心）之外，还有内存、带宽等。粒度比较粗糙。
+
+| 指标             | Tensor Core Utility          | SMActivity                     | GPU Utilization                    |
+|------------------+------------------------------+--------------------------------+------------------------------------|
+| 关注层面         | Tensor Cores                 | GPU 的 SM 计算核心             | GPU 的整体利用率                   |
+| 粒度             | 专注于矩阵计算硬件的使用效率 | 细粒度（专注计算核心）         | 粗粒度（计算 + 内存 + 数据传输等） |
+| 是否计算内存操作 | -                            | -                              | 计算                               |
+| 优化目标         |                              | 提高计算核心利用率             | 提高整体 GPU 资源利用率            |
+| 适用场景         | 矩阵运算                     | 核心优化（如 CUDA 核函数调优） | GPU 是否被任务充分占用的整体评估   |
+
+* Awesome
+
+- [[https://github.com/Hannibal046/Awesome-LLM][Awesome-LLM]]
+- [[https://github.com/Shubhamsaboo/awesome-llm-apps][awesome-llm-apps]]
+- [[https://www.wangrs.site/awesome-LLM-resourses/][awesome-LLM-resourses]] 学习资料

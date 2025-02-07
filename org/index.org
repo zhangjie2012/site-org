@@ -9,12 +9,11 @@
   + [[file:topic/cloud-native/index.org][云原生]] 容器、Docker、Kubernetes 等 _持续更新中_
   + [[file:topic/microservices/index.org][微服务]] 理念、架构和治理 _持续更新中_
   + [[file:topic/golang/index.org][Go]] 学习资料、工程实践 _持续更新中_
-  + [[file:topic/grpc/index.org][gRPC]]
-  + [[file:topic/miniapp/index.org][小程序开发系列]] _持续更新中_
+  + [[file:topic/grpc/index.org][gRPC]] _停更_
+  + [[file:topic/miniapp/index.org][小程序开发系列]] _停更_
 - [[https://github.com/zhangjie2012/reading][读书]] :: 阅读记录
 - 关于 ::
   + [[file:topic/resume.org][本人]] 简历
   + [[file:blog/2011/about-blog.org][本站]] 博客的心路历程
 - 其他 ::
   + [[file:wiki/growing/programmer.org][Setup]] 日常办公软硬件
-  + [[file:topic/youth/index.org][回忆录系列]] /没写完，不写了/
