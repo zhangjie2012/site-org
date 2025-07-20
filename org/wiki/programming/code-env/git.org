@@ -97,16 +97,25 @@ _如何放弃所有本地提交/改动，强制更新？_
   git pull
 #+END_SRC
 
-_远端分支被别人删除，自己本地 git br -a 还是能看到怎么办？_
-
-~git remote prune origin~ [fn:git-prune]。
-
 git 分支命名规范:
 
 - =feature/*=
 - =release/*=
 - =hotfix/*=
 - =bugfix/*=
+
+**分支批量清理：**
+
+- 本地分支清理 =git branch --merged | grep -v "main" | grep -v "master" | xargs git branch -d=
+  1. =git branch --merged= 筛选已合并的分支
+  2. =grep -v "main" | grep -v "master"= 过滤 main/master
+  3. =xargs git branch -d= 执行删除
+- 远端分支清理（超过 30 天未更新）=git for-each-ref --format '%(refname:short) %(authordate:unix)' refs/remotes/origin/ | awk -v now=$(date +%s) '$2 < now - 30*24*3600 {print $1}' | sed 's#origin/##' | xargs -I {} git push origin --delete {}=
+  1. =git for-each-ref --format '%(refname:short) %(authordate:unix)' refs/remotes/origin/= 获取分支名和时间戳
+  2. =awk -v now=$(date +%s) '$2 < now - 30*24*3600 {print $1}'= 按时间戳过滤
+  3. =sed 's#origin/##'= 去掉分支中的 origin
+  4. =xargs -I {} git push origin --delete {}= 批量删除
+- 远端分支被删除了，本地一键删除 =git remote prune origin=
 
 ** 标签
 
