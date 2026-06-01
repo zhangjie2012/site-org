@@ -8,7 +8,14 @@
 defaults -currentHost write -g AppleFontSmoothing -int 0
 #+end_src
 
-=-int= 表示粗细，0 最细、1 中等、2 原始粗细。
+命令中 -int 1 表示将平滑级别设为 1（macOS 通常支持 0-3 级）：
+
+- 0：关闭字体平滑（文字边缘可能有明显锯齿）
+- 1：轻度平滑（适合部分高分辨率屏幕，避免文字模糊）
+- 2：默认级别（大多数系统的默认设置，平衡平滑与清晰度）
+- 3：高强度平滑（文字更模糊但边缘更柔和，适合低分辨率屏幕）
+
+=defaults -currentHost delete -g AppleFontSmoothing= 恢复默认值
 
 删除 Mac 启动台中的无效图标：
 
